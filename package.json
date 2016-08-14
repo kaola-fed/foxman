@@ -2,7 +2,7 @@
   "name": "freemarker-server",
   "version": "0.0.1",
   "description": "a static server of nodejs",
-  "main": "index.js",
+  "main": "app.js",
   "directories": {
     "test": "test"
   },
