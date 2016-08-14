@@ -1,9 +1,19 @@
-# A flexiable mock data server 4 front-end engineer. 
+# foxman
 
-# usage
+[![NPM version][npm-image]][npm-url] [![Gitter chat][gitter-image]][gitter-url] [![Downloads][downloads-image]][downloads-url]
 
-1. npm install -g foxman
-2. create config.js
+[![NPM][nodei-image]][nodei-url]
+
+# Introduction
+
+a flexiable mock data server 4 front-end engineer. 
+
+# Installation
+
+1. global install:
+`npm install -g foxman`
+
+2. create config file:
 	```javascript 
 	var pathJoin = require('path').join;
 
