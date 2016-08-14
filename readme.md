@@ -1,6 +1,7 @@
 # foxman
 
 [![NPM version][npm-image]][npm-url] 
+
 [![NPM][nodei-image]][nodei-url]
 
 # Introduction
