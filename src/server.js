@@ -3,22 +3,21 @@ import {join} from 'path';
 import serve from 'koa-serve';
 import renderUtil from './renderUtil';
 import render from 'koa-ejs';
-import {
-	dirDispatcher,
-	ftlDispatcher,
-	jsonDispatcher
-} from './dispatcher';
+import { dirDispatcher, ftlDispatcher, jsonDispatcher } from './dispatcher';
 
 class Server{
 	constructor(config){
 		this.app = Koa();
 		
 		const _config = Object.assign({},{
-			port            : '3000',
-			ftlDir          : join(global.__rootdirname, 'test', 'ftl'),
-			mockFtlDir      : join(global.__rootdirname, 'test', 'mock','fakeData'),
-			mockJsonDir     : join(global.__rootdirname, 'test', 'mock','json'),
-			staticParentDir : join(global.__rootdirname, 'test'),
+			port        : '3000',
+			ftlDir      : join(global.__rootdirname, 'test', 'ftl'),
+			mockFtlDir  : join(global.__rootdirname, 'test', 'mock','fakeData'),
+			mockJsonDir : join(global.__rootdirname, 'test', 'mock','json'),
+			static      : {
+				parentDir  : join(global.__rootdirname, 'test'),
+				dirname    : 'static'
+			}
 		});
 
 		Object.assign(_config, config);
@@ -44,7 +43,7 @@ class Server{
 	}
 	
 	buildResource() {
-		this.app.use(serve('static', this.staticParentDir));
+		this.app.use(serve(this.static.dirname, this.static.parentDir));
 	}
 
 	dispatch() {
