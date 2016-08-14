@@ -1,21 +1,22 @@
-import {readdir, lstat, fstat	,readFile} from 'fs';
 import {join} from 'path';
 import {spawn} from 'child_process';
-const  jarFile = join(global.__rootdirname,'lib',"FMtoll.jar");
+const  jarFile = join(global.__rootdirname, 'lib', 'FMtoll.jar');
 
 
 let renderUtil;
 class RenderUtil {
 	constructor (settings) {
 		this.settings = Object.assign({
-			encoding: 'utf-8',
+			encoding:  'utf-8',
 			viewFolder: __dirname
 		}, settings);
 	}
-	parser (ftlStr, path, dataModel) {
-		const ctx = this;
-		dataModel = JSON.stringify(dataModel);
-		let cmd = spawn('java', ["-jar", jarFile, JSON.stringify(ctx.settings), path.substring(1), dataModel ]);
+	parse (path, dataModel) {
+		let settings = JSON.stringify(this.settings);
+		dataModel    = JSON.stringify(dataModel);
+		path         = path.substring(1);
+
+		let cmd = spawn('java', ['-jar', jarFile, settings, path,  ]);
 		cmd.stderr.setEncoding('utf-8');
 		
 		return {

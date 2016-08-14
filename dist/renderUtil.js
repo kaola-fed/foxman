@@ -13,15 +13,13 @@ exports.default = function (settings) {
 	return renderUtil;
 };
 
-var _fs = require('fs');
-
 var _path = require('path');
 
 var _child_process = require('child_process');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var jarFile = (0, _path.join)(global.__rootdirname, 'lib', 'jar', "FMtoll.jar");
+var jarFile = (0, _path.join)(global.__rootdirname, 'lib', 'FMtoll.jar');
 
 var renderUtil = void 0;
 
@@ -36,11 +34,13 @@ var RenderUtil = function () {
 	}
 
 	_createClass(RenderUtil, [{
-		key: 'parser',
-		value: function parser(ftlStr, path, dataModel) {
-			var ctx = this;
+		key: 'parse',
+		value: function parse(path, dataModel) {
+			var settings = JSON.stringify(this.settings);
 			dataModel = JSON.stringify(dataModel);
-			var cmd = (0, _child_process.spawn)('java', ["-jar", jarFile, JSON.stringify(ctx.settings), path.substring(1), dataModel]);
+			path = path.substring(1);
+
+			var cmd = (0, _child_process.spawn)('java', ['-jar', jarFile, settings, path]);
 			cmd.stderr.setEncoding('utf-8');
 
 			return {

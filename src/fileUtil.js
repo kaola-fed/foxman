@@ -1,4 +1,4 @@
-import {readdir, lstat, fstat	,readFile, ReadStream} from 'fs';
+import {readdir, lstat, readFile, ReadStream} from 'fs';
 
 let fileUtil;
 class FileUtil {
