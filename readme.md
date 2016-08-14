@@ -35,5 +35,5 @@ a flexiable mock data server 4 front-end engineer.
 [npm-image]: https://img.shields.io/npm/v/foxman.svg
 [downloads-image]: https://img.shields.io/npm/dm/foxman.svg
 [downloads-url]: http://badge.fury.io/js/foxman
-[nodei-image]: https://nodei.co/npm/webpack.png?downloads=true&downloadRank=true&stars=true
+[nodei-image]: https://nodei.co/npm/foxman.png?downloads=true&downloadRank=true&stars=true
 [nodei-url]: https://www.npmjs.com/package/foxman
