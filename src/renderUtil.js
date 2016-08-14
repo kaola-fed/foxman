@@ -16,7 +16,7 @@ class RenderUtil {
 		dataModel    = JSON.stringify(dataModel);
 		path         = path.substring(1);
 
-		let cmd = spawn('java', ['-jar', jarFile, settings, path,  ]);
+		let cmd = spawn('java', ['-jar', jarFile, settings, path, dataModel]);
 		cmd.stderr.setEncoding('utf-8');
 		
 		return {

@@ -170,4 +170,6 @@ var Server = function () {
 	return Server;
 }();
 
-new Server({}).createServer();
+module.exports = function (config) {
+	new Server(config).createServer();
+};

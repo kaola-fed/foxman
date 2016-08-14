@@ -40,7 +40,7 @@ var RenderUtil = function () {
 			dataModel = JSON.stringify(dataModel);
 			path = path.substring(1);
 
-			var cmd = (0, _child_process.spawn)('java', ['-jar', jarFile, settings, path]);
+			var cmd = (0, _child_process.spawn)('java', ['-jar', jarFile, settings, path, dataModel]);
 			cmd.stderr.setEncoding('utf-8');
 
 			return {

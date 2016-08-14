@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+// Run as bin
+
+let pathJoin = require('path').join;
+let argv = require('yargs').argv;
+let configPath = argv.config;
+
+configPath = pathJoin(process.cwd(), configPath);
+
+let config = require(configPath);
+
+require('../app.js')(config);	

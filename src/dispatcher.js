@@ -23,7 +23,7 @@ export function* ftlDispatcher (url, path, server, context) {
 	const dataModelName = [url.replace(/.ftl$/,''),'.json'].join('');
 	const dataPath  = join(server.mockFtlDir, dataModelName);
 	const dataModel = require(dataPath);
-	const output      = renderUtil().parse(url, dataModel);
+	const output    = renderUtil().parse(url, dataModel);
 
 	context.type = 'text/html; charset=utf-8';
 	context.body = output.stdout;

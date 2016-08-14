@@ -73,4 +73,7 @@ class Server{
 		console.log(`freemarker-server is run on port ${this.port}~ `);
 	}
 }
-new Server({}).createServer();
+
+module.exports = function (config) {
+	new Server( config ).createServer();
+}
