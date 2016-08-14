@@ -1,6 +1,6 @@
 {
   "name": "foxman",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "a static server of nodejs",
   "main": "./app.js",
   "bin": {
