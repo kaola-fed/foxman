@@ -1,7 +1,6 @@
 # foxman
 
-[![NPM version][npm-image]][npm-url] [![Gitter chat][gitter-image]][gitter-url] [![Downloads][downloads-image]][downloads-url]
-
+[![NPM version][npm-image]][npm-url] 
 [![NPM][nodei-image]][nodei-url]
 
 # Introduction
@@ -29,3 +28,11 @@ a flexiable mock data server 4 front-end engineer.
 	}
 	```
 3. foxman --config ./config.js
+
+
+[npm-url]: https://www.npmjs.com/package/foxman
+[npm-image]: https://img.shields.io/npm/v/foxman.svg
+[downloads-image]: https://img.shields.io/npm/dm/foxman.svg
+[downloads-url]: http://badge.fury.io/js/foxman
+[nodei-image]: https://nodei.co/npm/webpack.png?downloads=true&downloadRank=true&stars=true
+[nodei-url]: https://www.npmjs.com/package/foxman
