@@ -1,8 +1,10 @@
 import {join} from 'path';
 import fileUtil from './fileUtil';
 import renderUtil from './renderUtil';
+import {error} from './util';
+export function* dirDispatcher (url, config, context) {
 
-export function* dirDispatcher (url, path, server, context) {
+	const path     = join(config.path.root, url);
 	const files    = yield fileUtil().getDirInfo(path);
 	const promises = files.map((file) => {
 		return fileUtil().getFileStat(join(path, file))
@@ -19,12 +21,16 @@ export function* dirDispatcher (url, path, server, context) {
 	yield context.render('dir',{ fileList });
 }
 
-export function* ftlDispatcher (url, path, server, context) {
-	const dataModelName = [url.replace(/.ftl$/,''),'.json'].join('');
-	const dataPath  = join(server.mockFtlDir, dataModelName);
-	const dataModel = require(dataPath);
-	const output    = renderUtil().parse(url, dataModel);
+export function* ftlDispatcher (url, config, context) {
+	const dataPath = join(config.path.syncData, url.replace(/.ftl$/,'') + '.json');
 
+	let dataModel;
+	try{
+		dataModel = require(dataPath);	
+	}catch(err){
+		error(`${dataPath} is not found!`);
+	}
+	const output    = renderUtil().parse(url, dataModel);
 	context.type = 'text/html; charset=utf-8';
 	context.body = output.stdout;
 
@@ -37,10 +43,10 @@ export function* ftlDispatcher (url, path, server, context) {
 	});
 }
 
-export function* jsonDispatcher (url, path, server, context) {
-	const file       = join(server.mockJsonDir, url);
-	const readstream = fileUtil().getFileByStream(file);
+export function* jsonDispatcher (url, config, context) {
+	const file = join(config.path.asyncData, url);
+	const json = fileUtil().getFileByStream(file);
 
 	context.type = 'application/json; charset=utf-8';
-	context.body = readstream;
+	context.body = json;
 }

@@ -1,6 +1,7 @@
 # foxman
 
 [![NPM version][npm-image]][npm-url] 
+[![NPM version][downloads-image]][downloads-url]
 
 [![NPM][nodei-image]][nodei-url]
 
@@ -13,22 +14,23 @@ a flexiable mock data server 4 front-end engineer.
 1. global install:
 `npm install -g foxman`
 
-2. create config file:
+2. create config file（default is './foxman.config.js'）:
 	```javascript 
-	var pathJoin = require('path').join;
+	var path = require('path');
 
-	module.exports = {
-	  port        : '9999',
-	  ftlDir      : pathJoin(__dirname, 'ftl'),             // FTL根目录
-	  mockFtlDir  : pathJoin(__dirname, 'mock', 'fakeData'),// FTL combine data 根目录
-	  mockJsonDir : pathJoin(__dirname, 'mock', 'json'),    // ajax api 目录
-	  static      : {
-	    parentDir  : __dirname,                             // 静态资源父级目录
-	    dirname    : 'static'                               // 静态资源目录名
-	  }
-	}
+    module.exports = {
+      port: '3000',
+      path: {
+        root: path.join(__dirname, 'ftl'),
+        syncData: path.join(__dirname, 'mock', 'fakeData'),
+        asyncData: path.join(__dirname, 'mock', 'json'),
+        static: [
+          path.join(__dirname, 'static')
+        ]
+      }
+    };
 	```
-3. foxman --config ./config.js
+3. foxman
 
 
 [npm-url]: https://www.npmjs.com/package/foxman

@@ -31,24 +31,14 @@ var Server = function () {
 		_classCallCheck(this, Server);
 
 		this.app = (0, _koa2.default)();
-
-		var _config = Object.assign({}, {
-			port: '3000',
-			ftlDir: (0, _path.join)(global.__rootdirname, 'test', 'ftl'),
-			mockFtlDir: (0, _path.join)(global.__rootdirname, 'test', 'mock', 'fakeData'),
-			mockJsonDir: (0, _path.join)(global.__rootdirname, 'test', 'mock', 'json'),
-			staticParentDir: (0, _path.join)(global.__rootdirname, 'test')
-		});
-
-		Object.assign(_config, config);
-		Object.assign(this, _config);
+		this.config = config;
 
 		(0, _renderUtil2.default)({
-			viewFolder: this.ftlDir
+			viewFolder: config.path.root
 		});
 
+		this.buildResource(config.path.static);
 		this.setRender();
-		this.buildResource();
 		this.dispatch();
 	}
 
@@ -56,7 +46,7 @@ var Server = function () {
 		key: 'setRender',
 		value: function setRender() {
 			(0, _koaEjs2.default)(this.app, {
-				root: (0, _path.join)(global.__rootdirname, 'views'),
+				root: (0, _path.join)(global.__rootdir, 'views'),
 				layout: 'template',
 				viewExt: 'html',
 				cache: false,
@@ -66,7 +56,16 @@ var Server = function () {
 	}, {
 		key: 'buildResource',
 		value: function buildResource() {
-			this.app.use((0, _koaServe2.default)('static', this.staticParentDir));
+			var staticDirs = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+
+			var rootdir = void 0;
+			var dir = void 0;
+			staticDirs.forEach(function (item) {
+				dir = /[^(\\||\/)]*$/ig.exec(item);
+				if (!dir || !dir[0]) return;
+				rootdir = item.replace(dir[0], '');
+				this.app.use((0, _koaServe2.default)(dir[0], rootdir));
+			}.bind(this));
 		}
 	}, {
 		key: 'dispatch',
@@ -74,14 +73,13 @@ var Server = function () {
 			var context = this;
 
 			this.app.use(regeneratorRuntime.mark(function _callee() {
-				var url, path, routeMap, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, route;
+				var url, routeMap, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, route;
 
 				return regeneratorRuntime.wrap(function _callee$(_context) {
 					while (1) {
 						switch (_context.prev = _context.next) {
 							case 0:
 								url = this.req.url;
-								path = (0, _path.join)(context.ftlDir, url);
 								routeMap = {
 									'/': _dispatcher.dirDispatcher,
 									'.ftl': _dispatcher.ftlDispatcher,
@@ -90,80 +88,81 @@ var Server = function () {
 								_iteratorNormalCompletion = true;
 								_didIteratorError = false;
 								_iteratorError = undefined;
-								_context.prev = 6;
+								_context.prev = 5;
 								_iterator = Object.keys(routeMap)[Symbol.iterator]();
 
-							case 8:
+							case 7:
 								if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-									_context.next = 17;
+									_context.next = 16;
 									break;
 								}
 
 								route = _step.value;
 
 								if (!url.endsWith(route)) {
-									_context.next = 14;
+									_context.next = 13;
 									break;
 								}
 
-								_context.next = 13;
-								return routeMap[route](url, path, context, this);
+								_context.next = 12;
+								return routeMap[route](url, context.config, this);
 
-							case 13:
+							case 12:
 								return _context.abrupt('return');
 
-							case 14:
+							case 13:
 								_iteratorNormalCompletion = true;
-								_context.next = 8;
+								_context.next = 7;
 								break;
 
-							case 17:
-								_context.next = 23;
+							case 16:
+								_context.next = 22;
 								break;
 
-							case 19:
-								_context.prev = 19;
-								_context.t0 = _context['catch'](6);
+							case 18:
+								_context.prev = 18;
+								_context.t0 = _context['catch'](5);
 								_didIteratorError = true;
 								_iteratorError = _context.t0;
 
-							case 23:
+							case 22:
+								_context.prev = 22;
 								_context.prev = 23;
-								_context.prev = 24;
 
 								if (!_iteratorNormalCompletion && _iterator.return) {
 									_iterator.return();
 								}
 
-							case 26:
-								_context.prev = 26;
+							case 25:
+								_context.prev = 25;
 
 								if (!_didIteratorError) {
-									_context.next = 29;
+									_context.next = 28;
 									break;
 								}
 
 								throw _iteratorError;
 
+							case 28:
+								return _context.finish(25);
+
 							case 29:
-								return _context.finish(26);
+								return _context.finish(22);
 
 							case 30:
-								return _context.finish(23);
-
-							case 31:
 							case 'end':
 								return _context.stop();
 						}
 					}
-				}, _callee, this, [[6, 19, 23, 31], [24,, 26, 30]]);
+				}, _callee, this, [[5, 18, 22, 30], [23,, 25, 29]]);
 			}));
 		}
 	}, {
 		key: 'createServer',
 		value: function createServer() {
-			this.app.listen(this.port);
-			console.log('freemarker-server is run on port ' + this.port + '~ ');
+			this.config.port = this.config.port || 3000;
+			this.app.listen(this.config.port);
+			console.log('freemarker-server is run on port ' + this.config.port + '~ ');
 		}
 	}]);
 

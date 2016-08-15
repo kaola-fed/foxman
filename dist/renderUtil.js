@@ -19,7 +19,7 @@ var _child_process = require('child_process');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var jarFile = (0, _path.join)(global.__rootdirname, 'lib', 'FMtoll.jar');
+var jarFile = (0, _path.join)(global.__rootdir, 'lib', 'FMtoll.jar');
 
 var renderUtil = void 0;
 

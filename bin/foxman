@@ -2,10 +2,13 @@
 // Run as bin
 'use strict';
 var path = require('path');
+var fs   = require('fs');
+var config;
 var argv = require('yargs')
     .option('config', {
         alias    : 'c',
         demand   : true,
+        default  : 'foxman.config.js',
         describe : "Config file. Options read readme.md",
         boolean  : 0
     })
@@ -16,7 +19,14 @@ var argv = require('yargs')
     .epilog('copyright junyu')
     .argv;
 
-if(argv.config == true) console.log('Error:\n --config of -c is needed');return;
 
 var configPath = path.join(process.cwd(), argv.config);
-require('../app.js')( require(configPath) );
+
+try{
+    config = require(configPath);
+}catch(err){
+    console.log('Error:\n the config file (default is "foxman.config.js") is not found!');
+    process.exit(1);
+}
+
+require('../app.js')( config );

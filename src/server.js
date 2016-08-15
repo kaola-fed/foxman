@@ -8,42 +8,36 @@ import { dirDispatcher, ftlDispatcher, jsonDispatcher } from './dispatcher';
 class Server{
 	constructor(config){
 		this.app = Koa();
-		
-		const _config = Object.assign({},{
-			port        : '3000',
-			ftlDir      : join(global.__rootdirname, 'test', 'ftl'),
-			mockFtlDir  : join(global.__rootdirname, 'test', 'mock','fakeData'),
-			mockJsonDir : join(global.__rootdirname, 'test', 'mock','json'),
-			static      : {
-				parentDir  : join(global.__rootdirname, 'test'),
-				dirname    : 'static'
-			}
-		});
-
-		Object.assign(_config, config);
-		Object.assign(this, _config);
+		this.config = config;
 
 		renderUtil({
-			viewFolder: this.ftlDir
+			viewFolder: config.path.root
 		});
 
+		this.buildResource(config.path.static);
 		this.setRender();
-		this.buildResource();
 		this.dispatch();
 	}
 
 	setRender(){
 		render(this.app,{
-			root    : join(global.__rootdirname, 'views'),
-	  layout  : 'template',
-	  viewExt : 'html',
-	  cache   : false,
-	  debug   : true
+			root    : join(global.__rootdir, 'views'),
+			layout  : 'template',
+			viewExt : 'html',
+			cache   : false,
+			debug   : true
 		})
 	}
 	
-	buildResource() {
-		this.app.use(serve(this.static.dirname, this.static.parentDir));
+	buildResource(staticDirs = []) {
+		let rootdir;
+		let dir;
+		staticDirs.forEach(function (item) {
+			dir = /[^(\\||\/)]*$/ig.exec(item);
+			if(!dir || !dir[0]) return ;
+			rootdir = item.replace(dir[0],'');
+			this.app.use(serve( dir[0] , rootdir ));
+		}.bind(this));
 	}
 
 	dispatch() {
@@ -51,16 +45,15 @@ class Server{
 
 		this.app.use(function* (){
 			const url  = this.req.url;
-			const path = join(context.ftlDir, url);
 			const routeMap = {
 				'/'    : dirDispatcher,
 				'.ftl' : ftlDispatcher,
-				'.json': jsonDispatcher,
-			}
+				'.json': jsonDispatcher
+			};
 
 			for (let route of Object.keys(routeMap)){
 				if( url.endsWith(route) ){
-					yield routeMap[route](url, path, context, this);
+					yield routeMap[route](url, context.config, this);
 					return;
 				}
 			}
@@ -68,11 +61,12 @@ class Server{
 		});
 	}
 	createServer(){
-		this.app.listen(this.port);	
-		console.log(`freemarker-server is run on port ${this.port}~ `);
+		this.config.port = this.config.port || 3000;
+		this.app.listen(this.config.port);
+		console.log(`freemarker-server is run on port ${this.config.port}~ `);
 	}
 }
 
 module.exports = function (config) {
 	new Server( config ).createServer();
-}
+};

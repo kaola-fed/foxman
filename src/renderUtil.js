@@ -1,6 +1,6 @@
 import {join} from 'path';
 import {spawn} from 'child_process';
-const  jarFile = join(global.__rootdirname, 'lib', 'FMtoll.jar');
+const  jarFile = join(global.__rootdir, 'lib', 'FMtoll.jar');
 
 
 let renderUtil;

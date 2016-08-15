@@ -1,7 +1,7 @@
 'use strict';
-global.__rootdirname = __dirname;
+global.__rootdir = __dirname;
 require('babel-polyfill');
 
 module.exports = function (config) {
 	require('./dist/server.js')(config);
-}
+};

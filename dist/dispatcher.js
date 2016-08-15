@@ -17,28 +17,31 @@ var _renderUtil = require('./renderUtil');
 
 var _renderUtil2 = _interopRequireDefault(_renderUtil);
 
+var _util = require('./util');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _marked = [dirDispatcher, ftlDispatcher, jsonDispatcher].map(regeneratorRuntime.mark);
 
-function dirDispatcher(url, path, server, context) {
-	var files, promises, result, fileList;
+function dirDispatcher(url, config, context) {
+	var path, files, promises, result, fileList;
 	return regeneratorRuntime.wrap(function dirDispatcher$(_context) {
 		while (1) {
 			switch (_context.prev = _context.next) {
 				case 0:
-					_context.next = 2;
+					path = (0, _path.join)(config.path.root, url);
+					_context.next = 3;
 					return (0, _fileUtil2.default)().getDirInfo(path);
 
-				case 2:
+				case 3:
 					files = _context.sent;
 					promises = files.map(function (file) {
 						return (0, _fileUtil2.default)().getFileStat((0, _path.join)(path, file));
 					});
-					_context.next = 6;
+					_context.next = 7;
 					return Promise.all(promises);
 
-				case 6:
+				case 7:
 					result = _context.sent;
 					fileList = result.map(function (item, idx) {
 						return Object.assign(item, {
@@ -47,10 +50,10 @@ function dirDispatcher(url, path, server, context) {
 							url: [url, files[idx], item.isFile() ? '' : '/'].join('')
 						});
 					});
-					_context.next = 10;
+					_context.next = 11;
 					return context.render('dir', { fileList: fileList });
 
-				case 10:
+				case 11:
 				case 'end':
 					return _context.stop();
 			}
@@ -58,17 +61,21 @@ function dirDispatcher(url, path, server, context) {
 	}, _marked[0], this);
 }
 
-function ftlDispatcher(url, path, server, context) {
-	var dataModelName, dataPath, dataModel, output, errInfo;
+function ftlDispatcher(url, config, context) {
+	var dataPath, dataModel, output, errInfo;
 	return regeneratorRuntime.wrap(function ftlDispatcher$(_context2) {
 		while (1) {
 			switch (_context2.prev = _context2.next) {
 				case 0:
-					dataModelName = [url.replace(/.ftl$/, ''), '.json'].join('');
-					dataPath = (0, _path.join)(server.mockFtlDir, dataModelName);
-					dataModel = require(dataPath);
-					output = (0, _renderUtil2.default)().parse(url, dataModel);
+					dataPath = (0, _path.join)(config.path.syncData, url.replace(/.ftl$/, '') + '.json');
+					dataModel = void 0;
 
+					try {
+						dataModel = require(dataPath);
+					} catch (err) {
+						(0, _util.error)(dataPath + ' is not found!');
+					}
+					output = (0, _renderUtil2.default)().parse(url, dataModel);
 
 					context.type = 'text/html; charset=utf-8';
 					context.body = output.stdout;
@@ -90,18 +97,18 @@ function ftlDispatcher(url, path, server, context) {
 	}, _marked[1], this);
 }
 
-function jsonDispatcher(url, path, server, context) {
-	var file, readstream;
+function jsonDispatcher(url, config, context) {
+	var file, json;
 	return regeneratorRuntime.wrap(function jsonDispatcher$(_context3) {
 		while (1) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
-					file = (0, _path.join)(server.mockJsonDir, url);
-					readstream = (0, _fileUtil2.default)().getFileByStream(file);
+					file = (0, _path.join)(config.path.asyncData, url);
+					json = (0, _fileUtil2.default)().getFileByStream(file);
 
 
 					context.type = 'application/json; charset=utf-8';
-					context.body = readstream;
+					context.body = json;
 
 				case 4:
 				case 'end':
