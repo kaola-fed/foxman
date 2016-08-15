@@ -1,12 +1,22 @@
 #!/usr/bin/env node
 // Run as bin
+'use strict';
+var path = require('path');
+var argv = require('yargs')
+    .option('config', {
+        alias    : 'c',
+        demand   : true,
+        describe : "Config file. Options read readme.md",
+        boolean  : 0
+    })
+    .usage('Usage: foxman [options]')
+    .example('foxman -c ./config.json', 'set config file')
+    .help('h')
+    .alias('h', 'help')
+    .epilog('copyright junyu')
+    .argv;
 
-let pathJoin = require('path').join;
-let argv = require('yargs').argv;
-let configPath = argv.config;
+if(argv.config == true) console.log('Error:\n --config of -c is needed');return;
 
-configPath = pathJoin(process.cwd(), configPath);
-
-let config = require(configPath);
-
-require('../app.js')(config);	
+var configPath = path.join(process.cwd(), argv.config);
+require('../app.js')( require(configPath) );
