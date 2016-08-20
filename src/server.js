@@ -4,6 +4,7 @@ import serve from 'koa-serve';
 import renderUtil from './renderUtil';
 import render from 'koa-ejs';
 import { dirDispatcher, ftlDispatcher, jsonDispatcher } from './dispatcher';
+import KoaHandlebars from 'koa-handlebars';
 
 class Server{
 	constructor(config){
@@ -20,13 +21,13 @@ class Server{
 	}
 
 	setRender(){
-		render(this.app,{
-			root    : join(global.__rootdir, 'views'),
-			layout  : 'template',
-			viewExt : 'html',
-			cache   : false,
-			debug   : true
-		})
+		this.app.use(KoaHandlebars({
+			defaultLayout:"template",
+			extension: ["html"],
+			cache: process.env.NODE_ENV!=="development",
+			layoutsDir: "views",
+			viewsDir: "views"
+		}))
 	}
 	
 	buildResource(staticDirs = []) {
@@ -38,6 +39,8 @@ class Server{
 			rootdir = item.replace(dir[0],'');
 			this.app.use(serve( dir[0] , rootdir ));
 		}.bind(this));
+
+		this.app.use(serve('resource',__dirname));
 	}
 
 	dispatch() {

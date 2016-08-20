@@ -18,7 +18,7 @@ export function* dirDispatcher (url, config, context) {
 		});
 	});
 
-	yield context.render('dir',{ fileList });
+	yield context.render('cataLog',{ fileList });
 }
 
 export function* ftlDispatcher (url, config, context) {

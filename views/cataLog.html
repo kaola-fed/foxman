@@ -1,0 +1,10 @@
+<ul>
+{{#each fileList}}
+	<li>
+			<strong>{{#if isFile}}文件{{else}}目录{{/if}}</strong>		
+			<a href="{{url}}">
+				{{name}}
+			</a>
+		</li>
+{{/each}}
+</ul>
