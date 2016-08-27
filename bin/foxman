@@ -12,9 +12,15 @@ var argv = require('yargs')
         describe : 'Config file. Options read readme.md',
         boolean  : 0
     })
+    .option('build_pid',{
+        alias    : 'b',
+        demand   : true,
+        default  : false,
+        describe : 'is need build and init the project!'
+    })
     .option('update',{
         alias    : 'u',
-        demand   : true,
+        demand   : false,
         default  : false,
         describe : 'is update from nei'
     })
@@ -36,6 +42,10 @@ try{
     process.exit(1);
 }
 
-Object.assign(config,{isUpdate});  
+Object.assign(config, {
+    pid: argv.build_pid,
+    update: argv.update,
+    configPath: configPath
+});
 
 require('../app.js')(config);
