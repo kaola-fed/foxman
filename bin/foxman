@@ -9,8 +9,14 @@ var argv = require('yargs')
         alias    : 'c',
         demand   : true,
         default  : 'foxman.config.js',
-        describe : "Config file. Options read readme.md",
+        describe : 'Config file. Options read readme.md',
         boolean  : 0
+    })
+    .option('update',{
+        alias    : 'u',
+        demand   : true,
+        default  : false,
+        describe : 'is update from nei'
     })
     .usage('Usage: foxman [options]')
     .example('foxman -c ./config.json', 'set config file')
@@ -21,6 +27,7 @@ var argv = require('yargs')
 
 
 var configPath = path.join(process.cwd(), argv.config);
+var isUpdate   = argv.update || false;
 
 try{
     config = require(configPath);
@@ -29,4 +36,6 @@ try{
     process.exit(1);
 }
 
-require('../app.js')( config );
+Object.assign(config,{isUpdate});  
+
+require('../app.js')(config);
