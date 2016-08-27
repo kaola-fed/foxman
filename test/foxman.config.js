@@ -2,7 +2,18 @@ var path = require('path');
 
 module.exports = {
  port: '3000',
- plugins:[],
+ plugins:[
+ 	{
+ 		component: class{
+ 			constructor(){
+ 				console.log('hello world')
+ 			}
+ 		},
+ 		options: {
+
+ 		}
+ 	}
+ ],
  path: {
   root:      path.join(__dirname, 'ftl'),
   syncData:  path.join(__dirname, 'mock', 'fakeData'),
