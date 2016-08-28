@@ -4,9 +4,9 @@ import serve from 'koa-serve';
 import renderUtil from '../util/renderUtil';
 import render from 'koa-ejs';
 import { dirDispatcher, ftlDispatcher, jsonDispatcher } from './dispatcher';
-import KoaHandlebars from 'koa-handlebars';
+import {error, log} from '../util/util';
 
-class Server{
+class Server {
 	constructor(config){
 		this.app = Koa();
 		this.config = config;
@@ -21,24 +21,24 @@ class Server{
 	}
 
 	setRender(){
-		this.app.use(KoaHandlebars({
-			defaultLayout:"template",
-			extension: ["html"],
-			cache: process.env.NODE_ENV!=="development",
-			layoutsDir: "views",
-			viewsDir: "views"
-		}))
+		render(this.app,{
+			root: join(global.__rootdir, 'views'),
+		  layout: 'template',
+		  viewExt: 'html',
+		  cache: process.env.NODE_ENV!=="development",
+		  debug: true
+		});
 	}
-	
+
 	buildResource(staticDirs = []) {
 		let rootdir;
 		let dir;
-		staticDirs.forEach(function (item) {
+		staticDirs.forEach( (item) => {
 			dir = /[^(\\||\/)]*$/ig.exec(item);
 			if(!dir || !dir[0]) return ;
 			rootdir = item.replace(dir[0],'');
 			this.app.use(serve( dir[0] , rootdir ));
-		}.bind(this));
+		});
 
 		this.app.use(serve('resource',__dirname));
 	}
@@ -60,16 +60,16 @@ class Server{
 					return;
 				}
 			}
-
 		});
 	}
 	createServer(){
 		this.config.port = this.config.port || 3000;
 		this.app.listen(this.config.port);
-		console.log(`freemarker-server is run on port ${this.config.port}~ `);
+		log(`freemarker-server is run on port ${this.config.port}~ `);
 	}
 }
 
-module.exports = function (config) {
-	new Server( config ).createServer();
-};
+export default Server;
+// (config) => {
+// 	new Server( config ).createServer();
+// };

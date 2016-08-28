@@ -3,8 +3,16 @@
  */
 import child_process from 'child_process';
 
+export function debugLog( msg ) {
+  if(process.env.NODE_ENV === 'development'){
+    console.log(`[D] ${msg}`);
+  }
+}
+
+
+
 export function error ( msg ) {
-  console.log(`Error:\n  ${msg}`);
+  console.log(`[E] ${msg}`);
   process.exit(1);
 }
 
@@ -15,7 +23,11 @@ export function firstUpperCase (str) {
 }
 
 export function log (msg) {
-	console.log(`Msg:\n  ${msg}`);
+	console.log(`[I] ${msg}`);
+}
+
+export function warnLog ( msg ) {
+  console.log(`[W] ${msg}`);
 }
 
 export function exec ( exe , success, failed) {

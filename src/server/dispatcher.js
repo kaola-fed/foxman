@@ -2,6 +2,7 @@ import {join} from 'path';
 import fileUtil from '../util/fileUtil';
 import renderUtil from '../util/renderUtil';
 import {error} from '../util/util.js';
+
 export function* dirDispatcher (url, config, context) {
 
 	const path     = join(config.path.root, url);
@@ -26,7 +27,7 @@ export function* ftlDispatcher (url, config, context) {
 
 	let dataModel;
 	try{
-		dataModel = require(dataPath);	
+		dataModel = require(dataPath);
 	}catch(err){
 		error(`${dataPath} is not found!`);
 	}

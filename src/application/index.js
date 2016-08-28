@@ -1,6 +1,6 @@
 import EventEmitter from 'events';
-import {Event} from 'foxman-api';
-import {firstUpperCase, error} from '../util/util';
+import {Event, STATES} from 'foxman-api';
+import {firstUpperCase, error, log, debugLog, warnLog} from '../util/util';
 
 let app;
 class Application {
@@ -8,19 +8,22 @@ class Application {
 		this.eventEmitter = new EventEmitter();
 		this.beforeEventMap = {};
 		this.current = 0;
-		this.states = ['ready', 'create', 'startServer', 'serverBuild'];
+		this.states = STATES;//['ready', 'create', 'startServer', 'serverBuild'];
 	}
 
-	addBeforeEvent (eventName, pluginId, fn){
+	addBeforeEvent (eventName, plugin, fn){
 		if(!app.beforeEventMap[eventName]) app.beforeEventMap[eventName] = {};
-		app.beforeEventMap[eventName][pluginId] = fn;
+		app.beforeEventMap[eventName][plugin.id] = {
+			name: plugin.name,
+			fn: fn
+		};
 	}
 
-	removeBeforeEvent (eventName, pluginId){
+	removeBeforeEvent (eventName, plugin){
 		try{
-				delete app.beforeEventMap[eventName][pluginId];
+			delete app.beforeEventMap[eventName][plugin.id];
 		}catch(err){
-			app.beforeEventMap[eventName][pluginId] = null;
+			app.beforeEventMap[eventName][plugin.id] = null;
 		}
 	}
 
@@ -41,27 +44,36 @@ class Application {
 
 		plugin = new Plugins(options);
 		Object.assign(plugin, {
-			on: app.on,
+			on: (msg, fn) => {
+				app.on.call(plugin, msg, fn.bind(plugin));
+			},
 			emit: app.emit,
-			before: app.before,
+			before: (msg, fn) => {
+				app.before.call(plugin, msg, fn.bind(plugin));
+			},
 			complete: app.complete
 		});
 
 		plugin.app = app;
+
+		plugin.name = plugin.name || plugin.constructor.name;
 		plugin.id = app.current++;
+
 		plugin.bindLifeCircle = () => {
 			app.states.forEach( (item, idx) => {
 				const upperEventName = firstUpperCase(item);
 
-				if( (idx!==0) && plugin['before' + upperEventName]){
-					plugin.before(item, plugin[`before${upperEventName}`].bind(plugin));
+				if( (idx!==0) && plugin[`before${upperEventName}`]){
+					plugin.before(item, plugin[`before${upperEventName}`]);
 				}
-				if(plugin['on' + upperEventName]){
-					plugin.on(item, plugin[`on${upperEventName}`].bind(plugin));
+				if(plugin[`on${upperEventName}`]){
+					plugin.on(item, plugin[`on${upperEventName}`]);
 				}
 			});
 		}
 		plugin.bindLifeCircle();
+
+		debugLog(`插件 ${plugin.name || plugin.id} 装载完毕`);
 	}
 
 	run(...args) {
@@ -79,7 +91,7 @@ class Application {
 
 		const prevState = app.states[app.states.indexOf(state)-1];
 		app.eventEmitter.on(prevState, fn);
-		app.addBeforeEvent(state, this.id, fn);
+		app.addBeforeEvent(state, this, fn);
 	}
 
 	emit(msg ,event){
@@ -88,24 +100,31 @@ class Application {
 
 	complete(event){
 		const nextState = app.states[app.states.indexOf(app.state)+1];
-
 		if(!nextState) {
 			error('can`t complete ,because no more state');
 			return;
 		}
-		app.removeBeforeEvent(nextState, this.id);
+		app.removeBeforeEvent(nextState, this);
 		app.afterComplete(nextState);
 	}
 
 	afterComplete(msg){
-		const len = Object.keys(app.beforeEventMap[msg]||{}).length;
-		if(len <= 0){
+		const leaveItemIDs = Object.keys(app.beforeEventMap[msg]||{});
+		const leaveItems = leaveItemIDs.map((id)=>{
+			return app.beforeEventMap[msg][id].name;
+		});
+		const leaveItemsLen = leaveItems.length;
+		if(leaveItemsLen <= 0){
 			app.nextState();
+		} else{
+			debugLog(`进入 ${msg} 阶段还需要插件 [${leaveItems.join(',')}] 准备完毕`);
 		}
+		return leaveItemsLen<=0;
 	}
 
 	nextState(){
 		const nextState = app.states[app.states.indexOf(app.state)+1];
+		debugLog(`进入 ${nextState} 阶段`);
 		app.setState(nextState);
 	}
 
