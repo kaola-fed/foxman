@@ -1,4 +1,6 @@
 var path = require('path');
+var foxmanAPI = require('foxman-api');
+var Event = foxmanAPI.Event;
 
 module.exports = {
  port: '3000',

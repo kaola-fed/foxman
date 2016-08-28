@@ -8,6 +8,12 @@ export function error ( msg ) {
   process.exit(1);
 }
 
+export function firstUpperCase (str) {
+  return str.replace(/\b(\w)(\w*)/g, function($0, $1, $2) {
+      return $1.toUpperCase() + $2;
+  });
+}
+
 export function log (msg) {
 	console.log(`Msg:\n  ${msg}`);
 }

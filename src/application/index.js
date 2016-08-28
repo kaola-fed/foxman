@@ -1,57 +1,124 @@
-import {EventEmitter} from 'events';
+import EventEmitter from 'events';
+import {Event} from 'foxman-api';
+import {firstUpperCase, error} from '../util/util';
 
-class Application extends EventEmitter {
-	constructor() {	
-		super();
-		this.middleware = [];
-		this.eventsBinder = {};
+let app;
+class Application {
+	constructor() {
+		this.eventEmitter = new EventEmitter();
+		this.beforeEventMap = {};
 		this.current = 0;
+		this.states = ['ready', 'create', 'startServer', 'serverBuild'];
 	}
 
-	use(Component,options) {
-		
-		if(Array.isArray(Component) && !options){
-			Component.forEach((plugin)=>{
-				this.use(plugin.component, plugin.options);
+	addBeforeEvent (eventName, pluginId, fn){
+		if(!app.beforeEventMap[eventName]) app.beforeEventMap[eventName] = {};
+		app.beforeEventMap[eventName][pluginId] = fn;
+	}
+
+	removeBeforeEvent (eventName, pluginId){
+		try{
+				delete app.beforeEventMap[eventName][pluginId];
+		}catch(err){
+			app.beforeEventMap[eventName][pluginId] = null;
+		}
+	}
+
+	use(Plugins, options) {
+		let plugin;
+		if(Array.isArray(Plugins) && !options){
+			Plugins.forEach((Plugin)=>{
+				if(Array.isArray(Plugin)){
+					Plugin = Object.assign({},{
+						class: Plugin[0],
+						options: Plugin[1]
+					})
+				}
+				app.use(Plugin.class, Plugin.options);
 			});
 			return;
 		}
-		const component = new Component(options);
-		this.middleware.push(component);
 
-	}
-	run(...args) {
-		// this.middleware.forEach( (fn) => {
-		// 	fn.apply(this, args);
-		// });
-		
-		this.setState('preRun');
-	}
-	on(msg, event){
-		super.on(arguments);
-		Object.assign(this.eventsBinder[msg] = this.eventsBinder[msg] || {},
-			{
-				desc: event.getDesc()
-			},
-			{
-				bindCount: 1+(this.eventsBinder.bindCount||0)
+		plugin = new Plugins(options);
+		Object.assign(plugin, {
+			on: app.on,
+			emit: app.emit,
+			before: app.before,
+			complete: app.complete
+		});
+
+		plugin.app = app;
+		plugin.id = app.current++;
+		plugin.bindLifeCircle = () => {
+			app.states.forEach( (item, idx) => {
+				const upperEventName = firstUpperCase(item);
+
+				if( (idx!==0) && plugin['before' + upperEventName]){
+					plugin.before(item, plugin[`before${upperEventName}`].bind(plugin));
+				}
+				if(plugin['on' + upperEventName]){
+					plugin.on(item, plugin[`on${upperEventName}`].bind(plugin));
+				}
 			});
+		}
+		plugin.bindLifeCircle();
 	}
-	emit(msg ,event){
-		super.emit(arguments);
-		try{
-			delete this.eventsBinder[msg][event.desc]
-		}catch(err){
 
+	run(...args) {
+		setTimeout(()=>{
+			app.setState(app.states[0]);
+		}, 1000);
+	}
+
+	on(msg, fn){
+		app.eventEmitter.on(msg, fn);
+	}
+
+	before(state, fn){
+		if(!(~app.states.indexOf(state))) return;
+		// console.log(state);
+
+		const prevState = app.states[app.states.indexOf(state)-1];
+		app.eventEmitter.on(prevState, fn);
+		app.addBeforeEvent(state, this.id, fn);
+	}
+
+	emit(msg ,event){
+		app.eventEmitter.emit( msg, event);
+	}
+
+	complete(event){
+		const nextState = app.states[app.states.indexOf(app.state)+1];
+
+		if(!nextState) {
+			error('can`t complete ,because no more state');
+			return;
+		}
+		app.removeBeforeEvent(nextState, this.id);
+		app.afterComplete(nextState);
+	}
+
+	afterComplete(msg){
+		const len = Object.keys(app.beforeEventMap[msg]||{}).length;
+		if(len <= 0){
+			app.nextState();
 		}
 	}
-	setState(state){
-		this.state = state;
-		this.emit(state, {
-			from: 'app'
-		})
+
+	nextState(){
+		const nextState = app.states[app.states.indexOf(app.state)+1];
+		app.setState(nextState);
 	}
-} 
 
+	setState(state){
+		app.state = state;
+		app.emit(state, new Event(state,'app'));
+	}
+}
 
-export default Application;
+export default function () {
+	if(!app){
+		app = new Application();
+	}
+	return app;
+}

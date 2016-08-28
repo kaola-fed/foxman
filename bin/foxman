@@ -31,6 +31,17 @@ var argv = require('yargs')
     .epilog('copyright junyu')
     .argv;
 
+if( process.env.NODE_ENV === "development" ){
+  // node_modules/[^foxman]
+  // node_modules/[foxman]/node_modules
+  var foxmanModuleTestReg = /(node_modules[^(foxman)]*$)|(node_modules\/*foxman[^(node_modules)]*node_modules)$/g;
+  require("babel-register")({
+    ignore: (filename) => {
+      foxmanModuleTestReg.test(filename);
+    }
+  });
+  require('babel-polyfill');
+}
 
 var configPath = path.join(process.cwd(), argv.config);
 var isUpdate   = argv.update || false;
@@ -38,7 +49,8 @@ var isUpdate   = argv.update || false;
 try{
     config = require(configPath);
 }catch(err){
-    console.log('Error:\n the config file (default is "foxman.config.js") is not found!');
+    console.log(err)
+    // console.log(`Error:\n ${err}`);
     process.exit(1);
 }
 

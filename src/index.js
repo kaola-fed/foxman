@@ -3,7 +3,7 @@ import Application from './application/index.js';
 let ower;
 class Ower{
 	constructor(config){
-		const app = new Application();
+		const app = Application();
 		app.use(config.plugins);
 		app.run();
 	}
