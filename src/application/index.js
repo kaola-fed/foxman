@@ -76,7 +76,6 @@ class Application {
 
 	before(state, fn){
 		if(!(~app.states.indexOf(state))) return;
-		// console.log(state);
 
 		const prevState = app.states[app.states.indexOf(state)-1];
 		app.eventEmitter.on(prevState, fn);
