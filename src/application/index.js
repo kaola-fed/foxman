@@ -3,12 +3,12 @@ import {Event, STATES} from 'foxman-api';
 import {firstUpperCase, error, log, debugLog, warnLog} from '../util/util';
 
 let app;
-class Application {
+class Application extends EventEmitter{
 	constructor() {
-		this.eventEmitter = new EventEmitter();
+		super();
 		this.beforeEventMap = {};
 		this.current = 0;
-		this.states = STATES;//['ready', 'create', 'startServer', 'serverBuild'];
+		this.states = STATES ; //['ready', 'create', 'startServer', 'serverBuild'];
 	}
 
 	addBeforeEvent (eventName, plugin, fn){
@@ -44,14 +44,27 @@ class Application {
 
 		plugin = new Plugins(options);
 		Object.assign(plugin, {
-			on: (msg, fn) => {
-				app.on.call(plugin, msg, fn.bind(plugin));
+			on(msg, fn) {
+				app.on(msg, fn.bind(plugin));
 			},
-			emit: app.emit,
-			before: (msg, fn) => {
-				app.before.call(plugin, msg, fn.bind(plugin));
+			emit(msg, event) {
+				app.call(msg, event);
 			},
-			complete: app.complete
+			before(state, fn) {
+				if(!(~app.states.indexOf(state))) return;
+				const prevState = app.states[app.states.indexOf(state)-1];
+				this.on(prevState, fn);
+				app.addBeforeEvent(state, this, fn);
+			},
+			complete(event) {
+				const nextState = app.states[app.states.indexOf(app.state)+1];
+				if(!nextState) {
+					error('can`t complete ,because no more state');
+					return;
+				}
+				app.removeBeforeEvent(nextState, this);
+				app.afterComplete(nextState);
+			}
 		});
 
 		plugin.app = app;
@@ -83,29 +96,11 @@ class Application {
 	}
 
 	on(msg, fn){
-		app.eventEmitter.on(msg, fn);
-	}
-
-	before(state, fn){
-		if(!(~app.states.indexOf(state))) return;
-
-		const prevState = app.states[app.states.indexOf(state)-1];
-		app.eventEmitter.on(prevState, fn);
-		app.addBeforeEvent(state, this, fn);
+		super.on(msg, fn);
 	}
 
 	emit(msg ,event){
-		app.eventEmitter.emit( msg, event);
-	}
-
-	complete(event){
-		const nextState = app.states[app.states.indexOf(app.state)+1];
-		if(!nextState) {
-			error('can`t complete ,because no more state');
-			return;
-		}
-		app.removeBeforeEvent(nextState, this);
-		app.afterComplete(nextState);
+		super.emit(msg, event);
 	}
 
 	afterComplete(msg){
@@ -114,6 +109,7 @@ class Application {
 			return app.beforeEventMap[msg][id].name;
 		});
 		const leaveItemsLen = leaveItems.length;
+
 		if(leaveItemsLen <= 0){
 			app.nextState();
 		} else{
