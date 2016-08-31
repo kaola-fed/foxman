@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
 exports.default = function () {
 	if (!app) {
 		app = new Application();
@@ -25,16 +27,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var app = void 0;
 
-var Application = function () {
+var Application = function (_EventEmitter) {
+	_inherits(Application, _EventEmitter);
+
 	function Application() {
 		_classCallCheck(this, Application);
 
-		this.eventEmitter = new _events2.default();
-		this.beforeEventMap = {};
-		this.current = 0;
-		this.states = _foxmanApi.STATES; //['ready', 'create', 'startServer', 'serverBuild'];
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Application).call(this));
+
+		_this.beforeEventMap = {};
+		_this.current = 0;
+		_this.states = _foxmanApi.STATES; //['ready', 'create', 'startServer', 'serverBuild'];
+		return _this;
 	}
 
 	_createClass(Application, [{
@@ -75,13 +85,26 @@ var Application = function () {
 			plugin = new Plugins(options);
 			Object.assign(plugin, {
 				on: function on(msg, fn) {
-					app.on.call(plugin, msg, fn.bind(plugin));
+					app.on(msg, fn.bind(plugin));
 				},
-				emit: app.emit,
-				before: function before(msg, fn) {
-					app.before.call(plugin, msg, fn.bind(plugin));
+				emit: function emit(msg, event) {
+					app.call(msg, event);
 				},
-				complete: app.complete
+				before: function before(state, fn) {
+					if (!~app.states.indexOf(state)) return;
+					var prevState = app.states[app.states.indexOf(state) - 1];
+					this.on(prevState, fn);
+					app.addBeforeEvent(state, this, fn);
+				},
+				complete: function complete(event) {
+					var nextState = app.states[app.states.indexOf(app.state) + 1];
+					if (!nextState) {
+						(0, _util.error)('can`t complete ,because no more state');
+						return;
+					}
+					app.removeBeforeEvent(nextState, this);
+					app.afterComplete(nextState);
+				}
 			});
 
 			plugin.app = app;
@@ -115,32 +138,12 @@ var Application = function () {
 	}, {
 		key: 'on',
 		value: function on(msg, fn) {
-			app.eventEmitter.on(msg, fn);
-		}
-	}, {
-		key: 'before',
-		value: function before(state, fn) {
-			if (!~app.states.indexOf(state)) return;
-
-			var prevState = app.states[app.states.indexOf(state) - 1];
-			app.eventEmitter.on(prevState, fn);
-			app.addBeforeEvent(state, this, fn);
+			_get(Object.getPrototypeOf(Application.prototype), 'on', this).call(this, msg, fn);
 		}
 	}, {
 		key: 'emit',
 		value: function emit(msg, event) {
-			app.eventEmitter.emit(msg, event);
-		}
-	}, {
-		key: 'complete',
-		value: function complete(event) {
-			var nextState = app.states[app.states.indexOf(app.state) + 1];
-			if (!nextState) {
-				(0, _util.error)('can`t complete ,because no more state');
-				return;
-			}
-			app.removeBeforeEvent(nextState, this);
-			app.afterComplete(nextState);
+			_get(Object.getPrototypeOf(Application.prototype), 'emit', this).call(this, msg, event);
 		}
 	}, {
 		key: 'afterComplete',
@@ -150,6 +153,7 @@ var Application = function () {
 				return app.beforeEventMap[msg][id].name;
 			});
 			var leaveItemsLen = leaveItems.length;
+
 			if (leaveItemsLen <= 0) {
 				app.nextState();
 			} else {
@@ -157,7 +161,7 @@ var Application = function () {
 			}
 			return leaveItemsLen <= 0;
 		}
-	}, {
+	}], [{
 		key: 'nextState',
 		value: function nextState() {
 			var nextState = app.states[app.states.indexOf(app.state) + 1];
@@ -173,4 +177,4 @@ var Application = function () {
 	}]);
 
 	return Application;
-}();
+}(_events2.default);

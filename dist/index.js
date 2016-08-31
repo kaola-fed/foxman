@@ -8,6 +8,10 @@ var _index3 = require('./server/index');
 
 var _index4 = _interopRequireDefault(_index3);
 
+var _index5 = require('./watcher/index');
+
+var _index6 = _interopRequireDefault(_index5);
+
 var _util = require('./util/util');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -21,6 +25,7 @@ var Ower = function Ower(config) {
 
 	var app = (0, _index2.default)();
 	app.use(config.plugins);
+	app.use(_index6.default, config);
 	app.use(_index4.default, config);
 	app.run();
 
