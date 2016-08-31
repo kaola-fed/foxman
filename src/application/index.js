@@ -83,7 +83,7 @@ class Application extends EventEmitter{
 					plugin.on(item, plugin[`on${upperEventName}`]);
 				}
 			});
-		}
+		};
 		plugin.bindLifeCircle();
 
 		debugLog(`插件 ${plugin.name || plugin.id} 装载完毕`);
@@ -118,13 +118,13 @@ class Application extends EventEmitter{
 		return leaveItemsLen<=0;
 	}
 
-	nextState(){
+	static nextState(){
 		const nextState = app.states[app.states.indexOf(app.state)+1];
 		debugLog(`进入 ${nextState} 阶段`);
 		app.setState(nextState);
 	}
 
-	setState(state){
+	static setState(state){
 		app.state = state;
 		app.emit(state, new Event(state,'app'));
 	}
