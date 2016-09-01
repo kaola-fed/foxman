@@ -1,0 +1,16 @@
+{
+  "name": "foxman-test",
+  "version": "0.0.1",
+  "description": "foxman`s test",
+  "main": "index.js",
+  "dependencies": {
+    "babel-polyfill": "^6.13.0",
+    "foxman-api": "0.0.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
