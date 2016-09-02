@@ -9,17 +9,9 @@ export function debugLog( msg ) {
   }
 }
 
-
-
 export function error ( msg ) {
   console.log(`[E] ${msg}`);
   process.exit(1);
-}
-
-export function firstUpperCase (str) {
-  return str.replace(/\b(\w)(\w*)/g, function($0, $1, $2) {
-      return $1.toUpperCase() + $2;
-  });
 }
 
 export function log (msg) {
@@ -28,6 +20,19 @@ export function log (msg) {
 
 export function warnLog ( msg ) {
   console.log(`[W] ${msg}`);
+}
+
+export function createSystemId(){
+  let currentId = 0;
+  return function getNext() {
+    return ++currentId;
+  }
+}
+
+export function firstUpperCase (str) {
+  return str.replace(/\b(\w)(\w*)/g, function($0, $1, $2) {
+      return $1.toUpperCase() + $2;
+  });
 }
 
 export function exec ( exe , success, failed) {

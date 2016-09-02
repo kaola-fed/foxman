@@ -8,7 +8,8 @@ module.exports = {
  	[PluginA, {name:'xujunyu'}]
  ],
  path: {
-  root:      path.join(__dirname, 'ftl'),
+  root:      path.join(__dirname,'src','main','webapp'),
+  viewRoot:  path.join(__dirname, 'ftl'),
   syncData:  path.join(__dirname, 'mock', 'fakeData'),
   asyncData: path.join(__dirname, 'mock', 'json'),
   static: [

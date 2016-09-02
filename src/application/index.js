@@ -1,18 +1,42 @@
 import EventEmitter from 'events';
 import {Event, STATES} from 'foxman-api';
-import {firstUpperCase, error, log, debugLog, warnLog} from '../util/util';
+import {firstUpperCase,
+				error,
+				log,
+				debugLog,
+				warnLog,
+				createSystemId
+			} from '../util/util';
 
 let app;
 class Application extends EventEmitter{
 	constructor() {
+		let __ready       = '__ready';
+		// let __setConfig   = '__setConfig';
+		// let __loadPlugins = '__loadPlugins';
+		let __makeFile    = '__makeFile';
+		let __serverStart = '__serverStart';
+
 		super();
 		this.beforeEventMap = {};
-		this.current = 0;
-		this.states = STATES ; //['ready', 'create', 'startServer', 'serverBuild'];
+		this.getNextId = createSystemId();
+		// __setConfig,
+		// __loadPlugins,
+		this.scopeMap = {
+			__ready,
+			__makeFile,
+			__serverStart
+		}
+		this.scopeList = Object.keys(this.scopeMap);
+		console.log(this.scopeList);
 	}
 
+	setConfig(config){
+		app.config = config;
+	}
 	addBeforeEvent (eventName, plugin, fn){
 		if(!app.beforeEventMap[eventName]) app.beforeEventMap[eventName] = {};
+
 		app.beforeEventMap[eventName][plugin.id] = {
 			name: plugin.name,
 			fn: fn
@@ -20,6 +44,11 @@ class Application extends EventEmitter{
 	}
 
 	removeBeforeEvent (eventName, plugin){
+
+		if(!app.beforeEventMap[eventName] || !app.beforeEventMap[eventName][plugin.id]){
+			error(`${eventName} is not in our scope list.`);
+			return -1;
+		}
 		try{
 			delete app.beforeEventMap[eventName][plugin.id];
 		}catch(err){
@@ -44,38 +73,43 @@ class Application extends EventEmitter{
 
 		plugin = new Plugins(options);
 		Object.assign(plugin, {
+			app:		app,
+			config: app.config,
+			name: 	(plugin.name || plugin.constructor.name),
+			id: 		app.getNextId(),
+
 			on(msg, fn) {
 				app.on(msg, fn.bind(plugin));
 			},
 			emit(msg, event) {
 				app.call(msg, event);
 			},
-			before(state, fn) {
-				if(!(~app.states.indexOf(state))) return;
-				const prevState = app.states[app.states.indexOf(state)-1];
-				this.on(prevState, fn);
-				app.addBeforeEvent(state, this, fn);
+			before(scope, fn) {
+				if(!app.scopeMap[scope]) return;
+				const prevScope = app.getPrevScope(scope);
+				this.on(prevScope, fn);
+				app.addBeforeEvent(scope, this, fn);
 			},
 			complete(event) {
-				const nextState = app.states[app.states.indexOf(app.state)+1];
-				if(!nextState) {
-					error('can`t complete ,because no more state');
+				const nextScope = app.getNextScope(app.scope);
+				if(!nextScope) {
+					error('can`t complete ,because no more scope');
 					return;
 				}
-				app.removeBeforeEvent(nextState, this);
-				app.afterComplete(nextState);
+				var result = app.removeBeforeEvent(nextScope, this);
+
+				if(result===-1){
+					warnLog('请检查是否在plugin中的 before.. 方法内重复调用 this.complete')
+				}
+				app.afterComplete(nextScope);
 			}
 		});
 
-		plugin.app = app;
-
-		plugin.name = plugin.name || plugin.constructor.name;
-		plugin.id = app.current++;
+		// plugin.app = app;
 
 		plugin.bindLifeCircle = () => {
-			app.states.forEach( (item, idx) => {
-				const upperEventName = firstUpperCase(item);
-
+			app.scopeList.forEach( (item, idx) => {
+				const upperEventName = firstUpperCase(item.slice(2));
 				if( (idx!==0) && plugin[`before${upperEventName}`]){
 					plugin.before(item, plugin[`before${upperEventName}`]);
 				}
@@ -86,12 +120,12 @@ class Application extends EventEmitter{
 		};
 		plugin.bindLifeCircle();
 
-		debugLog(`插件 ${plugin.name || plugin.id} 装载完毕`);
+		debugLog(`plugin ${plugin.name || plugin.id} is ready`);
 	}
 
 	run(...args) {
 		setTimeout(()=>{
-			app.setState(app.states[0]);
+			app.setScope(app.scopeMap['__ready']);
 		}, 1000);
 	}
 
@@ -102,31 +136,35 @@ class Application extends EventEmitter{
 	emit(msg ,event){
 		super.emit(msg, event);
 	}
-
+	getPrevScope(scope){
+		return app.scopeList[app.scopeList.indexOf(scope)-1];
+	}
+	getNextScope(scope){
+		 return app.scopeList[app.scopeList.indexOf(scope)+1]
+	}
 	afterComplete(msg){
 		const leaveItemIDs = Object.keys(app.beforeEventMap[msg]||{});
 		const leaveItems = leaveItemIDs.map((id)=>{
 			return app.beforeEventMap[msg][id].name;
 		});
 		const leaveItemsLen = leaveItems.length;
-
 		if(leaveItemsLen <= 0){
-			app.nextState();
+			app.nextScope();
 		} else{
-			debugLog(`进入 ${msg} 阶段还需要插件 [${leaveItems.join(',')}] 准备完毕`);
+			debugLog(`enter ${msg} is wating [${leaveItems.join(',')}],checkout the plugin.complete`);
 		}
 		return leaveItemsLen<=0;
 	}
 
-	static nextState(){
-		const nextState = app.states[app.states.indexOf(app.state)+1];
-		debugLog(`进入 ${nextState} 阶段`);
-		app.setState(nextState);
+	nextScope(){
+		const nextScope = app.getNextScope(app.scope)
+		debugLog(`now scope is ${nextScope}`);
+		app.setScope(nextScope);
 	}
 
-	static setState(state){
-		app.state = state;
-		app.emit(state, new Event(state,'app'));
+	setScope(scope){
+		app.scope = scope;
+		app.emit(scope, new Event(scope,'app'));
 	}
 }
 

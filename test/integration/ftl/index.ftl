@@ -5,6 +5,6 @@
 	<title>hello world</title>
 </head>
 <body>
-	${hello} assasworld
+	${hello} world
 </body>
 </html>

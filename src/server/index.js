@@ -7,7 +7,19 @@ class ServerPlugin extends BasePlugin{
     // this.name = 'mockServer';
     this.options = options;
   }
-  onStartServer(){
+  beforeReady(){
+    this.complete();
+  }
+  beforeSetConfig(){
+    this.complete();
+  }
+  beforeMakeFile(){
+    this.complete();
+  }
+  beforeServerStart(){
+    this.complete();
+  }
+  onServerStart(){
     new Server( this.options ).createServer();
   }
 }

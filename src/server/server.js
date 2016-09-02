@@ -12,7 +12,7 @@ class Server {
 		this.config = config;
 
 		renderUtil({
-			viewFolder: config.path.root
+			viewFolder: config.path.viewRoot
 		});
 
 		this.buildResource(config.path.static);

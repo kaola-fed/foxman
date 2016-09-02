@@ -7,14 +7,28 @@ let ower;
 class Ower{
 	constructor(config){
 		const app = Application();
+		/**
+		 * __setConfig
+		 */
+		app.setConfig(config);
+
+		/**
+		 * __loadPlugins
+		 */
 		app.use(config.plugins);
+		/**
+		 * 内置组件
+		 */
 		app.use(WatcherPlugin,config);
-		app.use(ServerPlugin, config);
+		app.use(ServerPlugin,config);/** main **/
+
+		/**
+		 * __updateFile
+		 */
 		app.run();
 
 		/** start server **/
 
-		// new Server(config).startServer();
 
 		/** start server **/
 
