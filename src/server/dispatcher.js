@@ -5,7 +5,7 @@ import {error} from '../util/util.js';
 
 export function* dirDispatcher (url, config, context) {
 
-	const path     = join(config.path.root, url);
+	const path     = join(config.root, url);
 	const files    = yield fileUtil().getDirInfo(path);
 	const promises = files.map((file) => {
 		return fileUtil().getFileStat(join(path, file))
@@ -23,7 +23,7 @@ export function* dirDispatcher (url, config, context) {
 }
 
 export function* ftlDispatcher (url, config, context) {
-	const dataPath = join(config.path.syncData, url.replace(/.ftl$/,'') + '.json');
+	const dataPath = join(config.syncData, url.replace(/.ftl$/,'') + '.json');
 
 	let dataModel;
 	try{

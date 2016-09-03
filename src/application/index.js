@@ -104,7 +104,7 @@ class Application extends EventEmitter{
 				app.afterComplete(nextScope);
 			}
 		});
-
+		plugin.init && plugin.init();
 		// plugin.app = app;
 
 		plugin.bindLifeCircle = () => {

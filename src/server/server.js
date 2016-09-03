@@ -12,10 +12,10 @@ class Server {
 		this.config = config;
 
 		renderUtil({
-			viewFolder: config.path.viewRoot
+			viewFolder: config.viewRoot
 		});
 
-		this.buildResource(config.path.static);
+		this.buildResource(config.static);
 		this.setRender();
 		this.dispatch();
 	}
@@ -70,6 +70,3 @@ class Server {
 }
 
 export default Server;
-// (config) => {
-// 	new Server( config ).createServer();
-// };

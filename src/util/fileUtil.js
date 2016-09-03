@@ -1,14 +1,15 @@
-import {readdir, lstat, readFile, ReadStream} from 'fs';
+import {readdir, lstat, readFile, writeFile, ReadStream} from 'fs';
 
 let fileUtil;
 class FileUtil {
 	constructor(){
 
 	}
+
 	getFileByStream(path){
 		return ReadStream(path);
 	}
-	
+
 	getDirInfo(dir){
 		return new Promise( (resolve,reject) => {
 			readdir(dir, (err,files) => {
@@ -27,15 +28,22 @@ class FileUtil {
 		});
 	}
 
-	getFileContent(file){
+	readFile(file){
 		return new Promise( (resolve,reject) => {
-			readFile(file,function (err, data) {
+			readFile(file,'utf-8',function (err, data) {
 				if(err){return reject(err)}
 				resolve(data);
 			});
 		});
 	}
-
+	writeFile(filename,text){
+		return new Promise((resolve, reject)=>{
+			writeFile(filename,text, (err)=>{
+				if(err){return reject(err)}
+				resolve();
+			});
+		});
+	}
 }
 export default function () {
 	if(!fileUtil){ fileUtil = new FileUtil();}

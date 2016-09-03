@@ -22,7 +22,7 @@ export function warnLog ( msg ) {
   console.log(`[W] ${msg}`);
 }
 
-export function createSystemId(){
+export function createSystemId(){ // uid
   let currentId = 0;
   return function getNext() {
     return ++currentId;

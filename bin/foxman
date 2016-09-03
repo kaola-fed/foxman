@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Run as bin
 'use strict';
+var anymatch = require('anymatch');
 var path = require('path');
 var fs   = require('fs');
 var config;
@@ -34,10 +35,16 @@ var argv = require('yargs')
 if( process.env.NODE_ENV === "development" ){
   // node_modules/[^foxman]
   // node_modules/[foxman]/node_modules
-  var foxmanModuleTestReg = /(node_modules[^(foxman)]*$)|(node_modules\/*foxman[^(node_modules)]*node_modules)$/g;
+  // var foxmanModuleTestReg = /(node_modules[^(foxman)]*$)|(node_modules\/*foxman[^(node_modules)]*node_modules)/g;
+  var matcher = anymatch([
+    '**/foxman/src/**/*.js',
+    '**/foxman-api/src/**/*.js'
+  ])
   require("babel-register")({
     ignore: (filename) => {
-      return foxmanModuleTestReg.test(filename);
+      // console.log(filename+""+!matcher(filename));
+      return !matcher(filename);
+      // return foxmanModuleTestReg.test(filename);
     }
   });
   require('babel-polyfill');

@@ -1,14 +1,13 @@
 import EventEmitter from 'events';
+import {resolve} from 'path';
 import {Event, STATES} from 'foxman-api';
 import chokidar from 'chokidar';
 import anymatch from 'anymatch';
-import _ from 'underscore';
 import {firstUpperCase,
 				error,
 				log,
 				debugLog,
-				warnLog,
-				createSystemId
+				warnLog
 			} from '../util/util';
 
 let watcher;
@@ -20,19 +19,34 @@ class Watcher {
       persistent: true
     });
   }
-  onChange(...args){
-    debugLog(`watch Directory: ${this.root + args[0]}`);
-    if( args.length < 2 ) return;
-    let testFunc = ( path ,stats) => {
-      if( matcher(path) ) return args[args.length-1](path, stats);
+	on(...args){
+		if( Array.isArray(args[1]) ) {
+			return args[1].forEach( (path,idx) => {
+				this.on(args[0], path, args[2]);
+			});
+		}
+		let absPath = resolve(this.root, args[1]);
+		debugLog(`watch File: ${args[0]}:${ absPath }`);
+
+    if( args.length < 3 ) return;
+		let matcher = anymatch(absPath);
+
+		let testFunc = ( path ,stats) => {
+      if( matcher(path) ) {
+				debugLog(`watcher's event is ${args[0]},file is ${path}`);
+				return args[2](path, stats);
+			}
     };
-    let matcher = anymatch( this.root + args[0]);
 
-    if(args.length == 2){
-      debugLog(`watcher's arguments len is 2, is using all`)
-      this.watcher.on('change', testFunc);
-    }
-
+		this.watcher.on(args[0], testFunc);
+	}
+	onControl(...args){
+		this.on.apply(this,['add',...args]);
+	}
+  onChange(...args){
+		this.on.apply(this,['add',...args]);
+		this.on.apply(this,['change',...args]);
+		this.on.apply(this,['unlink',...args]);
   }
 }
 export default function (...args) {

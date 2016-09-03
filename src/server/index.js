@@ -2,15 +2,7 @@ import Server from './server';
 import {Event, STATES, BasePlugin} from 'foxman-api';
 
 class ServerPlugin extends BasePlugin{
-  constructor(options){
-    super(options);
-    // this.name = 'mockServer';
-    this.options = options;
-  }
   beforeReady(){
-    this.complete();
-  }
-  beforeSetConfig(){
     this.complete();
   }
   beforeMakeFile(){
@@ -20,6 +12,7 @@ class ServerPlugin extends BasePlugin{
     this.complete();
   }
   onServerStart(){
+    // console.log('hello world');
     new Server( this.options ).createServer();
   }
 }

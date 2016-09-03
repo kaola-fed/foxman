@@ -4,8 +4,11 @@
   "description": "foxman`s test",
   "main": "index.js",
   "dependencies": {
+    "autoprefixer": "^6.4.1",
     "babel-polyfill": "^6.13.0",
-    "foxman-api": "0.0.5"
+    "foxman-api": "0.0.5",
+    "mcss": "^0.5.1",
+    "postcss": "^5.1.2"
   },
   "devDependencies": {},
   "scripts": {
