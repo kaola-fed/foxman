@@ -36,12 +36,14 @@
   "dependencies": {
     "babel-register": "^6.11.6",
     "foxman-api": "0.0.7",
+    "globule": "^1.0.0",
     "koa": "^1.2.1",
     "koa-ejs": "^3.0.0",
     "koa-handlebars": "^0.5.7",
     "koa-serve": "^0.1.7",
     "nei": "^0.5.0",
     "underscore": "^1.8.3",
+    "vinyl-fs": "^2.4.3",
     "yargs": "^4.8.1"
   }
 }

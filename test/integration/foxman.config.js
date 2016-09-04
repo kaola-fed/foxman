@@ -15,12 +15,9 @@ module.exports = {
       * relative
       * @type {[type]}
       */
-     test: 'src/mcss/**/*.mcss',
+     test: ['src/mcss/**/*.mcss'],
      precompiler: function (preCompiler) {
-       return preCompiler.pipe(
-         compiler1).pipe(
-           compiler2).dest(
-             'src/css/**/*.css');
+       return preCompiler.pipe(compiler1()).pipe(preCompiler.dest('src/css/'));//.pipe(compiler2)//
      }
    }
  ],

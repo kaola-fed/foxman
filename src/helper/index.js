@@ -1,17 +1,17 @@
 import Nei from 'nei';
 import {readFile, readFileSync, writeFileSync} from 'fs';
 import path from 'path';
-import {jsSpawn, log} from '../util/util.js';
+import util from 'foxman-api';
 const NeiApp = path.join(global.__rootdir,'./node_modules/nei/bin/nei.js');
 
 function build (config) {
 	return new Promise(function (resolve, reject) {
 		if(!config.neiPid){
 			let success,
-				build = jsSpawn([NeiApp,'build',config.pid]);
-			
+				build = util.jsSpawn([NeiApp,'build',config.pid]);
+
 			build.stdout.on('data', (data) => {
-			  log('nei: '+data.toString('utf-8'));
+			  util.log('nei: '+data.toString('utf-8'));
 			  if(/success/.test(data)) success = true;
 			});
 			build.stdout.on('end', ()=>{
@@ -28,7 +28,7 @@ function build (config) {
 			return ;
 		}
 		resolve();
-		log('nei配置已存在，你可能需要的是 nei update');
+		util.log('nei配置已存在，你可能需要的是 nei update');
 	});
 }
 
@@ -37,25 +37,25 @@ function update(config) {
 		if( config.neiPid ){
 			let success,
 				update = jsSpawn([NeiApp,'update']);
-			
+
 			update.stdout.on('data', (data) => {
-			  log('nei: '+data.toString('utf-8'));
+			  util.log('nei: '+data.toString('utf-8'));
 			  if(/success/.test(data)) success = true;
 			});
 			update.stdout.on('end', ()=>{
-				if(success) { 
+				if(success) {
 					resolve();
 				}
 			});
 			return ;
 		}
 
-		log('nei pid未配置，你可能需要的是 nei update');
+		util.log('nei pid未配置，你可能需要的是 nei update');
 	})
 }
 
 function next() {
-	log('start server');
+	util.log('start server');
 }
 
 module.exports = (config, next) => {

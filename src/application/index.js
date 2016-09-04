@@ -1,12 +1,5 @@
 import EventEmitter from 'events';
-import {Event, STATES} from 'foxman-api';
-import {firstUpperCase,
-				error,
-				log,
-				debugLog,
-				warnLog,
-				createSystemId
-			} from '../util/util';
+import {Event, STATES, util} from 'foxman-api';
 
 let app;
 class Application extends EventEmitter{
@@ -19,7 +12,7 @@ class Application extends EventEmitter{
 
 		super();
 		this.beforeEventMap = {};
-		this.getNextId = createSystemId();
+		this.getNextId = util.createSystemId();
 		// __setConfig,
 		// __loadPlugins,
 		this.scopeMap = {
@@ -28,7 +21,6 @@ class Application extends EventEmitter{
 			__serverStart
 		}
 		this.scopeList = Object.keys(this.scopeMap);
-		console.log(this.scopeList);
 	}
 
 	setConfig(config){
@@ -46,7 +38,7 @@ class Application extends EventEmitter{
 	removeBeforeEvent (eventName, plugin){
 
 		if(!app.beforeEventMap[eventName] || !app.beforeEventMap[eventName][plugin.id]){
-			error(`${eventName} is not in our scope list.`);
+			util.error(`${eventName} is not in our scope list.`);
 			return -1;
 		}
 		try{
@@ -93,13 +85,13 @@ class Application extends EventEmitter{
 			complete(event) {
 				const nextScope = app.getNextScope(app.scope);
 				if(!nextScope) {
-					error('can`t complete ,because no more scope');
+					util.error('can`t complete ,because no more scope');
 					return;
 				}
 				var result = app.removeBeforeEvent(nextScope, this);
 
 				if(result===-1){
-					warnLog('请检查是否在plugin中的 before.. 方法内重复调用 this.complete')
+					util.warnLog('请检查是否在plugin中的 before.. 方法内重复调用 this.complete')
 				}
 				app.afterComplete(nextScope);
 			}
@@ -109,7 +101,7 @@ class Application extends EventEmitter{
 
 		plugin.bindLifeCircle = () => {
 			app.scopeList.forEach( (item, idx) => {
-				const upperEventName = firstUpperCase(item.slice(2));
+				const upperEventName = util.firstUpperCase(item.slice(2));
 				if( (idx!==0) && plugin[`before${upperEventName}`]){
 					plugin.before(item, plugin[`before${upperEventName}`]);
 				}
@@ -120,7 +112,7 @@ class Application extends EventEmitter{
 		};
 		plugin.bindLifeCircle();
 
-		debugLog(`plugin ${plugin.name || plugin.id} is ready`);
+		util.debugLog(`plugin ${plugin.name || plugin.id} is ready`);
 	}
 
 	run(...args) {
@@ -151,14 +143,14 @@ class Application extends EventEmitter{
 		if(leaveItemsLen <= 0){
 			app.nextScope();
 		} else{
-			debugLog(`enter ${msg} is wating [${leaveItems.join(',')}],checkout the plugin.complete`);
+			util.debugLog(`enter ${msg} is wating [${leaveItems.join(',')}],checkout the plugin.complete`);
 		}
 		return leaveItemsLen<=0;
 	}
 
 	nextScope(){
 		const nextScope = app.getNextScope(app.scope)
-		debugLog(`now scope is ${nextScope}`);
+		util.debugLog(`now scope is ${nextScope}`);
 		app.setScope(nextScope);
 	}
 

@@ -1,10 +1,10 @@
 import Koa from 'koa';
 import {join} from 'path';
 import serve from 'koa-serve';
-import renderUtil from '../util/renderUtil';
+import renderUtil from '../../helper/render';
 import render from 'koa-ejs';
 import { dirDispatcher, ftlDispatcher, jsonDispatcher } from './dispatcher';
-import {error, log} from '../util/util';
+import {util}  from 'foxman-api';
 
 class Server {
 	constructor(config){
@@ -65,7 +65,7 @@ class Server {
 	createServer(){
 		this.config.port = this.config.port || 3000;
 		this.app.listen(this.config.port);
-		log(`freemarker-server is run on port ${this.config.port}~ `);
+		util.log(`freemarker-server is run on port ${this.config.port}~ `);
 	}
 }
 

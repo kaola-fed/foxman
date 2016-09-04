@@ -1,4 +1,4 @@
 .b{
-  width:2px;
+  width: 6px;
   display: flex;
 }

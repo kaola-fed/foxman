@@ -1,14 +1,13 @@
 import {join} from 'path';
-import fileUtil from '../util/fileUtil';
-import renderUtil from '../util/renderUtil';
-import {error} from '../util/util.js';
+import renderUtil from '../../helper/render';
+import {util,fileUtil} from 'foxman-api';
 
 export function* dirDispatcher (url, config, context) {
 
 	const path     = join(config.root, url);
-	const files    = yield fileUtil().getDirInfo(path);
+	const files    = yield fileUtil.getDirInfo(path);
 	const promises = files.map((file) => {
-		return fileUtil().getFileStat(join(path, file))
+		return fileUtil.getFileStat(join(path, file))
 	});
 	const result   = yield Promise.all(promises);
 	const fileList = result.map((item,idx)=>{
@@ -29,7 +28,7 @@ export function* ftlDispatcher (url, config, context) {
 	try{
 		dataModel = require(dataPath);
 	}catch(err){
-		error(`${dataPath} is not found!`);
+		util.error(`${dataPath} is not found!`);
 	}
 	const output    = renderUtil().parse(url, dataModel);
 	context.type = 'text/html; charset=utf-8';
@@ -46,7 +45,7 @@ export function* ftlDispatcher (url, config, context) {
 
 export function* jsonDispatcher (url, config, context) {
 	const file = join(config.path.asyncData, url);
-	const json = fileUtil().getFileByStream(file);
+	const json = fileUtil.getFileByStream(file);
 
 	context.type = 'application/json; charset=utf-8';
 	context.body = json;

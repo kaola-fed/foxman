@@ -1,11 +1,6 @@
-import {Event, STATES, BasePlugin} from 'foxman-api';
+import {Event, STATES, BasePlugin, util} from 'foxman-api';
 import Watcher from './watcher';
 import chokidar from 'chokidar';
-import {error,
-				log,
-				debugLog,
-				warnLog
-			} from '../util/util';
 
 /**
  * 监听插件

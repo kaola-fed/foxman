@@ -1,39 +1,34 @@
-var mcss = require('mcss');
+'use strict';
 
-function handle(src, next, reset){
-  let filename = src.path;
+const through = require('through2');
+const gutil = require('gulp-util');
+const mcss = require('mcss');
+const replaceExt = require('replace-ext');
+const PluginError = gutil.PluginError;
 
-  var getInstance = () => {
-    return mcss({
-      filename
-    })
-  };
-  var changed = (instance = getInstance())=>{
-    return instance.translate().done((text) => {
-      if(text){
-        next(text);
-      }else{
-        reset();
-      }
-    }).fail((err) => {
-        mcss.error.format(err);
-        console.log(err.message);
+module.exports = function (opt) {
+    return through.obj((file, enc, cb) => {
+        if (file.isNull())
+            return cb(null, file);
+        if (file.isStream())
+            return cb(new PluginError('gulp_mcss', 'Streaming not supported'));
+
+        const options = Object.assign({
+            filename: file.path
+        }, opt);
+
+        try {
+            mcss(options).translate().done((text) => {
+                file.contents = new Buffer(text);
+                file.path = replaceExt(file.path, '.css');
+                cb(null, file);
+            }).fail((err) => {
+                mcss.error.format(err);
+                console.log(err.message);
+                cb();
+            });
+        } catch (err) {
+            cb(new PluginError('gulp_mcss', err));
+        }
     });
-  }
-
-  var instance = getInstance();
-  changed(instance).always(()=>{
-    /**
-     *
-     { '/home/jy/sample/fxm-dev/foxman/test/integration/src/main/webapp/src/mcss/base.mcss': '@import \'./_config.mcss\';\n.d{\n  width:200px;\n}\n',
-       '/home/jy/sample/fxm-dev/foxman/test/integration/src/main/webapp/src/mcss/_config.mcss': '.c{\n  width: 100px;\n}\n' }
-     */
-    //  console.log(this);
-     let watchFileMap = instance.get('imports');
-     let watchFiles   = Object.keys(watchFileMap);
-     this.onChange(watchFiles,(path,stats)=>{
-       changed();
-     });
-  });
 };
-module.exports = handle;

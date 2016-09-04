@@ -1,14 +1,8 @@
 import EventEmitter from 'events';
 import {resolve} from 'path';
-import {Event, STATES} from 'foxman-api';
+import {Event, STATES, util} from 'foxman-api';
 import chokidar from 'chokidar';
 import anymatch from 'anymatch';
-import {firstUpperCase,
-				error,
-				log,
-				debugLog,
-				warnLog
-			} from '../util/util';
 
 let watcher;
 class Watcher {
@@ -26,14 +20,13 @@ class Watcher {
 			});
 		}
 		let absPath = resolve(this.root, args[1]);
-		debugLog(`watch File: ${args[0]}:${ absPath }`);
 
     if( args.length < 3 ) return;
 		let matcher = anymatch(absPath);
 
 		let testFunc = ( path ,stats) => {
       if( matcher(path) ) {
-				debugLog(`watcher's event is ${args[0]},file is ${path}`);
+				util.debugLog(`watcher's event is ${args[0]},file is ${path}`);
 				return args[2](path, stats);
 			}
     };
