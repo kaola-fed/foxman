@@ -1,13 +1,13 @@
 # foxman
 
-[![NPM version][npm-image]][npm-url] 
+[![NPM version][npm-image]][npm-url]
 [![NPM version][downloads-image]][downloads-url]
 
 [![NPM][nodei-image]][nodei-url]
 
 # Introduction
 
-a flexiable mock data server 4 front-end engineer. 
+a flexiable mock data server 4 front-end engineer.
 
 # Installation
 
@@ -15,20 +15,49 @@ a flexiable mock data server 4 front-end engineer.
 `npm install -g foxman`
 
 2. create config file（default is './foxman.config.js'）:
-	```javascript 
-	var path = require('path');
+	```javascript
+	'use strict';
+var path = require('path');
+var PluginA = require('./plugin.test');
+var mcss = require('./foxman-mcss');
+var autoprefix = require('gulp-autoprefixer');
+var root = path.join(__dirname,'src','main','webapp');
+module.exports = {
+ root: root,
+ plugins: [
+ 	[PluginA, {name:'xujunyu'}]
+ ],
+ preCompilers:[{
+    /* [1] relative to root
+    ** [2] abs path is started with /
+    */
+     test: ['src/mcss/**/*.mcss'],
+     precompiler: function (preCompiler) {
+       return preCompiler.pipe(mcss())
+                         .pipe(autoprefix({
+                           browsers: [ 'Android >= 2.3'],
+                           cascade: false}))
+                         .pipe(preCompiler.dest('src/css/'));
+     }
+   }
+ ],
+ watch:{
+   /**
+    * absolute
+    * @type {[type]}
+    */
+ },
+  server: {
+    port:      3000,
+    viewRoot:  path.join(__dirname, 'ftl'),
+    syncData:  path.join(__dirname, 'mock', 'fakeData'),
+    asyncData: path.join(__dirname, 'mock', 'json'),
+    static: [
+     path.join(__dirname, 'static')
+    ]
+  }
+};
 
-    module.exports = {
-      port: '3000',
-      path: {
-        root: path.join(__dirname, 'ftl'),
-        syncData: path.join(__dirname, 'mock', 'fakeData'),
-        asyncData: path.join(__dirname, 'mock', 'json'),
-        static: [
-          path.join(__dirname, 'static')
-        ]
-      }
-    };
 	```
 3. foxman
 
