@@ -36,7 +36,6 @@ function foxmanMcc(opt) {
              */
             let imports = Object.keys(instance.get('imports'));
             // console.log(imports);
-
             res.emit('returnDependencys', new Event(options.filename, imports));
             // console.log(dependencyMap[filepath]);
           });

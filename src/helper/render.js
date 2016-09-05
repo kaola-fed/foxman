@@ -8,13 +8,12 @@ class RenderUtil {
 	constructor (settings) {
 		this.settings = Object.assign({
 			encoding:  'utf-8',
-			viewFolder: __dirname
+			viewFolder: settings.viewFolder
 		}, settings);
 	}
 	parse (path, dataModel) {
 		let settings = JSON.stringify(this.settings);
 		dataModel    = JSON.stringify(dataModel);
-		path         = path.substring(1);
 
 		let cmd = spawn('java', ['-jar', jarFile, settings, path, dataModel]);
 		cmd.stderr.setEncoding('utf-8');

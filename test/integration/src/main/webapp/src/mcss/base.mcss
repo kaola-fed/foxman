@@ -1,6 +1,6 @@
 @import './_config.mcss';
 .a{
-  width: 2px;
+  width: 1px;
   background: red;
 }
 .b{

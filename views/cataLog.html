@@ -1,10 +1,10 @@
 <ul>
-{{#each fileList}}
+<%fileList.forEach((file)=>{%>
 	<li>
-			<strong>{{#if isFile}}文件{{else}}目录{{/if}}</strong>		
-			<a href="{{url}}">
-				{{name}}
-			</a>
-		</li>
-{{/each}}
+		<strong><%= (file.isFile)?'文件':'目录'%></strong>
+		<a href="<%= file.url%>">
+			<%= file.name%>
+		</a>
+	</li>
+<%})%>
 </ul>

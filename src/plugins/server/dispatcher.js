@@ -1,13 +1,13 @@
-import {join} from 'path';
+import path from 'path';
 import renderUtil from '../../helper/render';
 import {util,fileUtil} from 'foxman-api';
 
 export function* dirDispatcher (url, config, context) {
 
-	const path     = join(config.root, url);
-	const files    = yield fileUtil.getDirInfo(path);
+	const viewPath     = path.join(config.root, url);
+	const files    = yield fileUtil.getDirInfo(viewPath);
 	const promises = files.map((file) => {
-		return fileUtil.getFileStat(join(path, file))
+		return fileUtil.getFileStat(path.resolve(viewPath, file))
 	});
 	const result   = yield Promise.all(promises);
 	const fileList = result.map((item,idx)=>{
@@ -18,19 +18,21 @@ export function* dirDispatcher (url, config, context) {
 		});
 	});
 
-	yield context.render('cataLog',{ fileList });
+	yield context.render('cataLog',{ title:'查看列表',fileList });
 }
 
 export function* ftlDispatcher (url, config, context) {
-	const dataPath = join(config.syncData, url.replace(/.ftl$/,'') + '.json');
+	const filePath = path.join(config.root, url);
+	const dataPath = filePath.replace(config.viewRoot, config.syncData).replace(/.ftl$/,'.json')
 
-	let dataModel;
-	try{
+	let dataModel = {};
+	try {
 		dataModel = require(dataPath);
-	}catch(err){
-		util.error(`${dataPath} is not found!`);
+	} catch (err) {
+		util.warnLog(`${dataPath} is not found!`);
 	}
-	const output    = renderUtil().parse(url, dataModel);
+	const output = renderUtil().parse(filePath.replace(config.viewRoot,''), dataModel);
+
 	context.type = 'text/html; charset=utf-8';
 	context.body = output.stdout;
 
@@ -44,8 +46,9 @@ export function* ftlDispatcher (url, config, context) {
 }
 
 export function* jsonDispatcher (url, config, context) {
-	const file = join(config.path.asyncData, url);
-	const json = fileUtil.getFileByStream(file);
+	const filePath = path.join(config.root, url);
+	const dataPath = filePath.replace(config.viewRoot, config.asyncData)
+	const json = fileUtil.getFileByStream(dataPath);
 
 	context.type = 'application/json; charset=utf-8';
 	context.body = json;
