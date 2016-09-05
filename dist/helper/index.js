@@ -12,7 +12,9 @@ var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
-var _util = require('../util/util.js');
+var _foxmanApi = require('foxman-api');
+
+var _foxmanApi2 = _interopRequireDefault(_foxmanApi);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -23,10 +25,10 @@ function build(config) {
 		if (!config.neiPid) {
 			var _ret = function () {
 				var success = void 0,
-				    build = (0, _util.jsSpawn)([NeiApp, 'build', config.pid]);
+				    build = _foxmanApi2.default.jsSpawn([NeiApp, 'build', config.pid]);
 
 				build.stdout.on('data', function (data) {
-					(0, _util.log)('nei: ' + data.toString('utf-8'));
+					_foxmanApi2.default.log('nei: ' + data.toString('utf-8'));
 					if (/success/.test(data)) success = true;
 				});
 				build.stdout.on('end', function () {
@@ -48,7 +50,7 @@ function build(config) {
 			if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 		}
 		resolve();
-		(0, _util.log)('nei配置已存在，你可能需要的是 nei update');
+		_foxmanApi2.default.log('nei配置已存在，你可能需要的是 nei update');
 	});
 }
 
@@ -57,10 +59,10 @@ function update(config) {
 		if (config.neiPid) {
 			var _ret2 = function () {
 				var success = void 0,
-				    update = (0, _util.jsSpawn)([NeiApp, 'update']);
+				    update = jsSpawn([NeiApp, 'update']);
 
 				update.stdout.on('data', function (data) {
-					(0, _util.log)('nei: ' + data.toString('utf-8'));
+					_foxmanApi2.default.log('nei: ' + data.toString('utf-8'));
 					if (/success/.test(data)) success = true;
 				});
 				update.stdout.on('end', function () {
@@ -76,12 +78,12 @@ function update(config) {
 			if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
 		}
 
-		(0, _util.log)('nei pid未配置，你可能需要的是 nei update');
+		_foxmanApi2.default.log('nei pid未配置，你可能需要的是 nei update');
 	});
 }
 
 function next() {
-	(0, _util.log)('start server');
+	_foxmanApi2.default.log('start server');
 }
 
 module.exports = function (config, next) {

@@ -4,15 +4,19 @@ var _index = require('./application/index');
 
 var _index2 = _interopRequireDefault(_index);
 
-var _index3 = require('./server/index');
+var _server = require('./plugins/server/');
 
-var _index4 = _interopRequireDefault(_index3);
+var _server2 = _interopRequireDefault(_server);
 
-var _index5 = require('./watcher/index');
+var _watcher = require('./plugins/watcher/');
 
-var _index6 = _interopRequireDefault(_index5);
+var _watcher2 = _interopRequireDefault(_watcher);
 
-var _util = require('./util/util');
+var _precompiler = require('./plugins/precompiler/');
+
+var _precompiler2 = _interopRequireDefault(_precompiler);
+
+var _foxmanApi = require('foxman-api');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -24,14 +28,33 @@ var Ower = function Ower(config) {
 	_classCallCheck(this, Ower);
 
 	var app = (0, _index2.default)();
+	var root = config.root;
+	/**
+  * __setConfig
+  */
+	app.setConfig(config);
+
+	/**
+  * 内置组件
+  */
+	app.use(_watcher2.default, Object.assign(config.watch, { root: root }));
+	app.use(_server2.default, Object.assign(config.server, { root: root })); /** main **/
+	app.use(_precompiler2.default, {
+		preCompilers: config.preCompilers,
+		root: root
+	}); /** main **/
+
+	/**
+  * __loadPlugins
+  */
 	app.use(config.plugins);
-	app.use(_index6.default, config);
-	app.use(_index4.default, config);
+
+	/**
+  * __ready
+  */
 	app.run();
 
 	/** start server **/
-
-	// new Server(config).startServer();
 
 	/** start server **/
 };

@@ -21,8 +21,6 @@ var _events2 = _interopRequireDefault(_events);
 
 var _foxmanApi = require('foxman-api');
 
-var _util = require('../util/util');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -39,18 +37,34 @@ var Application = function (_EventEmitter) {
 	function Application() {
 		_classCallCheck(this, Application);
 
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Application).call(this));
+		var __ready = '__ready';
+		var __makeFile = '__makeFile';
+		var __serverStart = '__serverStart';
+
+		var _this = _possibleConstructorReturn(this, (Application.__proto__ || Object.getPrototypeOf(Application)).call(this));
 
 		_this.beforeEventMap = {};
-		_this.current = 0;
-		_this.states = _foxmanApi.STATES; //['ready', 'create', 'startServer', 'serverBuild'];
+		_this.getNextId = _foxmanApi.util.createSystemId();
+
+		_this.scopeMap = {
+			__ready: __ready,
+			__makeFile: __makeFile,
+			__serverStart: __serverStart
+		};
+		_this.scopeList = Object.keys(_this.scopeMap);
 		return _this;
 	}
 
 	_createClass(Application, [{
+		key: 'setConfig',
+		value: function setConfig(config) {
+			app.config = config;
+		}
+	}, {
 		key: 'addBeforeEvent',
 		value: function addBeforeEvent(eventName, plugin, fn) {
 			if (!app.beforeEventMap[eventName]) app.beforeEventMap[eventName] = {};
+
 			app.beforeEventMap[eventName][plugin.id] = {
 				name: plugin.name,
 				fn: fn
@@ -59,6 +73,11 @@ var Application = function (_EventEmitter) {
 	}, {
 		key: 'removeBeforeEvent',
 		value: function removeBeforeEvent(eventName, plugin) {
+
+			if (!app.beforeEventMap[eventName] || !app.beforeEventMap[eventName][plugin.id]) {
+				_foxmanApi.util.error(eventName + ' is not in our scope list.');
+				return -1;
+			}
 			try {
 				delete app.beforeEventMap[eventName][plugin.id];
 			} catch (err) {
@@ -84,38 +103,42 @@ var Application = function (_EventEmitter) {
 
 			plugin = new Plugins(options);
 			Object.assign(plugin, {
+				app: app,
+				config: app.config,
+				name: plugin.name || plugin.constructor.name,
+				id: app.getNextId(),
+
 				on: function on(msg, fn) {
 					app.on(msg, fn.bind(plugin));
 				},
 				emit: function emit(msg, event) {
 					app.call(msg, event);
 				},
-				before: function before(state, fn) {
-					if (!~app.states.indexOf(state)) return;
-					var prevState = app.states[app.states.indexOf(state) - 1];
-					this.on(prevState, fn);
-					app.addBeforeEvent(state, this, fn);
+				before: function before(scope, fn) {
+					if (!app.scopeMap[scope]) return;
+					var prevScope = app.getPrevScope(scope);
+					this.on(prevScope, fn);
+					app.addBeforeEvent(scope, this, fn);
 				},
 				complete: function complete(event) {
-					var nextState = app.states[app.states.indexOf(app.state) + 1];
-					if (!nextState) {
-						(0, _util.error)('can`t complete ,because no more state');
+					var nextScope = app.getNextScope(app.scope);
+					if (!nextScope) {
+						_foxmanApi.util.error('can`t complete ,because no more scope');
 						return;
 					}
-					app.removeBeforeEvent(nextState, this);
-					app.afterComplete(nextState);
+					var result = app.removeBeforeEvent(nextScope, this);
+
+					if (result === -1) {
+						_foxmanApi.util.warnLog('请检查是否在plugin中的 before.. 方法内重复调用 this.complete');
+					}
+					app.afterComplete(nextScope);
 				}
 			});
-
-			plugin.app = app;
-
-			plugin.name = plugin.name || plugin.constructor.name;
-			plugin.id = app.current++;
+			plugin.init && plugin.init();
 
 			plugin.bindLifeCircle = function () {
-				app.states.forEach(function (item, idx) {
-					var upperEventName = (0, _util.firstUpperCase)(item);
-
+				app.scopeList.forEach(function (item, idx) {
+					var upperEventName = _foxmanApi.util.firstUpperCase(item.slice(2));
 					if (idx !== 0 && plugin['before' + upperEventName]) {
 						plugin.before(item, plugin['before' + upperEventName]);
 					}
@@ -126,24 +149,34 @@ var Application = function (_EventEmitter) {
 			};
 			plugin.bindLifeCircle();
 
-			(0, _util.debugLog)('插件 ' + (plugin.name || plugin.id) + ' 装载完毕');
+			_foxmanApi.util.debugLog('plugin ' + (plugin.name || plugin.id) + ' is ready');
 		}
 	}, {
 		key: 'run',
 		value: function run() {
 			setTimeout(function () {
-				app.setState(app.states[0]);
+				app.setScope(app.scopeMap['__ready']);
 			}, 1000);
 		}
 	}, {
 		key: 'on',
 		value: function on(msg, fn) {
-			_get(Object.getPrototypeOf(Application.prototype), 'on', this).call(this, msg, fn);
+			_get(Application.prototype.__proto__ || Object.getPrototypeOf(Application.prototype), 'on', this).call(this, msg, fn);
 		}
 	}, {
 		key: 'emit',
 		value: function emit(msg, event) {
-			_get(Object.getPrototypeOf(Application.prototype), 'emit', this).call(this, msg, event);
+			_get(Application.prototype.__proto__ || Object.getPrototypeOf(Application.prototype), 'emit', this).call(this, msg, event);
+		}
+	}, {
+		key: 'getPrevScope',
+		value: function getPrevScope(scope) {
+			return app.scopeList[app.scopeList.indexOf(scope) - 1];
+		}
+	}, {
+		key: 'getNextScope',
+		value: function getNextScope(scope) {
+			return app.scopeList[app.scopeList.indexOf(scope) + 1];
 		}
 	}, {
 		key: 'afterComplete',
@@ -153,26 +186,25 @@ var Application = function (_EventEmitter) {
 				return app.beforeEventMap[msg][id].name;
 			});
 			var leaveItemsLen = leaveItems.length;
-
 			if (leaveItemsLen <= 0) {
-				app.nextState();
+				app.nextScope();
 			} else {
-				(0, _util.debugLog)('进入 ' + msg + ' 阶段还需要插件 [' + leaveItems.join(',') + '] 准备完毕');
+				_foxmanApi.util.debugLog('enter ' + msg + ' is wating [' + leaveItems.join(',') + '],checkout the plugin.complete');
 			}
 			return leaveItemsLen <= 0;
 		}
-	}], [{
-		key: 'nextState',
-		value: function nextState() {
-			var nextState = app.states[app.states.indexOf(app.state) + 1];
-			(0, _util.debugLog)('进入 ' + nextState + ' 阶段');
-			app.setState(nextState);
+	}, {
+		key: 'nextScope',
+		value: function nextScope() {
+			var nextScope = app.getNextScope(app.scope);
+			_foxmanApi.util.debugLog('now scope is ' + nextScope);
+			app.setScope(nextScope);
 		}
 	}, {
-		key: 'setState',
-		value: function setState(state) {
-			app.state = state;
-			app.emit(state, new _foxmanApi.Event(state, 'app'));
+		key: 'setScope',
+		value: function setScope(scope) {
+			app.scope = scope;
+			app.emit(scope, new _foxmanApi.Event(scope, 'app'));
 		}
 	}]);
 

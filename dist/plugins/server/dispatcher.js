@@ -9,15 +9,11 @@ exports.jsonDispatcher = jsonDispatcher;
 
 var _path = require('path');
 
-var _fileUtil = require('./fileUtil');
+var _render = require('../../helper/render');
 
-var _fileUtil2 = _interopRequireDefault(_fileUtil);
+var _render2 = _interopRequireDefault(_render);
 
-var _renderUtil = require('./renderUtil');
-
-var _renderUtil2 = _interopRequireDefault(_renderUtil);
-
-var _util = require('./util');
+var _foxmanApi = require('foxman-api');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29,14 +25,14 @@ function dirDispatcher(url, config, context) {
 		while (1) {
 			switch (_context.prev = _context.next) {
 				case 0:
-					path = (0, _path.join)(config.path.root, url);
+					path = (0, _path.join)(config.root, url);
 					_context.next = 3;
-					return (0, _fileUtil2.default)().getDirInfo(path);
+					return _foxmanApi.fileUtil.getDirInfo(path);
 
 				case 3:
 					files = _context.sent;
 					promises = files.map(function (file) {
-						return (0, _fileUtil2.default)().getFileStat((0, _path.join)(path, file));
+						return _foxmanApi.fileUtil.getFileStat((0, _path.join)(path, file));
 					});
 					_context.next = 7;
 					return Promise.all(promises);
@@ -51,7 +47,7 @@ function dirDispatcher(url, config, context) {
 						});
 					});
 					_context.next = 11;
-					return context.render('dir', { fileList: fileList });
+					return context.render('cataLog', { fileList: fileList });
 
 				case 11:
 				case 'end':
@@ -67,15 +63,15 @@ function ftlDispatcher(url, config, context) {
 		while (1) {
 			switch (_context2.prev = _context2.next) {
 				case 0:
-					dataPath = (0, _path.join)(config.path.syncData, url.replace(/.ftl$/, '') + '.json');
+					dataPath = (0, _path.join)(config.syncData, url.replace(/.ftl$/, '') + '.json');
 					dataModel = void 0;
 
 					try {
 						dataModel = require(dataPath);
 					} catch (err) {
-						(0, _util.error)(dataPath + ' is not found!');
+						_foxmanApi.util.error(dataPath + ' is not found!');
 					}
-					output = (0, _renderUtil2.default)().parse(url, dataModel);
+					output = (0, _render2.default)().parse(url, dataModel);
 
 					context.type = 'text/html; charset=utf-8';
 					context.body = output.stdout;
@@ -104,7 +100,7 @@ function jsonDispatcher(url, config, context) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
 					file = (0, _path.join)(config.path.asyncData, url);
-					json = (0, _fileUtil2.default)().getFileByStream(file);
+					json = _foxmanApi.fileUtil.getFileByStream(file);
 
 
 					context.type = 'application/json; charset=utf-8';

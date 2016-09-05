@@ -23,19 +23,30 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var ServerPlugin = function (_BasePlugin) {
   _inherits(ServerPlugin, _BasePlugin);
 
-  function ServerPlugin(options) {
+  function ServerPlugin() {
     _classCallCheck(this, ServerPlugin);
 
-    // this.name = 'mockServer';
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ServerPlugin).call(this, options));
-
-    _this.options = options;
-    return _this;
+    return _possibleConstructorReturn(this, (ServerPlugin.__proto__ || Object.getPrototypeOf(ServerPlugin)).apply(this, arguments));
   }
 
   _createClass(ServerPlugin, [{
-    key: 'onStartServer',
-    value: function onStartServer() {
+    key: 'beforeReady',
+    value: function beforeReady() {
+      this.complete();
+    }
+  }, {
+    key: 'beforeMakeFile',
+    value: function beforeMakeFile() {
+      this.complete();
+    }
+  }, {
+    key: 'beforeServerStart',
+    value: function beforeServerStart() {
+      this.complete();
+    }
+  }, {
+    key: 'onServerStart',
+    value: function onServerStart() {
       new _server2.default(this.options).createServer();
     }
   }]);
