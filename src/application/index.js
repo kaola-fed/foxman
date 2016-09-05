@@ -95,7 +95,7 @@ class Application extends EventEmitter{
 		});
 		plugin.init && plugin.init();
 
-		plugin.bindLifeCircle = () => {
+		plugin.bindLifeCycle = () => {
 			app.scopeList.forEach( (item, idx) => {
 				const upperEventName = util.firstUpperCase(item.slice(2));
 				if( (idx!==0) && plugin[`before${upperEventName}`]){
@@ -106,7 +106,7 @@ class Application extends EventEmitter{
 				}
 			});
 		};
-		plugin.bindLifeCircle();
+		plugin.bindLifeCycle();
 
 		util.debugLog(`plugin ${plugin.name || plugin.id} is ready`);
 	}
