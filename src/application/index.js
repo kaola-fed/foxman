@@ -2,11 +2,11 @@ import EventEmitter from 'events';
 import {Event, STATES, util} from 'foxman-api';
 
 let app;
-class Application extends EventEmitter{
+class Application extends EventEmitter {
 	constructor() {
-		let __ready       = '__ready';
-		let __makeFile    = '__makeFile';
-		let __serverStart = '__serverStart';
+		const __ready       = '__ready';
+		const __makeFile    = '__makeFile';
+		const __serverStart = '__serverStart';
 
 		super();
 		this.beforeEventMap = {};
@@ -33,14 +33,16 @@ class Application extends EventEmitter{
 	}
 
 	removeBeforeEvent (eventName, plugin){
-
-		if(!app.beforeEventMap[eventName] || !app.beforeEventMap[eventName][plugin.id]){
+		if(
+			!app.beforeEventMap[eventName] ||
+			!app.beforeEventMap[eventName][plugin.id]
+		){
 			util.error(`${eventName} is not in our scope list.`);
 			return -1;
 		}
-		try{
+		try {
 			delete app.beforeEventMap[eventName][plugin.id];
-		}catch(err){
+		} catch(err) {
 			app.beforeEventMap[eventName][plugin.id] = null;
 		}
 	}
@@ -62,10 +64,10 @@ class Application extends EventEmitter{
 
 		plugin = new Plugins(options);
 		Object.assign(plugin, {
-			app:		app,
+			app: app,
 			config: app.config,
-			name: 	(plugin.name || plugin.constructor.name),
-			id: 		app.getNextId(),
+			name: (plugin.name || plugin.constructor.name),
+			id: app.getNextId(),
 
 			on(msg, fn) {
 				app.on(msg, fn.bind(plugin));
@@ -85,7 +87,7 @@ class Application extends EventEmitter{
 					util.error('can`t complete ,because no more scope');
 					return;
 				}
-				var result = app.removeBeforeEvent(nextScope, this);
+				const result = app.removeBeforeEvent(nextScope, this);
 
 				if(result===-1){
 					util.warnLog('请检查是否在plugin中的 before.. 方法内重复调用 this.complete')
