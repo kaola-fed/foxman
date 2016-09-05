@@ -1,5 +1,6 @@
 .config2{
 	width:10px;
+	display:-webkit-box;
 	display:flex;
 }
 .config{
@@ -10,5 +11,6 @@
 	background:#f00;
 }
 .b{
+	display:-webkit-box;
 	display:flex;
 }

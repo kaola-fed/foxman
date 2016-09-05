@@ -1,5 +1,6 @@
 .config2{
 	width:10px;
+	display:-webkit-box;
 	display:flex;
 }
 .config{

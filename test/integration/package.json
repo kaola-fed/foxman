@@ -7,6 +7,7 @@
     "autoprefixer": "^6.4.1",
     "babel-polyfill": "^6.13.0",
     "foxman-api": "0.0.5",
+    "gulp-autoprefixer": "^3.1.1",
     "gulp-util": "^3.0.7",
     "gulp_mcss": "^0.3.0",
     "mcss": "^0.5.1",

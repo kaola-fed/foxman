@@ -12,7 +12,6 @@ class ServerPlugin extends BasePlugin{
     this.complete();
   }
   onServerStart(){
-    // console.log('hello world');
     new Server( this.options ).createServer();
   }
 }

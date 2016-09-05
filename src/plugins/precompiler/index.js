@@ -43,8 +43,7 @@ class PreCompilerPlugin extends BasePlugin{
 				});
 				if(news.length == 0) return;
 				this.addWatch(watchList, news, compilerInstance);
-				util.log(`开启热编译\n${filename}监听\n|-> ${news.join('\n|->')}
-					`);
+				util.log(`监听\n${filename}的依赖\n|-> ${news.join('\n|->')}`);
 			});
 		});
 	}
