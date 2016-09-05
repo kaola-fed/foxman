@@ -4,7 +4,6 @@ var PluginA = require('./plugin.test');
 var compiler1 = require('./foxman-mcss');
 var compiler2 = require('./foxman-autoprefix');
 var root = path.join(__dirname,'src','main','webapp');
-
 module.exports = {
  plugins: [
  	[PluginA, {name:'xujunyu'}]

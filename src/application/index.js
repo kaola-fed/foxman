@@ -5,16 +5,13 @@ let app;
 class Application extends EventEmitter{
 	constructor() {
 		let __ready       = '__ready';
-		// let __setConfig   = '__setConfig';
-		// let __loadPlugins = '__loadPlugins';
 		let __makeFile    = '__makeFile';
 		let __serverStart = '__serverStart';
 
 		super();
 		this.beforeEventMap = {};
 		this.getNextId = util.createSystemId();
-		// __setConfig,
-		// __loadPlugins,
+
 		this.scopeMap = {
 			__ready,
 			__makeFile,
@@ -97,7 +94,6 @@ class Application extends EventEmitter{
 			}
 		});
 		plugin.init && plugin.init();
-		// plugin.app = app;
 
 		plugin.bindLifeCircle = () => {
 			app.scopeList.forEach( (item, idx) => {

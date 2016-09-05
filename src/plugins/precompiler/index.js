@@ -1,4 +1,4 @@
-import {Event, BasePlugin,PreCompiler} from 'foxman-api';
+import {Event, BasePlugin,PreCompiler,util} from 'foxman-api';
 import path from 'path';
 import globule from 'globule';
 
@@ -15,51 +15,49 @@ class PreCompilerPlugin extends BasePlugin{
 		});
 	}
 	prepare(watcher, preCompiler){
-		let onChange = this.app.watcher.onChange.bind(this.app.watcher);
 		let compiler = preCompiler.precompiler;
 		let patterns = preCompiler.test;
 		let root = this.options.root;
 		if(!Array.isArray(patterns)){patterns = [patterns]};
+
 		let files = [];
-		let fileCompilerMap = {};
 		patterns.forEach((pattern) => {
 			let absPath = path.resolve(root, pattern);
 			files = files.concat(globule.find(absPath));
 		});
-		// console.log(files);
 
 		files.forEach((filename)=>{
-			(fileCompilerMap[filename] = new PreCompiler({
+			let watchList = [];
+			let compilerInstance = new PreCompiler({
 				root,
 				filename,
 				compiler
-			})).run();
+			});
+			compilerInstance.run();
 
-			watcher.onChange(filename, (arg0, arg1)=>{
-				fileCompilerMap[filename].reBuild();
+			this.addWatch(watchList, filename, compilerInstance);
+			compilerInstance.on('updateWatch', (event) => {
+				let dependencys = event.data;
+				let news = dependencys.filter( (item) => {
+					return (watchList.indexOf(item) === -1);
+				});
+				if(news.length == 0) return;
+				this.addWatch(watchList, news, compilerInstance);
+				util.log(`开启热编译\n${filename}监听\n|-> ${news.join('\n|->')}
+					`);
 			});
 		});
 	}
-	watch(watcher, preCompiler){
-		// let testReg = /([^\*]*\/)*((\*\*\/)?(\*)?\.)([^\*]+)$/ig;
-		// let result = testReg.exec(path.resolve(root,preCompiler.test));
-
-		// watcher.onControl(preCompiler.test, (sourcePath, arg1)=>{
-			// compilerInstance.run({
-			// 	path: sourcePath,
-			// 	source: sourcePath.replace(result[1],''),
-			// 	text: null
-			// });
-		// });
-
-		// watcher.onChange(preCompiler.test, (arg0, arg1)=>{
-		// 	fileUtil().readFile(arg0).then(function (text) {
-		// 		compilerInstance.run({
-		// 			path:arg0,
-		// 			text: text
-		// 		});
-		// 	});
-		// });
+	addWatch (watchList, news, compiler) {
+		if(Array.isArray(news)) {
+			news.forEach((item)=>{watchList.push(item)});
+		}else{
+			watchList.push(news);
+		}
+		this.app.watcher.onChange(news, (arg0, arg1) => {
+			util.log(`发生变化:${compiler.filename}`);
+			compiler.update();
+		});
 	}
   onReady(){
 

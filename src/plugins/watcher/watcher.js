@@ -12,34 +12,25 @@ class Watcher {
       ignored: /node_modules/,
       persistent: true
     });
+    // this.watcher.setMaxListeners(0);
   }
-	on(...args){
-		if( Array.isArray(args[1]) ) {
-			return args[1].forEach( (path,idx) => {
-				this.on(args[0], path, args[2]);
-			});
-		}
-		let absPath = resolve(this.root, args[1]);
-
-    if( args.length < 3 ) return;
-		let matcher = anymatch(absPath);
-
-		let testFunc = ( path ,stats) => {
-      if( matcher(path) ) {
-				util.debugLog(`watcher's event is ${args[0]},file is ${path}`);
-				return args[2](path, stats);
-			}
-    };
-
-		this.watcher.on(args[0], testFunc);
-	}
-	onControl(...args){
-		this.on.apply(this,['add',...args]);
+	removeWatch(files){
+		this.watcher.unwatch(files);
 	}
   onChange(...args){
-		this.on.apply(this,['add',...args]);
-		this.on.apply(this,['change',...args]);
-		this.on.apply(this,['unlink',...args]);
+    args[0] = (Array.isArray(args[0]))?(args[0].map((path)=> {
+      return resolve(this.root, path);
+    })):resolve(this.root, args[0]);
+
+    let matcher = anymatch(args[0]);
+    this.watcher.on('all', (event, path) => {
+      if(['add','change','unlink'].indexOf(event) && matcher(path)){
+        args[1](path);
+      }
+    });
+		// this.on.apply(this,['add',...args]);
+		// this.on.apply(this,['change',...args]);
+		// this.on.apply(this,['unlink',...args]);
   }
 }
 export default function (...args) {
