@@ -1,68 +1,77 @@
 # foxman
 
 [![NPM version][npm-image]][npm-url]
-[![NPM version][downloads-image]][downloads-url]
+[![download][downloads-image]][downloads-url]
 
 [![NPM][nodei-image]][nodei-url]
 
-# Introduction
-
-a flexiable mock data server 4 front-end engineer.
+> flexiable mock data server for frontend engineer
 
 # Installation
 
-1. global install:
-`npm install -g foxman`
+```bash
+$ npm install foxman -g
+```
 
-2. create config file（default is './foxman.config.js'）:
-	```javascript
-	'use strict';
-	var path = require('path');
-	var PluginA = require('./plugin.test');
-	var mcss = require('./foxman-mcss');
-	var autoprefix = require('gulp-autoprefixer');
-	var root = path.join(__dirname,'src','main','webapp');
-	module.exports = {
-	 root,
-	 plugins: [
-	 	[PluginA, {name:'xujunyu'}]
-	 ],
-	 preCompilers:[{
-	    /* [1] relative to root
-	    ** [2] abs path is started with /
-	    */
-	     test: 'src/mcss/**/*.mcss', // String or ArrayList<String>
-	     precompiler: (dest) => [
-	       mcss(),
-	       autoprefix({browsers: [ 'Android >= 2.3'], cascade: false}),
-	       dest('src/css/')
-	     ]
-	   }
-	 ],
-	 watch:{
-	   /**
-	    * absolute
-	    * @type {[type]}
-	    */
-	 },
-	  server: {
-	    port:      3000,
-	    viewRoot:  path.resolve(root, 'WEB-INF'),
-	    syncData:  path.resolve(__dirname, 'mock', 'fakeData'),
-	    asyncData: path.resolve(__dirname, 'mock', 'json'),
-	    static: [
-	     path.resolve(__dirname, 'static')
-	    ]
-	  }
-	};
+# Usage
 
-	```
-3. foxman
+**Step 1**: create config file in your project folder, if not specified, `foxman.config.js` will be used:
 
+```js
+'use strict';
+const path = require('path');
+const PluginA = require('./plugin.test');
+const mcss = require('./foxman-mcss');
+const autoprefix = require('gulp-autoprefixer');
+const root = path.join(__dirname,'src','main','webapp');
+
+module.exports = {
+	root: root,
+	plugins: [
+		[PluginA, {name:'pluginName'}]
+	],
+	preCompilers:[{
+		/**
+		 * [1] relative to root
+		 * [2] abs path is started with /
+		 */
+		test: 'src/mcss/**/*.mcss', // String or Array
+		precompiler: dest => [
+			mcss(),
+			autoprefix({
+				browsers: [ 'Android >= 2.3'],
+				cascade: false
+			}),
+			dest('src/css/')
+		]
+	}],
+	watch:{
+		/**
+		 * absolute
+		 * @type {[type]}
+		 */
+	},
+	server: {
+		port: 3000,
+		viewRoot: path.resolve(root, 'WEB-INF'),
+		syncData: path.resolve(__dirname, 'mock', 'fakeData'),
+		asyncData: path.resolve(__dirname, 'mock', 'json'),
+		static: [
+			path.resolve(__dirname, 'static')
+		]
+	}
+};
+```
+
+**Step 2**: run `foxman`
+
+```bash
+$ foxman
+```
 
 [npm-url]: https://www.npmjs.com/package/foxman
 [npm-image]: https://img.shields.io/npm/v/foxman.svg
 [downloads-image]: https://img.shields.io/npm/dm/foxman.svg
-[downloads-url]: http://badge.fury.io/js/foxman
+[downloads-url]: https://www.npmjs.com/package/foxman
 [nodei-image]: https://nodei.co/npm/foxman.png?downloads=true&downloadRank=true&stars=true
 [nodei-url]: https://www.npmjs.com/package/foxman
