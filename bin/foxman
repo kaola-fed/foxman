@@ -1,29 +1,29 @@
 #!/usr/bin/env node
-// Run as bin
+ // Run as bin
 'use strict';
 var anymatch = require('anymatch');
 var path = require('path');
-var fs   = require('fs');
+var fs = require('fs');
 var config;
 var argv = require('yargs')
     .option('config', {
-        alias    : 'c',
-        demand   : true,
-        default  : 'foxman.config.js',
-        describe : 'Config file. Options read readme.md',
-        boolean  : 0
+        alias: 'c',
+        demand: true,
+        default: 'foxman.config.js',
+        describe: 'Config file. Options read readme.md',
+        boolean: 0
     })
-    .option('build_pid',{
-        alias    : 'b',
-        demand   : true,
-        default  : false,
-        describe : 'is need build and init the project!'
+    .option('build_pid', {
+        alias: 'b',
+        demand: true,
+        default: false,
+        describe: 'is need build and init the project!'
     })
-    .option('update',{
-        alias    : 'u',
-        demand   : false,
-        default  : false,
-        describe : 'is update from nei'
+    .option('update', {
+        alias: 'u',
+        demand: false,
+        default: false,
+        describe: 'is update from nei'
     })
     .usage('Usage: foxman [options]')
     .example('foxman -c ./config.json', 'set config file')
@@ -32,32 +32,28 @@ var argv = require('yargs')
     .epilog('copyright junyu')
     .argv;
 
-if( process.env.NODE_ENV === "development" ){
-  // node_modules/[^foxman]
-  // node_modules/[foxman]/node_modules
-  // var foxmanModuleTestReg = /(node_modules[^(foxman)]*$)|(node_modules\/*foxman[^(node_modules)]*node_modules)/g;
-  var matcher = anymatch([
-    '**/foxman/src/**/*.js',
-    '**/foxman-api/src/**/*.js'
-  ])
-  require("babel-register")({
-    ignore: (filename) => {
-      // console.log(filename+""+!matcher(filename));
-      return !matcher(filename);
-      // return foxmanModuleTestReg.test(filename);
-    }
-  });
-  require('babel-polyfill');
+if (process.env.NODE_ENV === "development") {
+
+    var matcher = anymatch([
+        '**/foxman/src/**/*.js',
+        '**/node_modules/**/foxman-api/**/src/**/*.js'
+    ])
+    require("babel-register")({
+        ignore: (filename) => {
+            return !matcher(filename);
+        }
+    });
+    require('babel-polyfill');
 }
 
 var configPath = path.join(process.cwd(), argv.config);
-var isUpdate   = argv.update || false;
+var isUpdate = argv.update || false;
 
-try{
+try {
     config = require(configPath);
-}catch(err){
+} catch (err) {
     console.log(err)
-    // console.log(`Error:\n ${err}`);
+        // console.log(`Error:\n ${err}`);
     process.exit(1);
 }
 
