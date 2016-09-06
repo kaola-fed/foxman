@@ -15,7 +15,7 @@ $ npm install foxman -g
 
 # Usage
 
-**Step 1**: create config file in your project folder, if not specified, `foxman.config.js` will be used:
+**Step 1**: create config file in your project folder, if not specified, `foxman.config.js` will be used
 
 ```js
 'use strict';
@@ -30,7 +30,7 @@ module.exports = {
 	plugins: [
 		[PluginA, {name:'pluginName'}]
 	],
-	preCompilers:[{
+	preCompilers: [{
 		/**
 		 * [1] relative to root
 		 * [2] abs path is started with /
@@ -45,7 +45,7 @@ module.exports = {
 			dest('src/css/')
 		]
 	}],
-	watch:{
+	watch: {
 		/**
 		 * absolute
 		 * @type {[type]}
