@@ -5,7 +5,7 @@
 
 [![NPM][nodei-image]][nodei-url]
 
-> flexiable mock data server for frontend engineer
+> flexiable mock server for frontend engineer
 
 # Installation
 

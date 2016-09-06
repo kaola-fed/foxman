@@ -1,7 +1,7 @@
 {
   "name": "foxman",
   "version": "0.0.9",
-  "description": "a static server of nodejs",
+  "description": "flexiable mock server for nodejs",
   "main": "./app.js",
   "bin": {
     "foxman": "./bin/foxman"
@@ -10,13 +10,13 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "babel src -d dist",
-    "start": "node-debug ./bin/foxman -c ./test/foxman.config.js"
+    "start": "node ./bin/foxman -c ./test/foxman.config.js",
+    "debug": "node-debug ./bin/foxman -c ./test/foxman.config.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PipeCube/foxman.git"
+    "url": "git+https://github.com/foxman-tools/foxman.git"
   },
   "keywords": [
     "nodejs",
@@ -25,9 +25,9 @@
   "author": "junyu",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/PipeCube/foxman/issues"
+    "url": "https://github.com/foxman-tools/foxman/issues"
   },
-  "homepage": "https://github.com/PipeCube/foxman#readme",
+  "homepage": "https://github.com/foxman-tools/foxman#readme",
   "devDependencies": {
     "babel-cli": "^6.11.4",
     "babel-polyfill": "^6.13.0",
