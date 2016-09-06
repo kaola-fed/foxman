@@ -19,11 +19,11 @@ $ npm install foxman -g
 
 ```js
 'use strict';
-var path = require('path');
-var PluginA = require('./plugin.test');
-var mcss = require('./foxman-mcss');
-var autoprefix = require('gulp-autoprefixer');
-var root = path.join(__dirname, 'src', 'main', 'webapp');
+const path = require('path');
+const PluginA = require('./plugin.test');
+const mcss = require('./foxman-mcss');
+const autoprefix = require('gulp-autoprefixer');
+const root = path.join(__dirname, 'src', 'main', 'webapp');
 module.exports = {
     root,
     plugins: [
