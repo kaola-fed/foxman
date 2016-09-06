@@ -1,15 +1,15 @@
 var autoprefixer = require('autoprefixer');
-var postcss      = require('postcss');
+var postcss = require('postcss');
 
-module.exports = function handle(src, next){
-  let text = src.text;
-  if(text){
-    postcss([ autoprefixer ]).process(src).then(function (result) {
-        result.warnings().forEach(function (warn) {
-            console.warn(warn.toString());
+module.exports = function handle(src, next) {
+    let text = src.text;
+    if (text) {
+        postcss([autoprefixer]).process(src).then(function(result) {
+            result.warnings().forEach(function(warn) {
+                console.warn(warn.toString());
+            });
+            next(result.css);
         });
-        next(result.css);
-    });
-    return;
-  }
+        return;
+    }
 };

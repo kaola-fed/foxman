@@ -1,6 +1,6 @@
 {
   "name": "foxman",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "flexiable mock server for nodejs",
   "main": "./app.js",
   "bin": {
@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "babel-register": "^6.11.6",
-    "foxman-api": "0.0.7",
+    "foxman-api": "^0.0.9",
     "globule": "^1.0.0",
     "koa": "^1.2.1",
     "koa-ejs": "^3.0.0",

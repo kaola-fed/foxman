@@ -23,17 +23,18 @@ const path = require('path');
 const PluginA = require('./plugin.test');
 const mcss = require('./foxman-mcss');
 const autoprefix = require('gulp-autoprefixer');
-const root = path.join(__dirname,'src','main','webapp');
-
+const root = path.join(__dirname, 'src', 'main', 'webapp');
 module.exports = {
 	root: root,
 	plugins: [
-		[PluginA, {name:'pluginName'}]
+		new PluginA({
+			option: 'optionValue'
+		})
 	],
 	preCompilers: [{
 		/**
 		 * [1] relative to root
-		 * [2] abs path is started with /
+		 * [2] absolute path starts with '/'
 		 */
 		test: 'src/mcss/**/*.mcss', // String or Array
 		precompiler: dest => [
