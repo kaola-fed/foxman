@@ -1,9 +1,9 @@
 import {
-    Event,
     BasePlugin,
-    PreCompiler,
     util
 } from 'foxman-api';
+
+import PreCompiler from './preCompiler';
 import path from 'path';
 import globule from 'globule';
 
@@ -20,17 +20,16 @@ class PreCompilerPlugin extends BasePlugin {
         });
     }
     prepare(watcher, preCompiler) {
-        let compiler = preCompiler.precompiler;
+        const compiler = preCompiler.precompiler;
+        const root = this.options.root;
         let patterns = preCompiler.test;
-        let root = this.options.root;
         if (!Array.isArray(patterns)) {
             patterns = [patterns]
         };
 
         let files = [];
         patterns.forEach((pattern) => {
-            let absPath = path.resolve(root, pattern);
-            files = files.concat(globule.find(absPath));
+            files = files.concat(globule.find(path.resolve(root, pattern)));
         });
 
         files.forEach((filename) => {

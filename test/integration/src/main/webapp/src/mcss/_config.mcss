@@ -1,4 +1,0 @@
-@import './_config2.mcss';
-.config{
-  width: 1px;
-}

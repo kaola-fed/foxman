@@ -1,8 +1,8 @@
 {
   "name": "foxman",
-  "version": "0.0.10",
+  "version": "0.1.0",
   "description": "flexiable mock server for nodejs",
-  "main": "./app.js",
+  "main": "app.js",
   "bin": {
     "foxman": "./bin/foxman"
   },
@@ -11,8 +11,7 @@
   },
   "scripts": {
     "build": "babel src -d dist",
-    "start": "node ./bin/foxman -c ./test/foxman.config.js",
-    "debug": "node-debug ./bin/foxman -c ./test/foxman.config.js"
+    "dev": "babel src -w -d dist"
   },
   "repository": {
     "type": "git",
@@ -34,8 +33,10 @@
     "babel-preset-es2015": "^6.13.2"
   },
   "dependencies": {
+    "anymatch": "^1.3.0",
     "babel-register": "^6.11.6",
-    "foxman-api": "^0.0.9",
+    "chokidar": "^1.6.0",
+    "foxman-api": "^0.1.0",
     "globule": "^1.0.0",
     "koa": "^1.2.1",
     "koa-ejs": "^3.0.0",

@@ -32,19 +32,6 @@ var argv = require('yargs')
     .epilog('copyright junyu')
     .argv;
 
-if (process.env.NODE_ENV === "development") {
-
-    var matcher = anymatch([
-        '**/foxman/src/**/*.js',
-        '**/node_modules/**/foxman-api/**/src/**/*.js'
-    ])
-    require("babel-register")({
-        ignore: (filename) => {
-            return !matcher(filename);
-        }
-    });
-    require('babel-polyfill');
-}
 
 var configPath = path.join(process.cwd(), argv.config);
 var isUpdate = argv.update || false;

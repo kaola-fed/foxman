@@ -25,41 +25,45 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var ower = void 0;
 
 var Ower = function Ower(config) {
-	_classCallCheck(this, Ower);
+    _classCallCheck(this, Ower);
 
-	var app = (0, _index2.default)();
-	var root = config.root;
-	/**
-  * __setConfig
-  */
-	app.setConfig(config);
+    var app = (0, _index2.default)();
+    var root = config.root;
+    /**
+     * __setConfig
+     */
+    app.setConfig(config);
 
-	/**
-  * 内置组件
-  */
-	app.use(_watcher2.default, Object.assign(config.watch, { root: root }));
-	app.use(_server2.default, Object.assign(config.server, { root: root })); /** main **/
-	app.use(_precompiler2.default, {
-		preCompilers: config.preCompilers,
-		root: root
-	}); /** main **/
+    /**
+     * 内置组件
+     */
+    app.use(new _watcher2.default(Object.assign(config.watch, {
+        root: root
+    })));
+    app.use(new _server2.default(Object.assign(config.server, {
+        root: root
+    }))); /** main **/
+    app.use(new _precompiler2.default({
+        preCompilers: config.preCompilers,
+        root: root
+    })); /** main **/
 
-	/**
-  * __loadPlugins
-  */
-	app.use(config.plugins);
+    /**
+     * __loadPlugins
+     */
+    app.use(config.plugins);
 
-	/**
-  * __ready
-  */
-	app.run();
+    /**
+     * __ready
+     */
+    app.run();
 
-	/** start server **/
+    /** start server **/
 
-	/** start server **/
+    /** start server **/
 };
 
 module.exports = function (config) {
-	if (!ower) ower = new Ower(config);
-	return ower;
+    if (!ower) ower = new Ower(config);
+    return ower;
 };
