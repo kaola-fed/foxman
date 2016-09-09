@@ -4,9 +4,8 @@ import {
 } from 'path';
 import {
     Event,
-    STATES,
     util
-} from 'foxman-api';
+} from '../../helper';
 import chokidar from 'chokidar';
 import anymatch from 'anymatch';
 

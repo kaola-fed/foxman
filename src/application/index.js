@@ -2,7 +2,7 @@ import Application from './application';
 
 let app;
 export default function() {
-    if (!app) {
+    if ( !app ) {
         app = new Application();
     }
     return app;

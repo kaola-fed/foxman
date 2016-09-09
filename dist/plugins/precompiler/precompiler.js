@@ -73,7 +73,7 @@ var PreCompiler = function (_EventEmitter) {
       var _this3 = this;
 
       this.source = _vinylFs2.default.src(this.filename);
-      this.compiler(this.dest.bind(this)).forEach(function (item) {
+      this.handler(this.dest.bind(this)).forEach(function (item) {
         _this3.pipe(item);
       });
     }

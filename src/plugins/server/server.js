@@ -62,6 +62,7 @@ class Server {
             }
         });
     }
+    
     createServer() {
         this.config.port = this.config.port || 3000;
         this.app.listen(this.config.port);

@@ -21,7 +21,7 @@ var _events2 = _interopRequireDefault(_events);
 
 var _path = require('path');
 
-var _foxmanApi = require('foxman-api');
+var _helper = require('../../helper');
 
 var _chokidar = require('chokidar');
 

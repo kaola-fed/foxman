@@ -59,7 +59,7 @@ var PreCompilerPlugin = function (_BasePlugin) {
         value: function prepare(watcher, preCompiler) {
             var _this3 = this;
 
-            var compiler = preCompiler.precompiler;
+            var handler = preCompiler.handler;
             var root = this.options.root;
             var patterns = preCompiler.test;
             if (!Array.isArray(patterns)) {
@@ -76,7 +76,7 @@ var PreCompilerPlugin = function (_BasePlugin) {
                 var compilerInstance = new _preCompiler2.default({
                     root: root,
                     filename: filename,
-                    compiler: compiler
+                    handler: handler
                 });
                 compilerInstance.run();
 

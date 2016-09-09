@@ -20,21 +20,23 @@ class Ower {
         /**
          * 内置组件
          */
-        app.use(new WatcherPlugin(Object.assign(config.watch, {
+        app.use( new WatcherPlugin( Object.assign( config.watch, {
             root
         })));
-        app.use(new ServerPlugin(Object.assign(config.server, {
+
+        app.use( new ServerPlugin( Object.assign( config.server, {
             root
-        }))); /** main **/
-        app.use(new PreCompilerPlugin({
+        })));
+
+        app.use( new PreCompilerPlugin( {
             preCompilers: config.preCompilers,
-            root: root
+            root
         })); /** main **/
 
         /**
          * __loadPlugins
          */
-        app.use(config.plugins);
+        app.use( config.plugins );
 
         /**
          * __ready

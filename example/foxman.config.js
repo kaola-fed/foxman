@@ -1,13 +1,17 @@
 'use strict';
 const path = require('path');
-const PluginA = require('./plugin.test');
+
 const mcss = require('../../foxman-mcss');
 const autoprefix = require('gulp-autoprefixer');
-const root = path.join(__dirname, 'src', 'main', 'webapp');
+
+const reloadPlugin = require('./plugin.reload');
+
+const root = path.resolve(__dirname, 'src', 'main', 'webapp');
+
 module.exports = {
     root,
     plugins: [
-        new PluginA({
+        new reloadPlugin({
             name: 'xujunyu'
         })
     ],
@@ -16,7 +20,7 @@ module.exports = {
          ** [2] abs path is started with /
          */
         test: 'src/mcss/**/*.mcss', // String or ArrayList<String>
-        precompiler: (dest) => [
+        handler: (dest) => [
             mcss(),
             // autoprefix({
             //     browsers: ['Android >= 2.3'],

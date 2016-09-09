@@ -5,13 +5,7 @@ import {
 } from '../../helper';
 
 class ServerPlugin extends BasePlugin {
-    beforeMakeFile() {
-        this.complete();
-    }
-    beforeServerStart() {
-        this.complete();
-    }
-    onServerStart() {
+    init (){
         new Server(this.options).createServer();
     }
 }

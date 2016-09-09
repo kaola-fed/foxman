@@ -29,7 +29,7 @@ class PreCompiler extends EventEmitter{
   }
   update(){
     this.source = vinylFs.src(this.filename);
-    this.compiler( this.dest.bind(this) ).forEach( (item) => { this.pipe(item); });
+    this.handler( this.dest.bind(this) ).forEach( (item) => { this.pipe(item); });
   }
   run(){
     this.update();

@@ -40,9 +40,11 @@ var Ower = function Ower(config) {
     app.use(new _watcher2.default(Object.assign(config.watch, {
         root: root
     })));
+
     app.use(new _server2.default(Object.assign(config.server, {
         root: root
-    }))); /** main **/
+    })));
+
     app.use(new _precompiler2.default({
         preCompilers: config.preCompilers,
         root: root

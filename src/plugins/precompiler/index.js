@@ -20,7 +20,7 @@ class PreCompilerPlugin extends BasePlugin {
         });
     }
     prepare(watcher, preCompiler) {
-        const compiler = preCompiler.precompiler;
+        const handler = preCompiler.handler;
         const root = this.options.root;
         let patterns = preCompiler.test;
         if (!Array.isArray(patterns)) {
@@ -37,7 +37,7 @@ class PreCompilerPlugin extends BasePlugin {
             let compilerInstance = new PreCompiler({
                 root,
                 filename,
-                compiler
+                handler
             });
             compilerInstance.run();
 

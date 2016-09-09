@@ -30,18 +30,8 @@ var ServerPlugin = function (_BasePlugin) {
     }
 
     _createClass(ServerPlugin, [{
-        key: 'beforeMakeFile',
-        value: function beforeMakeFile() {
-            this.complete();
-        }
-    }, {
-        key: 'beforeServerStart',
-        value: function beforeServerStart() {
-            this.complete();
-        }
-    }, {
-        key: 'onServerStart',
-        value: function onServerStart() {
+        key: 'init',
+        value: function init() {
             new _server2.default(this.options).createServer();
         }
     }]);
