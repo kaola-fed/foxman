@@ -3,7 +3,7 @@ import {
     util
 } from '../../helper';
 
-import PreCompiler from './preCompiler';
+import PreCompiler from './precompiler';
 import path from 'path';
 import globule from 'globule';
 

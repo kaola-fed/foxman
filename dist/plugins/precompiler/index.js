@@ -8,9 +8,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _helper = require('../../helper');
 
-var _preCompiler = require('./preCompiler');
+var _precompiler = require('./precompiler');
 
-var _preCompiler2 = _interopRequireDefault(_preCompiler);
+var _precompiler2 = _interopRequireDefault(_precompiler);
 
 var _path = require('path');
 
@@ -72,7 +72,7 @@ var PreCompilerPlugin = function (_BasePlugin) {
             });
             files.forEach(function (filename) {
                 var watchList = [];
-                var compilerInstance = new _preCompiler2.default({
+                var compilerInstance = new _precompiler2.default({
                     root: root,
                     filename: filename,
                     handler: handler
