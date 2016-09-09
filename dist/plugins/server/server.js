@@ -12,6 +12,8 @@ var _koa2 = _interopRequireDefault(_koa);
 
 var _path = require('path');
 
+var _path2 = _interopRequireDefault(_path);
+
 var _koaServe = require('koa-serve');
 
 var _koaServe2 = _interopRequireDefault(_koaServe);
@@ -26,7 +28,7 @@ var _koaEjs2 = _interopRequireDefault(_koaEjs);
 
 var _dispatcher = require('./dispatcher');
 
-var _foxmanApi = require('foxman-api');
+var _helper = require('../../helper');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -52,7 +54,7 @@ var Server = function () {
         key: 'setRender',
         value: function setRender() {
             (0, _koaEjs2.default)(this.app, {
-                root: (0, _path.join)(global.__rootdir, 'views'),
+                root: _path2.default.join(global.__rootdir, 'views'),
                 layout: 'template',
                 viewExt: 'html',
                 cache: process.env.NODE_ENV !== "development",
@@ -172,7 +174,7 @@ var Server = function () {
         value: function createServer() {
             this.config.port = this.config.port || 3000;
             this.app.listen(this.config.port);
-            _foxmanApi.util.log('freemarker-server is run on port ' + this.config.port + '~ ');
+            _helper.util.log('freemarker-server is run on port ' + this.config.port + '~ ');
         }
     }]);
 

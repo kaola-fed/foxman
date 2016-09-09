@@ -1,7 +1,7 @@
 import {
     BasePlugin,
     util
-} from 'foxman-api';
+} from '../../helper';
 
 import PreCompiler from './preCompiler';
 import path from 'path';
@@ -43,7 +43,7 @@ class PreCompilerPlugin extends BasePlugin {
 
             this.addWatch(watchList, filename, compilerInstance);
             compilerInstance.on('updateWatch', (event) => {
-                let dependencys = event.data;
+                let dependencys = event;
                 let news = dependencys.filter((item) => {
                     return (watchList.indexOf(item) === -1);
                 });

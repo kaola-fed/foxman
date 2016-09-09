@@ -15,7 +15,7 @@ var _render = require('../../helper/render');
 
 var _render2 = _interopRequireDefault(_render);
 
-var _foxmanApi = require('foxman-api');
+var _helper = require('../../helper');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29,12 +29,12 @@ function dirDispatcher(url, config, context) {
                 case 0:
                     viewPath = _path2.default.join(config.root, url);
                     _context.next = 3;
-                    return _foxmanApi.fileUtil.getDirInfo(viewPath);
+                    return _helper.fileUtil.getDirInfo(viewPath);
 
                 case 3:
                     files = _context.sent;
                     promises = files.map(function (file) {
-                        return _foxmanApi.fileUtil.getFileStat(_path2.default.resolve(viewPath, file));
+                        return _helper.fileUtil.getFileStat(_path2.default.resolve(viewPath, file));
                     });
                     _context.next = 7;
                     return Promise.all(promises);
@@ -75,7 +75,7 @@ function ftlDispatcher(url, config, context) {
                     try {
                         dataModel = require(dataPath);
                     } catch (err) {
-                        _foxmanApi.util.warnLog(dataPath + ' is not found!');
+                        _helper.util.warnLog(dataPath + ' is not found!');
                     }
                     output = (0, _render2.default)().parse(filePath.replace(config.viewRoot, ''), dataModel);
 
@@ -108,7 +108,7 @@ function jsonDispatcher(url, config, context) {
                 case 0:
                     filePath = _path2.default.join(config.root, url);
                     dataPath = filePath.replace(config.viewRoot, config.asyncData);
-                    json = _foxmanApi.fileUtil.getFileByStream(dataPath);
+                    json = _helper.fileUtil.getFileByStream(dataPath);
 
 
                     context.type = 'application/json; charset=utf-8';

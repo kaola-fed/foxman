@@ -1,9 +1,8 @@
 import Server from './server';
 import {
     Event,
-    STATES,
     BasePlugin
-} from 'foxman-api';
+} from '../../helper';
 
 class ServerPlugin extends BasePlugin {
     beforeMakeFile() {

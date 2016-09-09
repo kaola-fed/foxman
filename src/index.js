@@ -4,9 +4,8 @@ import WatcherPlugin from './plugins/watcher/';
 import PreCompilerPlugin from './plugins/precompiler/';
 import {
     Event,
-    STATES,
     util
-} from 'foxman-api';
+} from './helper';
 
 let ower;
 class Ower {

@@ -3,7 +3,7 @@ import renderUtil from '../../helper/render';
 import {
     util,
     fileUtil
-} from 'foxman-api';
+} from '../../helper';
 
 export function* dirDispatcher(url, config, context) {
 

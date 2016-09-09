@@ -1,0 +1,14 @@
+.config2{
+	width:1px;
+	display:flex;
+}
+.config{
+	width:1px;
+}
+.a{
+	width:1px;
+	background:#f00;
+}
+.b{
+	display:flex;
+}

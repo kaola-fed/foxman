@@ -1,0 +1,8 @@
+@import './_config.mcss';
+.a{
+  width: 1px;
+  background: red;
+}
+.b{
+  display: flex;
+}

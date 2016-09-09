@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _foxmanApi = require('foxman-api');
+var _helper = require('../../helper');
 
 var _preCompiler = require('./preCompiler');
 
@@ -82,13 +82,13 @@ var PreCompilerPlugin = function (_BasePlugin) {
 
                 _this3.addWatch(watchList, filename, compilerInstance);
                 compilerInstance.on('updateWatch', function (event) {
-                    var dependencys = event.data;
+                    var dependencys = event;
                     var news = dependencys.filter(function (item) {
                         return watchList.indexOf(item) === -1;
                     });
                     if (news.length == 0) return;
                     _this3.addWatch(watchList, news, compilerInstance);
-                    _foxmanApi.util.log('监听\n' + filename + '的依赖\n|-> ' + news.join('\n|->'));
+                    _helper.util.log('监听\n' + filename + '的依赖\n|-> ' + news.join('\n|->'));
                 });
             });
         }
@@ -103,7 +103,7 @@ var PreCompilerPlugin = function (_BasePlugin) {
                 watchList.push(news);
             }
             this.app.watcher.onChange(news, function (arg0, arg1) {
-                _foxmanApi.util.log('发生变化:' + compiler.filename);
+                _helper.util.log('发生变化:' + compiler.filename);
                 compiler.update();
             });
         }
@@ -113,6 +113,6 @@ var PreCompilerPlugin = function (_BasePlugin) {
     }]);
 
     return PreCompilerPlugin;
-}(_foxmanApi.BasePlugin);
+}(_helper.BasePlugin);
 
 exports.default = PreCompilerPlugin;

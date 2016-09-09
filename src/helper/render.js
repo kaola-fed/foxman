@@ -1,10 +1,8 @@
-import {
-    join
-} from 'path';
+import path from 'path';
 import {
     spawn
 } from 'child_process';
-const jarFile = join(global.__rootdir, 'lib', 'FMtoll.jar');
+const jarFile = path.join(global.__rootdir, 'lib', 'FMtoll.jar');
 
 
 let renderUtil;
@@ -15,11 +13,11 @@ class RenderUtil {
             viewFolder: settings.viewFolder
         }, settings);
     }
-    parse(path, dataModel) {
+    parse(p1, dataModel) {
         let settings = JSON.stringify(this.settings);
         dataModel = JSON.stringify(dataModel);
 
-        let cmd = spawn('java', ['-jar', jarFile, settings, path, dataModel]);
+        let cmd = spawn('java', ['-jar', jarFile, settings, p1, dataModel]);
         cmd.stderr.setEncoding('utf-8');
 
         return {

@@ -11,7 +11,8 @@
   },
   "scripts": {
     "build": "babel src -d dist",
-    "dev": "babel src -w -d dist"
+    "dev": "babel src -w -d dist",
+    "test": "node ./test/foxman-dev.js"
   },
   "repository": {
     "type": "git",

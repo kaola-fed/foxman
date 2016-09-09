@@ -1,4 +1,4 @@
-import Application from './Application';
+import Application from './application';
 
 let app;
 export default function() {

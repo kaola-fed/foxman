@@ -1,9 +1,8 @@
 import {
     Event,
-    STATES,
     BasePlugin,
     util
-} from 'foxman-api';
+} from '../../helper';
 import Watcher from './watcher';
 import chokidar from 'chokidar';
 
@@ -22,13 +21,6 @@ class WatcherPlugin extends BasePlugin {
     watch(root) {
         let app = this.app;
         app.watcher = new Watcher(root);
-        /**
-         * file watcher api;
-         * relative path is root Directory
-         */
-        // app.watcher.onChange('/**/*', function ( path, stats) {
-        //   // debugLog(`watcher: ${path}`);
-        // });
     }
 }
 export default WatcherPlugin;

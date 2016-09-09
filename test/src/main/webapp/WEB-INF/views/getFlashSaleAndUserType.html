@@ -1,0 +1,30 @@
+<@compress>
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <#include "/common/macro.ftl">
+
+    <title>wap首页限时购异步请求</title>
+    <meta charset="utf-8"/>
+    <meta name="description" content="页面描述"/>
+    <meta name="keywords" content="页面描述"/>
+
+    <@css/>
+    <link href="${csRoot}getFlashSaleAndUserType.css" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+
+    <!-- Page Content Here -->
+
+    <script src="${nejRoot}"></script>
+    <script>
+        NEJ.define([
+            'pro/getFlashSaleAndUserType'
+        ],function(m){
+            m._$$Module._$allocate();
+        });
+    </script>
+  </body>
+</html>
+</@compress>

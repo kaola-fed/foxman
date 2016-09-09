@@ -1,18 +1,10 @@
 import Koa from 'koa';
-import {
-    join
-} from 'path';
+import path from 'path';
 import serve from 'koa-serve';
 import renderUtil from '../../helper/render';
 import render from 'koa-ejs';
-import {
-    dirDispatcher,
-    ftlDispatcher,
-    jsonDispatcher
-} from './dispatcher';
-import {
-    util
-} from 'foxman-api';
+import { dirDispatcher, ftlDispatcher, jsonDispatcher } from './dispatcher';
+import { util } from '../../helper';
 
 class Server {
     constructor(config) {
@@ -30,7 +22,7 @@ class Server {
 
     setRender() {
         render(this.app, {
-            root: join(global.__rootdir, 'views'),
+            root: path.join(global.__rootdir, 'views'),
             layout: 'template',
             viewExt: 'html',
             cache: process.env.NODE_ENV !== "development",

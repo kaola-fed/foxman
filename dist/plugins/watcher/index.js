@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _foxmanApi = require('foxman-api');
+var _helper = require('../../helper');
 
 var _watcher = require('./watcher');
 
@@ -50,17 +50,10 @@ var WatcherPlugin = function (_BasePlugin) {
         value: function watch(root) {
             var app = this.app;
             app.watcher = new _watcher2.default(root);
-            /**
-             * file watcher api;
-             * relative path is root Directory
-             */
-            // app.watcher.onChange('/**/*', function ( path, stats) {
-            //   // debugLog(`watcher: ${path}`);
-            // });
         }
     }]);
 
     return WatcherPlugin;
-}(_foxmanApi.BasePlugin);
+}(_helper.BasePlugin);
 
 exports.default = WatcherPlugin;

@@ -16,7 +16,7 @@ var _precompiler = require('./plugins/precompiler/');
 
 var _precompiler2 = _interopRequireDefault(_precompiler);
 
-var _foxmanApi = require('foxman-api');
+var _helper = require('./helper');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

@@ -10,7 +10,7 @@ var _server = require('./server');
 
 var _server2 = _interopRequireDefault(_server);
 
-var _foxmanApi = require('foxman-api');
+var _helper = require('../../helper');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47,6 +47,6 @@ var ServerPlugin = function (_BasePlugin) {
     }]);
 
     return ServerPlugin;
-}(_foxmanApi.BasePlugin);
+}(_helper.BasePlugin);
 
 exports.default = ServerPlugin;

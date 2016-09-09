@@ -6,14 +6,14 @@ Object.defineProperty(exports, "__esModule", {
 
 exports.default = function () {
     if (!app) {
-        app = new _Application2.default();
+        app = new _application2.default();
     }
     return app;
 };
 
-var _Application = require('./Application');
+var _application = require('./application');
 
-var _Application2 = _interopRequireDefault(_Application);
+var _application2 = _interopRequireDefault(_application);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
