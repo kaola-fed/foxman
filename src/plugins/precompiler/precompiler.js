@@ -16,16 +16,18 @@ class PreCompiler extends EventEmitter{
     Object.assign(this, options);
   }
   pipe(...args){
+    // console.log(args);
     this.source = this.source.pipe.apply(this.source,args);
     Object.assign(args[0], EventEmitter.prototype);
     args[0].on('returnDependencys', (event) => {
       return this.emit('updateWatch', event);
     });
+
     return this;
   }
-  dest(...args){
-    args[0] = resolve(this.root, args[0]);
-    return vinylFs.dest.apply(vinylFs,args);
+  dest(arg1){
+
+    return vinylFs.dest.call(vinylFs, resolve(this.root, arg1));
   }
   update(){
     this.source = vinylFs.src(this.filename);

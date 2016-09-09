@@ -46,7 +46,6 @@ var Watcher = function () {
             ignored: /node_modules/,
             persistent: true
         });
-        // this.watcher.setMaxListeners(0);
     }
 
     _createClass(Watcher, [{

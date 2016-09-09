@@ -70,7 +70,6 @@ var PreCompilerPlugin = function (_BasePlugin) {
             patterns.forEach(function (pattern) {
                 files = files.concat(_globule2.default.find(_path2.default.resolve(root, pattern)));
             });
-
             files.forEach(function (filename) {
                 var watchList = [];
                 var compilerInstance = new _preCompiler2.default({
@@ -86,9 +85,9 @@ var PreCompilerPlugin = function (_BasePlugin) {
                     var news = dependencys.filter(function (item) {
                         return watchList.indexOf(item) === -1;
                     });
-                    if (news.length == 0) return;
+                    if (!news.length) return;
                     _this3.addWatch(watchList, news, compilerInstance);
-                    _helper.util.log('监听\n' + filename + '的依赖\n|-> ' + news.join('\n|->'));
+                    _helper.util.log(filename + ' watching \n|-> ' + news.join('\n|->'));
                 });
             });
         }
@@ -107,9 +106,6 @@ var PreCompilerPlugin = function (_BasePlugin) {
                 compiler.update();
             });
         }
-    }, {
-        key: 'onReady',
-        value: function onReady() {}
     }]);
 
     return PreCompilerPlugin;

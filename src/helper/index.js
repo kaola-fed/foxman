@@ -3,4 +3,4 @@ import util from './util';
 import fileUtil from './fileutil';
 import Event from './event';
 
-module.exports = {BasePlugin,util,fileUtil,Event};
+module.exports = {BasePlugin, util, fileUtil, Event};

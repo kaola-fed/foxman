@@ -50,22 +50,20 @@ var PreCompiler = function (_EventEmitter) {
         args[_key] = arguments[_key];
       }
 
+      // console.log(args);
       this.source = this.source.pipe.apply(this.source, args);
       Object.assign(args[0], _events2.default.prototype);
       args[0].on('returnDependencys', function (event) {
         return _this2.emit('updateWatch', event);
       });
+
       return this;
     }
   }, {
     key: 'dest',
-    value: function dest() {
-      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
-      }
+    value: function dest(arg1) {
 
-      args[0] = (0, _path.resolve)(this.root, args[0]);
-      return _vinylFs2.default.dest.apply(_vinylFs2.default, args);
+      return _vinylFs2.default.dest.call(_vinylFs2.default, (0, _path.resolve)(this.root, arg1));
     }
   }, {
     key: 'update',

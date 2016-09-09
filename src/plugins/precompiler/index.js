@@ -12,11 +12,11 @@ import globule from 'globule';
  */
 class PreCompilerPlugin extends BasePlugin {
     init() {
-        this.mapCompiler(this.options.preCompilers);
+        this.mapCompiler( this.options.preCompilers );
     }
     mapCompiler(preCompilers) {
         preCompilers.forEach((preCompiler) => {
-            this.prepare(this.app.watcher, preCompiler)
+            this.prepare( this.app.watcher, preCompiler)
         });
     }
     prepare(watcher, preCompiler) {
@@ -29,27 +29,26 @@ class PreCompilerPlugin extends BasePlugin {
 
         let files = [];
         patterns.forEach((pattern) => {
-            files = files.concat(globule.find(path.resolve(root, pattern)));
+            files = files.concat( globule.find( path.resolve(root, pattern ) ) );
         });
-
         files.forEach((filename) => {
             let watchList = [];
-            let compilerInstance = new PreCompiler({
+            let compilerInstance = new PreCompiler( {
                 root,
                 filename,
                 handler
-            });
+            } );
             compilerInstance.run();
 
-            this.addWatch(watchList, filename, compilerInstance);
-            compilerInstance.on('updateWatch', (event) => {
+            this.addWatch( watchList, filename, compilerInstance);
+            compilerInstance.on( 'updateWatch', (event) => {
                 let dependencys = event;
                 let news = dependencys.filter((item) => {
-                    return (watchList.indexOf(item) === -1);
+                    return ( watchList.indexOf(item) === -1 );
                 });
-                if (news.length == 0) return;
+                if ( !news.length ) return;
                 this.addWatch(watchList, news, compilerInstance);
-                util.log(`监听\n${filename}的依赖\n|-> ${news.join('\n|->')}`);
+                util.log(`${filename} watching \n|-> ${news.join('\n|->')}`);
             });
         });
     }
@@ -65,9 +64,6 @@ class PreCompilerPlugin extends BasePlugin {
             util.log(`发生变化:${compiler.filename}`);
             compiler.update();
         });
-    }
-    onReady() {
-
     }
 }
 

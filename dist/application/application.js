@@ -47,7 +47,6 @@ var Application = function (_EventEmitter) {
                 name: plugin.constructor.name,
                 id: this.uid()
             }));
-
             _helper.util.debugLog('plugin ' + (plugin.name || plugin.id) + ' is loaded');
         }
         // before(plugin ,scope, fn){

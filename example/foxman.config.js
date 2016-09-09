@@ -22,10 +22,10 @@ module.exports = {
         test: 'src/mcss/**/*.mcss', // String or ArrayList<String>
         handler: (dest) => [
             mcss(),
-            // autoprefix({
-            //     browsers: ['Android >= 2.3'],
-            //     cascade: false
-            // }),
+            autoprefix({
+                browsers: ['Android >= 2.3'],
+                cascade: false
+            }),
             dest('src/css/')
         ]
     }],

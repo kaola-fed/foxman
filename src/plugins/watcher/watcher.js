@@ -17,7 +17,6 @@ class Watcher {
             ignored: /node_modules/,
             persistent: true
         });
-        // this.watcher.setMaxListeners(0);
     }
     removeWatch(files) {
         this.watcher.unwatch(files);
