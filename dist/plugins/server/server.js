@@ -28,6 +28,12 @@ var _koaEjs2 = _interopRequireDefault(_koaEjs);
 
 var _dispatcher = require('./dispatcher');
 
+var _dispatcher2 = _interopRequireDefault(_dispatcher);
+
+var _routemap = require('./routemap');
+
+var _routemap2 = _interopRequireDefault(_routemap);
+
 var _helper = require('../../helper');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -39,16 +45,15 @@ var Server = function () {
         _classCallCheck(this, Server);
 
         console.log(config);
-        this.app = (0, _koa2.default)();
-        this.config = config;
+        var app = this.app = (0, _koa2.default)();
+        Object.assign(this, config);
+        (0, _render2.default)({ viewFolder: this.viewRoot });
 
-        (0, _render2.default)({
-            viewFolder: config.viewRoot
-        });
-
-        this.buildResource(config.static);
         this.setRender();
-        this.dispatch();
+        this.setStaticHandler();
+
+        app.use((0, _routemap2.default)(this));
+        app.use((0, _dispatcher2.default)(this));
     }
 
     _createClass(Server, [{
@@ -63,8 +68,8 @@ var Server = function () {
             });
         }
     }, {
-        key: 'buildResource',
-        value: function buildResource() {
+        key: 'setStaticHandler',
+        value: function setStaticHandler() {
             var _this = this;
 
             var staticDirs = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
@@ -81,101 +86,11 @@ var Server = function () {
             this.app.use((0, _koaServe2.default)('resource', __dirname));
         }
     }, {
-        key: 'dispatch',
-        value: function dispatch() {
-            var context = this;
-
-            this.app.use(regeneratorRuntime.mark(function _callee() {
-                var url, routeMap, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, route;
-
-                return regeneratorRuntime.wrap(function _callee$(_context) {
-                    while (1) {
-                        switch (_context.prev = _context.next) {
-                            case 0:
-                                url = this.req.url;
-                                routeMap = {
-                                    '/': _dispatcher.dirDispatcher,
-                                    '.ftl': _dispatcher.ftlDispatcher,
-                                    '.json': _dispatcher.jsonDispatcher
-                                };
-                                _iteratorNormalCompletion = true;
-                                _didIteratorError = false;
-                                _iteratorError = undefined;
-                                _context.prev = 5;
-                                _iterator = Object.keys(routeMap)[Symbol.iterator]();
-
-                            case 7:
-                                if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                                    _context.next = 16;
-                                    break;
-                                }
-
-                                route = _step.value;
-
-                                if (!url.endsWith(route)) {
-                                    _context.next = 13;
-                                    break;
-                                }
-
-                                _context.next = 12;
-                                return routeMap[route](url, context.config, this);
-
-                            case 12:
-                                return _context.abrupt('return');
-
-                            case 13:
-                                _iteratorNormalCompletion = true;
-                                _context.next = 7;
-                                break;
-
-                            case 16:
-                                _context.next = 22;
-                                break;
-
-                            case 18:
-                                _context.prev = 18;
-                                _context.t0 = _context['catch'](5);
-                                _didIteratorError = true;
-                                _iteratorError = _context.t0;
-
-                            case 22:
-                                _context.prev = 22;
-                                _context.prev = 23;
-
-                                if (!_iteratorNormalCompletion && _iterator.return) {
-                                    _iterator.return();
-                                }
-
-                            case 25:
-                                _context.prev = 25;
-
-                                if (!_didIteratorError) {
-                                    _context.next = 28;
-                                    break;
-                                }
-
-                                throw _iteratorError;
-
-                            case 28:
-                                return _context.finish(25);
-
-                            case 29:
-                                return _context.finish(22);
-
-                            case 30:
-                            case 'end':
-                                return _context.stop();
-                        }
-                    }
-                }, _callee, this, [[5, 18, 22, 30], [23,, 25, 29]]);
-            }));
-        }
-    }, {
         key: 'createServer',
         value: function createServer() {
-            this.config.port = this.config.port || 3000;
-            this.app.listen(this.config.port);
-            _helper.util.log('freemarker-server is run on port ' + this.config.port + '~ ');
+            var port = this.port || 3000;
+            this.app.listen(port);
+            _helper.util.log('server is running on port ' + port + '~ ');
         }
     }]);
 

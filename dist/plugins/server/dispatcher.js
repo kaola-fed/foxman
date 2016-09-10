@@ -21,6 +21,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var _marked = [dirDispatcher, ftlDispatcher, jsonDispatcher].map(regeneratorRuntime.mark);
 
+/**
+ * default dispatcher
+ * @param  {[type]} url     [description]
+ * @param  {[type]} config  [description]
+ * @param  {[type]} context [description]
+ * @return {[type]}         [description]
+ */
 function dirDispatcher(url, config, context) {
     var viewPath, files, promises, result, fileList;
     return regeneratorRuntime.wrap(function dirDispatcher$(_context) {
@@ -90,7 +97,9 @@ function ftlDispatcher(url, config, context) {
                     });
                     output.stderr.on('end', function () {
                         var err = errInfo.join('');
-                        console.log(err);
+                        if (err) {
+                            console.log(err);
+                        }
                         // console.log(context);
                         // context.body = err;
                     });
@@ -124,3 +133,90 @@ function jsonDispatcher(url, config, context) {
         }
     }, _marked[2], this);
 }
+
+exports.default = function (config) {
+    return regeneratorRuntime.mark(function _callee() {
+        var url, routeMap, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, route;
+
+        return regeneratorRuntime.wrap(function _callee$(_context4) {
+            while (1) {
+                switch (_context4.prev = _context4.next) {
+                    case 0:
+                        url = this.request.handledPath || this.request.path;
+                        routeMap = {
+                            '/': dirDispatcher,
+                            '.ftl': ftlDispatcher,
+                            '.json': jsonDispatcher
+                        };
+                        _iteratorNormalCompletion = true;
+                        _didIteratorError = false;
+                        _iteratorError = undefined;
+                        _context4.prev = 5;
+                        _iterator = Object.keys(routeMap)[Symbol.iterator]();
+
+                    case 7:
+                        if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
+                            _context4.next = 16;
+                            break;
+                        }
+
+                        route = _step.value;
+
+                        if (!url.endsWith(route)) {
+                            _context4.next = 13;
+                            break;
+                        }
+
+                        _context4.next = 12;
+                        return routeMap[route](url, config, this);
+
+                    case 12:
+                        return _context4.abrupt('return');
+
+                    case 13:
+                        _iteratorNormalCompletion = true;
+                        _context4.next = 7;
+                        break;
+
+                    case 16:
+                        _context4.next = 22;
+                        break;
+
+                    case 18:
+                        _context4.prev = 18;
+                        _context4.t0 = _context4['catch'](5);
+                        _didIteratorError = true;
+                        _iteratorError = _context4.t0;
+
+                    case 22:
+                        _context4.prev = 22;
+                        _context4.prev = 23;
+
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+
+                    case 25:
+                        _context4.prev = 25;
+
+                        if (!_didIteratorError) {
+                            _context4.next = 28;
+                            break;
+                        }
+
+                        throw _iteratorError;
+
+                    case 28:
+                        return _context4.finish(25);
+
+                    case 29:
+                        return _context4.finish(22);
+
+                    case 30:
+                    case 'end':
+                        return _context4.stop();
+                }
+            }
+        }, _callee, this, [[5, 18, 22, 30], [23,, 25, 29]]);
+    });
+};

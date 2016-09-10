@@ -4,7 +4,6 @@ import {
 } from 'child_process';
 const jarFile = path.join(global.__rootdir, 'lib', 'FMtoll.jar');
 
-
 let renderUtil;
 class RenderUtil {
     constructor(settings) {

@@ -5,6 +5,13 @@ import {
     fileUtil
 } from '../../helper';
 
+/**
+ * default dispatcher
+ * @param  {[type]} url     [description]
+ * @param  {[type]} config  [description]
+ * @param  {[type]} context [description]
+ * @return {[type]}         [description]
+ */
 export function* dirDispatcher(url, config, context) {
 
     const viewPath = path.join( config.viewRoot, url);
@@ -48,7 +55,7 @@ export function* ftlDispatcher(url, config, context) {
     });
     output.stderr.on('end', ()=> {
         let err = errInfo.join('');
-        console.log(err);
+        if( err ){ console.log(err); }
         // console.log(context);
         // context.body = err;
     });
@@ -61,4 +68,23 @@ export function* jsonDispatcher(url, config, context) {
 
     context.type = 'application/json; charset=utf-8';
     context.body = json;
+}
+
+export default ( config )=>{
+  return function*() {
+    const url = this.request.handledPath || this.request.path;
+
+    const routeMap = {
+        '/':     dirDispatcher,
+        '.ftl':  ftlDispatcher,
+        '.json': jsonDispatcher
+    };
+
+    for (let route of Object.keys(routeMap)) {
+        if (url.endsWith(route)) {
+            yield routeMap[route](url, config, this);
+            return;
+        }
+    }
+  }
 }

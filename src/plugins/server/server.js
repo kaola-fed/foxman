@@ -3,22 +3,22 @@ import path from 'path';
 import serve from 'koa-serve';
 import renderUtil from '../../helper/render';
 import render from 'koa-ejs';
-import { dirDispatcher, ftlDispatcher, jsonDispatcher } from './dispatcher';
-import { util } from '../../helper';
+import dispatcher from './dispatcher';
+import routeMap from './routemap'
+import { util , genRouteMap} from '../../helper';
 
 class Server {
     constructor(config) {
         console.log(config);
-        this.app = Koa();
-        this.config = config;
+        const app = this.app = Koa();
+        Object.assign( this, config );
+        renderUtil({ viewFolder: this.viewRoot });
 
-        renderUtil({
-            viewFolder: config.viewRoot
-        });
-
-        this.buildResource(config.static);
         this.setRender();
-        this.dispatch();
+        this.setStaticHandler();
+
+        app.use( routeMap( this ) );
+        app.use( dispatcher( this ) );
     }
 
     setRender() {
@@ -31,7 +31,7 @@ class Server {
         });
     }
 
-    buildResource(staticDirs = []) {
+    setStaticHandler(staticDirs = []) {
         let rootdir;
         let dir;
         staticDirs.forEach((item) => {
@@ -41,33 +41,12 @@ class Server {
             this.app.use(serve(dir[0], rootdir));
         });
 
-        this.app.use(serve('resource', __dirname));
+        this.app.use( serve('resource', __dirname) );
     }
-
-    dispatch() {
-        const context = this;
-
-        this.app.use(function*() {
-            const url = this.req.url;
-            const routeMap = {
-                '/': dirDispatcher,
-                '.ftl': ftlDispatcher,
-                '.json': jsonDispatcher
-            };
-
-            for (let route of Object.keys(routeMap)) {
-                if (url.endsWith(route)) {
-                    yield routeMap[route](url, context.config, this);
-                    return;
-                }
-            }
-        });
-    }
-
     createServer() {
-        this.config.port = this.config.port || 3000;
-        this.app.listen(this.config.port);
-        util.log(`freemarker-server is run on port ${this.config.port}~ `);
+        const port = this.port || 3000;
+        this.app.listen( port );
+        util.log(`server is running on port ${port}~ `);
     }
 }
 

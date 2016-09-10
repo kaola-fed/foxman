@@ -8,8 +8,15 @@ const reloadPlugin = require('./plugin.reload');
 
 const root = path.resolve(__dirname, 'src', 'main', 'webapp');
 
+/**
+ * a route table to query tpl and model
+ * @type {Array}
+ */
 const router = [
-  'get', '/index.html', 'index.ftl'
+  {
+    method: 'GET', url: '/index.html', sync: false, filePath: 'index.ftl',
+    method: 'GET', url: '/index2.html', sync: false, filePath: 'index2.ftl'
+  }
 ]
 
 module.exports = {
@@ -43,6 +50,16 @@ module.exports = {
         port: 3000,
         router,
         proxy: false,
+        tpl: {
+          suffix: 'ftl',
+          /**
+           * combime
+           * @param  {[type]} tpl  [description]
+           * @param  {[type]} data [description]
+           * @return {[type]}      [description]
+           */
+          handler: null /**  parse Util Class default is ftl render **/
+        },
         dataMatch:( syncFilePath ) => path.resolve( this.syncData, syncFilePath + '.json' ),
         viewRoot: path.resolve( root, 'WEB-INF' ),
         syncData: path.resolve( __dirname, 'mock', 'fakeData' ),
