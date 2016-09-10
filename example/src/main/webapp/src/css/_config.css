@@ -4,5 +4,8 @@
 	display:flex;
 }
 .config{
-	width:1px;
+	width:10px;
+}
+body{
+	margin:0;
 }

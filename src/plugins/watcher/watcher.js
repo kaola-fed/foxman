@@ -13,8 +13,8 @@ let watcher;
 class Watcher {
     constructor(...args) {
         this.root = args[0];
-        this.watcher = chokidar.watch(this.root, {
-            ignored: /node_modules/,
+        this.watcher = chokidar.watch(process.cwd(), {
+            ignored: ['**/.git/**', '**/node_modules/**', '**/.gitignore'],
             persistent: true
         });
     }

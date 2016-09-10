@@ -1,3 +1,4 @@
+import http from 'http';
 import Koa from 'koa';
 import path from 'path';
 import serve from 'koa-serve';
@@ -9,20 +10,26 @@ import { util , genRouteMap} from '../../helper';
 
 class Server {
     constructor(config) {
-
-        const app = this.app = Koa();
+        this.app = Koa();
         Object.assign( this, config );
-
         this.setRender();
         this.setStaticHandler();
 
-        app.use( routeMap( this ) );
-        app.use( dispatcher( this ) );
+        this.delayInit();
     }
-
+    delayInit(){
+      const app = this.app;
+      app.use( routeMap( this ) );
+      app.use( dispatcher( this ) );
+    }
     setRender() {
-        Object.assign(this, this.tpl);
+        if( this.tplConfig ){
+          Object.assign(this, this.tplConfig);
+        }
+
         this.renderUtil = this.renderUtil || renderUtil;
+        this.extension = this.extension || 'tpl';
+
         this.renderUtil({ viewFolder: this.viewRoot });
 
         render(this.app, {
@@ -34,21 +41,37 @@ class Server {
         });
     }
 
-    setStaticHandler(staticDirs = []) {
+    setStaticHandler() {
         let rootdir;
         let dir;
-        staticDirs.forEach((item) => {
-            dir = /[^(\\||\/)]*$/ig.exec(item);
-            if (!dir || !dir[0]) return;
-            rootdir = item.replace(dir[0], '');
-            this.app.use(serve(dir[0], rootdir));
-        });
+        if(this.static && !Array.isArray(this.static)) this.static = [ this.static ];
 
-        this.app.use( serve('resource', __dirname) );
+        this.static.forEach((item) => {
+            dir = /[^(\\\/)]*$/.exec(item);
+            if (!dir || !dir[0]) return;
+            rootdir = item.replace(/[^(\\\/)]*$/, '');
+
+            this.app.use( serve(dir[0], rootdir) );
+        });
+        this.app.use( serve('resource', global.__rootdir) );
     }
+
+    appendHtml ( html ){
+      let extension = this.extension;
+      this.app.use(function * ( next ) {
+        let pagePath = this.request.pagePath || this.request.path;
+
+        if( pagePath && pagePath.endsWith(extension) ){
+
+          this.body = this.body + html;
+          yield next;
+        }
+      });
+    }
+
     createServer() {
         const port = this.port || 3000;
-        this.app.listen( port );
+        this.serverApp = http.createServer(this.app.callback()).listen(port);
         util.log(`server is running on port ${port}~ `);
     }
 }

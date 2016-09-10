@@ -2,6 +2,8 @@ import Application from './application/index';
 import ServerPlugin from './plugins/server/';
 import WatcherPlugin from './plugins/watcher/';
 import PreCompilerPlugin from './plugins/precompiler/';
+import ReloadPlugin from './plugins/reloader';
+
 import {
     Event,
     util
@@ -32,6 +34,9 @@ class Ower {
             preCompilers: config.preCompilers,
             root
         })); /** main **/
+
+        app.use( new ReloadPlugin( {
+        })); /** reloader **/
 
         /**
          * __loadPlugins

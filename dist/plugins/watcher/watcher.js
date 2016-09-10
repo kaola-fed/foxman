@@ -42,8 +42,8 @@ var Watcher = function () {
         _classCallCheck(this, Watcher);
 
         this.root = arguments.length <= 0 ? undefined : arguments[0];
-        this.watcher = _chokidar2.default.watch(this.root, {
-            ignored: /node_modules/,
+        this.watcher = _chokidar2.default.watch(process.cwd(), {
+            ignored: ['**/.git/**', '**/node_modules/**', '**/.gitignore'],
             persistent: true
         });
     }

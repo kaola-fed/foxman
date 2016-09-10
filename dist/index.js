@@ -16,6 +16,10 @@ var _precompiler = require('./plugins/precompiler/');
 
 var _precompiler2 = _interopRequireDefault(_precompiler);
 
+var _reloader = require('./plugins/reloader');
+
+var _reloader2 = _interopRequireDefault(_reloader);
+
 var _helper = require('./helper');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -25,47 +29,49 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var ower = void 0;
 
 var Ower = function Ower(config) {
-    _classCallCheck(this, Ower);
+        _classCallCheck(this, Ower);
 
-    var app = (0, _index2.default)();
-    var root = config.root;
-    /**
-     * __setConfig
-     */
-    app.setConfig(config);
+        var app = (0, _index2.default)();
+        var root = config.root;
+        /**
+         * __setConfig
+         */
+        app.setConfig(config);
 
-    /**
-     * 内置组件
-     */
-    app.use(new _watcher2.default(Object.assign(config.watch, {
-        root: root
-    })));
+        /**
+         * 内置组件
+         */
+        app.use(new _watcher2.default(Object.assign(config.watch, {
+                root: root
+        })));
 
-    app.use(new _server2.default(Object.assign(config.server, {
-        root: root
-    })));
+        app.use(new _server2.default(Object.assign(config.server, {
+                root: root
+        })));
 
-    app.use(new _precompiler2.default({
-        preCompilers: config.preCompilers,
-        root: root
-    })); /** main **/
+        app.use(new _precompiler2.default({
+                preCompilers: config.preCompilers,
+                root: root
+        })); /** main **/
 
-    /**
-     * __loadPlugins
-     */
-    app.use(config.plugins);
+        app.use(new _reloader2.default({})); /** reloader **/
 
-    /**
-     * __ready
-     */
-    app.run();
+        /**
+         * __loadPlugins
+         */
+        app.use(config.plugins);
 
-    /** start server **/
+        /**
+         * __ready
+         */
+        app.run();
 
-    /** start server **/
+        /** start server **/
+
+        /** start server **/
 };
 
 module.exports = function (config) {
-    if (!ower) ower = new Ower(config);
-    return ower;
+        if (!ower) ower = new Ower(config);
+        return ower;
 };

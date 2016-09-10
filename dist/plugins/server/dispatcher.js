@@ -19,6 +19,8 @@ var _helper = require('../../helper');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var _marked = [dirDispatcher, ftlDispatcher, jsonDispatcher].map(regeneratorRuntime.mark);
 
 /**
@@ -28,7 +30,7 @@ var _marked = [dirDispatcher, ftlDispatcher, jsonDispatcher].map(regeneratorRunt
  * @param  {[type]} context [description]
  * @return {[type]}         [description]
  */
-function dirDispatcher(url, config, context) {
+function dirDispatcher(url, config, context, next) {
     var viewPath, files, promises, result, fileList;
     return regeneratorRuntime.wrap(function dirDispatcher$(_context) {
         while (1) {
@@ -69,14 +71,14 @@ function dirDispatcher(url, config, context) {
     }, _marked[0], this);
 }
 
-function ftlDispatcher(url, config, context) {
-    var filePath, dataPath, dataModel, output, errInfo;
+function ftlDispatcher(url, config, context, next) {
+    var filePath, dataPath, dataModel, output, html, errInfo;
     return regeneratorRuntime.wrap(function ftlDispatcher$(_context2) {
         while (1) {
             switch (_context2.prev = _context2.next) {
                 case 0:
                     filePath = _path2.default.join(config.viewRoot, url);
-                    dataPath = config.dataMatch ? config.dataMatch(url.replace(/\.[^.]*$/, '')) : url.replace(/\.[^.]*$/, '.json');
+                    dataPath = config.dataMatch ? config.dataMatch(url.replace(/^(\/||\\)/, '').replace(/\.[^.]*$/, '')) : _path2.default.join(config.syncData, url.replace(/\.[^.]*$/, '.json'));
                     dataModel = {};
 
                     try {
@@ -86,12 +88,25 @@ function ftlDispatcher(url, config, context) {
                     }
 
                     output = config.renderUtil().parse(filePath.replace(config.viewRoot, ''), dataModel);
+                    html = [];
+                    _context2.next = 8;
+                    return new Promise(function (resolve, reject) {
+                        output.stdout.on('data', function (chunk) {
+                            html.push(chunk);
+                        });
+                        output.stdout.on('end', function () {
+                            if (html) {
+                                context.type = 'text/html; charset=utf-8';
+                                context.body = html.join('');
+                                return resolve();
+                            }
+                            reject();
+                        });
+                    });
 
-
-                    context.type = 'text/html; charset=utf-8';
-                    context.body = output.stdout || output.stderr;
-
+                case 8:
                     errInfo = [];
+
 
                     output.stderr.on('data', function (chunk) {
                         errInfo.push(chunk);
@@ -105,7 +120,10 @@ function ftlDispatcher(url, config, context) {
                         // context.body = err;
                     });
 
-                case 10:
+                    _context2.next = 13;
+                    return next;
+
+                case 13:
                 case 'end':
                     return _context2.stop();
             }
@@ -113,21 +131,23 @@ function ftlDispatcher(url, config, context) {
     }, _marked[1], this);
 }
 
-function jsonDispatcher(url, config, context) {
-    var filePath, dataPath, json;
+function jsonDispatcher(url, config, context, next) {
+    var filePath, json;
     return regeneratorRuntime.wrap(function jsonDispatcher$(_context3) {
         while (1) {
             switch (_context3.prev = _context3.next) {
                 case 0:
-                    filePath = _path2.default.join(config.root, url);
-                    dataPath = filePath.replace(config.viewRoot, config.asyncData);
-                    json = _helper.fileUtil.getFileByStream(dataPath);
+                    filePath = _path2.default.join(config.asyncData, url);
+                    json = _helper.fileUtil.getFileByStream(filePath);
 
 
                     context.type = 'application/json; charset=utf-8';
                     context.body = json;
 
-                case 5:
+                    _context3.next = 6;
+                    return next;
+
+                case 6:
                 case 'end':
                     return _context3.stop();
             }
@@ -136,19 +156,19 @@ function jsonDispatcher(url, config, context) {
 }
 
 exports.default = function (config) {
-    return regeneratorRuntime.mark(function _callee() {
+    return regeneratorRuntime.mark(function _callee(next) {
+        var _routeMap;
+
         var url, routeMap, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, route;
 
         return regeneratorRuntime.wrap(function _callee$(_context4) {
             while (1) {
                 switch (_context4.prev = _context4.next) {
                     case 0:
-                        url = this.request.handledPath || this.request.path;
-                        routeMap = {
-                            '/': dirDispatcher,
-                            '.ftl': ftlDispatcher,
-                            '.json': jsonDispatcher
-                        };
+                        url = this.request.pagePath || this.request.path;
+                        routeMap = (_routeMap = {
+                            '/': dirDispatcher
+                        }, _defineProperty(_routeMap, '.' + config.extension, ftlDispatcher), _defineProperty(_routeMap, '.json', jsonDispatcher), _routeMap);
                         _iteratorNormalCompletion = true;
                         _didIteratorError = false;
                         _iteratorError = undefined;
@@ -169,7 +189,7 @@ exports.default = function (config) {
                         }
 
                         _context4.next = 12;
-                        return routeMap[route](url, config, this);
+                        return routeMap[route](url, config, this, next);
 
                     case 12:
                         return _context4.abrupt('return');

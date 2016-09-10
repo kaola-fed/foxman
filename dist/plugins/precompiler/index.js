@@ -81,15 +81,13 @@ var PreCompilerPlugin = function () {
                     });
                     if (!news.length) return;
                     _this2.addWatch(watchList, news, compilerInstance);
-                    _helper.util.log((filename + ' \n      ' + news.join('\n      ')).replace(new RegExp(root, 'ig'), ''));
+                    _helper.util.log(filename + ' \n      ' + news.join('\n      '));
                 });
             });
         }
     }, {
         key: 'addWatch',
         value: function addWatch(watchList, news, compiler) {
-            var _this3 = this;
-
             if (Array.isArray(news)) {
                 news.forEach(function (item) {
                     watchList.push(item);
@@ -98,7 +96,7 @@ var PreCompilerPlugin = function () {
                 watchList.push(news);
             }
             this.app.watcher.onChange(news, function (arg0, arg1) {
-                _helper.util.log(('changed: ' + compiler.filename).replace(new RegExp(_this3.options.root, 'ig'), ''));
+                _helper.util.log('changed: ' + compiler.filename);
                 compiler.update();
             });
         }

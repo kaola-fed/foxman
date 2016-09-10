@@ -12,7 +12,7 @@ import {
  * @param  {[type]} context [description]
  * @return {[type]}         [description]
  */
-export function* dirDispatcher(url, config, context) {
+export function* dirDispatcher(url, config, context, next) {
 
     const viewPath = path.join( config.viewRoot, url);
     const files = yield fileUtil.getDirInfo(viewPath);
@@ -34,10 +34,12 @@ export function* dirDispatcher(url, config, context) {
     });
 }
 
-export function* ftlDispatcher( url, config, context ) {
+export function* ftlDispatcher( url, config, context ,next) {
     const filePath = path.join( config.viewRoot, url );
 
-    const dataPath = ( config.dataMatch ) ? config.dataMatch(url.replace(/\.[^.]*$/, '') ) : url.replace( /\.[^.]*$/, '.json' );
+    const dataPath = ( config.dataMatch ) ?
+     config.dataMatch( url.replace(/^(\/||\\)/,'').replace(/\.[^.]*$/, '')) :
+     path.join( config.syncData ,url.replace( /\.[^.]*$/, '.json' ));
 
     let dataModel = {};
     try {
@@ -47,11 +49,24 @@ export function* ftlDispatcher( url, config, context ) {
     }
 
     let output = config.renderUtil().parse(filePath.replace(config.viewRoot, ''), dataModel);
+    let html = [];
+    yield new Promise( ( resolve, reject )=>{
+      output.stdout.on('data',(chunk)=>{
+        html.push(chunk);
+      });
+      output.stdout.on('end',()=>{
+        if(html){
+          context.type = 'text/html; charset=utf-8';
+          context.body = html.join('');
+          return resolve();
+        }
+        reject();
+      });
+    })
 
-    context.type = 'text/html; charset=utf-8';
-    context.body = output.stdout || output.stderr;
 
     const errInfo = [];
+
     output.stderr.on('data', (chunk)=> {
         errInfo.push(chunk);
     });
@@ -61,30 +76,34 @@ export function* ftlDispatcher( url, config, context ) {
         // console.log(context);
         // context.body = err;
     });
+
+    yield next;
 }
 
-export function* jsonDispatcher(url, config, context) {
-    const filePath = path.join(config.root, url);
-    const dataPath = filePath.replace(config.viewRoot, config.asyncData)
-    const json = fileUtil.getFileByStream(dataPath);
+
+export function* jsonDispatcher(url, config, context, next) {
+    const filePath = path.join(config.asyncData, url);
+    const json = fileUtil.getFileByStream(filePath);
 
     context.type = 'application/json; charset=utf-8';
     context.body = json;
+
+    yield next;
 }
 
 export default ( config )=>{
-  return function*() {
-    const url = this.request.handledPath || this.request.path;
+  return function*( next ) {
+    const url = this.request.pagePath || this.request.path;
 
     const routeMap = {
         '/':     dirDispatcher,
-        '.ftl':  ftlDispatcher,
+        [ '.' + config.extension ]:  ftlDispatcher,
         '.json': jsonDispatcher
     };
 
     for (let route of Object.keys(routeMap)) {
         if (url.endsWith(route)) {
-            yield routeMap[route](url, config, this);
+            yield routeMap[route](url, config, this, next);
             return;
         }
     }
