@@ -20,16 +20,20 @@ var _reloader = require('./plugins/reloader');
 
 var _reloader2 = _interopRequireDefault(_reloader);
 
+var _nei = require('./plugins/nei');
+
+var _nei2 = _interopRequireDefault(_nei);
+
 var _helper = require('./helper');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ower = void 0;
+var owner = void 0;
 
-var Ower = function Ower(config) {
-        _classCallCheck(this, Ower);
+var Owner = function Owner(config) {
+        _classCallCheck(this, Owner);
 
         var app = (0, _index2.default)();
         var root = config.root;
@@ -56,6 +60,7 @@ var Ower = function Ower(config) {
 
         app.use(new _reloader2.default({})); /** reloader **/
 
+        app.use(new _nei2.default({}));
         /**
          * __loadPlugins
          */
@@ -72,6 +77,6 @@ var Ower = function Ower(config) {
 };
 
 module.exports = function (config) {
-        if (!ower) ower = new Ower(config);
-        return ower;
+        if (!owner) owner = new Owner(config);
+        return owner;
 };

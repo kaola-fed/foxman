@@ -4,7 +4,7 @@ const path = require('path');
 const mcss = require('../../foxman-mcss');
 const autoprefix = require('gulp-autoprefixer');
 
-const NeiPlugin = require('./plugin.nei');
+// const NeiPlugin = require('./plugin.nei');
 
 const router = require('./route');
 
@@ -13,9 +13,9 @@ const root = path.resolve(__dirname, 'src', 'main', 'webapp');
 module.exports = {
     root,
     plugins: [
-        new NeiPlugin({
-            name: 'xujunyu'
-        })
+        // new NeiPlugin({
+        //     name: 'xujunyu'
+        // })
     ],
     preCompilers: [{
         test: path.resolve(root, 'src/mcss/**/*.mcss'), // String or ArrayList<String>

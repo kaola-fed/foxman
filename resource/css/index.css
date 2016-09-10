@@ -28,7 +28,8 @@ body,html{height:100%;-webkit-tap-highlight-color:transparent}body{overflow-x:hi
   z-index: 700;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
-  border-top: 1px solid #f4f4f4;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
 }
 .tabbar-inner {
     display: flex;align-items: center;flex:1;
@@ -54,7 +55,7 @@ body,html{height:100%;-webkit-tap-highlight-color:transparent}body{overflow-x:hi
     margin: 0;
     padding: 0;
     list-style: none;
-    z-index: 500;
+    z-index: -1;
 }
 .u-navitem{
   -webkit-box-flex: 1;
@@ -89,4 +90,9 @@ body,html{height:100%;-webkit-tap-highlight-color:transparent}body{overflow-x:hi
   height: 20px;
   background-position: -20px 0;
   margin: 0 0 0 10px;
+}
+.weui_cell_ft{
+  display: flex;
+  align-items: center;
+  height: 24px;
 }

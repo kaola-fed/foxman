@@ -3,14 +3,15 @@ import ServerPlugin from './plugins/server/';
 import WatcherPlugin from './plugins/watcher/';
 import PreCompilerPlugin from './plugins/precompiler/';
 import ReloadPlugin from './plugins/reloader';
+import NeiPlugin from './plugins/nei';
 
 import {
     Event,
     util
 } from './helper';
 
-let ower;
-class Ower {
+let owner;
+class Owner {
     constructor(config) {
         const app = Application();
         const root = config.root;
@@ -30,14 +31,16 @@ class Ower {
             root
         })));
 
-        app.use( new PreCompilerPlugin( {
+        app.use( new PreCompilerPlugin({
             preCompilers: config.preCompilers,
             root
         })); /** main **/
 
-        app.use( new ReloadPlugin( {
-        })); /** reloader **/
+        app.use( new ReloadPlugin({})); /** reloader **/
 
+        app.use( new NeiPlugin({
+          
+        }));
         /**
          * __loadPlugins
          */
@@ -56,6 +59,6 @@ class Ower {
 }
 
 module.exports = function(config) {
-    if (!ower) ower = new Ower(config);
-    return ower;
+    if (!owner) owner = new Owner(config);
+    return owner;
 }
