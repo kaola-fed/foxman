@@ -12,10 +12,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * BasePlugin class
  */
 var BasePlugin = function () {
-  function BasePlugin(options) {
+  function BasePlugin() {
     _classCallCheck(this, BasePlugin);
-
-    this.options = options;
   }
 
   _createClass(BasePlugin, [{

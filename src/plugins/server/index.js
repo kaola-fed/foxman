@@ -1,10 +1,10 @@
 import Server from './server';
-import {
-    Event,
-    BasePlugin
-} from '../../helper';
+import { Event } from '../../helper';
 
-class ServerPlugin extends BasePlugin {
+class ServerPlugin  {
+    constructor(options){
+      this.options = options;
+    }
     init (){
         new Server(this.options).createServer();
     }

@@ -1,26 +1,17 @@
-import {
-    Event,
-    BasePlugin,
-    util
-} from '../../helper';
+import { util } from '../../helper';
 import Watcher from './watcher';
 import chokidar from 'chokidar';
 
 /**
  * 监听插件
  */
-class WatcherPlugin extends BasePlugin {
+class WatcherPlugin {
     constructor(options) {
-        super(options);
         this.options = options;
         this.root = options.root;
     }
     init() {
-        this.watch(this.root);
-    }
-    watch(root) {
-        let app = this.app;
-        app.watcher = new Watcher(root);
+        this.app.watcher = new Watcher(this.root);
     }
 }
 export default WatcherPlugin;

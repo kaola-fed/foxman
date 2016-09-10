@@ -24,20 +24,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 /**
  * 监听插件
  */
-var PreCompilerPlugin = function (_BasePlugin) {
-    _inherits(PreCompilerPlugin, _BasePlugin);
-
-    function PreCompilerPlugin() {
+var PreCompilerPlugin = function () {
+    function PreCompilerPlugin(options) {
         _classCallCheck(this, PreCompilerPlugin);
 
-        return _possibleConstructorReturn(this, (PreCompilerPlugin.__proto__ || Object.getPrototypeOf(PreCompilerPlugin)).apply(this, arguments));
+        this.options = options;
     }
 
     _createClass(PreCompilerPlugin, [{
@@ -48,16 +42,16 @@ var PreCompilerPlugin = function (_BasePlugin) {
     }, {
         key: 'mapCompiler',
         value: function mapCompiler(preCompilers) {
-            var _this2 = this;
+            var _this = this;
 
             preCompilers.forEach(function (preCompiler) {
-                _this2.prepare(_this2.app.watcher, preCompiler);
+                _this.prepare(_this.app.watcher, preCompiler);
             });
         }
     }, {
         key: 'prepare',
         value: function prepare(watcher, preCompiler) {
-            var _this3 = this;
+            var _this2 = this;
 
             var handler = preCompiler.handler;
             var root = this.options.root;
@@ -79,14 +73,14 @@ var PreCompilerPlugin = function (_BasePlugin) {
                 });
                 compilerInstance.run();
 
-                _this3.addWatch(watchList, filename, compilerInstance);
+                _this2.addWatch(watchList, filename, compilerInstance);
                 compilerInstance.on('updateWatch', function (event) {
                     var dependencys = event;
                     var news = dependencys.filter(function (item) {
                         return watchList.indexOf(item) === -1;
                     });
                     if (!news.length) return;
-                    _this3.addWatch(watchList, news, compilerInstance);
+                    _this2.addWatch(watchList, news, compilerInstance);
                     _helper.util.log((filename + ' \n      ' + news.join('\n      ')).replace(new RegExp(root, 'ig'), ''));
                 });
             });
@@ -94,7 +88,7 @@ var PreCompilerPlugin = function (_BasePlugin) {
     }, {
         key: 'addWatch',
         value: function addWatch(watchList, news, compiler) {
-            var _this4 = this;
+            var _this3 = this;
 
             if (Array.isArray(news)) {
                 news.forEach(function (item) {
@@ -104,13 +98,13 @@ var PreCompilerPlugin = function (_BasePlugin) {
                 watchList.push(news);
             }
             this.app.watcher.onChange(news, function (arg0, arg1) {
-                _helper.util.log(('changed: ' + compiler.filename).replace(new RegExp(_this4.options.root, 'ig'), ''));
+                _helper.util.log(('changed: ' + compiler.filename).replace(new RegExp(_this3.options.root, 'ig'), ''));
                 compiler.update();
             });
         }
     }]);
 
     return PreCompilerPlugin;
-}(_helper.BasePlugin);
+}();
 
 exports.default = PreCompilerPlugin;

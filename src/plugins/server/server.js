@@ -9,7 +9,7 @@ import { util , genRouteMap} from '../../helper';
 
 class Server {
     constructor(config) {
-        console.log(config);
+
         const app = this.app = Koa();
         Object.assign( this, config );
         renderUtil({ viewFolder: this.viewRoot });

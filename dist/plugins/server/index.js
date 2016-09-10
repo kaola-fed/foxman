@@ -16,17 +16,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var ServerPlugin = function (_BasePlugin) {
-    _inherits(ServerPlugin, _BasePlugin);
-
-    function ServerPlugin() {
+var ServerPlugin = function () {
+    function ServerPlugin(options) {
         _classCallCheck(this, ServerPlugin);
 
-        return _possibleConstructorReturn(this, (ServerPlugin.__proto__ || Object.getPrototypeOf(ServerPlugin)).apply(this, arguments));
+        this.options = options;
     }
 
     _createClass(ServerPlugin, [{
@@ -37,6 +31,6 @@ var ServerPlugin = function (_BasePlugin) {
     }]);
 
     return ServerPlugin;
-}(_helper.BasePlugin);
+}();
 
 exports.default = ServerPlugin;

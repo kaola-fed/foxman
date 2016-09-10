@@ -44,7 +44,6 @@ var Server = function () {
     function Server(config) {
         _classCallCheck(this, Server);
 
-        console.log(config);
         var app = this.app = (0, _koa2.default)();
         Object.assign(this, config);
         (0, _render2.default)({ viewFolder: this.viewRoot });

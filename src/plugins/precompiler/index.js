@@ -1,5 +1,4 @@
 import {
-    BasePlugin,
     util
 } from '../../helper';
 
@@ -10,7 +9,10 @@ import globule from 'globule';
 /**
  * 监听插件
  */
-class PreCompilerPlugin extends BasePlugin {
+class PreCompilerPlugin  {
+    constructor(options){
+      this.options = options;
+    }
     init() {
         this.mapCompiler( this.options.preCompilers );
     }
