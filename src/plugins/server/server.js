@@ -12,7 +12,6 @@ class Server {
 
         const app = this.app = Koa();
         Object.assign( this, config );
-        renderUtil({ viewFolder: this.viewRoot });
 
         this.setRender();
         this.setStaticHandler();
@@ -22,6 +21,10 @@ class Server {
     }
 
     setRender() {
+        Object.assign(this, this.tpl);
+        this.renderUtil = this.renderUtil || renderUtil;
+        this.renderUtil({ viewFolder: this.viewRoot });
+
         render(this.app, {
             root: path.join(global.__rootdir, 'views'),
             layout: 'template',

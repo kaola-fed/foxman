@@ -18,6 +18,7 @@ const router = [
     method: 'GET', url: '/index2.html', sync: false, filePath: 'index2.ftl'
   }
 ]
+const syncData = path.resolve( __dirname, 'mock', 'fakeData' );
 
 module.exports = {
     root,
@@ -51,18 +52,18 @@ module.exports = {
         router,
         proxy: false,
         tpl: {
-          suffix: 'ftl',
-          /**
-           * combime
-           * @param  {[type]} tpl  [description]
-           * @param  {[type]} data [description]
-           * @return {[type]}      [description]
-           */
-          handler: null /**  parse Util Class default is ftl render **/
+          // suffix: 'ftl',
+          // /**
+          //  * combime
+          //  * @param  {[type]} tpl  [description]
+          //  * @param  {[type]} data [description]
+          //  * @return {[type]}      [description]
+          //  */
+          // renderUtil: null /**  parse Util Class default is ftl render **/
         },
-        dataMatch:( syncFilePath ) => path.resolve( this.syncData, syncFilePath + '.json' ),
+        dataMatch: ( syncFilePath ) => path.resolve( syncData , syncFilePath + '.json' ),
         viewRoot: path.resolve( root, 'WEB-INF' ),
-        syncData: path.resolve( __dirname, 'mock', 'fakeData' ),
+        syncData,
         asyncData: path.resolve( __dirname, 'mock', 'json' ),
         static: [
             path.resolve(__dirname, 'static')

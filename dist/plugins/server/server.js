@@ -46,7 +46,6 @@ var Server = function () {
 
         var app = this.app = (0, _koa2.default)();
         Object.assign(this, config);
-        (0, _render2.default)({ viewFolder: this.viewRoot });
 
         this.setRender();
         this.setStaticHandler();
@@ -58,6 +57,10 @@ var Server = function () {
     _createClass(Server, [{
         key: 'setRender',
         value: function setRender() {
+            Object.assign(this, this.tpl);
+            this.renderUtil = this.renderUtil || _render2.default;
+            this.renderUtil({ viewFolder: this.viewRoot });
+
             (0, _koaEjs2.default)(this.app, {
                 root: _path2.default.join(global.__rootdir, 'views'),
                 layout: 'template',

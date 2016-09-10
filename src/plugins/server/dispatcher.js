@@ -34,9 +34,10 @@ export function* dirDispatcher(url, config, context) {
     });
 }
 
-export function* ftlDispatcher(url, config, context) {
-    const filePath = path.join(config.viewRoot, url);
-    const dataPath = filePath.replace(config.viewRoot, config.syncData).replace(/.ftl$/, '.json')
+export function* ftlDispatcher( url, config, context ) {
+    const filePath = path.join( config.viewRoot, url );
+
+    const dataPath = ( config.dataMatch ) ? config.dataMatch(url.replace(/\.[^.]*$/, '') ) : url.replace( /\.[^.]*$/, '.json' );
 
     let dataModel = {};
     try {
@@ -44,7 +45,8 @@ export function* ftlDispatcher(url, config, context) {
     } catch (err) {
         util.warnLog(`${dataPath} is not found!`);
     }
-    const output = renderUtil().parse(filePath.replace(config.viewRoot, ''), dataModel);
+
+    let output = config.renderUtil().parse(filePath.replace(config.viewRoot, ''), dataModel);
 
     context.type = 'text/html; charset=utf-8';
     context.body = output.stdout || output.stderr;

@@ -76,7 +76,7 @@ function ftlDispatcher(url, config, context) {
             switch (_context2.prev = _context2.next) {
                 case 0:
                     filePath = _path2.default.join(config.viewRoot, url);
-                    dataPath = filePath.replace(config.viewRoot, config.syncData).replace(/.ftl$/, '.json');
+                    dataPath = config.dataMatch ? config.dataMatch(url.replace(/\.[^.]*$/, '')) : url.replace(/\.[^.]*$/, '.json');
                     dataModel = {};
 
                     try {
@@ -84,7 +84,8 @@ function ftlDispatcher(url, config, context) {
                     } catch (err) {
                         _helper.util.warnLog(dataPath + ' is not found!');
                     }
-                    output = (0, _render2.default)().parse(filePath.replace(config.viewRoot, ''), dataModel);
+
+                    output = config.renderUtil().parse(filePath.replace(config.viewRoot, ''), dataModel);
 
 
                     context.type = 'text/html; charset=utf-8';
