@@ -48,7 +48,7 @@ class PreCompilerPlugin extends BasePlugin {
                 });
                 if ( !news.length ) return;
                 this.addWatch(watchList, news, compilerInstance);
-                util.log(`${filename} watching \n|-> ${news.join('\n|->')}`);
+                util.log(`${filename} \n      ${news.join('\n      ')}`.replace(new RegExp(root,'ig'),''));
             });
         });
     }
@@ -61,7 +61,7 @@ class PreCompilerPlugin extends BasePlugin {
             watchList.push(news);
         }
         this.app.watcher.onChange(news, (arg0, arg1) => {
-            util.log(`发生变化:${compiler.filename}`);
+            util.log( `changed: ${compiler.filename}`.replace(new RegExp(this.options.root,'ig'),'') );
             compiler.update();
         });
     }

@@ -26,7 +26,6 @@ class PreCompiler extends EventEmitter{
     return this;
   }
   dest(arg1){
-
     return vinylFs.dest.call(vinylFs, resolve(this.root, arg1));
   }
   update(){

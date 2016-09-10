@@ -62,7 +62,6 @@ var PreCompiler = function (_EventEmitter) {
   }, {
     key: 'dest',
     value: function dest(arg1) {
-
       return _vinylFs2.default.dest.call(_vinylFs2.default, (0, _path.resolve)(this.root, arg1));
     }
   }, {

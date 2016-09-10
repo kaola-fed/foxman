@@ -38,6 +38,7 @@ var Server = function () {
     function Server(config) {
         _classCallCheck(this, Server);
 
+        console.log(config);
         this.app = (0, _koa2.default)();
         this.config = config;
 

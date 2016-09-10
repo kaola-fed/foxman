@@ -8,6 +8,10 @@ const reloadPlugin = require('./plugin.reload');
 
 const root = path.resolve(__dirname, 'src', 'main', 'webapp');
 
+const router = [
+  'get', '/index.html', 'index.ftl'
+]
+
 module.exports = {
     root,
     plugins: [
@@ -37,9 +41,12 @@ module.exports = {
     },
     server: {
         port: 3000,
-        viewRoot: path.resolve(root, 'WEB-INF'),
-        syncData: path.resolve(__dirname, 'mock', 'fakeData'),
-        asyncData: path.resolve(__dirname, 'mock', 'json'),
+        router,
+        proxy: false,
+        dataMatch:( syncFilePath ) => path.resolve( this.syncData, syncFilePath + '.json' ),
+        viewRoot: path.resolve( root, 'WEB-INF' ),
+        syncData: path.resolve( __dirname, 'mock', 'fakeData' ),
+        asyncData: path.resolve( __dirname, 'mock', 'json' ),
         static: [
             path.resolve(__dirname, 'static')
         ]

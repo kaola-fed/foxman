@@ -18,6 +18,10 @@ export function log (msg) {
   console.log(`[I] ${msg}`);
 }
 
+export function warnLog (msg) {
+  console.log(`[W] ${msg}`);
+}
+
 export function createSystemId(){ // uid
   let currentId = 0;
   return function getNext() {
@@ -54,6 +58,7 @@ export function jsSpawn (args){
 export default {
   debugLog,
   error,
+  warnLog,
   log,
   createSystemId,
   firstUpperCase,

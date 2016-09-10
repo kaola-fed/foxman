@@ -7,7 +7,7 @@ import {
 
 export function* dirDispatcher(url, config, context) {
 
-    const viewPath = path.join(config.root, url);
+    const viewPath = path.join( config.viewRoot, url);
     const files = yield fileUtil.getDirInfo(viewPath);
     const promises = files.map((file) => {
         return fileUtil.getFileStat(path.resolve(viewPath, file))
@@ -28,7 +28,7 @@ export function* dirDispatcher(url, config, context) {
 }
 
 export function* ftlDispatcher(url, config, context) {
-    const filePath = path.join(config.root, url);
+    const filePath = path.join(config.viewRoot, url);
     const dataPath = filePath.replace(config.viewRoot, config.syncData).replace(/.ftl$/, '.json')
 
     let dataModel = {};
@@ -40,14 +40,17 @@ export function* ftlDispatcher(url, config, context) {
     const output = renderUtil().parse(filePath.replace(config.viewRoot, ''), dataModel);
 
     context.type = 'text/html; charset=utf-8';
-    context.body = output.stdout;
+    context.body = output.stdout || output.stderr;
 
     const errInfo = [];
-    output.stderr.on('data', function(chunk) {
+    output.stderr.on('data', (chunk)=> {
         errInfo.push(chunk);
     });
-    output.stderr.on('end', function() {
-        console.log(errInfo.join(''));
+    output.stderr.on('end', ()=> {
+        let err = errInfo.join('');
+        console.log(err);
+        // console.log(context);
+        // context.body = err;
     });
 }
 

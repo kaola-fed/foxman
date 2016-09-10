@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.debugLog = debugLog;
 exports.error = error;
 exports.log = log;
+exports.warnLog = warnLog;
 exports.createSystemId = createSystemId;
 exports.firstUpperCase = firstUpperCase;
 exports.exec = exec;
@@ -31,6 +32,10 @@ function error(msg) {
 
 function log(msg) {
   console.log('[I] ' + msg);
+}
+
+function warnLog(msg) {
+  console.log('[W] ' + msg);
 }
 
 function createSystemId() {
@@ -69,6 +74,7 @@ function jsSpawn(args) {
 exports.default = {
   debugLog: debugLog,
   error: error,
+  warnLog: warnLog,
   log: log,
   createSystemId: createSystemId,
   firstUpperCase: firstUpperCase,

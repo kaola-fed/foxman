@@ -27,7 +27,7 @@ function dirDispatcher(url, config, context) {
         while (1) {
             switch (_context.prev = _context.next) {
                 case 0:
-                    viewPath = _path2.default.join(config.root, url);
+                    viewPath = _path2.default.join(config.viewRoot, url);
                     _context.next = 3;
                     return _helper.fileUtil.getDirInfo(viewPath);
 
@@ -68,7 +68,7 @@ function ftlDispatcher(url, config, context) {
         while (1) {
             switch (_context2.prev = _context2.next) {
                 case 0:
-                    filePath = _path2.default.join(config.root, url);
+                    filePath = _path2.default.join(config.viewRoot, url);
                     dataPath = filePath.replace(config.viewRoot, config.syncData).replace(/.ftl$/, '.json');
                     dataModel = {};
 
@@ -81,7 +81,7 @@ function ftlDispatcher(url, config, context) {
 
 
                     context.type = 'text/html; charset=utf-8';
-                    context.body = output.stdout;
+                    context.body = output.stdout || output.stderr;
 
                     errInfo = [];
 
@@ -89,7 +89,10 @@ function ftlDispatcher(url, config, context) {
                         errInfo.push(chunk);
                     });
                     output.stderr.on('end', function () {
-                        console.log(errInfo.join(''));
+                        var err = errInfo.join('');
+                        console.log(err);
+                        // console.log(context);
+                        // context.body = err;
                     });
 
                 case 10:

@@ -8,6 +8,7 @@ import { util } from '../../helper';
 
 class Server {
     constructor(config) {
+        console.log(config);
         this.app = Koa();
         this.config = config;
 
@@ -62,7 +63,7 @@ class Server {
             }
         });
     }
-    
+
     createServer() {
         this.config.port = this.config.port || 3000;
         this.app.listen(this.config.port);
