@@ -36,7 +36,7 @@ var ReloadPlugin = function () {
     key: 'init',
     value: function init() {
       var server = this.app.server;
-      server.appendHtml("<script src='/resource/reload.js'></script>");
+      server.appendHtml("<script src='/resource/js/reload.js'></script>");
 
       this.reloader = new _reloader2.default(Object.assign({
         watcher: this.app.watcher,

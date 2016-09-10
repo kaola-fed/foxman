@@ -15,7 +15,7 @@ class ReloadPlugin  {
     }
     init() {
       let server = this.app.server;
-      server.appendHtml("<script src='/resource/reload.js'></script>");
+      server.appendHtml("<script src='/resource/js/reload.js'></script>");
 
       this.reloader = new Reloader( Object.assign({
         watcher: this.app.watcher,

@@ -37,7 +37,13 @@ module.exports = {
     server: {
       router,
       port: 3000,
-      proxy: false,
+      proxy: [
+        {
+          test1: {
+
+          }
+        }
+      ],
       tplConfig: {
         extension: 'ftl',
         // TODO: 外部的渲染工具
