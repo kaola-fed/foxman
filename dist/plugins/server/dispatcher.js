@@ -4,8 +4,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.dirDispatcher = dirDispatcher;
-exports.ftlDispatcher = ftlDispatcher;
-exports.jsonDispatcher = jsonDispatcher;
+exports.syncDispatcher = syncDispatcher;
+exports.asyncDispather = asyncDispather;
 
 var _path = require('path');
 
@@ -19,24 +19,21 @@ var _helper = require('../../helper');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var _marked = [dirDispatcher, ftlDispatcher, jsonDispatcher].map(regeneratorRuntime.mark);
+var _marked = [dirDispatcher, syncDispatcher, asyncDispather].map(regeneratorRuntime.mark);
 
 /**
  * default dispatcher
- * @param  {[type]} url     [description]
  * @param  {[type]} config  [description]
  * @param  {[type]} context [description]
  * @return {[type]}         [description]
  */
-function dirDispatcher(url, config, context, next) {
+function dirDispatcher(dispatcher, config, context, next) {
     var viewPath, files, promises, result, fileList;
     return regeneratorRuntime.wrap(function dirDispatcher$(_context) {
         while (1) {
             switch (_context.prev = _context.next) {
                 case 0:
-                    viewPath = _path2.default.join(config.viewRoot, url);
+                    viewPath = _path2.default.join(config.viewRoot, dispatcher.path);
                     _context.next = 3;
                     return _helper.fileUtil.getDirInfo(viewPath);
 
@@ -54,7 +51,7 @@ function dirDispatcher(url, config, context, next) {
                         return Object.assign(item, {
                             name: files[idx],
                             isFile: item.isFile(),
-                            url: [url, files[idx], item.isFile() ? '' : '/'].join('')
+                            requestPath: [dispatcher.path, files[idx], item.isFile() ? '' : '/'].join('')
                         });
                     });
                     _context.next = 11;
@@ -71,69 +68,79 @@ function dirDispatcher(url, config, context, next) {
     }, _marked[0], this);
 }
 
-function ftlDispatcher(url, config, context, next) {
+function syncDispatcher(dispatcher, config, context, next) {
     var _this = this;
 
     var filePath, dataPath, dataModel, output, errInfo;
-    return regeneratorRuntime.wrap(function ftlDispatcher$(_context3) {
+    return regeneratorRuntime.wrap(function syncDispatcher$(_context3) {
         while (1) {
             switch (_context3.prev = _context3.next) {
                 case 0:
-                    filePath = _path2.default.join(config.viewRoot, url);
-                    dataPath = config.syncDataMatch(url.replace(/^(\/||\\)/, '').replace(/\.[^.]*$/, ''));
+                    filePath = _path2.default.join(config.viewRoot, dispatcher.path);
+                    dataPath = dispatcher.dataPath;
                     dataModel = {};
+                    _context3.prev = 3;
+                    _context3.next = 6;
+                    return _helper.fileUtil.jsonResover(dataPath);
 
-                    try {
-                        dataModel = require(dataPath);
-                    } catch (err) {
-                        _helper.util.warnLog(dataPath + ' is not found!');
-                    }
+                case 6:
+                    dataModel = _context3.sent;
 
+                    console.log(dataModel);
+                    _context3.next = 13;
+                    break;
+
+                case 10:
+                    _context3.prev = 10;
+                    _context3.t0 = _context3['catch'](3);
+
+                    _helper.util.warnLog(dataPath + ' is not found!');
+
+                case 13:
                     output = config.renderUtil().parse(filePath.replace(config.viewRoot, ''), dataModel);
-                    errInfo = [];
-                    _context3.next = 8;
+                    errInfo = Buffer.alloc(0);
+                    _context3.next = 17;
                     return new Promise(function (resolve, reject) {
                         output.stderr.on('data', function (chunk) {
-                            errInfo.push(chunk);
+                            errInfo = _helper.util.bufferConcat(errInfo, Buffer.from(chunk));
                         });
                         output.stderr.on('end', function () {
-                            var err = errInfo.join('');
-                            if (err) {
-                                _helper.util.warnLog(err.red);
+                            if (errInfo.length != 0) {
+                                _helper.util.warnLog(errInfo.toString('utf-8').red);
+
                                 context.type = 'text/plain; charset=utf-8';
                                 context.status = 500;
-                                context.body = errInfo.join('');
-                                return resolve();
+
+                                context.body = errInfo;
                             }
-                            reject();
+                            resolve();
                         });
                     });
 
-                case 8:
-                    if (errInfo[0]) {
-                        _context3.next = 10;
+                case 17:
+                    if (!(errInfo.length == 0)) {
+                        _context3.next = 19;
                         break;
                     }
 
                     return _context3.delegateYield(regeneratorRuntime.mark(function _callee() {
-                        var html;
+                        var htmlBuf;
                         return regeneratorRuntime.wrap(function _callee$(_context2) {
                             while (1) {
                                 switch (_context2.prev = _context2.next) {
                                     case 0:
-                                        html = [];
+                                        htmlBuf = Buffer.alloc(0);
                                         _context2.next = 3;
                                         return new Promise(function (resolve, reject) {
                                             output.stdout.on('data', function (chunk) {
-                                                html.push(chunk);
+                                                htmlBuf = _helper.util.bufferConcat(htmlBuf, chunk);
                                             });
                                             output.stdout.on('end', function () {
-                                                if (html.length != 0) {
-                                                    context.type = 'text/html; charset=utf-8';
-                                                    context.body = html.join('');
-                                                    return resolve();
-                                                }
-                                                reject();
+
+                                                context.type = 'text/html; charset=utf-8';
+                                                context.body = htmlBuf;
+
+                                                resolve();
                                             });
                                         });
 
@@ -143,37 +150,42 @@ function ftlDispatcher(url, config, context, next) {
                                 }
                             }
                         }, _callee, _this);
-                    })(), 't0', 10);
+                    })(), 't1', 19);
 
-                case 10:
-                    _context3.next = 12;
+                case 19:
+                    _context3.next = 21;
                     return next;
 
-                case 12:
+                case 21:
                 case 'end':
                     return _context3.stop();
             }
         }
-    }, _marked[1], this);
+    }, _marked[1], this, [[3, 10]]);
 }
 
-function jsonDispatcher(url, config, context, next) {
-    var filePath, json;
-    return regeneratorRuntime.wrap(function jsonDispatcher$(_context4) {
+function asyncDispather(dispatcher, config, context, next) {
+    var asyncDataPath, filePath, api;
+    return regeneratorRuntime.wrap(function asyncDispather$(_context4) {
         while (1) {
             switch (_context4.prev = _context4.next) {
                 case 0:
-                    filePath = _path2.default.join(config.asyncData, url);
-                    json = _helper.fileUtil.getFileByStream(filePath);
+                    /**
+                     * 异步接口处理
+                     * @type {[type]}
+                     */
+                    asyncDataPath = dispatcher.dataPath;
+                    filePath = _path2.default.join(config.asyncData, asyncDataPath);
+                    api = _helper.fileUtil.getFileByStream(filePath);
 
 
                     context.type = 'application/json; charset=utf-8';
-                    context.body = json;
+                    context.body = api;
 
-                    _context4.next = 6;
+                    _context4.next = 7;
                     return next;
 
-                case 6:
+                case 7:
                 case 'end':
                     return _context4.stop();
             }
@@ -182,88 +194,40 @@ function jsonDispatcher(url, config, context, next) {
 }
 
 exports.default = function (config) {
+
     return regeneratorRuntime.mark(function _callee2(next) {
-        var _routeMap;
-
-        var url, routeMap, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, route;
-
+        var request, url, args, dispatcherMap, dispatcher;
         return regeneratorRuntime.wrap(function _callee2$(_context5) {
             while (1) {
                 switch (_context5.prev = _context5.next) {
                     case 0:
-                        url = this.request.pagePath || this.request.path;
-                        routeMap = (_routeMap = {
-                            '/': dirDispatcher
-                        }, _defineProperty(_routeMap, '.' + config.extension, ftlDispatcher), _defineProperty(_routeMap, '.json', jsonDispatcher), _routeMap);
-                        _iteratorNormalCompletion = true;
-                        _didIteratorError = false;
-                        _iteratorError = undefined;
-                        _context5.prev = 5;
-                        _iterator = Object.keys(routeMap)[Symbol.iterator]();
+                        /**
+                         * 分配给不同的处理器
+                         * @type {Object}
+                         */
+                        request = this.request;
+                        url = request.path;
+                        args = [config, this, next];
+                        dispatcherMap = {
+                            'dir': dirDispatcher,
+                            'sync': syncDispatcher,
+                            'async': asyncDispather
+                        };
+                        dispatcher = void 0;
 
-                    case 7:
-                        if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                            _context5.next = 16;
+                        if (!(dispatcher = dispatcherMap[this.dispatcher.type])) {
+                            _context5.next = 8;
                             break;
                         }
 
-                        route = _step.value;
+                        _context5.next = 8;
+                        return dispatcher.apply(undefined, [this.dispatcher].concat(args));
 
-                        if (!url.endsWith(route)) {
-                            _context5.next = 13;
-                            break;
-                        }
-
-                        _context5.next = 12;
-                        return routeMap[route](url, config, this, next);
-
-                    case 12:
-                        return _context5.abrupt('return');
-
-                    case 13:
-                        _iteratorNormalCompletion = true;
-                        _context5.next = 7;
-                        break;
-
-                    case 16:
-                        _context5.next = 22;
-                        break;
-
-                    case 18:
-                        _context5.prev = 18;
-                        _context5.t0 = _context5['catch'](5);
-                        _didIteratorError = true;
-                        _iteratorError = _context5.t0;
-
-                    case 22:
-                        _context5.prev = 22;
-                        _context5.prev = 23;
-
-                        if (!_iteratorNormalCompletion && _iterator.return) {
-                            _iterator.return();
-                        }
-
-                    case 25:
-                        _context5.prev = 25;
-
-                        if (!_didIteratorError) {
-                            _context5.next = 28;
-                            break;
-                        }
-
-                        throw _iteratorError;
-
-                    case 28:
-                        return _context5.finish(25);
-
-                    case 29:
-                        return _context5.finish(22);
-
-                    case 30:
+                    case 8:
                     case 'end':
                         return _context5.stop();
                 }
             }
-        }, _callee2, this, [[5, 18, 22, 30], [23,, 25, 29]]);
+        }, _callee2, this);
     });
 };

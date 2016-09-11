@@ -3,6 +3,8 @@
  */
 import child_process from 'child_process';
 import 'colors';
+import http from 'http';
+import url from 'url';
 
 export function debugLog(msg) {
   if(process.env.NODE_ENV === 'development'){
@@ -65,10 +67,64 @@ export function removeSuffix( str ) {
 }
 
 export function jsonPathResolve ( url ) {
+  url = removeSuffix( url ) + '.json';
+
   if( /\.[^\.]*$/.test( url ) ){
-    return removeHeadBreak( url + '.json');
+    return removeHeadBreak( url);
   }
-  return (removeSuffix( url )+'.json');
+  return url;
+}
+
+export function appendHeadBreak( str ){
+  if(/^[\/\\]/.test(str) ){
+    return str;
+  }
+  return '/'+str
+}
+
+export function bufferConcat(...bufs) {
+  let total = bufs.reduce( (pre, crt) => {
+    return (Array.isArray(pre)?pre.length:pre) + crt.length;
+  });
+  return Buffer.concat(bufs, total);
+};
+
+export function dispatcherTypeCreator(type, path, dataPath) {
+  return {
+    type,
+    path,
+    dataPath
+  }
+}
+
+export function request(options) {
+
+	let urlInfo = url.parse(options.url);
+	options = Object.assign({
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded',
+		}
+	}, urlInfo);
+
+	return new Promise(( resolve, reject)=>{
+		let req = http.request(options, (res) => {
+      let htmlBuf = Buffer.alloc(0);
+
+			res.setEncoding('utf8');
+			res.on('data', (chunk) => {
+        htmlBuf = bufferConcat(htmlBuf, Buffer.from(chunk));
+			});
+			res.on('end', () => {
+        resolve(htmlBuf);
+			});
+		});
+
+		req.on('error', (e) => {
+		  console.log(`problem with request: ${e.message}`);
+		});
+		req.end();
+	})
 }
 
 export default {
@@ -82,5 +138,9 @@ export default {
   jsSpawn,
   jsonPathResolve,
   removeHeadBreak,
-  removeSuffix
+  removeSuffix,
+  appendHeadBreak,
+  bufferConcat,
+  dispatcherTypeCreator,
+  request
 };

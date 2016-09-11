@@ -119,16 +119,13 @@ var Server = function () {
                             case 0:
                                 pagePath = this.request.pagePath || this.request.path;
 
-                                if (!(pagePath && pagePath.endsWith(extension))) {
-                                    _context.next = 5;
-                                    break;
+                                if (pagePath && pagePath.endsWith(extension) && this.status == 200) {
+                                    this.body = this.body + html;
                                 }
-
-                                this.body = this.body + html;
-                                _context.next = 5;
+                                _context.next = 4;
                                 return next;
 
-                            case 5:
+                            case 4:
                             case 'end':
                                 return _context.stop();
                         }

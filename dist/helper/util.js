@@ -14,12 +14,24 @@ exports.jsSpawn = jsSpawn;
 exports.removeHeadBreak = removeHeadBreak;
 exports.removeSuffix = removeSuffix;
 exports.jsonPathResolve = jsonPathResolve;
+exports.appendHeadBreak = appendHeadBreak;
+exports.bufferConcat = bufferConcat;
+exports.dispatcherTypeCreator = dispatcherTypeCreator;
+exports.request = request;
 
 var _child_process = require('child_process');
 
 var _child_process2 = _interopRequireDefault(_child_process);
 
 require('colors');
+
+var _http = require('http');
+
+var _http2 = _interopRequireDefault(_http);
+
+var _url = require('url');
+
+var _url2 = _interopRequireDefault(_url);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -87,10 +99,68 @@ function removeSuffix(str) {
 }
 
 function jsonPathResolve(url) {
+  url = removeSuffix(url) + '.json';
+
   if (/\.[^\.]*$/.test(url)) {
-    return removeHeadBreak(url + '.json');
+    return removeHeadBreak(url);
   }
-  return removeSuffix(url) + '.json';
+  return url;
+}
+
+function appendHeadBreak(str) {
+  if (/^[\/\\]/.test(str)) {
+    return str;
+  }
+  return '/' + str;
+}
+
+function bufferConcat() {
+  for (var _len = arguments.length, bufs = Array(_len), _key = 0; _key < _len; _key++) {
+    bufs[_key] = arguments[_key];
+  }
+
+  var total = bufs.reduce(function (pre, crt) {
+    return (Array.isArray(pre) ? pre.length : pre) + crt.length;
+  });
+  return Buffer.concat(bufs, total);
+};
+
+function dispatcherTypeCreator(type, path, dataPath) {
+  return {
+    type: type,
+    path: path,
+    dataPath: dataPath
+  };
+}
+
+function request(options) {
+
+  var urlInfo = _url2.default.parse(options.url);
+  options = Object.assign({
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }, urlInfo);
+
+  return new Promise(function (resolve, reject) {
+    var req = _http2.default.request(options, function (res) {
+      var htmlBuf = Buffer.alloc(0);
+
+      res.setEncoding('utf8');
+      res.on('data', function (chunk) {
+        htmlBuf = bufferConcat(htmlBuf, Buffer.from(chunk));
+      });
+      res.on('end', function () {
+        resolve(htmlBuf);
+      });
+    });
+
+    req.on('error', function (e) {
+      console.log('problem with request: ' + e.message);
+    });
+    req.end();
+  });
 }
 
 exports.default = {
@@ -104,5 +174,9 @@ exports.default = {
   jsSpawn: jsSpawn,
   jsonPathResolve: jsonPathResolve,
   removeHeadBreak: removeHeadBreak,
-  removeSuffix: removeSuffix
+  removeSuffix: removeSuffix,
+  appendHeadBreak: appendHeadBreak,
+  bufferConcat: bufferConcat,
+  dispatcherTypeCreator: dispatcherTypeCreator,
+  request: request
 };

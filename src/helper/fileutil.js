@@ -12,6 +12,8 @@
 
 import fs from 'fs';
 import path from 'path';
+import _ from './util';
+import url from 'url';
 
 export function getFileByStream (path) {
 	return fs.ReadStream(path);
@@ -54,25 +56,51 @@ export function writeFile(filename,text){
 
 export function writeUnExistsFile ( file, text ) {
 	let needCreateStack = [file];
-	const search = () => {
-		file = path.resolve(file,'../');
-		fs.stat(file, (err) => {
-				if( err ){
-					needCreateStack.push(file);
-					search();
-				}else{
-					create();
-				}
-		});
-	}
-	const create = () => {
-		let file = needCreateStack.pop();
-		if(needCreateStack.length!=0){
-				return fs.mkdir(file, create);
+
+	return new Promise((...args) => {
+		const search = () => {
+			file = path.resolve(file,'../');
+			fs.stat(file, (err) => {
+					if( err ){
+						needCreateStack.push(file);
+						search();
+					}else{
+						create();
+					}
+			});
 		}
-		writeFile(file, text);
-	}
-	search();
+		const create = () => {
+			let file = needCreateStack.pop();
+			if(needCreateStack.length != 0){
+					return fs.mkdir(file, create);
+			}
+			writeFile(file, text).then(...args);
+		}
+
+			search();
+	});
+}
+
+export function jsonResover ( url ) {
+	// console.log(url);
+	// console.log(/^http/g.test(url));
+	return new Promise( (resolve, reject) => {
+		if(/^http/g.test(url)){
+			_.log('waiting for request');
+			_.request({url}).then((htmlBuf)=>{
+				let json;
+				try{
+					json = JSON.parse(htmlBuf.toString('utf-8'))
+				} catch (e) {
+					json = {};
+				}
+				resolve(json);
+			});
+			return;
+		}
+
+		resolve(require(url));
+	});
 }
 
 
@@ -82,5 +110,6 @@ export default {
 	getFileStat,
 	readFile,
 	writeFile,
-	writeUnExistsFile
+	writeUnExistsFile,
+	jsonResover
 }

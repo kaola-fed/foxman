@@ -16,6 +16,8 @@ var _path2 = _interopRequireDefault(_path);
 
 var _ws = require('ws');
 
+var _helper = require('../../helper');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -55,6 +57,7 @@ var Reloader = function (_EventEmitter) {
       });
 
       this.watcher.onChange(reloadResources, function (arg0, arg1) {
+        // util.log(`changed: ${arg0}`)
         _this2.reload(arg0);
       });
     }

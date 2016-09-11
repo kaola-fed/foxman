@@ -13,7 +13,6 @@ const options = {
         var config = event.options || {};
         config = this.format(action, config);
         subMain.update(this, action, config);
-
         /**
          * 往外传递
         */

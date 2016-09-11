@@ -64,12 +64,10 @@ class Server {
       let extension = this.extension;
       this.app.use(function * ( next ) {
         let pagePath = this.request.pagePath || this.request.path;
-
-        if( pagePath && pagePath.endsWith(extension) ){
-
+        if( pagePath && pagePath.endsWith(extension) && this.status == 200){
           this.body = this.body + html;
-          yield next;
         }
+        yield next;
       });
     }
 

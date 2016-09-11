@@ -6,7 +6,7 @@ const autoprefix = require('gulp-autoprefixer');
 
 // const NeiPlugin = require('./plugin.nei');
 
-const router = require('./route');
+const routers = require('./route');
 
 const root = path.resolve(__dirname, 'src', 'main', 'webapp');
 
@@ -35,7 +35,7 @@ module.exports = {
          */
     },
     server: {
-      router,
+      routers,
       port: 3000,
       proxy: {
         test1: {

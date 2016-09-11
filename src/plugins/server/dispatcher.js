@@ -4,24 +4,22 @@ import { util, fileUtil } from '../../helper';
 
 /**
  * default dispatcher
- * @param  {[type]} url     [description]
  * @param  {[type]} config  [description]
  * @param  {[type]} context [description]
  * @return {[type]}         [description]
  */
-export function* dirDispatcher(url, config, context, next) {
+export function* dirDispatcher( dispatcher, config, context, next) {
 
-    const viewPath = path.join( config.viewRoot, url);
-    const files = yield fileUtil.getDirInfo(viewPath);
-    const promises = files.map((file) => {
-        return fileUtil.getFileStat(path.resolve(viewPath, file))
-    });
+    const viewPath = path.join( config.viewRoot, dispatcher.path );
+    const files = yield fileUtil.getDirInfo( viewPath );
+    const promises = files.map( ( file ) => fileUtil.getFileStat( path.resolve( viewPath, file ) ) );
     const result = yield Promise.all(promises);
+
     const fileList = result.map((item, idx) => {
         return Object.assign(item, {
             name: files[idx],
             isFile: item.isFile(),
-            url: [url, files[idx], item.isFile() ? '' : '/'].join('')
+            requestPath: [dispatcher.path, files[idx], item.isFile() ? '' : '/'].join('')
         });
     });
 
@@ -31,50 +29,49 @@ export function* dirDispatcher(url, config, context, next) {
     });
 }
 
-export function* ftlDispatcher( url, config, context ,next) {
-    const filePath = path.join( config.viewRoot, url );
-
-    const dataPath = config.syncDataMatch( url.replace(/^(\/||\\)/,'').replace(/\.[^.]*$/, ''));
-
+export function* syncDispatcher(dispatcher, config, context, next) {
+    const filePath = path.join( config.viewRoot, dispatcher.path );
+    const dataPath = dispatcher.dataPath;
     let dataModel = {};
     try {
-        dataModel = require(dataPath);
+        dataModel = yield fileUtil.jsonResover(dataPath);
+        console.log(dataModel);
     } catch (err) {
         util.warnLog(`${dataPath} is not found!`);
     }
 
     const output = config.renderUtil().parse(filePath.replace(config.viewRoot, ''), dataModel);
 
-    const errInfo = [];
+    let errInfo = Buffer.alloc(0);
     yield new Promise(( resolve, reject )=>{
       output.stderr.on('data', (chunk)=> {
-          errInfo.push(chunk);
+          errInfo = util.bufferConcat(errInfo, Buffer.from(chunk))
       });
       output.stderr.on('end', ()=> {
-          let err = errInfo.join('');
-          if( err ){
-            util.warnLog(err.red);
+          if( errInfo.length != 0 ){
+            util.warnLog(errInfo.toString('utf-8').red);
+
             context.type = 'text/plain; charset=utf-8';
-            context.status = 500
-            context.body = errInfo.join('');
-            return resolve();
+            context.status = 500;
+
+            context.body = errInfo ;
           }
-          reject();
+          resolve();
       });
     });
-    if( !errInfo[0] ){
-      const html = [];
+
+    if( errInfo.length == 0 ){
+      let htmlBuf = Buffer.alloc(0);
       yield new Promise(( resolve, reject )=>{
         output.stdout.on('data',(chunk)=>{
-          html.push(chunk);
+          htmlBuf = util.bufferConcat(htmlBuf, chunk);
         });
         output.stdout.on('end',()=>{
-          if( html.length != 0 ){
-            context.type = 'text/html; charset=utf-8';
-            context.body = html.join('');
-            return resolve();
-          }
-          reject();
+
+          context.type = 'text/html; charset=utf-8';
+          context.body = htmlBuf;
+
+          resolve();
         });
       });
     }
@@ -82,31 +79,45 @@ export function* ftlDispatcher( url, config, context ,next) {
     yield next;
 }
 
-export function* jsonDispatcher(url, config, context, next) {
-    const filePath = path.join(config.asyncData, url);
-    const json = fileUtil.getFileByStream(filePath);
+export function* asyncDispather( dispatcher, config, context, next) {
+    /**
+     * 异步接口处理
+     * @type {[type]}
+     */
+    const asyncDataPath = dispatcher.dataPath;
+    const filePath = path.join(config.asyncData, asyncDataPath);
+    const api = fileUtil.getFileByStream(filePath);
 
     context.type = 'application/json; charset=utf-8';
-    context.body = json;
+    context.body = api;
 
     yield next;
 }
 
 export default ( config )=>{
+
   return function*( next ) {
-    const url = this.request.pagePath || this.request.path;
+    /**
+     * 分配给不同的处理器
+     * @type {Object}
+     */
+    const request = this.request;
+    const url = request.path;
+    let args = [config, this, next];
 
-    const routeMap = {
-        '/':     dirDispatcher,
-        [ '.' + config.extension ]:  ftlDispatcher,
-        '.json': jsonDispatcher
-    };
-
-    for (let route of Object.keys(routeMap)) {
-        if (url.endsWith(route)) {
-            yield routeMap[route](url, config, this, next);
-            return;
-        }
+    let dispatcherMap = {
+      'dir': dirDispatcher,
+      'sync': syncDispatcher,
+      'async': asyncDispather
     }
+    let dispatcher;
+    if( dispatcher = dispatcherMap[ this.dispatcher.type ] ){
+      yield dispatcher( this.dispatcher, ...args );
+    }
+    // for (let dispatcher of dispatcherMap) {
+    //     if (dispatcher.test()) {
+    //         return yield dispatcher.handler();
+    //     }
+    // }
   }
 }

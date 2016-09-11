@@ -9,6 +9,7 @@ exports.getFileStat = getFileStat;
 exports.readFile = readFile;
 exports.writeFile = writeFile;
 exports.writeUnExistsFile = writeUnExistsFile;
+exports.jsonResover = jsonResover;
 
 var _fs = require('fs');
 
@@ -17,6 +18,14 @@ var _fs2 = _interopRequireDefault(_fs);
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
+
+var _util = require('./util');
+
+var _util2 = _interopRequireDefault(_util);
+
+var _url = require('url');
+
+var _url2 = _interopRequireDefault(_url);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -81,25 +90,57 @@ function writeFile(filename, text) {
 
 function writeUnExistsFile(file, text) {
 	var needCreateStack = [file];
-	var search = function search() {
-		file = _path2.default.resolve(file, '../');
-		_fs2.default.stat(file, function (err) {
-			if (err) {
-				needCreateStack.push(file);
-				search();
-			} else {
-				create();
-			}
-		});
-	};
-	var create = function create() {
-		var file = needCreateStack.pop();
-		if (needCreateStack.length != 0) {
-			return _fs2.default.mkdir(file, create);
+
+	return new Promise(function () {
+		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+			args[_key] = arguments[_key];
 		}
-		writeFile(file, text);
-	};
-	search();
+
+		var search = function search() {
+			file = _path2.default.resolve(file, '../');
+			_fs2.default.stat(file, function (err) {
+				if (err) {
+					needCreateStack.push(file);
+					search();
+				} else {
+					create();
+				}
+			});
+		};
+		var create = function create() {
+			var _writeFile;
+
+			var file = needCreateStack.pop();
+			if (needCreateStack.length != 0) {
+				return _fs2.default.mkdir(file, create);
+			}
+			(_writeFile = writeFile(file, text)).then.apply(_writeFile, args);
+		};
+
+		search();
+	});
+}
+
+function jsonResover(url) {
+	// console.log(url);
+	// console.log(/^http/g.test(url));
+	return new Promise(function (resolve, reject) {
+		if (/^http/g.test(url)) {
+			_util2.default.log('waiting for request');
+			_util2.default.request({ url: url }).then(function (htmlBuf) {
+				var json = void 0;
+				try {
+					json = JSON.parse(htmlBuf.toString('utf-8'));
+				} catch (e) {
+					json = {};
+				}
+				resolve(json);
+			});
+			return;
+		}
+
+		resolve(require(url));
+	});
 }
 
 exports.default = {
@@ -108,5 +149,6 @@ exports.default = {
 	getFileStat: getFileStat,
 	readFile: readFile,
 	writeFile: writeFile,
-	writeUnExistsFile: writeUnExistsFile
+	writeUnExistsFile: writeUnExistsFile,
+	jsonResover: jsonResover
 };

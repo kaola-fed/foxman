@@ -30,7 +30,6 @@ var options = {
     var config = event.options || {};
     config = this.format(action, config);
     _submain2.default.update(this, action, config);
-
     /**
      * 往外传递
     */
