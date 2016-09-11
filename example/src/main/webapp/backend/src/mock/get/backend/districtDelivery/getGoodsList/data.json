@@ -1,0 +1,36 @@
+{
+    "code": 2805,
+    "message": "lGMWcdb4iN",
+    "goodsList": [
+        {
+            "goodsId": 115472,
+            "goodsName": "hSN3K8SINy",
+            "importType": "t9XOLzNWNY",
+            "skuIds": [
+                "116144",
+                "117029",
+                "117210"
+            ]
+        },
+        {
+            "goodsId": 117296,
+            "goodsName": "A2H2EnTz4u",
+            "importType": "FDR3AlHw2M",
+            "skuIds": [
+                "117794",
+                "118260",
+                "118487"
+            ]
+        },
+        {
+            "goodsId": 118771,
+            "goodsName": "XfjiA5iFya",
+            "importType": "6qhGadZ4IY",
+            "skuIds": [
+                "119670",
+                "119995",
+                "120046"
+            ]
+        }
+    ]
+}

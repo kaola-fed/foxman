@@ -1,0 +1,234 @@
+{
+    "warehouseList": [
+        {
+            "warehouseId": 111,
+            "warehouseName": "杭州仓仓仓",
+            "warehouseNameAlias": "苍苍",
+            "type": 1,
+            "warehouseStatus": 1,
+            "countryCode": "262",
+            "internalCompanyName": "网易",
+            "internalCompanyCode": "010",
+            "locations": {
+                "province": "浙江省",
+                "provinceCode": "1",
+                "city": "杭州市",
+                "cityCode": "11",
+                "region": "滨江区",
+                "regionCode": "111",
+                "location": "网商路599号"
+            },
+            "contactName": "邱邱",
+            "contactPhone": 13102646485,
+            "applyOrderCode": "111",
+            "applyOrderCodeCombination": "11111111",
+            "customesType": 1,
+            "customesAgencyId": 1,
+            "portCode": "1244",
+            "dockCode": "1254",
+            "payMode": 1,
+            "reGoodsAddress": {
+                "province": "浙江省",
+                "provinceCode": "1",
+                "city": "杭州市",
+                "cityCode": "11",
+                "region": "滨江区",
+                "regionCode": "111",
+                "location": "网商路599号"
+            },
+            "reGoodsContact": 13257458458,
+            "creator": "求求求求",
+            "updateTime": 1587815482,
+            "warehouseTypeName": "好仓库",
+            "customesTypeName": "好海关",
+            "costmoesAgencyName": "XXX报关行",
+            "payModeName": "邱邱",
+            "logisDecideType": 1
+        },
+        {
+            "warehouseId": 111,
+            "warehouseName": "杭州仓仓仓",
+            "warehouseNameAlias": "苍苍",
+            "type": 1,
+            "warehouseStatus": 1,
+            "countryCode": "262",
+            "internalCompanyName": "网易",
+            "internalCompanyCode": "010",
+            "locations": {
+                "province": "浙江省",
+                "provinceCode": "1",
+                "city": "杭州市",
+                "cityCode": "11",
+                "region": "滨江区",
+                "regionCode": "111",
+                "location": "网商路599号"
+            },
+            "contactName": "邱邱",
+            "contactPhone": 13102646485,
+            "applyOrderCode": "111",
+            "applyOrderCodeCombination": "11111111",
+            "customesType": 1,
+            "customesAgencyId": 1,
+            "portCode": "1244",
+            "dockCode": "1254",
+            "payMode": 1,
+            "reGoodsAddress": {
+                "province": "浙江省",
+                "provinceCode": "1",
+                "city": "杭州市",
+                "cityCode": "11",
+                "region": "滨江区",
+                "regionCode": "111",
+                "location": "网商路599号"
+            },
+            "reGoodsContact": 13257458458,
+            "creator": "求求求求",
+            "updateTime": 1587815482,
+            "warehouseTypeName": "好仓库",
+            "customesTypeName": "好海关",
+            "costmoesAgencyName": "XXX报关行",
+            "payModeName": "邱邱",
+            "logisDecideType": 1
+        },
+        {
+            "warehouseId": 111,
+            "warehouseName": "杭州仓仓仓",
+            "warehouseNameAlias": "苍苍",
+            "type": 1,
+            "warehouseStatus": 1,
+            "countryCode": "262",
+            "internalCompanyName": "网易",
+            "internalCompanyCode": "010",
+            "locations": {
+                "province": "浙江省",
+                "provinceCode": "1",
+                "city": "杭州市",
+                "cityCode": "11",
+                "region": "滨江区",
+                "regionCode": "111",
+                "location": "网商路599号"
+            },
+            "contactName": "邱邱",
+            "contactPhone": 13102646485,
+            "applyOrderCode": "111",
+            "applyOrderCodeCombination": "11111111",
+            "customesType": 1,
+            "customesAgencyId": 1,
+            "portCode": "1244",
+            "dockCode": "1254",
+            "payMode": 1,
+            "reGoodsAddress": {
+                "province": "浙江省",
+                "provinceCode": "1",
+                "city": "杭州市",
+                "cityCode": "11",
+                "region": "滨江区",
+                "regionCode": "111",
+                "location": "网商路599号"
+            },
+            "reGoodsContact": 13257458458,
+            "creator": "求求求求",
+            "updateTime": 1587815482,
+            "warehouseTypeName": "好仓库",
+            "customesTypeName": "好海关",
+            "costmoesAgencyName": "XXX报关行",
+            "payModeName": "邱邱",
+            "logisDecideType": 1
+        }
+    ],
+    "outboundStatusList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ],
+    "outTypeList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ],
+    "settleModeList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ],
+    "distributorList": [
+        {
+            "id": "441158",
+            "supplierName": "QygvrlD8nD",
+            "address": "Oi3b1eKhIT",
+            "registrationNo": "8R8LLddRi8"
+        },
+        {
+            "id": "441838",
+            "supplierName": "EXDnT5Ijgo",
+            "address": "j3wBcmrrPo",
+            "registrationNo": "sNs71NecO6"
+        },
+        {
+            "id": "442477",
+            "supplierName": "UhoKsEwz8j",
+            "address": "oYYdo6fJlI",
+            "registrationNo": "VunH022Ssf"
+        }
+    ],
+    "reasonList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ],
+    "liabilityList": [
+        true,
+        true,
+        true
+    ],
+    "currencyList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ]
+}

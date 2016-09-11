@@ -72,13 +72,15 @@ function dirDispatcher(url, config, context, next) {
 }
 
 function ftlDispatcher(url, config, context, next) {
-    var filePath, dataPath, dataModel, output, html, errInfo;
-    return regeneratorRuntime.wrap(function ftlDispatcher$(_context2) {
+    var _this = this;
+
+    var filePath, dataPath, dataModel, output, errInfo;
+    return regeneratorRuntime.wrap(function ftlDispatcher$(_context3) {
         while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
                 case 0:
                     filePath = _path2.default.join(config.viewRoot, url);
-                    dataPath = config.dataMatch ? config.dataMatch(url.replace(/^(\/||\\)/, '').replace(/\.[^.]*$/, '')) : _path2.default.join(config.syncData, url.replace(/\.[^.]*$/, '.json'));
+                    dataPath = config.syncDataMatch(url.replace(/^(\/||\\)/, '').replace(/\.[^.]*$/, ''));
                     dataModel = {};
 
                     try {
@@ -88,16 +90,19 @@ function ftlDispatcher(url, config, context, next) {
                     }
 
                     output = config.renderUtil().parse(filePath.replace(config.viewRoot, ''), dataModel);
-                    html = [];
-                    _context2.next = 8;
+                    errInfo = [];
+                    _context3.next = 8;
                     return new Promise(function (resolve, reject) {
-                        output.stdout.on('data', function (chunk) {
-                            html.push(chunk);
+                        output.stderr.on('data', function (chunk) {
+                            errInfo.push(chunk);
                         });
-                        output.stdout.on('end', function () {
-                            if (html) {
-                                context.type = 'text/html; charset=utf-8';
-                                context.body = html.join('');
+                        output.stderr.on('end', function () {
+                            var err = errInfo.join('');
+                            if (err) {
+                                _helper.util.warnLog(err.red);
+                                context.type = 'text/plain; charset=utf-8';
+                                context.status = 500;
+                                context.body = errInfo.join('');
                                 return resolve();
                             }
                             reject();
@@ -105,27 +110,48 @@ function ftlDispatcher(url, config, context, next) {
                     });
 
                 case 8:
-                    errInfo = [];
+                    if (errInfo[0]) {
+                        _context3.next = 10;
+                        break;
+                    }
 
+                    return _context3.delegateYield(regeneratorRuntime.mark(function _callee() {
+                        var html;
+                        return regeneratorRuntime.wrap(function _callee$(_context2) {
+                            while (1) {
+                                switch (_context2.prev = _context2.next) {
+                                    case 0:
+                                        html = [];
+                                        _context2.next = 3;
+                                        return new Promise(function (resolve, reject) {
+                                            output.stdout.on('data', function (chunk) {
+                                                html.push(chunk);
+                                            });
+                                            output.stdout.on('end', function () {
+                                                if (html.length != 0) {
+                                                    context.type = 'text/html; charset=utf-8';
+                                                    context.body = html.join('');
+                                                    return resolve();
+                                                }
+                                                reject();
+                                            });
+                                        });
 
-                    output.stderr.on('data', function (chunk) {
-                        errInfo.push(chunk);
-                    });
-                    output.stderr.on('end', function () {
-                        var err = errInfo.join('');
-                        if (err) {
-                            console.log(err);
-                        }
-                        // console.log(context);
-                        // context.body = err;
-                    });
+                                    case 3:
+                                    case 'end':
+                                        return _context2.stop();
+                                }
+                            }
+                        }, _callee, _this);
+                    })(), 't0', 10);
 
-                    _context2.next = 13;
+                case 10:
+                    _context3.next = 12;
                     return next;
 
-                case 13:
+                case 12:
                 case 'end':
-                    return _context2.stop();
+                    return _context3.stop();
             }
         }
     }, _marked[1], this);
@@ -133,9 +159,9 @@ function ftlDispatcher(url, config, context, next) {
 
 function jsonDispatcher(url, config, context, next) {
     var filePath, json;
-    return regeneratorRuntime.wrap(function jsonDispatcher$(_context3) {
+    return regeneratorRuntime.wrap(function jsonDispatcher$(_context4) {
         while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context4.prev = _context4.next) {
                 case 0:
                     filePath = _path2.default.join(config.asyncData, url);
                     json = _helper.fileUtil.getFileByStream(filePath);
@@ -144,26 +170,26 @@ function jsonDispatcher(url, config, context, next) {
                     context.type = 'application/json; charset=utf-8';
                     context.body = json;
 
-                    _context3.next = 6;
+                    _context4.next = 6;
                     return next;
 
                 case 6:
                 case 'end':
-                    return _context3.stop();
+                    return _context4.stop();
             }
         }
     }, _marked[2], this);
 }
 
 exports.default = function (config) {
-    return regeneratorRuntime.mark(function _callee(next) {
+    return regeneratorRuntime.mark(function _callee2(next) {
         var _routeMap;
 
         var url, routeMap, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, route;
 
-        return regeneratorRuntime.wrap(function _callee$(_context4) {
+        return regeneratorRuntime.wrap(function _callee2$(_context5) {
             while (1) {
-                switch (_context4.prev = _context4.next) {
+                switch (_context5.prev = _context5.next) {
                     case 0:
                         url = this.request.pagePath || this.request.path;
                         routeMap = (_routeMap = {
@@ -172,72 +198,72 @@ exports.default = function (config) {
                         _iteratorNormalCompletion = true;
                         _didIteratorError = false;
                         _iteratorError = undefined;
-                        _context4.prev = 5;
+                        _context5.prev = 5;
                         _iterator = Object.keys(routeMap)[Symbol.iterator]();
 
                     case 7:
                         if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                            _context4.next = 16;
+                            _context5.next = 16;
                             break;
                         }
 
                         route = _step.value;
 
                         if (!url.endsWith(route)) {
-                            _context4.next = 13;
+                            _context5.next = 13;
                             break;
                         }
 
-                        _context4.next = 12;
+                        _context5.next = 12;
                         return routeMap[route](url, config, this, next);
 
                     case 12:
-                        return _context4.abrupt('return');
+                        return _context5.abrupt('return');
 
                     case 13:
                         _iteratorNormalCompletion = true;
-                        _context4.next = 7;
+                        _context5.next = 7;
                         break;
 
                     case 16:
-                        _context4.next = 22;
+                        _context5.next = 22;
                         break;
 
                     case 18:
-                        _context4.prev = 18;
-                        _context4.t0 = _context4['catch'](5);
+                        _context5.prev = 18;
+                        _context5.t0 = _context5['catch'](5);
                         _didIteratorError = true;
-                        _iteratorError = _context4.t0;
+                        _iteratorError = _context5.t0;
 
                     case 22:
-                        _context4.prev = 22;
-                        _context4.prev = 23;
+                        _context5.prev = 22;
+                        _context5.prev = 23;
 
                         if (!_iteratorNormalCompletion && _iterator.return) {
                             _iterator.return();
                         }
 
                     case 25:
-                        _context4.prev = 25;
+                        _context5.prev = 25;
 
                         if (!_didIteratorError) {
-                            _context4.next = 28;
+                            _context5.next = 28;
                             break;
                         }
 
                         throw _iteratorError;
 
                     case 28:
-                        return _context4.finish(25);
+                        return _context5.finish(25);
 
                     case 29:
-                        return _context4.finish(22);
+                        return _context5.finish(22);
 
                     case 30:
                     case 'end':
-                        return _context4.stop();
+                        return _context5.stop();
                 }
             }
-        }, _callee, this, [[5, 18, 22, 30], [23,, 25, 29]]);
+        }, _callee2, this, [[5, 18, 22, 30], [23,, 25, 29]]);
     });
 };

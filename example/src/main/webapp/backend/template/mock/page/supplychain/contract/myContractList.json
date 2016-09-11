@@ -1,0 +1,88 @@
+{
+    "contractCategorytList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ],
+    "supplierInfoList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ],
+    "teamMateList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ],
+    "contractTransferingStatusList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ],
+    "contractCompletedStatusList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ],
+    "contractConfirmedStatusList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ],
+    "title": "我的合同任务",
+    "description": ""
+}

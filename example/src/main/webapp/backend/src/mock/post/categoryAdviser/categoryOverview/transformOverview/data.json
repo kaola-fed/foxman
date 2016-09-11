@@ -1,0 +1,38 @@
+{
+    "code": 200,
+    "msg": "U4V4DoTPn4",
+    "data": {
+        "curTransformRatios": {
+            "visistUserCount": 80123,
+            "visistUserPercent": "100%",
+            "visitCategoryUserCount": 81430,
+            "commitOrderUserCount": 56041,
+            "commitOrderUserPercent": "ua2GNdariW",
+            "paySuccessUserCount": 44795,
+            "paySuccessUserPercent": "dPTsqN54Im",
+            "purchaseSuccessUserCount": 59500,
+            "purchaseSuccessUserPercent": "WxNF1w18BT",
+            "visitCategoryUserPercent": "sdWdBi8X3w",
+            "visitCategoryUserRate": "fpnt01VzAD",
+            "commitOrderUserRate": "OwMzkrIF4S",
+            "paySuccessUserRate": "g3XxnoScrX",
+            "purchaseSuccessUserRate": "OzTXiwp40B"
+        },
+        "compareDateTransformRatios": {
+            "visistUserCount": 17955,
+            "visistUserPercent": "100%",
+            "visitCategoryUserCount": 96952,
+            "commitOrderUserCount": 63635,
+            "commitOrderUserPercent": "rgpnsaOffx",
+            "paySuccessUserCount": 42186,
+            "paySuccessUserPercent": "14R98AoQE6",
+            "purchaseSuccessUserCount": 81571,
+            "purchaseSuccessUserPercent": "U0PwmIZOgr",
+            "visitCategoryUserPercent": "BcBKYQ8Xgx",
+            "visitCategoryUserRate": "sBGipJAKC9",
+            "commitOrderUserRate": "SZXFL8uMQ6",
+            "paySuccessUserRate": "p9Jan6AN0P",
+            "purchaseSuccessUserRate": "SnlNsRljul"
+        }
+    }
+}

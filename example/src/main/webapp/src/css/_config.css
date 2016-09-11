@@ -4,8 +4,13 @@
 	display:flex;
 }
 .config{
-	width:10px;
+	width:60px;
 }
 body{
-	margin:0;
+	margin:0px;
+	background:#00f;
+	padding:50px;
+	color:#fff;
+	display:-webkit-box;
+	display:flex;
 }

@@ -1,0 +1,63 @@
+{
+    "supplierInfoList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ],
+    "contracCategorytList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ],
+    "contractStatusList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ],
+    "businessUnitList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ],
+    "teamMateList": [
+        "Y8zHeDKsO4",
+        "HVzg0TvUSR",
+        "68gDQghVsp"
+    ]
+}

@@ -1,0 +1,120 @@
+{
+    "code": 65540,
+    "message": "PGLPpKOpjs",
+    "list": [
+        {
+            "id": 363838,
+            "templateName": "EB2CsaZiox",
+            "currencyId": 364447,
+            "operateFee": 54808,
+            "packageMaterialFeeType": 78586,
+            "packageMaterialFee": 95687,
+            "orderExceedNum": 21130,
+            "orderExceedNumFee": 53584,
+            "platformServiceFee": 18068,
+            "storageTemplateOtherFees": [
+                {
+                    "id": 364460,
+                    "storageTemplateId": 365359,
+                    "categoryId": 365974,
+                    "specificGoodsAdditionalFee": 5619,
+                    "categoryName": "YOyMVnq11G"
+                },
+                {
+                    "id": 366700,
+                    "storageTemplateId": 367390,
+                    "categoryId": 368194,
+                    "specificGoodsAdditionalFee": 74048,
+                    "categoryName": "rvjC4ZKisC"
+                },
+                {
+                    "id": 368215,
+                    "storageTemplateId": 368884,
+                    "categoryId": 369512,
+                    "specificGoodsAdditionalFee": 7748,
+                    "categoryName": "A6WFlHgyFl"
+                }
+            ],
+            "currencyName": "mNeKUVTVr4",
+            "orderExceedMark": 88892,
+            "specificGoodsFeeMark": 92636,
+            "platformServiceFeeMark": 36927
+        },
+        {
+            "id": 369678,
+            "templateName": "FWuGVIgDNS",
+            "currencyId": 370367,
+            "operateFee": 28900,
+            "packageMaterialFeeType": 41272,
+            "packageMaterialFee": 19637,
+            "orderExceedNum": 96028,
+            "orderExceedNumFee": 60635,
+            "platformServiceFee": 47102,
+            "storageTemplateOtherFees": [
+                {
+                    "id": 370654,
+                    "storageTemplateId": 370802,
+                    "categoryId": 371414,
+                    "specificGoodsAdditionalFee": 70462,
+                    "categoryName": "5dnWqYwYxn"
+                },
+                {
+                    "id": 371793,
+                    "storageTemplateId": 372023,
+                    "categoryId": 372789,
+                    "specificGoodsAdditionalFee": 91074,
+                    "categoryName": "L4jr2jzy3m"
+                },
+                {
+                    "id": 373784,
+                    "storageTemplateId": 374463,
+                    "categoryId": 375043,
+                    "specificGoodsAdditionalFee": 16638,
+                    "categoryName": "XsLFcPiWEO"
+                }
+            ],
+            "currencyName": "jYd1CsElDV",
+            "orderExceedMark": 707,
+            "specificGoodsFeeMark": 79713,
+            "platformServiceFeeMark": 59936
+        },
+        {
+            "id": 375396,
+            "templateName": "r6iWuzZRqX",
+            "currencyId": 376372,
+            "operateFee": 8102,
+            "packageMaterialFeeType": 27295,
+            "packageMaterialFee": 31165,
+            "orderExceedNum": 20465,
+            "orderExceedNumFee": 69063,
+            "platformServiceFee": 60623,
+            "storageTemplateOtherFees": [
+                {
+                    "id": 376522,
+                    "storageTemplateId": 376642,
+                    "categoryId": 377369,
+                    "specificGoodsAdditionalFee": 41385,
+                    "categoryName": "gjH67HXoCz"
+                },
+                {
+                    "id": 378289,
+                    "storageTemplateId": 378973,
+                    "categoryId": 379584,
+                    "specificGoodsAdditionalFee": 42272,
+                    "categoryName": "YOl0lvwtVd"
+                },
+                {
+                    "id": 380469,
+                    "storageTemplateId": 380963,
+                    "categoryId": 381254,
+                    "specificGoodsAdditionalFee": 53081,
+                    "categoryName": "VDVuOq1Y3m"
+                }
+            ],
+            "currencyName": "olKBo9YhbF",
+            "orderExceedMark": 9141,
+            "specificGoodsFeeMark": 27173,
+            "platformServiceFeeMark": 71946
+        }
+    ]
+}

@@ -37,19 +37,17 @@ module.exports = {
     server: {
       router,
       port: 3000,
-      proxy: [
-        {
-          test1: {
+      proxy: {
+        test1: {
 
-          }
         }
-      ],
+      },
       tplConfig: {
         extension: 'ftl',
         // TODO: 外部的渲染工具
         renderUtil: null /**  parse Util Class default is ftl render **/
       },
-      dataMatch: ( syncFilePath ) => path.resolve( __dirname, 'mock', 'fakeData', syncFilePath + '.json' ) , // 默认是层级
+      syncDataMatch: ( syncFilePath ) => path.resolve( __dirname, 'mock', 'fakeData', syncFilePath + '.json' ) , // 默认是层级
       syncData: path.resolve( __dirname, 'mock', 'fakeData' ),
       viewRoot: path.resolve( root, 'WEB-INF' ),
       asyncData: path.resolve( __dirname, 'mock', 'json' ),

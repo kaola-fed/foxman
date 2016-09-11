@@ -9,7 +9,7 @@
     <meta charset="utf-8"/>
     <meta name="description" content="页面描述"/>
     <meta name="keywords" content="页面描述"/>
-
+    ${saasasaas}
     <@css/>
     <link href="${csRoot}pages/activity/201605/flychess/index.css" rel="stylesheet" type="text/css"/>
   </head>

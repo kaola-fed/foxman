@@ -4,11 +4,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _helper = require('../../helper');
+
 exports.default = function (config) {
   var router = config.router;
 
   return regeneratorRuntime.mark(function _callee(next) {
-    var path, method, i, route;
+    var path, method, i, route, fileWithoutExt;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -23,30 +25,32 @@ exports.default = function (config) {
 
           case 4:
             if (!(i < router.length)) {
-              _context.next = 12;
+              _context.next = 13;
               break;
             }
 
             route = router[i];
 
             if (!(route.method.toUpperCase() == method.toUpperCase() && route.url == path)) {
-              _context.next = 9;
+              _context.next = 10;
               break;
             }
 
-            this.request.pagePath = route.filePath + '.' + (route.sync ? config.extension : 'json');
-            return _context.abrupt('break', 12);
+            fileWithoutExt = _helper.util.removeSuffix(route.filePath);
 
-          case 9:
+            this.request.pagePath = route.sync ? fileWithoutExt + '.' + config.extension : fileWithoutExt + '.json';
+            return _context.abrupt('break', 13);
+
+          case 10:
             i++;
             _context.next = 4;
             break;
 
-          case 12:
-            _context.next = 14;
+          case 13:
+            _context.next = 15;
             return next;
 
-          case 14:
+          case 15:
           case 'end':
             return _context.stop();
         }

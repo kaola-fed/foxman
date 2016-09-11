@@ -1,0 +1,117 @@
+{
+    "code": 200,
+    "message": "mXatIfuvfc",
+    "data": [
+        {
+            "goodsId": 418011,
+            "productId": 418140,
+            "goodsName": "lX8w4ZcmxE",
+            "storageName": "irob6exGQD",
+            "saleStatusName": "vOVvX1tAmq",
+            "skuBarcode": "sEmugsdqub",
+            "preSaleName": "39G4DR3n5E",
+            "skuId": "418549",
+            "skuDesc": "uSLOcohreB",
+            "backStock": 25463,
+            "backStockAmount": 32643,
+            "goodsStatusName": "vRzv8TXP3G",
+            "remainDays": 58596,
+            "createTime": "1473545977866",
+            "operatorRecord": [
+                {
+                    "operatorName": "j3tLnwTBWL",
+                    "operateTime": "1473547700832",
+                    "operatorNo": "zCfGAYYD0O",
+                    "enventLog": "fcw81twZzc"
+                },
+                {
+                    "operatorName": "QYUFzid5Ra",
+                    "operateTime": "1473548068993",
+                    "operatorNo": "Ag4AcdWkEB",
+                    "enventLog": "ZwR6RLh5Kh"
+                },
+                {
+                    "operatorName": "FOZF1wO3IG",
+                    "operateTime": "1473547748841",
+                    "operatorNo": "AZxFMKoogr",
+                    "enventLog": "6hwydU4grw"
+                }
+            ],
+            "remark": "whoHjxWjDw"
+        },
+        {
+            "goodsId": 418615,
+            "productId": 418984,
+            "goodsName": "J3ooKh4BuY",
+            "storageName": "Vkwfkkqf8b",
+            "saleStatusName": "7t541aKI38",
+            "skuBarcode": "4ICbbswfYm",
+            "preSaleName": "DoAHBufCT5",
+            "skuId": "419652",
+            "skuDesc": "2kgEdTXFuL",
+            "backStock": 52044,
+            "backStockAmount": 24714,
+            "goodsStatusName": "SUP44pcV26",
+            "remainDays": 94442,
+            "createTime": "1473546365109",
+            "operatorRecord": [
+                {
+                    "operatorName": "zB6sdGlIR1",
+                    "operateTime": "1473547552777",
+                    "operatorNo": "kS82j0Kmvw",
+                    "enventLog": "6JZMXWKimv"
+                },
+                {
+                    "operatorName": "Jagdp7VAIU",
+                    "operateTime": "1473546099078",
+                    "operatorNo": "6bRFX6j1NA",
+                    "enventLog": "Cjh9NiAsEd"
+                },
+                {
+                    "operatorName": "TyH9IxDYrj",
+                    "operateTime": "1473547450784",
+                    "operatorNo": "sVVqbSEvTG",
+                    "enventLog": "Cs06gha5Uv"
+                }
+            ],
+            "remark": "iIbPbqUbOJ"
+        },
+        {
+            "goodsId": 420461,
+            "productId": 420971,
+            "goodsName": "QeKDfM7nrf",
+            "storageName": "hzuHqz9qnc",
+            "saleStatusName": "ovcasn5Bfd",
+            "skuBarcode": "LQYiQb1dNw",
+            "preSaleName": "7Qd7naXv6N",
+            "skuId": "421293",
+            "skuDesc": "7iTxziS37B",
+            "backStock": 45606,
+            "backStockAmount": 18012,
+            "goodsStatusName": "ivhK84OvF6",
+            "remainDays": 658,
+            "createTime": "1473548206519",
+            "operatorRecord": [
+                {
+                    "operatorName": "EycKMUNjZq",
+                    "operateTime": "1473547937171",
+                    "operatorNo": "ZGzZQMZzuz",
+                    "enventLog": "x6opZqdIFZ"
+                },
+                {
+                    "operatorName": "nBn9F6mMCc",
+                    "operateTime": "1473547232685",
+                    "operatorNo": "THZ9FPPeZQ",
+                    "enventLog": "Q4FRSYyTPb"
+                },
+                {
+                    "operatorName": "UmNySnaRQP",
+                    "operateTime": "1473547425648",
+                    "operatorNo": "LDKTJWtyAC",
+                    "enventLog": "Egz5DjWKHP"
+                }
+            ],
+            "remark": "gFtJcp1PAT"
+        }
+    ]
+}

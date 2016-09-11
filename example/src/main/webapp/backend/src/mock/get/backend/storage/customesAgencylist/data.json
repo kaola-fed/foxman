@@ -1,0 +1,31 @@
+{
+    "customesAgencyList": [
+        {
+            "customesAgencyId": "1",
+            "declareCompanyCode": "vwjOomku7T",
+            "declareCompanyName": "XXX报关行",
+            "declareCompanyType": "CIz6DL7mO7",
+            "creator": "zheTKEeGlW",
+            "updateTime": 1473546943161
+        },
+        {
+            "customesAgencyId": "1",
+            "declareCompanyCode": "FzlBIap2Ub",
+            "declareCompanyName": "XXX报关行",
+            "declareCompanyType": "Ww8m82fsB7",
+            "creator": "XIFI0O5ypk",
+            "updateTime": 1473547080859
+        },
+        {
+            "customesAgencyId": "1",
+            "declareCompanyCode": "RIkXWz0kQy",
+            "declareCompanyName": "XXX报关行",
+            "declareCompanyType": "YKXpnQisMX",
+            "creator": "5CMXQbhvLS",
+            "updateTime": 1473546801047
+        }
+    ],
+    "code": 200,
+    "msg": "n7dVB8Phrf",
+    "total": 61326
+}

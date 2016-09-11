@@ -1,0 +1,51 @@
+{
+    "code": 200,
+    "message": "xV75voshVA",
+    "locationList": [
+        {
+            "current": {
+                "orderValue": 1,
+                "code": 11,
+                "name": "杭州市",
+                "parentCode": 34173,
+                "geographyType": 97893,
+                "isdistrict": 1
+            },
+            "children": [
+                "<GeographyInfoTreeNode>",
+                "<GeographyInfoTreeNode>",
+                "<GeographyInfoTreeNode>"
+            ]
+        },
+        {
+            "current": {
+                "orderValue": 1,
+                "code": 11,
+                "name": "杭州市",
+                "parentCode": 74469,
+                "geographyType": 15363,
+                "isdistrict": 1
+            },
+            "children": [
+                "<GeographyInfoTreeNode>",
+                "<GeographyInfoTreeNode>",
+                "<GeographyInfoTreeNode>"
+            ]
+        },
+        {
+            "current": {
+                "orderValue": 1,
+                "code": 11,
+                "name": "杭州市",
+                "parentCode": 77218,
+                "geographyType": 74455,
+                "isdistrict": 1
+            },
+            "children": [
+                "<GeographyInfoTreeNode>",
+                "<GeographyInfoTreeNode>",
+                "<GeographyInfoTreeNode>"
+            ]
+        }
+    ]
+}

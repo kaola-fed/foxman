@@ -1,0 +1,32 @@
+{
+    "supplierInfoList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ],
+    "contractCategoryList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ],
+    "title": "合同管理",
+    "description": ""
+}

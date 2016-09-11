@@ -1,0 +1,18 @@
+{
+    "customCategory": [
+        {
+            "index": 1,
+            "value": "hello"
+        },
+        {
+            "index": 1,
+            "value": "hello"
+        },
+        {
+            "index": 1,
+            "value": "hello"
+        }
+    ],
+    "title": "资金池列表页",
+    "description": ""
+}

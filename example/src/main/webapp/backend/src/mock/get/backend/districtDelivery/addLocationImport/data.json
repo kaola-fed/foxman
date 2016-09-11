@@ -1,0 +1,21 @@
+{
+    "code": 200,
+    "message": "2WDKb2j4LZ",
+    "areas": [
+        {
+            "areaNames": "5XJPflh8Ec",
+            "areaIds": "120275",
+            "districtId": 120395
+        },
+        {
+            "areaNames": "zUOuaOWJ6G",
+            "areaIds": "121189",
+            "districtId": 122130
+        },
+        {
+            "areaNames": "NE7Sf0lQTx",
+            "areaIds": "122349",
+            "districtId": 122984
+        }
+    ]
+}

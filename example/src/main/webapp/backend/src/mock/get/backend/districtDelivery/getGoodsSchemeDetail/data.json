@@ -1,0 +1,25 @@
+{
+    "code": 200,
+    "message": "q36lRpvXNr",
+    "schemeDetail": {
+        "id": 108513,
+        "category": "2cJZznG1AZ",
+        "goods": "bYzGpwV6Zm",
+        "district": "4vfTSbI5jf",
+        "logisName": "2WpPUZRDIR",
+        "remark": "wBFwc2ivYD",
+        "opUser": "r16PC2lWfa",
+        "updateTime": 1473546100934,
+        "categoryIds": [
+            108919,
+            109481,
+            109776
+        ],
+        "goodsIds": [
+            110306,
+            111248,
+            111463
+        ],
+        "logisId": 111470
+    }
+}

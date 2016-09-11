@@ -1,0 +1,89 @@
+{
+    "list": [
+        {
+            "id": 448224,
+            "skuId": "448496",
+            "goodsName": "XJKaWM1bft",
+            "goodsUnit": "bDwZ0G7gpc",
+            "skuDesc": "rvgeAkih2b",
+            "oldGoodsItemNo": "Dz5vm2J4tx",
+            "newGoodsItemNo": "I3PWaYntP4",
+            "oldSkuBarcode": "GPvRKksTaD",
+            "newSkuBarcode": "T6WtSUejCS",
+            "applyId": 448580,
+            "applyName": "p61jH9Cl3T",
+            "remark": "TOhnShlzkQ",
+            "dbCreateTime": {
+                "content": "{\"link\":\"www.bai.com\",\"img\":\"http://nos.netease.com/haitao/10cbStkzKbnx1sBmaxresdefault.jpg\"}",
+                "isEdit": 1,
+                "materialId": 448951,
+                "format": "{ \"text\": \"上限15个字\",\"image\": \"960*675\",\"imageUrl\": \"http://nos.netease.com/haitao/SAWdsVtAzqHTem1%E7%B1%BB%E7%9B%AE%E7%A1%AE%E8%AE%A4%E9%A1%B5%E9%9D%A2_03.jpg\"}",
+                "templateId": 1
+            },
+            "dbUpdateTime": {
+                "content": "{\"link\":\"www.bai.com\",\"img\":\"http://nos.netease.com/haitao/10cbStkzKbnx1sBmaxresdefault.jpg\"}",
+                "isEdit": 1,
+                "materialId": 449128,
+                "format": "{ \"text\": \"上限15个字\",\"image\": \"960*675\",\"imageUrl\": \"http://nos.netease.com/haitao/SAWdsVtAzqHTem1%E7%B1%BB%E7%9B%AE%E7%A1%AE%E8%AE%A4%E9%A1%B5%E9%9D%A2_03.jpg\"}",
+                "templateId": 1
+            }
+        },
+        {
+            "id": 449653,
+            "skuId": "450109",
+            "goodsName": "TQx700PRll",
+            "goodsUnit": "WYt0nyCskG",
+            "skuDesc": "L68WG6SKuY",
+            "oldGoodsItemNo": "CCxkRIOm5T",
+            "newGoodsItemNo": "ldq17zz4l2",
+            "oldSkuBarcode": "p2n7Ekgz2G",
+            "newSkuBarcode": "umcQAvA7Lx",
+            "applyId": 450400,
+            "applyName": "BLtU6kcICZ",
+            "remark": "wgjckgym7Y",
+            "dbCreateTime": {
+                "content": "{\"link\":\"www.bai.com\",\"img\":\"http://nos.netease.com/haitao/10cbStkzKbnx1sBmaxresdefault.jpg\"}",
+                "isEdit": 1,
+                "materialId": 450454,
+                "format": "{ \"text\": \"上限15个字\",\"image\": \"960*675\",\"imageUrl\": \"http://nos.netease.com/haitao/SAWdsVtAzqHTem1%E7%B1%BB%E7%9B%AE%E7%A1%AE%E8%AE%A4%E9%A1%B5%E9%9D%A2_03.jpg\"}",
+                "templateId": 1
+            },
+            "dbUpdateTime": {
+                "content": "{\"link\":\"www.bai.com\",\"img\":\"http://nos.netease.com/haitao/10cbStkzKbnx1sBmaxresdefault.jpg\"}",
+                "isEdit": 1,
+                "materialId": 450488,
+                "format": "{ \"text\": \"上限15个字\",\"image\": \"960*675\",\"imageUrl\": \"http://nos.netease.com/haitao/SAWdsVtAzqHTem1%E7%B1%BB%E7%9B%AE%E7%A1%AE%E8%AE%A4%E9%A1%B5%E9%9D%A2_03.jpg\"}",
+                "templateId": 1
+            }
+        },
+        {
+            "id": 450841,
+            "skuId": "451240",
+            "goodsName": "mm5LY5ttJl",
+            "goodsUnit": "NNYzgoswTl",
+            "skuDesc": "QTz69km9p8",
+            "oldGoodsItemNo": "K8SVfrW2gl",
+            "newGoodsItemNo": "GjIMX0Fr5v",
+            "oldSkuBarcode": "65ke7Op9x0",
+            "newSkuBarcode": "dSr39Be0vN",
+            "applyId": 451752,
+            "applyName": "1hIUK96JpS",
+            "remark": "3zHyyTRv66",
+            "dbCreateTime": {
+                "content": "{\"link\":\"www.bai.com\",\"img\":\"http://nos.netease.com/haitao/10cbStkzKbnx1sBmaxresdefault.jpg\"}",
+                "isEdit": 1,
+                "materialId": 452508,
+                "format": "{ \"text\": \"上限15个字\",\"image\": \"960*675\",\"imageUrl\": \"http://nos.netease.com/haitao/SAWdsVtAzqHTem1%E7%B1%BB%E7%9B%AE%E7%A1%AE%E8%AE%A4%E9%A1%B5%E9%9D%A2_03.jpg\"}",
+                "templateId": 1
+            },
+            "dbUpdateTime": {
+                "content": "{\"link\":\"www.bai.com\",\"img\":\"http://nos.netease.com/haitao/10cbStkzKbnx1sBmaxresdefault.jpg\"}",
+                "isEdit": 1,
+                "materialId": 452571,
+                "format": "{ \"text\": \"上限15个字\",\"image\": \"960*675\",\"imageUrl\": \"http://nos.netease.com/haitao/SAWdsVtAzqHTem1%E7%B1%BB%E7%9B%AE%E7%A1%AE%E8%AE%A4%E9%A1%B5%E9%9D%A2_03.jpg\"}",
+                "templateId": 1
+            }
+        }
+    ],
+    "total": 48599
+}

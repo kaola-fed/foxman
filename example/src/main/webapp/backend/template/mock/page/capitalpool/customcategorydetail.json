@@ -1,0 +1,60 @@
+{
+    "list": [
+        {
+            "customCategoryName": "yBo5KG8XtP",
+            "goodsGrade": "lt8j5dFWdp",
+            "targetDayAmount": 9586,
+            "daily30sales": 82164,
+            "profit2": 14061,
+            "initialStockAmount": 99672,
+            "initialOnWayAmount": 62433,
+            "initialUnTransportAmount": 46592,
+            "curAuditAmount": 84832,
+            "curSalesAmount": 14119,
+            "curSpecialAuditAmount": 93713,
+            "leftUsefulCapitalPool": 76450,
+            "cycleInventoryDayNum": 72586,
+            "initialReplenishAmount": 86314,
+            "initialOverflowAmount": 12694,
+            "curOverflowAmount": 21859
+        },
+        {
+            "customCategoryName": "ADBYbPzxi3",
+            "goodsGrade": "vjq5Ex6fId",
+            "targetDayAmount": 98660,
+            "daily30sales": 27608,
+            "profit2": 44359,
+            "initialStockAmount": 5705,
+            "initialOnWayAmount": 86510,
+            "initialUnTransportAmount": 5799,
+            "curAuditAmount": 52633,
+            "curSalesAmount": 11014,
+            "curSpecialAuditAmount": 85306,
+            "leftUsefulCapitalPool": 84114,
+            "cycleInventoryDayNum": 78155,
+            "initialReplenishAmount": 70066,
+            "initialOverflowAmount": 64375,
+            "curOverflowAmount": 38762
+        },
+        {
+            "customCategoryName": "jO2cp1TpDf",
+            "goodsGrade": "5EqwvpDzCP",
+            "targetDayAmount": 20575,
+            "daily30sales": 1755,
+            "profit2": 8260,
+            "initialStockAmount": 1452,
+            "initialOnWayAmount": 38283,
+            "initialUnTransportAmount": 64653,
+            "curAuditAmount": 32177,
+            "curSalesAmount": 94826,
+            "curSpecialAuditAmount": 18278,
+            "leftUsefulCapitalPool": 3795,
+            "cycleInventoryDayNum": 92389,
+            "initialReplenishAmount": 11929,
+            "initialOverflowAmount": 99328,
+            "curOverflowAmount": 66348
+        }
+    ],
+    "title": "资金池详情页",
+    "description": ""
+}

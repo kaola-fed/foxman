@@ -1,0 +1,21 @@
+{
+    "storageInfoList": [
+        {
+            "storageId": 514374,
+            "storageName": "Sn3T85UgXm",
+            "storageTemTypeId": 515124
+        },
+        {
+            "storageId": 515844,
+            "storageName": "xxikA55aHI",
+            "storageTemTypeId": 516439
+        },
+        {
+            "storageId": 516685,
+            "storageName": "vU0afwaJ5h",
+            "storageTemTypeId": 516795
+        }
+    ],
+    "title": "仓费管理页",
+    "description": ""
+}

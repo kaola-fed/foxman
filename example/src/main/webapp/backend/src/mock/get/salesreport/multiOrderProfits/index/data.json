@@ -1,0 +1,67 @@
+{
+    "profitTrend": [
+        {
+            "date": "1473548425673",
+            "data": "P6WyJCvnYU",
+            "profitsRate": 10676,
+            "orderPayAmount": 34301,
+            "allCostAmount": 8676,
+            "profits": 13621
+        },
+        {
+            "date": "1473548326281",
+            "data": "KTJndRwggu",
+            "profitsRate": 54196,
+            "orderPayAmount": 13918,
+            "allCostAmount": 34817,
+            "profits": 83670
+        },
+        {
+            "date": "1473547849604",
+            "data": "uT0tfD97Cg",
+            "profitsRate": 43045,
+            "orderPayAmount": 10792,
+            "allCostAmount": 95572,
+            "profits": 37322
+        }
+    ],
+    "total": 78016,
+    "statData": {
+        "payAmount": 97690,
+        "costAmount": 68160,
+        "profits": 76777,
+        "profitsRate": 52737
+    },
+    "code": 79631,
+    "profitRateTrend": [
+        {
+            "date": "1473546019829",
+            "data": "719Ouy72rO",
+            "profitsRate": 67985,
+            "orderPayAmount": 46994,
+            "allCostAmount": 31881,
+            "profits": 61018
+        },
+        {
+            "date": "1473546166465",
+            "data": "jcdxSSSWiu",
+            "profitsRate": 79588,
+            "orderPayAmount": 22547,
+            "allCostAmount": 75981,
+            "profits": 69993
+        },
+        {
+            "date": "1473547873447",
+            "data": "EMVZCqsMQX",
+            "profitsRate": 50243,
+            "orderPayAmount": 59568,
+            "allCostAmount": 17706,
+            "profits": 71426
+        }
+    ],
+    "profits": [
+        "67tzT7UIXB",
+        "e4u1oAAthp",
+        "LRfTSBDHkk"
+    ]
+}

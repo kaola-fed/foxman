@@ -1,0 +1,36 @@
+{
+    "code": 9814,
+    "msg": "eFjSTtmCOo",
+    "logisticKind": [
+        {
+            "id": 90940,
+            "logisKindName": "cB6W87dknE",
+            "website": "VsdjXEHG6l",
+            "remark": "c7geEn8Xgf",
+            "opUser": "xOJyePInbW",
+            "createTime": 1473546530406,
+            "updateTime": 1473547653872,
+            "deleteFlag": 96817
+        },
+        {
+            "id": 91906,
+            "logisKindName": "KYoGhldoh0",
+            "website": "wmcaUZhdlk",
+            "remark": "6YuXq7jq6T",
+            "opUser": "G4Jja8m3DX",
+            "createTime": 1473547909767,
+            "updateTime": 1473547256204,
+            "deleteFlag": 39123
+        },
+        {
+            "id": 92556,
+            "logisKindName": "adjBUB63B9",
+            "website": "KuWw6i2Ia2",
+            "remark": "ACLXfADVdX",
+            "opUser": "03HSFOeprP",
+            "createTime": 1473548031246,
+            "updateTime": 1473546562993,
+            "deleteFlag": 42477
+        }
+    ]
+}

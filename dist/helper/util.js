@@ -11,31 +11,38 @@ exports.createSystemId = createSystemId;
 exports.firstUpperCase = firstUpperCase;
 exports.exec = exec;
 exports.jsSpawn = jsSpawn;
+exports.removeHeadBreak = removeHeadBreak;
+exports.removeSuffix = removeSuffix;
+exports.jsonPathResolve = jsonPathResolve;
 
 var _child_process = require('child_process');
 
 var _child_process2 = _interopRequireDefault(_child_process);
 
+require('colors');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/**
+ * Created by hzxujunyu on 2016/8/15.
+ */
 function debugLog(msg) {
   if (process.env.NODE_ENV === 'development') {
-    console.log('[D] ' + msg);
+    console.log('[D]'.blue + ' ' + msg);
   }
-} /**
-   * Created by hzxujunyu on 2016/8/15.
-   */
+}
+
 function error(msg) {
-  console.log('[E] ' + msg);
+  console.log('[E]'.red + ' ' + msg);
   process.exit(1);
 }
 
 function log(msg) {
-  console.log('[I] ' + msg);
+  console.log('[I]'.green + ' ' + msg);
 }
 
 function warnLog(msg) {
-  console.log('[W] ' + msg);
+  console.log('[W]'.yellow + ' ' + msg);
 }
 
 function createSystemId() {
@@ -71,6 +78,21 @@ function jsSpawn(args) {
   };
 }
 
+function removeHeadBreak(str) {
+  return str.replace(/^(\/||\\)/, '');
+}
+
+function removeSuffix(str) {
+  return str.replace(/\.[^\.]*$/, '');
+}
+
+function jsonPathResolve(url) {
+  if (/\.[^\.]*$/.test(url)) {
+    return removeHeadBreak(url + '.json');
+  }
+  return removeSuffix(url) + '.json';
+}
+
 exports.default = {
   debugLog: debugLog,
   error: error,
@@ -79,5 +101,8 @@ exports.default = {
   createSystemId: createSystemId,
   firstUpperCase: firstUpperCase,
   exec: exec,
-  jsSpawn: jsSpawn
+  jsSpawn: jsSpawn,
+  jsonPathResolve: jsonPathResolve,
+  removeHeadBreak: removeHeadBreak,
+  removeSuffix: removeSuffix
 };

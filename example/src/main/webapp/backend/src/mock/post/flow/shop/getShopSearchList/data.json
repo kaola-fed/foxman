@@ -1,0 +1,31 @@
+{
+    "code": 200,
+    "msg": "ElqNCqqnKg",
+    "list": [
+        {
+            "shopId": 429243,
+            "shopName": "A9Csyvjuag",
+            "searchWord": "n2RsEw8u2R",
+            "shopStatus": 15788,
+            "isBannerShow": 99892,
+            "status": 85132
+        },
+        {
+            "shopId": 430028,
+            "shopName": "9q4AIX4hpy",
+            "searchWord": "u1Bu9P6seL",
+            "shopStatus": 18169,
+            "isBannerShow": 70965,
+            "status": 38381
+        },
+        {
+            "shopId": 430402,
+            "shopName": "5X4i9RB1mL",
+            "searchWord": "bgh9bIiUy3",
+            "shopStatus": 76461,
+            "isBannerShow": 30585,
+            "status": 23934
+        }
+    ],
+    "pageInfo": {}
+}

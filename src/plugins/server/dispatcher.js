@@ -1,9 +1,6 @@
 import path from 'path';
 import renderUtil from '../../helper/render';
-import {
-    util,
-    fileUtil
-} from '../../helper';
+import { util, fileUtil } from '../../helper';
 
 /**
  * default dispatcher
@@ -37,9 +34,7 @@ export function* dirDispatcher(url, config, context, next) {
 export function* ftlDispatcher( url, config, context ,next) {
     const filePath = path.join( config.viewRoot, url );
 
-    const dataPath = ( config.dataMatch ) ?
-     config.dataMatch( url.replace(/^(\/||\\)/,'').replace(/\.[^.]*$/, '')) :
-     path.join( config.syncData ,url.replace( /\.[^.]*$/, '.json' ));
+    const dataPath = config.syncDataMatch( url.replace(/^(\/||\\)/,'').replace(/\.[^.]*$/, ''));
 
     let dataModel = {};
     try {
@@ -48,38 +43,44 @@ export function* ftlDispatcher( url, config, context ,next) {
         util.warnLog(`${dataPath} is not found!`);
     }
 
-    let output = config.renderUtil().parse(filePath.replace(config.viewRoot, ''), dataModel);
-    let html = [];
-    yield new Promise( ( resolve, reject )=>{
-      output.stdout.on('data',(chunk)=>{
-        html.push(chunk);
-      });
-      output.stdout.on('end',()=>{
-        if(html){
-          context.type = 'text/html; charset=utf-8';
-          context.body = html.join('');
-          return resolve();
-        }
-        reject();
-      });
-    })
-
+    const output = config.renderUtil().parse(filePath.replace(config.viewRoot, ''), dataModel);
 
     const errInfo = [];
-
-    output.stderr.on('data', (chunk)=> {
-        errInfo.push(chunk);
+    yield new Promise(( resolve, reject )=>{
+      output.stderr.on('data', (chunk)=> {
+          errInfo.push(chunk);
+      });
+      output.stderr.on('end', ()=> {
+          let err = errInfo.join('');
+          if( err ){
+            util.warnLog(err.red);
+            context.type = 'text/plain; charset=utf-8';
+            context.status = 500
+            context.body = errInfo.join('');
+            return resolve();
+          }
+          reject();
+      });
     });
-    output.stderr.on('end', ()=> {
-        let err = errInfo.join('');
-        if( err ){ console.log(err); }
-        // console.log(context);
-        // context.body = err;
-    });
+    if( !errInfo[0] ){
+      const html = [];
+      yield new Promise(( resolve, reject )=>{
+        output.stdout.on('data',(chunk)=>{
+          html.push(chunk);
+        });
+        output.stdout.on('end',()=>{
+          if( html.length != 0 ){
+            context.type = 'text/html; charset=utf-8';
+            context.body = html.join('');
+            return resolve();
+          }
+          reject();
+        });
+      });
+    }
 
     yield next;
 }
-
 
 export function* jsonDispatcher(url, config, context, next) {
     const filePath = path.join(config.asyncData, url);

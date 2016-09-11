@@ -1,3 +1,5 @@
+import { util } from '../../helper';
+
 export default ( config )=>{
   let router = config.router;
 
@@ -9,11 +11,11 @@ export default ( config )=>{
       let route = router[i];
       if( route.method.toUpperCase() == method.toUpperCase() &&
           route.url == path){
-          this.request.pagePath = route.filePath + '.' + (route.sync ? config.extension : 'json');
+          let fileWithoutExt = util.removeSuffix( route.filePath );
+          this.request.pagePath = ( route.sync ) ? ( fileWithoutExt + '.' + config.extension) : ( fileWithoutExt + '.json' );
           break;
       }
     }
-
     yield next;
   }
 }

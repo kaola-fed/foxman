@@ -1,0 +1,35 @@
+{
+    "additionalFeeTypeList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ],
+    "storageInfoList": [
+        {
+            "storageId": 535404,
+            "storageName": "ksWussR11H",
+            "storageTemTypeId": 535664
+        },
+        {
+            "storageId": 536531,
+            "storageName": "G6JTvJ2X1B",
+            "storageTemTypeId": 537394
+        },
+        {
+            "storageId": 538238,
+            "storageName": "cOhIKAw4al",
+            "storageTemTypeId": 538781
+        }
+    ],
+    "title": "仓库附加费",
+    "description": ""
+}

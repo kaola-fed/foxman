@@ -1,0 +1,16 @@
+{
+    "code": 200,
+    "message": "J40vIL6v6Q",
+    "Area": {
+        "areaId": 130010,
+        "areaName": "c52vqbhcxh",
+        "type": 74828,
+        "isDistrict": 59618,
+        "parentAreaId": 130771,
+        "containedAreas": [
+            "<Area>",
+            "<Area>",
+            "<Area>"
+        ]
+    }
+}

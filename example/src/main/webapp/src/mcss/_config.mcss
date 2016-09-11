@@ -1,7 +1,11 @@
 @import './_config2.mcss';
 .config{
-  width: 10px;
+  width: 60px;
 }
 body{
-  margin: 0;
+  margin: 0px;
+  background: blue;
+  padding: 50px;
+  color: #fff;
+  display: flex;
 }

@@ -12,9 +12,13 @@ class Server {
     constructor(config) {
         this.app = Koa();
         Object.assign( this, config );
+
+        if( !this.dataMasyncDataMatchtch ){
+          this.syncDataMatch = ( url ) => path.resolve( config.syncData ,url + '.json' );
+        }
+
         this.setRender();
         this.setStaticHandler();
-
         this.delayInit();
     }
     delayInit(){

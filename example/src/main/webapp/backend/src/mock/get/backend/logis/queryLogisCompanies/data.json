@@ -1,0 +1,20 @@
+{
+    "code": 200,
+    "msg": "OjnLtnU3Qz",
+    "data": {
+        "code": "H7FnJqPfeP",
+        "list": [
+            "tzjt5B4Fi9",
+            "hhTK7PtNkj",
+            "2qdbygUyPw"
+        ],
+        "msg": "z5zOv7DYMA",
+        "pageInfo": {
+            "currentPage": 1,
+            "recordPerPage": 20,
+            "totalPage": 6,
+            "totalRecord": 120
+        }
+    },
+    "total": 4840
+}

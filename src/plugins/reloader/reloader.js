@@ -11,32 +11,28 @@ class Reloader extends EventEmitter {
     this.buildWebSocket();
   }
   bindChange(){
-    let server = this.server;
-    let watcher = this.watcher;
-    let view = path.resolve(server.viewRoot,'**','*.' + server.extension);
-    let syncData = path.resolve(server.syncData,'**','*');
-    let asyncData = path.resolve(server.asyncData,'**','*');
-    let statics = [];
+    let [server,watcher] = [this.server, this.watcher];
+    let reloadResources = [path.resolve(server.viewRoot,'**','*.' + server.extension),
+                      path.resolve(server.syncData,'**','*'),
+                      path.resolve(server.asyncData,'**','*')];
 
     server.static.forEach( item => {
-      statics.push(path.resolve(item, '**', '*.css'));
-      statics.push(path.resolve(item, '**', '*.js'));
+      reloadResources.push(path.resolve(item, '**', '*.css'));
+      reloadResources.push(path.resolve(item, '**', '*.js'));
     });
 
-    this.watcher.onChange([view, syncData, asyncData], (arg0, arg1) => {
-      this.reload(0, arg0);
+    this.watcher.onChange( reloadResources, ( arg0, arg1  ) => {
+      this.reload( arg0 );
     });
 
-    this.watcher.onChange(statics, (arg0, arg1)=>{
-      this.reload(1, arg0);
-    });
   }
-  buildWebSocket(){
 
+  buildWebSocket(){
     let serverApp = this.server.serverApp;
     this.wss = new WebSocketServer({
         server: serverApp
     });
+
     this.wss.on('connection', (ws) => {
         ws.on('message', (message) => {
             console.log('received: %s', message);
@@ -52,14 +48,9 @@ class Reloader extends EventEmitter {
             });
         });
     };
-
-    // var watchDirs = config.public.concat(config.ftlBase);
-    // watchDirAndBroadcast(watchDirs, wss);
-    serverApp.wss = this.wss;
-
   }
   reload(...args){
-    this.wss.broadcast(path.basename(args[1]), args[0]);
+    this.wss.broadcast( path.basename(args[0]) );
   }
 }
 export default Reloader;

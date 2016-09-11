@@ -1,0 +1,135 @@
+{
+    "code": 200,
+    "msg": "hWf633m2No",
+    "list": [
+        {
+            "goodId": "312863",
+            "goodName": "pLJW9IwJlk",
+            "mainSuppliers": [
+                {
+                    "id": 313176,
+                    "name": "8xgCePOKbV"
+                },
+                {
+                    "id": 313353,
+                    "name": "DkMAbTmRfa"
+                },
+                {
+                    "id": 313824,
+                    "name": "qNs0q38xp9"
+                }
+            ],
+            "subSuppliers": [
+                {
+                    "id": 314785,
+                    "name": "t32dzK56RB"
+                },
+                {
+                    "id": 314815,
+                    "name": "7yB3fcUQEM"
+                },
+                {
+                    "id": 315620,
+                    "name": "d49NMqWDz2"
+                }
+            ],
+            "goodPartNumber": "OAjQtmHtqj",
+            "goodSpec": "Z0e2lk2Q2V",
+            "goodCode": "BFwJ3ikUFu"
+        },
+        {
+            "goodId": "316210",
+            "goodName": "Wg7bVEyFOW",
+            "mainSuppliers": [
+                {
+                    "id": 316757,
+                    "name": "MIwrt5MCr2"
+                },
+                {
+                    "id": 317729,
+                    "name": "B9Pr1JuODE"
+                },
+                {
+                    "id": 318430,
+                    "name": "0daIwYjjBJ"
+                }
+            ],
+            "subSuppliers": [
+                {
+                    "id": 318783,
+                    "name": "vW2RwcrGHO"
+                },
+                {
+                    "id": 318805,
+                    "name": "zusf2OXKrI"
+                },
+                {
+                    "id": 319540,
+                    "name": "zCSGPFr7cg"
+                }
+            ],
+            "goodPartNumber": "JAnv1Vdf97",
+            "goodSpec": "iiYHz5zg1X",
+            "goodCode": "pjqj70uYjP"
+        },
+        {
+            "goodId": "320214",
+            "goodName": "LXuxMoElra",
+            "mainSuppliers": [
+                {
+                    "id": 321145,
+                    "name": "cfrXCxNa0q"
+                },
+                {
+                    "id": 321436,
+                    "name": "SPsJVlhr8u"
+                },
+                {
+                    "id": 322163,
+                    "name": "RUv9eKQx34"
+                }
+            ],
+            "subSuppliers": [
+                {
+                    "id": 322527,
+                    "name": "QahZGKtjXv"
+                },
+                {
+                    "id": 322648,
+                    "name": "cw095uw1dt"
+                },
+                {
+                    "id": 323076,
+                    "name": "xWFAu3zSG0"
+                }
+            ],
+            "goodPartNumber": "DjtFDtpoJS",
+            "goodSpec": "HhKQeR8Iww",
+            "goodCode": "nxoEkauLgU"
+        }
+    ],
+    "categoryInfo": {
+        "categoryId": 323860,
+        "categoryName": "FUT3NSg7tU",
+        "parentId": 324731,
+        "categoryLevel": 81320,
+        "isLeaf": 83766,
+        "childrenNodeList": [
+            "<Category>",
+            "<Category>",
+            "<Category>"
+        ],
+        "parent": "<Category>"
+    },
+    "pageInfo": {
+        "currentPage": 1,
+        "recordPerPage": 20,
+        "totalPage": 6,
+        "totalRecord": 120
+    },
+    "brand": {
+        "id": 324971,
+        "name": "7iUz9UJPDx"
+    },
+    "total": 1
+}

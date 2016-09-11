@@ -5,6 +5,7 @@ import PreCompilerPlugin from './plugins/precompiler/';
 import ReloadPlugin from './plugins/reloader';
 import NeiPlugin from './plugins/nei';
 
+import path from 'path';
 import {
     Event,
     util
@@ -39,7 +40,7 @@ class Owner {
         app.use( new ReloadPlugin({})); /** reloader **/
 
         app.use( new NeiPlugin({
-          
+            neiConfigRoot: path.resolve( process.cwd(),'nei.11169.4af51152079f243c6dc28ce87908919e','server.config.js' )
         }));
         /**
          * __loadPlugins

@@ -2,24 +2,25 @@
  * Created by hzxujunyu on 2016/8/15.
  */
 import child_process from 'child_process';
+import 'colors';
 
 export function debugLog(msg) {
   if(process.env.NODE_ENV === 'development'){
-    console.log(`[D] ${msg}`);
+    console.log('[D]'.blue+' '+msg);
   }
 }
 
 export function error ( msg ) {
-  console.log(`[E] ${msg}`);
+  console.log('[E]'.red+' '+msg);
   process.exit(1);
 }
 
 export function log (msg) {
-  console.log(`[I] ${msg}`);
+  console.log('[I]'.green+' '+msg);
 }
 
 export function warnLog (msg) {
-  console.log(`[W] ${msg}`);
+  console.log('[W]'.yellow+' '+msg);
 }
 
 export function createSystemId(){ // uid
@@ -55,6 +56,21 @@ export function jsSpawn (args){
   }
 }
 
+export function removeHeadBreak ( str ) {
+  return str.replace( /^(\/||\\)/, '' );
+}
+
+export function removeSuffix( str ) {
+  return str.replace( /\.[^\.]*$/, '' );
+}
+
+export function jsonPathResolve ( url ) {
+  if( /\.[^\.]*$/.test( url ) ){
+    return removeHeadBreak( url + '.json');
+  }
+  return (removeSuffix( url )+'.json');
+}
+
 export default {
   debugLog,
   error,
@@ -63,5 +79,8 @@ export default {
   createSystemId,
   firstUpperCase,
   exec,
-  jsSpawn
+  jsSpawn,
+  jsonPathResolve,
+  removeHeadBreak,
+  removeSuffix
 };

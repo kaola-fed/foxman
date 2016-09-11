@@ -1,0 +1,52 @@
+{
+    "code": 34903,
+    "list": [
+        {
+            "auditNo": "QFFpEKKfRm",
+            "goodsName": "MF3oucRwLC",
+            "purchaseCount": 15831,
+            "originCountry": "J0VMXvCTkW",
+            "supplierId": 431342,
+            "supplierName": "gsQQdNeCDZ",
+            "auditStatus": 5043,
+            "auditAmountTaxExclude": 66099,
+            "auditAmountTaxInclude": 21894,
+            "payStatus": 72319,
+            "actualPayAmount": 88495,
+            "applyPaymentOrderId": 431356,
+            "auditStatusName": "YKMAk4R0Le"
+        },
+        {
+            "auditNo": "xBuRUzBbth",
+            "goodsName": "grr9n4nqTd",
+            "purchaseCount": 84414,
+            "originCountry": "cf7gGTZXG5",
+            "supplierId": 432029,
+            "supplierName": "yk2qtenJla",
+            "auditStatus": 100,
+            "auditAmountTaxExclude": 82117,
+            "auditAmountTaxInclude": 59569,
+            "payStatus": 93715,
+            "actualPayAmount": 49416,
+            "applyPaymentOrderId": 432938,
+            "auditStatusName": "98xlsUMSkX"
+        },
+        {
+            "auditNo": "K5VRh8oQrj",
+            "goodsName": "k0jFhzEZZu",
+            "purchaseCount": 14164,
+            "originCountry": "5SODQKGf08",
+            "supplierId": 433107,
+            "supplierName": "WUyopRGzif",
+            "auditStatus": 71165,
+            "auditAmountTaxExclude": 64677,
+            "auditAmountTaxInclude": 63830,
+            "payStatus": 83224,
+            "actualPayAmount": 60968,
+            "applyPaymentOrderId": 434087,
+            "auditStatusName": "dQnVCm1Zhr"
+        }
+    ],
+    "message": "BayCJ39rQG",
+    "total": 72537
+}

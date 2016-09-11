@@ -1,0 +1,18 @@
+{
+    "customCategoryList": [
+        {
+            "index": 1,
+            "value": "hello"
+        },
+        {
+            "index": 1,
+            "value": "hello"
+        },
+        {
+            "index": 1,
+            "value": "hello"
+        }
+    ],
+    "title": "审批单特批统计页",
+    "description": ""
+}

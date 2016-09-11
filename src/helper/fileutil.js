@@ -2,8 +2,8 @@
  * 通用文件系统处理
  *
  * import {getFileByStream,...} from 'fileUtil'
- * or 
- * 
+ * or
+ *
  * import fileUtil from 'fileUtil'
  * then
  * 	fileUtil.getFileByStream
@@ -11,6 +11,7 @@
  */
 
 import fs from 'fs';
+import path from 'path';
 
 export function getFileByStream (path) {
 	return fs.ReadStream(path);
@@ -51,10 +52,35 @@ export function writeFile(filename,text){
 	});
 }
 
+export function writeUnExistsFile ( file, text ) {
+	let needCreateStack = [file];
+	const search = () => {
+		file = path.resolve(file,'../');
+		fs.stat(file, (err) => {
+				if( err ){
+					needCreateStack.push(file);
+					search();
+				}else{
+					create();
+				}
+		});
+	}
+	const create = () => {
+		let file = needCreateStack.pop();
+		if(needCreateStack.length!=0){
+				return fs.mkdir(file, create);
+		}
+		writeFile(file, text);
+	}
+	search();
+}
+
+
 export default {
 	getFileByStream,
 	getDirInfo,
 	getFileStat,
 	readFile,
-	writeFile
+	writeFile,
+	writeUnExistsFile
 }

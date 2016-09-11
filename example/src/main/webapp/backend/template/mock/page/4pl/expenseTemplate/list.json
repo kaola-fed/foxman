@@ -1,0 +1,35 @@
+{
+    "additionalFeeTypeList": [
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        },
+        {
+            "index": 1,
+            "value": "XXXX"
+        }
+    ],
+    "storageInfoList": [
+        {
+            "storageId": 520029,
+            "storageName": "rLgWSiORPL",
+            "storageTemTypeId": 520450
+        },
+        {
+            "storageId": 521162,
+            "storageName": "Rr74iG07np",
+            "storageTemTypeId": 521557
+        },
+        {
+            "storageId": 522452,
+            "storageName": "wtZlaiGslT",
+            "storageTemTypeId": 522954
+        }
+    ],
+    "title": "仓费模板库",
+    "description": ""
+}

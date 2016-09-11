@@ -1,0 +1,382 @@
+{
+    "code": 200,
+    "msg": "ZjDYwrMBiY",
+    "list": [
+        {
+            "category": {
+                "categoryId": 262806,
+                "categoryName": "NCgkv51flb",
+                "parentId": 263727,
+                "categoryLevel": 24358,
+                "isLeaf": 38743,
+                "childrenNodeList": [
+                    "<Category>",
+                    "<Category>",
+                    "<Category>"
+                ],
+                "parent": "<Category>"
+            },
+            "brandsSuppliers": [
+                {
+                    "skuNum": 94809,
+                    "brand": {
+                        "id": 264186,
+                        "name": "5Faz1NlGyr"
+                    },
+                    "mainSuppliers": [
+                        {
+                            "id": 264584,
+                            "name": "QtpVDNDaQv"
+                        },
+                        {
+                            "id": 264864,
+                            "name": "8camEbtowc"
+                        },
+                        {
+                            "id": 265837,
+                            "name": "qVLvfiwQH9"
+                        }
+                    ],
+                    "subSuppliers": [
+                        {
+                            "id": 266626,
+                            "name": "9x91OLkTXi"
+                        },
+                        {
+                            "id": 266671,
+                            "name": "BkxMa0osgB"
+                        },
+                        {
+                            "id": 266818,
+                            "name": "nT9AeMgxNS"
+                        }
+                    ],
+                    "id": 267587
+                },
+                {
+                    "skuNum": 38944,
+                    "brand": {
+                        "id": 268088,
+                        "name": "teEJvnIjhd"
+                    },
+                    "mainSuppliers": [
+                        {
+                            "id": 268602,
+                            "name": "hpfcCQ4476"
+                        },
+                        {
+                            "id": 269394,
+                            "name": "hVMVuVFogF"
+                        },
+                        {
+                            "id": 270186,
+                            "name": "qqBijMsone"
+                        }
+                    ],
+                    "subSuppliers": [
+                        {
+                            "id": 271141,
+                            "name": "hNHMKrCO5A"
+                        },
+                        {
+                            "id": 271428,
+                            "name": "Guni99ufy5"
+                        },
+                        {
+                            "id": 272352,
+                            "name": "jIbLy96teF"
+                        }
+                    ],
+                    "id": 272481
+                },
+                {
+                    "skuNum": 87877,
+                    "brand": {
+                        "id": 273212,
+                        "name": "cf0Uxnkrnw"
+                    },
+                    "mainSuppliers": [
+                        {
+                            "id": 273564,
+                            "name": "afNvYKB66y"
+                        },
+                        {
+                            "id": 273871,
+                            "name": "yPIky9xVnu"
+                        },
+                        {
+                            "id": 274311,
+                            "name": "xpsPTSe3qE"
+                        }
+                    ],
+                    "subSuppliers": [
+                        {
+                            "id": 275022,
+                            "name": "5Wobw6uxqK"
+                        },
+                        {
+                            "id": 275233,
+                            "name": "947XnzhHny"
+                        },
+                        {
+                            "id": 275894,
+                            "name": "jH82iHUJcj"
+                        }
+                    ],
+                    "id": 276492
+                }
+            ]
+        },
+        {
+            "category": {
+                "categoryId": 277075,
+                "categoryName": "eTpkgPANbU",
+                "parentId": 277478,
+                "categoryLevel": 75724,
+                "isLeaf": 60936,
+                "childrenNodeList": [
+                    "<Category>",
+                    "<Category>",
+                    "<Category>"
+                ],
+                "parent": "<Category>"
+            },
+            "brandsSuppliers": [
+                {
+                    "skuNum": 97589,
+                    "brand": {
+                        "id": 278086,
+                        "name": "uXdOTFikGL"
+                    },
+                    "mainSuppliers": [
+                        {
+                            "id": 278598,
+                            "name": "DUfPK6VoTq"
+                        },
+                        {
+                            "id": 279215,
+                            "name": "DeU6KAWsiu"
+                        },
+                        {
+                            "id": 280079,
+                            "name": "AxRs4xDrto"
+                        }
+                    ],
+                    "subSuppliers": [
+                        {
+                            "id": 280131,
+                            "name": "SRfpZrlKDh"
+                        },
+                        {
+                            "id": 280977,
+                            "name": "ujDbKKQ3HN"
+                        },
+                        {
+                            "id": 281578,
+                            "name": "hUg1t5YXnC"
+                        }
+                    ],
+                    "id": 282543
+                },
+                {
+                    "skuNum": 47079,
+                    "brand": {
+                        "id": 283306,
+                        "name": "8whhh3iY0v"
+                    },
+                    "mainSuppliers": [
+                        {
+                            "id": 283894,
+                            "name": "O0NSptjqZi"
+                        },
+                        {
+                            "id": 284321,
+                            "name": "oH71Z53bOd"
+                        },
+                        {
+                            "id": 284742,
+                            "name": "Fhemu6OGDz"
+                        }
+                    ],
+                    "subSuppliers": [
+                        {
+                            "id": 285408,
+                            "name": "RjRL9R5rON"
+                        },
+                        {
+                            "id": 285617,
+                            "name": "3wkqlSkOJy"
+                        },
+                        {
+                            "id": 285936,
+                            "name": "0ldIkhf609"
+                        }
+                    ],
+                    "id": 286219
+                },
+                {
+                    "skuNum": 32699,
+                    "brand": {
+                        "id": 286940,
+                        "name": "b9YhSzCuE1"
+                    },
+                    "mainSuppliers": [
+                        {
+                            "id": 287166,
+                            "name": "N8bVx3BPkp"
+                        },
+                        {
+                            "id": 287477,
+                            "name": "TPdVi9q73Q"
+                        },
+                        {
+                            "id": 287694,
+                            "name": "wGpt4AbcKv"
+                        }
+                    ],
+                    "subSuppliers": [
+                        {
+                            "id": 288054,
+                            "name": "fcKF4WBNrw"
+                        },
+                        {
+                            "id": 288696,
+                            "name": "ufoHghuanm"
+                        },
+                        {
+                            "id": 289431,
+                            "name": "9ksU15ra9v"
+                        }
+                    ],
+                    "id": 289827
+                }
+            ]
+        },
+        {
+            "category": {
+                "categoryId": 290607,
+                "categoryName": "cYCbZ1v1eU",
+                "parentId": 290842,
+                "categoryLevel": 40156,
+                "isLeaf": 36802,
+                "childrenNodeList": [
+                    "<Category>",
+                    "<Category>",
+                    "<Category>"
+                ],
+                "parent": "<Category>"
+            },
+            "brandsSuppliers": [
+                {
+                    "skuNum": 49125,
+                    "brand": {
+                        "id": 291354,
+                        "name": "h1Oy9jkLBR"
+                    },
+                    "mainSuppliers": [
+                        {
+                            "id": 291513,
+                            "name": "y0wM10SCa2"
+                        },
+                        {
+                            "id": 291768,
+                            "name": "KdDg5mhorv"
+                        },
+                        {
+                            "id": 292269,
+                            "name": "EPwwfMrqP4"
+                        }
+                    ],
+                    "subSuppliers": [
+                        {
+                            "id": 292668,
+                            "name": "fFmSyNwtuY"
+                        },
+                        {
+                            "id": 293544,
+                            "name": "OJ4NDjUaVO"
+                        },
+                        {
+                            "id": 293596,
+                            "name": "k3ulK0UJxk"
+                        }
+                    ],
+                    "id": 294469
+                },
+                {
+                    "skuNum": 53612,
+                    "brand": {
+                        "id": 294485,
+                        "name": "ISuYRheSlJ"
+                    },
+                    "mainSuppliers": [
+                        {
+                            "id": 294559,
+                            "name": "FC8bJ4vjQi"
+                        },
+                        {
+                            "id": 294869,
+                            "name": "Ocletc9fku"
+                        },
+                        {
+                            "id": 295330,
+                            "name": "DvLKvbVfRZ"
+                        }
+                    ],
+                    "subSuppliers": [
+                        {
+                            "id": 295353,
+                            "name": "85pOlWbRgn"
+                        },
+                        {
+                            "id": 296067,
+                            "name": "NSOvEGNsJF"
+                        },
+                        {
+                            "id": 296288,
+                            "name": "53H8ioaxvM"
+                        }
+                    ],
+                    "id": 296709
+                },
+                {
+                    "skuNum": 68297,
+                    "brand": {
+                        "id": 296975,
+                        "name": "v1fxCdToMV"
+                    },
+                    "mainSuppliers": [
+                        {
+                            "id": 297623,
+                            "name": "ZcgQJfZy9G"
+                        },
+                        {
+                            "id": 298504,
+                            "name": "O2scDhVIZ5"
+                        },
+                        {
+                            "id": 299233,
+                            "name": "i7rO9PqWaA"
+                        }
+                    ],
+                    "subSuppliers": [
+                        {
+                            "id": 299610,
+                            "name": "Zkavbbd3sr"
+                        },
+                        {
+                            "id": 300544,
+                            "name": "9G3tyB6U9I"
+                        },
+                        {
+                            "id": 300667,
+                            "name": "fPtWkwnLIZ"
+                        }
+                    ],
+                    "id": 301158
+                }
+            ]
+        }
+    ],
+    "total": 0
+}
