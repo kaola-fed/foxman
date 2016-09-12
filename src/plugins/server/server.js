@@ -13,8 +13,12 @@ class Server {
         this.app = Koa();
         Object.assign( this, config );
 
-        if( !this.dataMasyncDataMatchtch ){
-          this.syncDataMatch = ( url ) => path.resolve( config.syncData ,url + '.json' );
+        if( !this.syncDataMatch ){
+          this.syncDataMatch = ( url ) => path.resolve( config.syncData ,url );
+        }
+
+        if( !this.asyncDataMatch ){
+          this.asyncDataMatch = ( url ) => path.join(config.asyncData, url );
         }
 
         this.setRender();

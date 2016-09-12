@@ -1,3 +1,5 @@
+import 'babel-polyfill';
+
 import Application from './application/index';
 import ServerPlugin from './plugins/server/';
 import WatcherPlugin from './plugins/watcher/';
@@ -39,11 +41,11 @@ class Owner {
 
         app.use( new ReloadPlugin({})); /** reloader **/
 
-        app.use( new NeiPlugin({
-            neiConfigRoot: path.resolve( process.cwd(),'nei.11169.4af51152079f243c6dc28ce87908919e','server.config.js' )
-        }));
+        if( !!config.nei )
+          app.use( new NeiPlugin(config.nei) );
+
         /**
-         * __loadPlugins
+         * __load ex Plugins
          */
         app.use( config.plugins );
 

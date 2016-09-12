@@ -30,10 +30,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-// import neiHandle from 'nei/lib/server/nei';
-
 /**
- * 监听插件
+ * Nei 插件
  */
 var NeiPlugin = function () {
   function NeiPlugin(options) {
@@ -46,22 +44,47 @@ var NeiPlugin = function () {
   _createClass(NeiPlugin, [{
     key: 'init',
     value: function init() {
-      var rules = require(this.neiConfigRoot).routes;
-      this.neiRoute = _path2.default.resolve(this.app.config.root, 'nei.route.js');
-      var routes = require(this.neiRoute);
-      this.updateRoutes(routes);
-      return;
+      var _this = this;
 
-      // neiTools.update().then((config) => {
-      // const routes = this.formatRoutes( rules );
-      // this.updateLocalFiles( routes ).then((routes) => {
-      // this.updateRoutes(routes);
-      // });
-      // });
+      var recieveUpdate = function recieveUpdate(config) {
+        // 更新
+        try {
+          delete require.cache[require.resolve(_this.config)];
+        } catch (e) {}
+
+        var rules = require(_this.config).routes;
+        var routes = _this.formatRoutes(rules);
+        return _this.updateLocalFiles(routes);
+      };
+      var updateRoutes = function updateRoutes(routes) {
+        _this.updateRoutes(routes);
+      };
+
+      var doUpdate = this.app.config.update;
+
+      var neiConfig = void 0,
+          routes = void 0;
+
+      this.neiRoute = _path2.default.resolve(this.app.config.root, 'nei.route.js');
+
+      try {
+        neiConfig = require(this.config);
+      } catch (e) {
+        _helper.util.error('nei 配置文件不存在，请先配置项目的nei关联，并核对 config 中的 nei.config是否合法');
+      }
+
+      if (doUpdate) {
+        return _nei2.default.update().then(recieveUpdate).then(updateRoutes);
+      }
+
+      try {
+        routes = require(this.neiRoute);
+      } catch (e) {
+        _helper.util.error('foxman 未找到格式化过的内 nei route，请先执行 foxman -u ');
+      }
+
+      return updateRoutes(routes);
     }
-  }, {
-    key: 'initRules',
-    value: function initRules() {}
   }, {
     key: 'formatRoutes',
     value: function formatRoutes(rules) {
@@ -82,7 +105,7 @@ var NeiPlugin = function () {
           var method = _ruleName$split2[0];
           var url = _ruleName$split2[1];
 
-          // nei url 默认都是不带 / ,检查是否又
+          // nei url 默认都是不带 / ,检查是否有
 
           url = _helper.util.appendHeadBreak(url);
 
@@ -154,7 +177,7 @@ var NeiPlugin = function () {
   }, {
     key: 'updateRoutes',
     value: function updateRoutes(routes) {
-      var _this = this;
+      var _this2 = this;
 
       var promises = routes.map(function (route) {
 
@@ -169,11 +192,11 @@ var NeiPlugin = function () {
              */
             if (error || !stat.size) {
               // TODO url creater
+              var dataPath = _this2.genNeiApiUrl(route);
               if (route.sync) {
-                route.syncData = 'http://m.kaola.com';
+                route.syncData = dataPath;
               } else {
-                route.filePath = 'http://m.kaola.com';
-                // dataPath = path.resolve( server.asyncData, util.jsonPathResolve( route.filePath ));
+                route.asyncData = dataPath;
               }
             }
             args[0]();
@@ -181,9 +204,14 @@ var NeiPlugin = function () {
         });
       });
       Promise.all(promises).then(function () {
-        var server = _this.app.server;
+        var server = _this2.app.server;
         server.routers = routes.concat(server.routers);
       });
+    }
+  }, {
+    key: 'genNeiApiUrl',
+    value: function genNeiApiUrl(route) {
+      return _path2.default.resolve(route.sync ? this.mockTpl : this.mockApi, route.filePath + '.json');
     }
   }]);
 

@@ -10,7 +10,8 @@ import { util, fileUtil } from '../../helper';
  */
 export function* dirDispatcher( dispatcher, config, context, next) {
 
-    const viewPath = path.join( config.viewRoot, dispatcher.path );
+    const viewPath = dispatcher.path;
+    console.log(viewPath);
     const files = yield fileUtil.getDirInfo( viewPath );
     const promises = files.map( ( file ) => fileUtil.getFileStat( path.resolve( viewPath, file ) ) );
     const result = yield Promise.all(promises);
@@ -19,7 +20,7 @@ export function* dirDispatcher( dispatcher, config, context, next) {
         return Object.assign(item, {
             name: files[idx],
             isFile: item.isFile(),
-            requestPath: [dispatcher.path, files[idx], item.isFile() ? '' : '/'].join('')
+            requestPath: [context.request.path, files[idx], item.isFile() ? '' : '/'].join('')
         });
     });
 
@@ -30,7 +31,7 @@ export function* dirDispatcher( dispatcher, config, context, next) {
 }
 
 export function* syncDispatcher(dispatcher, config, context, next) {
-    const filePath = path.join( config.viewRoot, dispatcher.path );
+    const filePath = dispatcher.path; // path.join( config.viewRoot, dispatcher.path );
     const dataPath = dispatcher.dataPath;
     let dataModel = {};
     try {
@@ -85,8 +86,7 @@ export function* asyncDispather( dispatcher, config, context, next) {
      * @type {[type]}
      */
     const asyncDataPath = dispatcher.dataPath;
-    const filePath = path.join(config.asyncData, asyncDataPath);
-    const api = fileUtil.getFileByStream(filePath);
+    const api = fileUtil.getFileByStream(asyncDataPath);
 
     context.type = 'application/json; charset=utf-8';
     context.body = api;

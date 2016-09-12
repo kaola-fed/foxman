@@ -6,6 +6,12 @@ Object.defineProperty(exports, "__esModule", {
 
 var _helper = require('../../helper');
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 /**
@@ -26,7 +32,7 @@ exports.default = function (config) {
   return regeneratorRuntime.mark(function _callee(next) {
     var _routeMap;
 
-    var routers, method, requestPath, commonSync, commonAsync, i, router, fileWithoutExt, routeMap, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, route;
+    var routers, method, requestPath, routeMap, realTplPath, tplPath, commonSync, commonAsync, i, router, fileWithoutExt, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, route;
 
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
@@ -40,27 +46,67 @@ exports.default = function (config) {
             routers = config.routers;
             method = this.request.method;
             requestPath = this.request.path;
+            routeMap = (_routeMap = {
+              '/': function _() {
+                this.dispatcher = _helper.util.dispatcherTypeCreator('dir', realTplPath, null);
+              }
+            }, _defineProperty(_routeMap, '.' + config.extension, function undefined() {
+              this.dispatcher = _helper.util.dispatcherTypeCreator('sync', tplPath, commonSync);
+            }), _defineProperty(_routeMap, '.json', function json() {
+              this.dispatcher = _helper.util.dispatcherTypeCreator('async', commonAsync, commonAsync);
+            }), _routeMap);
 
-            if (requestPath === '/' && this.request.query.mode != 1) {
+
+            if (requestPath == '/') {
               requestPath = '/index.html';
             }
 
-            commonSync = config.syncDataMatch(requestPath.replace(/^(\/||\\)/, '').replace(/\.[^.]*$/, ''));
-            commonAsync = _helper.util.jsonPathResolve(requestPath);
+            /**
+             * 路径统一绝对路径
+             */
+            realTplPath = _path2.default.join(config.viewRoot, this.request.path);
+            tplPath = _path2.default.join(config.viewRoot, requestPath);
+            commonSync = config.syncDataMatch(requestPath.replace(/^(\/||\\)/, '').replace(/\.[^.]*$/, '')); // arg[0] = viewName;
 
-            console.log(routers);
+            commonAsync = config.asyncDataMatch(_helper.util.jsonPathResolve(requestPath));
+
+            /**
+             * mode 1 拦截文件夹的路径
+             */
+
+            if (!(this.request.query.mode == 1 && this.request.path.endsWith('/'))) {
+              _context.next = 15;
+              break;
+            }
+
+            _helper.util.log('文件夹类型');
+            routeMap['/'].call(this);
+            _context.next = 14;
+            return next;
+
+          case 14:
+            return _context.abrupt('return', _context.sent);
+
+          case 15:
+
+            /**
+              */
+            console.log(tplPath);
+            console.log(commonSync);
+            console.log(commonAsync);
+
             i = 0;
 
-          case 8:
+          case 19:
             if (!(i < routers.length)) {
-              _context.next = 20;
+              _context.next = 32;
               break;
             }
 
             router = routers[i];
 
-            if (!(router.method.toUpperCase() == method.toUpperCase() && router.url == requestPath)) {
-              _context.next = 17;
+            if (!(router.method.toUpperCase() == method.toUpperCase() && router.url == this.request.path)) {
+              _context.next = 29;
               break;
             }
 
@@ -72,8 +118,7 @@ exports.default = function (config) {
              */
 
             if (router.sync) {
-
-              this.dispatcher = _helper.util.dispatcherTypeCreator('sync', fileWithoutExt + '.' + config.extension, router.syncData || commonSync);
+              this.dispatcher = _helper.util.dispatcherTypeCreator('sync', _path2.default.join(config.viewRoot, fileWithoutExt + '.' + config.extension), router.syncData || commonSync);
             } else {
               /**
                * 如果插件已生成了 asyncData 属性,则用插件的
@@ -82,100 +127,95 @@ exports.default = function (config) {
               this.dispatcher = _helper.util.dispatcherTypeCreator('async', commonAsync, router.asyncData || commonAsync);
             }
             _helper.util.log('请求url:' + router.url);
-            _context.next = 16;
+
+            console.log(this.dispatcher);
+            _context.next = 28;
             return next;
 
-          case 16:
+          case 28:
             return _context.abrupt('return', _context.sent);
 
-          case 17:
+          case 29:
             i++;
-            _context.next = 8;
+            _context.next = 19;
             break;
 
-          case 20:
+          case 32:
+
             /**
              * ② 未拦截到 router
              */
-            routeMap = (_routeMap = {
-              '/': function _() {
-                this.dispatcher = _helper.util.dispatcherTypeCreator('dir', requestPath, null);
-              }
-            }, _defineProperty(_routeMap, '.' + config.extension, function undefined() {
-              this.dispatcher = _helper.util.dispatcherTypeCreator('sync', requestPath, commonSync);
-            }), _defineProperty(_routeMap, '.json', function json() {
-              this.dispatcher = _helper.util.dispatcherTypeCreator('async', commonAsync, commonAsync);
-            }), _routeMap);
+
             _iteratorNormalCompletion = true;
             _didIteratorError = false;
             _iteratorError = undefined;
-            _context.prev = 24;
+            _context.prev = 35;
             _iterator = Object.keys(routeMap)[Symbol.iterator]();
 
-          case 26:
+          case 37:
             if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-              _context.next = 36;
+              _context.next = 47;
               break;
             }
 
             route = _step.value;
 
             if (!requestPath.endsWith(route)) {
-              _context.next = 33;
+              _context.next = 44;
               break;
             }
 
             routeMap[route].call(this);
-            _context.next = 32;
+            _context.next = 43;
             return next;
 
-          case 32:
+          case 43:
             return _context.abrupt('return', _context.sent);
 
-          case 33:
+          case 44:
             _iteratorNormalCompletion = true;
-            _context.next = 26;
+            _context.next = 37;
             break;
 
-          case 36:
-            _context.next = 42;
+          case 47:
+            _context.next = 53;
             break;
 
-          case 38:
-            _context.prev = 38;
-            _context.t0 = _context['catch'](24);
+          case 49:
+            _context.prev = 49;
+            _context.t0 = _context['catch'](35);
             _didIteratorError = true;
             _iteratorError = _context.t0;
 
-          case 42:
-            _context.prev = 42;
-            _context.prev = 43;
+          case 53:
+            _context.prev = 53;
+            _context.prev = 54;
 
             if (!_iteratorNormalCompletion && _iterator.return) {
               _iterator.return();
             }
 
-          case 45:
-            _context.prev = 45;
+          case 56:
+            _context.prev = 56;
 
             if (!_didIteratorError) {
-              _context.next = 48;
+              _context.next = 59;
               break;
             }
 
             throw _iteratorError;
 
-          case 48:
-            return _context.finish(45);
+          case 59:
+            return _context.finish(56);
 
-          case 49:
-            return _context.finish(42);
+          case 60:
+            return _context.finish(53);
 
-          case 50:
+          case 61:
           case 'end':
             return _context.stop();
         }
       }
-    }, _callee, this, [[24, 38, 42, 50], [43,, 45, 49]]);
+    }, _callee, this, [[35, 49, 53, 61], [54,, 56, 60]]);
   });
 };

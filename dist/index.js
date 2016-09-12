@@ -1,5 +1,7 @@
 'use strict';
 
+require('babel-polyfill');
+
 var _index = require('./application/index');
 
 var _index2 = _interopRequireDefault(_index);
@@ -37,52 +39,51 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var owner = void 0;
 
 var Owner = function Owner(config) {
-    _classCallCheck(this, Owner);
+        _classCallCheck(this, Owner);
 
-    var app = (0, _index2.default)();
-    var root = config.root;
-    /**
-     * __setConfig
-     */
-    app.setConfig(config);
+        var app = (0, _index2.default)();
+        var root = config.root;
+        /**
+         * __setConfig
+         */
+        app.setConfig(config);
 
-    /**
-     * 内置组件
-     */
-    app.use(new _watcher2.default(Object.assign(config.watch, {
-        root: root
-    })));
+        /**
+         * 内置组件
+         */
+        app.use(new _watcher2.default(Object.assign(config.watch, {
+                root: root
+        })));
 
-    app.use(new _server2.default(Object.assign(config.server, {
-        root: root
-    })));
+        app.use(new _server2.default(Object.assign(config.server, {
+                root: root
+        })));
 
-    app.use(new _precompiler2.default({
-        preCompilers: config.preCompilers,
-        root: root
-    })); /** main **/
+        app.use(new _precompiler2.default({
+                preCompilers: config.preCompilers,
+                root: root
+        })); /** main **/
 
-    app.use(new _reloader2.default({})); /** reloader **/
+        app.use(new _reloader2.default({})); /** reloader **/
 
-    app.use(new _nei2.default({
-        neiConfigRoot: _path2.default.resolve(process.cwd(), 'nei.11169.4af51152079f243c6dc28ce87908919e', 'server.config.js')
-    }));
-    /**
-     * __loadPlugins
-     */
-    app.use(config.plugins);
+        if (!!config.nei) app.use(new _nei2.default(config.nei));
 
-    /**
-     * __ready
-     */
-    app.run();
+        /**
+         * __load ex Plugins
+         */
+        app.use(config.plugins);
 
-    /** start server **/
+        /**
+         * __ready
+         */
+        app.run();
 
-    /** start server **/
+        /** start server **/
+
+        /** start server **/
 };
 
 module.exports = function (config) {
-    if (!owner) owner = new Owner(config);
-    return owner;
+        if (!owner) owner = new Owner(config);
+        return owner;
 };

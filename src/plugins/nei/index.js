@@ -4,10 +4,8 @@ import fs from 'fs';
 import { util,fileUtil } from '../../helper';
 import _ from 'util';
 
-// import neiHandle from 'nei/lib/server/nei';
-
 /**
- * 监听插件
+ * Nei 插件
  */
 class NeiPlugin  {
     constructor(options){
@@ -16,22 +14,43 @@ class NeiPlugin  {
     }
 
     init() {
-      const rules = require( this.neiConfigRoot ).routes;
-      this.neiRoute = path.resolve(this.app.config.root, 'nei.route.js');
-      const routes = require(this.neiRoute);
-      this.updateRoutes(routes);
-      return;
+      const recieveUpdate = (config) => {
+        // 更新
+        try{
+          delete require.cache[require.resolve(this.config)];
+        }catch(e){}
 
-      // neiTools.update().then((config) => {
-        // const routes = this.formatRoutes( rules );
-        // this.updateLocalFiles( routes ).then((routes) => {
-          // this.updateRoutes(routes);
-        // });
-      // });
-    }
+        const rules = require( this.config ).routes;
+        const routes = this.formatRoutes( rules );
+        return this.updateLocalFiles( routes );
+      }
+      const updateRoutes = (routes) => {
+        this.updateRoutes(routes);
+      }
 
-    initRules(){
+      const doUpdate = this.app.config.update;
 
+      let neiConfig, routes;
+
+      this.neiRoute = path.resolve( this.app.config.root, 'nei.route.js');
+
+      try {
+        neiConfig = require( this.config );
+      } catch ( e ) {
+        util.error('nei 配置文件不存在，请先配置项目的nei关联，并核对 config 中的 nei.config是否合法');
+      }
+
+      if( doUpdate ) {
+        return neiTools.update().then(recieveUpdate).then(updateRoutes);
+      }
+
+      try {
+        routes = require(this.neiRoute);
+      } catch ( e ) {
+        util.error('foxman 未找到格式化过的内 nei route，请先执行 foxman -u ');
+      }
+
+      return updateRoutes(routes);
     }
 
     formatRoutes( rules ){
@@ -45,7 +64,7 @@ class NeiPlugin  {
           let rule = rules[ruleName];
           let [method, url] = ruleName.split(' ');
 
-          // nei url 默认都是不带 / ,检查是否又
+          // nei url 默认都是不带 / ,检查是否有
           url = util.appendHeadBreak( url );
 
           let sync = rule.hasOwnProperty('list');
@@ -116,11 +135,11 @@ class NeiPlugin  {
              */
             if( error || !stat.size ){
                 // TODO url creater
+                const dataPath = this.genNeiApiUrl( route );
                 if( route.sync ) {
-                    route.syncData = 'http://m.kaola.com';
+                    route.syncData = dataPath;
                 } else {
-                    route.filePath = 'http://m.kaola.com';
-                    // dataPath = path.resolve( server.asyncData, util.jsonPathResolve( route.filePath ));
+                    route.asyncData = dataPath;
                 }
             }
             args[0]();
@@ -131,6 +150,10 @@ class NeiPlugin  {
         let server = this.app.server;
         server.routers = routes.concat( server.routers );
       });
+    }
+
+    genNeiApiUrl ( route ) {
+      return path.resolve(route.sync? this.mockTpl: this.mockApi, route.filePath +'.json' );
     }
 }
 

@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "anymatch": "^1.3.0",
+    "babel-polyfill": "^6.13.0",
     "chokidar": "^1.6.0",
     "colors": "^1.1.2",
     "globule": "^1.0.0",

@@ -122,8 +122,6 @@ function writeUnExistsFile(file, text) {
 }
 
 function jsonResover(url) {
-	// console.log(url);
-	// console.log(/^http/g.test(url));
 	return new Promise(function (resolve, reject) {
 		if (/^http/g.test(url)) {
 			_util2.default.log('waiting for request');
@@ -139,7 +137,14 @@ function jsonResover(url) {
 			return;
 		}
 
-		resolve(require(url));
+		try {
+			readFile(url).then(function (data) {
+				resolve(JSON.parse(data));
+			});
+		} catch (e) {
+			util.debugLog(e);
+			resolve({});
+		}
 	});
 }
 

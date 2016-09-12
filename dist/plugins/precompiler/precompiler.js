@@ -50,7 +50,6 @@ var PreCompiler = function (_EventEmitter) {
         args[_key] = arguments[_key];
       }
 
-      // console.log(args);
       this.source = this.source.pipe.apply(this.source, args);
       Object.assign(args[0], _events2.default.prototype);
       args[0].on('returnDependencys', function (event) {

@@ -33,34 +33,36 @@ function dirDispatcher(dispatcher, config, context, next) {
         while (1) {
             switch (_context.prev = _context.next) {
                 case 0:
-                    viewPath = _path2.default.join(config.viewRoot, dispatcher.path);
-                    _context.next = 3;
+                    viewPath = dispatcher.path;
+
+                    console.log(viewPath);
+                    _context.next = 4;
                     return _helper.fileUtil.getDirInfo(viewPath);
 
-                case 3:
+                case 4:
                     files = _context.sent;
                     promises = files.map(function (file) {
                         return _helper.fileUtil.getFileStat(_path2.default.resolve(viewPath, file));
                     });
-                    _context.next = 7;
+                    _context.next = 8;
                     return Promise.all(promises);
 
-                case 7:
+                case 8:
                     result = _context.sent;
                     fileList = result.map(function (item, idx) {
                         return Object.assign(item, {
                             name: files[idx],
                             isFile: item.isFile(),
-                            requestPath: [dispatcher.path, files[idx], item.isFile() ? '' : '/'].join('')
+                            requestPath: [context.request.path, files[idx], item.isFile() ? '' : '/'].join('')
                         });
                     });
-                    _context.next = 11;
+                    _context.next = 12;
                     return context.render('cataLog', {
                         title: '查看列表',
                         fileList: fileList
                     });
 
-                case 11:
+                case 12:
                 case 'end':
                     return _context.stop();
             }
@@ -76,7 +78,8 @@ function syncDispatcher(dispatcher, config, context, next) {
         while (1) {
             switch (_context3.prev = _context3.next) {
                 case 0:
-                    filePath = _path2.default.join(config.viewRoot, dispatcher.path);
+                    filePath = dispatcher.path; // path.join( config.viewRoot, dispatcher.path );
+
                     dataPath = dispatcher.dataPath;
                     dataModel = {};
                     _context3.prev = 3;
@@ -165,7 +168,7 @@ function syncDispatcher(dispatcher, config, context, next) {
 }
 
 function asyncDispather(dispatcher, config, context, next) {
-    var asyncDataPath, filePath, api;
+    var asyncDataPath, api;
     return regeneratorRuntime.wrap(function asyncDispather$(_context4) {
         while (1) {
             switch (_context4.prev = _context4.next) {
@@ -175,17 +178,16 @@ function asyncDispather(dispatcher, config, context, next) {
                      * @type {[type]}
                      */
                     asyncDataPath = dispatcher.dataPath;
-                    filePath = _path2.default.join(config.asyncData, asyncDataPath);
-                    api = _helper.fileUtil.getFileByStream(filePath);
+                    api = _helper.fileUtil.getFileByStream(asyncDataPath);
 
 
                     context.type = 'application/json; charset=utf-8';
                     context.body = api;
 
-                    _context4.next = 7;
+                    _context4.next = 6;
                     return next;
 
-                case 7:
+                case 6:
                 case 'end':
                     return _context4.stop();
             }

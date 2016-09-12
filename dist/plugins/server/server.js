@@ -51,9 +51,15 @@ var Server = function () {
         this.app = (0, _koa2.default)();
         Object.assign(this, config);
 
-        if (!this.dataMasyncDataMatchtch) {
+        if (!this.syncDataMatch) {
             this.syncDataMatch = function (url) {
-                return _path2.default.resolve(config.syncData, url + '.json');
+                return _path2.default.resolve(config.syncData, url);
+            };
+        }
+
+        if (!this.asyncDataMatch) {
+            this.asyncDataMatch = function (url) {
+                return _path2.default.join(config.asyncData, url);
             };
         }
 

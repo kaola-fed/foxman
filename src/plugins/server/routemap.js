@@ -1,4 +1,5 @@
 import { util } from '../../helper';
+import path from 'path';
 
 /**
  * 全局中间件,会将具体的页面转换成需要的资源
@@ -23,18 +24,64 @@ export default ( config )=>{
      */
     const [routers, method] = [config.routers, this.request.method];
     let requestPath = this.request.path;
-    if( requestPath === '/' && this.request.query.mode != 1 ) {
+
+    const routeMap = {
+      '/'(){
+        this.dispatcher = util.dispatcherTypeCreator(
+          'dir',
+          realTplPath,
+          null
+        );
+      },
+      [`.${config.extension}`](){
+        this.dispatcher = util.dispatcherTypeCreator(
+          'sync',
+          tplPath,
+          commonSync
+        );
+      },
+      '.json'(){
+        this.dispatcher = util.dispatcherTypeCreator(
+          'async',
+          commonAsync,
+          commonAsync
+        );
+      }
+    };
+
+    if( requestPath =='/' ){
       requestPath = '/index.html';
     }
 
-    const commonSync = config.syncDataMatch( requestPath.replace(/^(\/||\\)/,'').replace(/\.[^.]*$/, '') );
-    const commonAsync = util.jsonPathResolve( requestPath );
-    console.log(routers);
+    /**
+     * 路径统一绝对路径
+     */
+    const realTplPath = path.join(config.viewRoot, this.request.path);
+    const tplPath = path.join(config.viewRoot, requestPath);
+    const commonSync = config.syncDataMatch( requestPath.replace(/^(\/||\\)/,'').replace(/\.[^.]*$/, '') ); // arg[0] = viewName;
+    const commonAsync = config.asyncDataMatch( util.jsonPathResolve( requestPath ));
+
+    /**
+     * mode 1 拦截文件夹的路径
+     */
+    if( (this.request.query.mode == 1) && this.request.path.endsWith('/') ) {
+      util.log('文件夹类型');
+      routeMap['/'].call(this);
+      return yield next;
+    }
+
+    /**
+
+    */
+    console.log(tplPath);
+    console.log(commonSync);
+    console.log(commonAsync);
+
     for (let i = 0; i < routers.length; i++) {
       const router = routers[i];
 
       if( router.method.toUpperCase() == method.toUpperCase() &&
-          router.url == requestPath ){
+          router.url == this.request.path ){
           const fileWithoutExt = util.removeSuffix( router.filePath );
           /**
            * 同步接口
@@ -42,10 +89,9 @@ export default ( config )=>{
            * 即: 插件对于响应,有更高的权限
            */
           if( router.sync ){
-
             this.dispatcher = util.dispatcherTypeCreator(
               'sync',
-              `${fileWithoutExt}.${config.extension}`,
+              path.join( config.viewRoot, `${fileWithoutExt}.${config.extension}`),
               router.syncData || commonSync
             );
           } else {
@@ -59,36 +105,16 @@ export default ( config )=>{
               router.asyncData || commonAsync
             );
           }
-          util.log(`请求url:${router.url}`)
+          util.log(`请求url:${router.url}`);
+
+          console.log(this.dispatcher);
           return yield next;
       }
     }
+
     /**
      * ② 未拦截到 router
      */
-    let routeMap = {
-      '/'(){
-        this.dispatcher = util.dispatcherTypeCreator(
-          'dir',
-          requestPath,
-          null
-        );
-      },
-      [`.${config.extension}`](){
-        this.dispatcher = util.dispatcherTypeCreator(
-          'sync',
-          requestPath,
-          commonSync
-        );
-      },
-      '.json'(){
-        this.dispatcher = util.dispatcherTypeCreator(
-          'async',
-          commonAsync,
-          commonAsync
-        );
-      }
-    };
 
     for( let route of Object.keys(routeMap) ) {
       if(requestPath.endsWith(route)){

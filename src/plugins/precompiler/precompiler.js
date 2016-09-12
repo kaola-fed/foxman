@@ -16,7 +16,6 @@ class PreCompiler extends EventEmitter{
     Object.assign(this, options);
   }
   pipe(...args){
-    // console.log(args);
     this.source = this.source.pipe.apply(this.source,args);
     Object.assign(args[0], EventEmitter.prototype);
     args[0].on('returnDependencys', (event) => {

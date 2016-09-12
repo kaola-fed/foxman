@@ -82,8 +82,6 @@ export function writeUnExistsFile ( file, text ) {
 }
 
 export function jsonResover ( url ) {
-	// console.log(url);
-	// console.log(/^http/g.test(url));
 	return new Promise( (resolve, reject) => {
 		if(/^http/g.test(url)){
 			_.log('waiting for request');
@@ -99,7 +97,14 @@ export function jsonResover ( url ) {
 			return;
 		}
 
-		resolve(require(url));
+		try{
+			readFile(url).then( (data) => {
+					resolve(JSON.parse(data))
+			});
+		}catch(e){
+			util.debugLog(e);
+			resolve({});
+		}
 	});
 }
 

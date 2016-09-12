@@ -4,8 +4,6 @@ const path = require('path');
 const mcss = require('../../foxman-mcss');
 const autoprefix = require('gulp-autoprefixer');
 
-// const NeiPlugin = require('./plugin.nei');
-
 const routers = require('./route');
 
 const root = path.resolve(__dirname, 'src', 'main', 'webapp');
@@ -13,10 +11,15 @@ const root = path.resolve(__dirname, 'src', 'main', 'webapp');
 module.exports = {
     root,
     plugins: [
-        // new NeiPlugin({
-        //     name: 'xujunyu'
-        // })
+      /**
+       * 插件
+       */
     ],
+    // nei: {
+    //   config: path.resolve( process.cwd(), 'nei.xxxx.xxxxxxxxxxxxxxxx' /*nei ket*/ , 'server.config.js' ),
+    //   mockTpl: path.resolve( process.cwd(), 'src', 'main', 'webapp', 'backend', 'template', 'mock' ),
+    //   mockApi: path.resolve( process.cwd(), 'src', 'main', 'webapp', 'backend', 'src', 'mock' )
+    // },
     preCompilers: [{
         test: path.resolve(root, 'src/mcss/**/*.mcss'), // String or ArrayList<String>
         handler: (dest) => [
