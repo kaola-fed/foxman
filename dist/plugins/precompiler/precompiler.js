@@ -55,20 +55,21 @@ var PreCompiler = function (_EventEmitter) {
       args[0].on('returnDependencys', function (event) {
         return _this2.emit('updateWatch', event);
       });
-
       return this;
     }
   }, {
     key: 'dest',
     value: function dest(arg1) {
-      return _vinylFs2.default.dest.call(_vinylFs2.default, (0, _path.resolve)(this.root, arg1));
+      var target = (0, _path.resolve)(this.root, arg1);
+      var outputdir = (0, _path.relative)(this.file.pattern, (0, _path.resolve)(this.file.filename, '..'));
+      return _vinylFs2.default.dest.call(_vinylFs2.default, (0, _path.resolve)(target, outputdir));
     }
   }, {
     key: 'update',
     value: function update() {
       var _this3 = this;
 
-      this.source = _vinylFs2.default.src(this.filename);
+      this.source = _vinylFs2.default.src(this.file.filename);
       this.handler(this.dest.bind(this)).forEach(function (item) {
         _this3.pipe(item);
       });

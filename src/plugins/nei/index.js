@@ -60,7 +60,7 @@ class NeiPlugin  {
 
       for( let ruleName in rules ){
         if(rules.hasOwnProperty(ruleName)){
-          let filePath,id;
+          let filePath, id;
           let rule = rules[ruleName];
           let [method, url] = ruleName.split(' ');
 
@@ -126,7 +126,6 @@ class NeiPlugin  {
 
     updateRoutes( routes ){
       let promises = routes.map( ( route ) => {
-
         return new Promise((...args) => {
 
           fs.stat( route.filePath, ( error, stat ) => {

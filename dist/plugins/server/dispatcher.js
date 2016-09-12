@@ -34,20 +34,18 @@ function dirDispatcher(dispatcher, config, context, next) {
             switch (_context.prev = _context.next) {
                 case 0:
                     viewPath = dispatcher.path;
-
-                    console.log(viewPath);
-                    _context.next = 4;
+                    _context.next = 3;
                     return _helper.fileUtil.getDirInfo(viewPath);
 
-                case 4:
+                case 3:
                     files = _context.sent;
                     promises = files.map(function (file) {
                         return _helper.fileUtil.getFileStat(_path2.default.resolve(viewPath, file));
                     });
-                    _context.next = 8;
+                    _context.next = 7;
                     return Promise.all(promises);
 
-                case 8:
+                case 7:
                     result = _context.sent;
                     fileList = result.map(function (item, idx) {
                         return Object.assign(item, {
@@ -56,13 +54,13 @@ function dirDispatcher(dispatcher, config, context, next) {
                             requestPath: [context.request.path, files[idx], item.isFile() ? '' : '/'].join('')
                         });
                     });
-                    _context.next = 12;
+                    _context.next = 11;
                     return context.render('cataLog', {
                         title: '查看列表',
                         fileList: fileList
                     });
 
-                case 12:
+                case 11:
                 case 'end':
                     return _context.stop();
             }
@@ -78,8 +76,7 @@ function syncDispatcher(dispatcher, config, context, next) {
         while (1) {
             switch (_context3.prev = _context3.next) {
                 case 0:
-                    filePath = dispatcher.path; // path.join( config.viewRoot, dispatcher.path );
-
+                    filePath = dispatcher.path;
                     dataPath = dispatcher.dataPath;
                     dataModel = {};
                     _context3.prev = 3;
@@ -101,7 +98,7 @@ function syncDispatcher(dispatcher, config, context, next) {
 
                 case 13:
                     output = config.renderUtil().parse(filePath.replace(config.viewRoot, ''), dataModel);
-                    errInfo = Buffer.alloc(0);
+                    errInfo = Buffer.from('<meta charset="utf-8"><pre>');
                     _context3.next = 17;
                     return new Promise(function (resolve, reject) {
                         output.stderr.on('data', function (chunk) {
@@ -110,11 +107,9 @@ function syncDispatcher(dispatcher, config, context, next) {
                         output.stderr.on('end', function () {
                             if (errInfo.length != 0) {
                                 _helper.util.warnLog(errInfo.toString('utf-8').red);
+                                context.type = 'text/html; charset=utf-8';
 
-                                context.type = 'text/plain; charset=utf-8';
-                                context.status = 500;
-
-                                context.body = errInfo;
+                                context.body = _helper.util.bufferConcat(errInfo, Buffer.from('</pre>'));
                             }
                             resolve();
                         });
@@ -139,10 +134,8 @@ function syncDispatcher(dispatcher, config, context, next) {
                                                 htmlBuf = _helper.util.bufferConcat(htmlBuf, chunk);
                                             });
                                             output.stdout.on('end', function () {
-
                                                 context.type = 'text/html; charset=utf-8';
                                                 context.body = htmlBuf;
-
                                                 resolve();
                                             });
                                         });

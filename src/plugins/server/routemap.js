@@ -25,29 +25,36 @@ export default ( config )=>{
     const [routers, method] = [config.routers, this.request.method];
     let requestPath = this.request.path;
 
-    const routeMap = {
-      '/'(){
-        this.dispatcher = util.dispatcherTypeCreator(
-          'dir',
-          realTplPath,
-          null
-        );
-      },
-      [`.${config.extension}`](){
-        this.dispatcher = util.dispatcherTypeCreator(
-          'sync',
-          tplPath,
-          commonSync
-        );
-      },
-      '.json'(){
-        this.dispatcher = util.dispatcherTypeCreator(
-          'async',
-          commonAsync,
-          commonAsync
-        );
+    const routeMap = [
+      {
+        test: '/',
+        handler(){
+          this.dispatcher = util.dispatcherTypeCreator(
+            'dir',
+            realTplPath,
+            null
+          );
+        }
+      }, {
+        test: `.${config.extension}`,
+        handler(){
+          this.dispatcher = util.dispatcherTypeCreator(
+            'sync',
+            tplPath,
+            commonSync
+          );
+        }
+      }, {
+        test: '.json',
+        handler(){
+          this.dispatcher = util.dispatcherTypeCreator(
+            'async',
+            commonAsync,
+            commonAsync
+          );
+        }
       }
-    };
+    ];
 
     if( requestPath =='/' ){
       requestPath = '/index.html';
@@ -66,17 +73,13 @@ export default ( config )=>{
      */
     if( (this.request.query.mode == 1) && this.request.path.endsWith('/') ) {
       util.log('文件夹类型');
-      routeMap['/'].call(this);
+      routeMap[0].handler.call(this);
       return yield next;
     }
 
     /**
 
     */
-    console.log(tplPath);
-    console.log(commonSync);
-    console.log(commonAsync);
-
     for (let i = 0; i < routers.length; i++) {
       const router = routers[i];
 
@@ -106,8 +109,6 @@ export default ( config )=>{
             );
           }
           util.log(`请求url:${router.url}`);
-
-          console.log(this.dispatcher);
           return yield next;
       }
     }
@@ -115,10 +116,9 @@ export default ( config )=>{
     /**
      * ② 未拦截到 router
      */
-
-    for( let route of Object.keys(routeMap) ) {
-      if(requestPath.endsWith(route)){
-        routeMap[route].call(this);
+    for( let route of routeMap) {
+      if( requestPath.endsWith(route.test) ){
+        route.handler.call(this);
         return yield next;
       }
     }

@@ -12,8 +12,6 @@ var _path2 = _interopRequireDefault(_path);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 /**
  * 全局中间件,会将具体的页面转换成需要的资源
  * 1.同步
@@ -30,8 +28,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 exports.default = function (config) {
 
   return regeneratorRuntime.mark(function _callee(next) {
-    var _routeMap;
-
     var routers, method, requestPath, routeMap, realTplPath, tplPath, commonSync, commonAsync, i, router, fileWithoutExt, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, route;
 
     return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -46,15 +42,22 @@ exports.default = function (config) {
             routers = config.routers;
             method = this.request.method;
             requestPath = this.request.path;
-            routeMap = (_routeMap = {
-              '/': function _() {
+            routeMap = [{
+              test: '/',
+              handler: function handler() {
                 this.dispatcher = _helper.util.dispatcherTypeCreator('dir', realTplPath, null);
               }
-            }, _defineProperty(_routeMap, '.' + config.extension, function undefined() {
-              this.dispatcher = _helper.util.dispatcherTypeCreator('sync', tplPath, commonSync);
-            }), _defineProperty(_routeMap, '.json', function json() {
-              this.dispatcher = _helper.util.dispatcherTypeCreator('async', commonAsync, commonAsync);
-            }), _routeMap);
+            }, {
+              test: '.' + config.extension,
+              handler: function handler() {
+                this.dispatcher = _helper.util.dispatcherTypeCreator('sync', tplPath, commonSync);
+              }
+            }, {
+              test: '.json',
+              handler: function handler() {
+                this.dispatcher = _helper.util.dispatcherTypeCreator('async', commonAsync, commonAsync);
+              }
+            }];
 
 
             if (requestPath == '/') {
@@ -80,7 +83,7 @@ exports.default = function (config) {
             }
 
             _helper.util.log('文件夹类型');
-            routeMap['/'].call(this);
+            routeMap[0].handler.call(this);
             _context.next = 14;
             return next;
 
@@ -88,25 +91,18 @@ exports.default = function (config) {
             return _context.abrupt('return', _context.sent);
 
           case 15:
-
-            /**
-              */
-            console.log(tplPath);
-            console.log(commonSync);
-            console.log(commonAsync);
-
             i = 0;
 
-          case 19:
+          case 16:
             if (!(i < routers.length)) {
-              _context.next = 32;
+              _context.next = 28;
               break;
             }
 
             router = routers[i];
 
             if (!(router.method.toUpperCase() == method.toUpperCase() && router.url == this.request.path)) {
-              _context.next = 29;
+              _context.next = 25;
               break;
             }
 
@@ -127,95 +123,92 @@ exports.default = function (config) {
               this.dispatcher = _helper.util.dispatcherTypeCreator('async', commonAsync, router.asyncData || commonAsync);
             }
             _helper.util.log('请求url:' + router.url);
-
-            console.log(this.dispatcher);
-            _context.next = 28;
+            _context.next = 24;
             return next;
 
-          case 28:
+          case 24:
             return _context.abrupt('return', _context.sent);
 
-          case 29:
+          case 25:
             i++;
-            _context.next = 19;
+            _context.next = 16;
             break;
 
-          case 32:
+          case 28:
 
             /**
              * ② 未拦截到 router
              */
-
             _iteratorNormalCompletion = true;
             _didIteratorError = false;
             _iteratorError = undefined;
-            _context.prev = 35;
-            _iterator = Object.keys(routeMap)[Symbol.iterator]();
+            _context.prev = 31;
+            _iterator = routeMap[Symbol.iterator]();
 
-          case 37:
+          case 33:
             if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-              _context.next = 47;
+              _context.next = 43;
               break;
             }
 
             route = _step.value;
 
-            if (!requestPath.endsWith(route)) {
-              _context.next = 44;
+            if (!requestPath.endsWith(route.test)) {
+              _context.next = 40;
               break;
             }
 
-            routeMap[route].call(this);
-            _context.next = 43;
+            route.handler.call(this);
+            _context.next = 39;
             return next;
 
-          case 43:
+          case 39:
             return _context.abrupt('return', _context.sent);
 
-          case 44:
+          case 40:
             _iteratorNormalCompletion = true;
-            _context.next = 37;
+            _context.next = 33;
             break;
 
-          case 47:
-            _context.next = 53;
+          case 43:
+            _context.next = 49;
             break;
 
-          case 49:
-            _context.prev = 49;
-            _context.t0 = _context['catch'](35);
+          case 45:
+            _context.prev = 45;
+            _context.t0 = _context['catch'](31);
             _didIteratorError = true;
             _iteratorError = _context.t0;
 
-          case 53:
-            _context.prev = 53;
-            _context.prev = 54;
+          case 49:
+            _context.prev = 49;
+            _context.prev = 50;
 
             if (!_iteratorNormalCompletion && _iterator.return) {
               _iterator.return();
             }
 
-          case 56:
-            _context.prev = 56;
+          case 52:
+            _context.prev = 52;
 
             if (!_didIteratorError) {
-              _context.next = 59;
+              _context.next = 55;
               break;
             }
 
             throw _iteratorError;
 
-          case 59:
-            return _context.finish(56);
+          case 55:
+            return _context.finish(52);
 
-          case 60:
-            return _context.finish(53);
+          case 56:
+            return _context.finish(49);
 
-          case 61:
+          case 57:
           case 'end':
             return _context.stop();
         }
       }
-    }, _callee, this, [[35, 49, 53, 61], [54,, 56, 60]]);
+    }, _callee, this, [[31, 45, 49, 57], [50,, 52, 56]]);
   });
 };

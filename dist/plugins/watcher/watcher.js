@@ -46,6 +46,7 @@ var Watcher = function () {
             ignored: ['**/.git/**', '**/node_modules/**', '**/.gitignore'],
             persistent: true
         });
+        this.watcher.setMaxListeners(0);
     }
 
     _createClass(Watcher, [{

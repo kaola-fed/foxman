@@ -137,14 +137,11 @@ function jsonResover(url) {
 			return;
 		}
 
-		try {
-			readFile(url).then(function (data) {
-				resolve(JSON.parse(data));
-			});
-		} catch (e) {
-			util.debugLog(e);
+		readFile(url).then(function (data) {
+			resolve(JSON.parse(data));
+		}, function () {
 			resolve({});
-		}
+		});
 	});
 }
 

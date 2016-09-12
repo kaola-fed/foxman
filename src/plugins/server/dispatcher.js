@@ -11,7 +11,6 @@ import { util, fileUtil } from '../../helper';
 export function* dirDispatcher( dispatcher, config, context, next) {
 
     const viewPath = dispatcher.path;
-    console.log(viewPath);
     const files = yield fileUtil.getDirInfo( viewPath );
     const promises = files.map( ( file ) => fileUtil.getFileStat( path.resolve( viewPath, file ) ) );
     const result = yield Promise.all(promises);
@@ -31,7 +30,8 @@ export function* dirDispatcher( dispatcher, config, context, next) {
 }
 
 export function* syncDispatcher(dispatcher, config, context, next) {
-    const filePath = dispatcher.path; // path.join( config.viewRoot, dispatcher.path );
+
+    const filePath = dispatcher.path;
     const dataPath = dispatcher.dataPath;
     let dataModel = {};
     try {
@@ -43,7 +43,7 @@ export function* syncDispatcher(dispatcher, config, context, next) {
 
     const output = config.renderUtil().parse(filePath.replace(config.viewRoot, ''), dataModel);
 
-    let errInfo = Buffer.alloc(0);
+    let errInfo = Buffer.from('<meta charset="utf-8"><pre>');
     yield new Promise(( resolve, reject )=>{
       output.stderr.on('data', (chunk)=> {
           errInfo = util.bufferConcat(errInfo, Buffer.from(chunk))
@@ -51,11 +51,9 @@ export function* syncDispatcher(dispatcher, config, context, next) {
       output.stderr.on('end', ()=> {
           if( errInfo.length != 0 ){
             util.warnLog(errInfo.toString('utf-8').red);
+            context.type = 'text/html; charset=utf-8';
 
-            context.type = 'text/plain; charset=utf-8';
-            context.status = 500;
-
-            context.body = errInfo ;
+            context.body = util.bufferConcat(errInfo, Buffer.from('</pre>')) ;
           }
           resolve();
       });
@@ -68,10 +66,8 @@ export function* syncDispatcher(dispatcher, config, context, next) {
           htmlBuf = util.bufferConcat(htmlBuf, chunk);
         });
         output.stdout.on('end',()=>{
-
           context.type = 'text/html; charset=utf-8';
           context.body = htmlBuf;
-
           resolve();
         });
       });

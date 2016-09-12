@@ -83,7 +83,7 @@ var Server = function () {
             }
 
             this.renderUtil = this.renderUtil || _render2.default;
-            this.extension = this.extension || 'tpl';
+            this.extension = this.extension || 'ftl';
 
             this.renderUtil({ viewFolder: this.viewRoot });
 

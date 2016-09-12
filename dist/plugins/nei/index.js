@@ -180,7 +180,6 @@ var NeiPlugin = function () {
       var _this2 = this;
 
       var promises = routes.map(function (route) {
-
         return new Promise(function () {
           for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
             args[_key2] = arguments[_key2];

@@ -1,5 +1,4 @@
 #!/usr/bin/env node
- // Run as bin
 'use strict';
 var anymatch = require('anymatch');
 var path = require('path');
@@ -32,8 +31,7 @@ var configPath = path.join(process.cwd(), argv.config);
 try {
     config = require(configPath);
 } catch (err) {
-    console.log(err)
-        // console.log(`Error:\n ${err}`);
+    console.log(`Error:\n ${err}`);
     process.exit(1);
 }
 

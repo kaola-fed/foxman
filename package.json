@@ -4,7 +4,8 @@
   "description": "flexiable mock server for nodejs",
   "main": "app.js",
   "bin": {
-    "foxman": "./bin/foxman"
+    "foxman": "./bin/foxman",
+    "fm": "./bin/foxman"
   },
   "directories": {
     "test": "test"

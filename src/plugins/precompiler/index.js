@@ -31,14 +31,18 @@ class PreCompilerPlugin  {
 
         let files = [];
         patterns.forEach((pattern) => {
-            files = files.concat( globule.find( path.resolve(root, pattern ) ) );
+            files = files.concat( globule.find( pattern ).map(( filename )=>{
+              util.log(filename);
+              return {
+                pattern: path.resolve(root, pattern.replace(/\*+.*$/ig,'')),
+                filename
+              }
+            }));
         });
-        files.forEach((filename) => {
-            let watchList = [];
+        files.forEach((file) => {
+            let [watchList, filename] = [ [], file.filename ];
             let compilerInstance = new PreCompiler( {
-                root,
-                filename,
-                handler
+                root, file, handler
             } );
             compilerInstance.run();
 
@@ -50,7 +54,7 @@ class PreCompilerPlugin  {
                 });
                 if ( !news.length ) return;
                 this.addWatch(watchList, news, compilerInstance);
-                util.log(`${filename} \n      ${news.join('\n      ')}`);
+                util.log(filename);
             });
         });
     }
@@ -63,7 +67,7 @@ class PreCompilerPlugin  {
             watchList.push(news);
         }
         this.app.watcher.onChange(news, (arg0, arg1) => {
-            util.log( `changed: ${compiler.filename}` );
+            util.log( `changed: ${compiler.file.filename}` );
             compiler.update();
         });
     }

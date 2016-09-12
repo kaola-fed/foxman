@@ -17,6 +17,7 @@ class Watcher {
             ignored: ['**/.git/**', '**/node_modules/**', '**/.gitignore'],
             persistent: true
         });
+        this.watcher.setMaxListeners(0);
     }
     removeWatch(files) {
         this.watcher.unwatch(files);

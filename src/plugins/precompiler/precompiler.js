@@ -1,7 +1,7 @@
 /**
  * 预处理器 api，用于
  */
-import {resolve} from 'path';
+import {resolve, relative} from 'path';
 import {
   fileUtil,
   util
@@ -21,14 +21,15 @@ class PreCompiler extends EventEmitter{
     args[0].on('returnDependencys', (event) => {
       return this.emit('updateWatch', event);
     });
-
     return this;
   }
   dest(arg1){
-    return vinylFs.dest.call(vinylFs, resolve(this.root, arg1));
+    let target = resolve( this.root, arg1 );
+    let outputdir = relative( this.file.pattern, resolve(this.file.filename, '..'));
+    return vinylFs.dest.call(vinylFs, resolve( target, outputdir));
   }
   update(){
-    this.source = vinylFs.src(this.filename);
+    this.source = vinylFs.src(this.file.filename);
     this.handler( this.dest.bind(this) ).forEach( (item) => { this.pipe(item); });
   }
   run(){

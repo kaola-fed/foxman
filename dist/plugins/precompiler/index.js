@@ -62,14 +62,20 @@ var PreCompilerPlugin = function () {
 
             var files = [];
             patterns.forEach(function (pattern) {
-                files = files.concat(_globule2.default.find(_path2.default.resolve(root, pattern)));
+                files = files.concat(_globule2.default.find(pattern).map(function (filename) {
+                    _helper.util.log(filename);
+                    return {
+                        pattern: _path2.default.resolve(root, pattern.replace(/\*+.*$/ig, '')),
+                        filename: filename
+                    };
+                }));
             });
-            files.forEach(function (filename) {
+            files.forEach(function (file) {
                 var watchList = [];
+                var filename = file.filename;
+
                 var compilerInstance = new _precompiler2.default({
-                    root: root,
-                    filename: filename,
-                    handler: handler
+                    root: root, file: file, handler: handler
                 });
                 compilerInstance.run();
 
@@ -81,7 +87,7 @@ var PreCompilerPlugin = function () {
                     });
                     if (!news.length) return;
                     _this2.addWatch(watchList, news, compilerInstance);
-                    _helper.util.log(filename + ' \n      ' + news.join('\n      '));
+                    _helper.util.log(filename);
                 });
             });
         }
@@ -96,7 +102,7 @@ var PreCompilerPlugin = function () {
                 watchList.push(news);
             }
             this.app.watcher.onChange(news, function (arg0, arg1) {
-                _helper.util.log('changed: ' + compiler.filename);
+                _helper.util.log('changed: ' + compiler.file.filename);
                 compiler.update();
             });
         }
