@@ -17,7 +17,7 @@ let owner;
 class Owner {
     constructor(config) {
         const app = Application();
-        const root = config.root;
+        const root = app.root = config.root;
         /**
          * __setConfig
          */

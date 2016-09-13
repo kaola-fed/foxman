@@ -13,6 +13,8 @@ class Server {
         this.app = Koa();
         Object.assign( this, config );
 
+        this.formatArgs();
+
         if( !this.syncDataMatch ){
           this.syncDataMatch = ( url ) => path.resolve( config.syncData ,url );
         }
@@ -25,6 +27,19 @@ class Server {
         this.setStaticHandler();
         this.delayInit();
     }
+
+    formatArgs(){
+      ['syncData', 'viewRoot', 'asyncData'].forEach( ( item ) => {
+          this[item] = path.resolve(this.root, this[item]);
+      });
+
+      this.static.forEach( (item, idx )=>{
+        this.static[idx] = path.resolve(this.root, item);
+      });
+
+      console.log(this);
+    }
+
     delayInit(){
       const app = this.app;
       app.use( routeMap( this ) );

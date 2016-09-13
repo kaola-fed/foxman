@@ -42,22 +42,32 @@ var NeiPlugin = function () {
   }
 
   _createClass(NeiPlugin, [{
-    key: 'init',
-    value: function init() {
+    key: 'formatArgs',
+    value: function formatArgs() {
       var _this = this;
 
+      ['config', 'mockTpl', 'mockApi'].forEach(function (item) {
+        _this[item] = _path2.default.resolve(_this.app.root, _this[item]);
+      });
+    }
+  }, {
+    key: 'init',
+    value: function init() {
+      var _this2 = this;
+
+      this.formatArgs();
       var recieveUpdate = function recieveUpdate(config) {
         // 更新
         try {
-          delete require.cache[require.resolve(_this.config)];
+          delete require.cache[require.resolve(_this2.config)];
         } catch (e) {}
 
-        var rules = require(_this.config).routes;
-        var routes = _this.formatRoutes(rules);
-        return _this.updateLocalFiles(routes);
+        var rules = require(_this2.config).routes;
+        var routes = _this2.formatRoutes(rules);
+        return _this2.updateLocalFiles(routes);
       };
       var updateRoutes = function updateRoutes(routes) {
-        _this.updateRoutes(routes);
+        _this2.updateRoutes(routes);
       };
 
       var doUpdate = this.app.config.update;
@@ -177,7 +187,7 @@ var NeiPlugin = function () {
   }, {
     key: 'updateRoutes',
     value: function updateRoutes(routes) {
-      var _this2 = this;
+      var _this3 = this;
 
       var promises = routes.map(function (route) {
         return new Promise(function () {
@@ -191,7 +201,7 @@ var NeiPlugin = function () {
              */
             if (error || !stat.size) {
               // TODO url creater
-              var dataPath = _this2.genNeiApiUrl(route);
+              var dataPath = _this3.genNeiApiUrl(route);
               if (route.sync) {
                 route.syncData = dataPath;
               } else {
@@ -203,7 +213,7 @@ var NeiPlugin = function () {
         });
       });
       Promise.all(promises).then(function () {
-        var server = _this2.app.server;
+        var server = _this3.app.server;
         server.routers = routes.concat(server.routers);
       });
     }

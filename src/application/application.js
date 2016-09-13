@@ -18,7 +18,6 @@ export default class Application extends EventEmitter {
             app: this,
             name: plugin.constructor.name,
             id: this.uid(),
-            // addMiddleWare: this.addMiddleWare.bind(plugin)
         }) );
         util.debugLog(`plugin ${plugin.name || plugin.id} is loaded`);
     }

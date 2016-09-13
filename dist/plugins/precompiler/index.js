@@ -26,6 +26,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * 监听插件
+ test: Array<String> or String
+ exclude: Array<String> or String
+ handler: (dest) => [
+     Gulp插件,
+     dest(String)
+ ]
  */
 var PreCompilerPlugin = function () {
     function PreCompilerPlugin(options) {
@@ -37,6 +43,7 @@ var PreCompilerPlugin = function () {
     _createClass(PreCompilerPlugin, [{
         key: 'init',
         value: function init() {
+            this.watcher = this.app.watcher;
             this.mapCompiler(this.options.preCompilers);
         }
     }, {
@@ -45,34 +52,47 @@ var PreCompilerPlugin = function () {
             var _this = this;
 
             preCompilers.forEach(function (preCompiler) {
-                _this.prepare(_this.app.watcher, preCompiler);
+                _this.prepare(preCompiler);
             });
         }
     }, {
         key: 'prepare',
-        value: function prepare(watcher, preCompiler) {
+        value: function prepare(preCompiler) {
             var _this2 = this;
 
             var handler = preCompiler.handler;
             var root = this.options.root;
+
+            var excludes = preCompiler.exclude || [];
+            if (!Array.isArray(excludes)) excludes = [excludes];
+
+            var excludeReg = new RegExp('(' + excludes.join(")||(") + ')', 'ig');
+
             var patterns = preCompiler.test;
+
             if (!Array.isArray(patterns)) {
                 patterns = [patterns];
             };
 
             var files = [];
             patterns.forEach(function (pattern) {
-                files = files.concat(_globule2.default.find(pattern).map(function (filename) {
-                    _helper.util.log(filename);
+                files = files.concat(_globule2.default.find(_path2.default.resolve(root, pattern)).map(function (filename) {
+                    _helper.util.log('source file: ' + filename);
                     return {
                         pattern: _path2.default.resolve(root, pattern.replace(/\*+.*$/ig, '')),
                         filename: filename
                     };
                 }));
             });
+
             files.forEach(function (file) {
                 var watchList = [];
                 var filename = file.filename;
+
+
+                if (excludeReg.test('src/mcss/1.mcss')) {
+                    return false;
+                }
 
                 var compilerInstance = new _precompiler2.default({
                     root: root, file: file, handler: handler
@@ -87,7 +107,6 @@ var PreCompilerPlugin = function () {
                     });
                     if (!news.length) return;
                     _this2.addWatch(watchList, news, compilerInstance);
-                    _helper.util.log(filename);
                 });
             });
         }
@@ -101,7 +120,8 @@ var PreCompilerPlugin = function () {
             } else {
                 watchList.push(news);
             }
-            this.app.watcher.onChange(news, function (arg0, arg1) {
+
+            this.watcher.onChange(news, function (arg0, arg1) {
                 _helper.util.log('changed: ' + compiler.file.filename);
                 compiler.update();
             });

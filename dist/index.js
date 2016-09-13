@@ -42,7 +42,7 @@ var Owner = function Owner(config) {
         _classCallCheck(this, Owner);
 
         var app = (0, _index2.default)();
-        var root = config.root;
+        var root = app.root = config.root;
         /**
          * __setConfig
          */

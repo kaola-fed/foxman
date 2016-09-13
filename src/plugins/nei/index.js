@@ -12,8 +12,13 @@ class NeiPlugin  {
       this.options = options;
       Object.assign(this, options);
     }
-
+    formatArgs(){
+      ['config', 'mockTpl', 'mockApi'].forEach( ( item ) => {
+          this[item] = path.resolve(this.app.root, this[item]);
+      });
+    }
     init() {
+      this.formatArgs();
       const recieveUpdate = (config) => {
         // 更新
         try{

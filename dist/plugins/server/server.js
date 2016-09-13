@@ -51,6 +51,8 @@ var Server = function () {
         this.app = (0, _koa2.default)();
         Object.assign(this, config);
 
+        this.formatArgs();
+
         if (!this.syncDataMatch) {
             this.syncDataMatch = function (url) {
                 return _path2.default.resolve(config.syncData, url);
@@ -69,6 +71,21 @@ var Server = function () {
     }
 
     _createClass(Server, [{
+        key: 'formatArgs',
+        value: function formatArgs() {
+            var _this = this;
+
+            ['syncData', 'viewRoot', 'asyncData'].forEach(function (item) {
+                _this[item] = _path2.default.resolve(_this.root, _this[item]);
+            });
+
+            this.static.forEach(function (item, idx) {
+                _this.static[idx] = _path2.default.resolve(_this.root, item);
+            });
+
+            console.log(this);
+        }
+    }, {
         key: 'delayInit',
         value: function delayInit() {
             var app = this.app;
@@ -98,7 +115,7 @@ var Server = function () {
     }, {
         key: 'setStaticHandler',
         value: function setStaticHandler() {
-            var _this = this;
+            var _this2 = this;
 
             var rootdir = void 0;
             var dir = void 0;
@@ -109,7 +126,7 @@ var Server = function () {
                 if (!dir || !dir[0]) return;
                 rootdir = item.replace(/[^(\\\/)]*$/, '');
 
-                _this.app.use((0, _koaServe2.default)(dir[0], rootdir));
+                _this2.app.use((0, _koaServe2.default)(dir[0], rootdir));
             });
             this.app.use((0, _koaServe2.default)('resource', global.__rootdir));
         }
