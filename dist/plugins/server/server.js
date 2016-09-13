@@ -52,7 +52,6 @@ var Server = function () {
         Object.assign(this, config);
 
         this.formatArgs();
-
         if (!this.syncDataMatch) {
             this.syncDataMatch = function (url) {
                 return _path2.default.resolve(config.syncData, url);

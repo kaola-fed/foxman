@@ -1,15 +1,13 @@
 #!/usr/bin/env node
 'use strict';
-var anymatch = require('anymatch');
 var path = require('path');
-var fs = require('fs');
-var config;
+var config ;
 var argv = require('yargs')
     .option('config', {
-        alias: 'c',
-        demand: true,
-        default: 'foxman.config.js',
-        describe: 'Config file. Options read readme.md',
+        alias: 'c' ,
+        demand: true ,
+        default: 'foxman.config.js' ,
+        describe: 'Config file. Options read readme.md' ,
         boolean: 0
     })
     .option('update', {

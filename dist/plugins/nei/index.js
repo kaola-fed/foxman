@@ -42,58 +42,55 @@ var NeiPlugin = function () {
   }
 
   _createClass(NeiPlugin, [{
-    key: 'formatArgs',
-    value: function formatArgs() {
-      var _this = this;
-
-      ['config', 'mockTpl', 'mockApi'].forEach(function (item) {
-        _this[item] = _path2.default.resolve(_this.app.root, _this[item]);
-      });
-    }
-  }, {
     key: 'init',
     value: function init() {
-      var _this2 = this;
+      var _this = this;
 
       this.formatArgs();
-      var recieveUpdate = function recieveUpdate(config) {
-        // 更新
-        try {
-          delete require.cache[require.resolve(_this2.config)];
-        } catch (e) {}
-
-        var rules = require(_this2.config).routes;
-        var routes = _this2.formatRoutes(rules);
-        return _this2.updateLocalFiles(routes);
-      };
-      var updateRoutes = function updateRoutes(routes) {
-        _this2.updateRoutes(routes);
-      };
 
       var doUpdate = this.app.config.update;
-
-      var neiConfig = void 0,
-          routes = void 0;
-
       this.neiRoute = _path2.default.resolve(this.app.config.root, 'nei.route.js');
 
       try {
-        neiConfig = require(this.config);
+        require(this.config);
       } catch (e) {
         _helper.util.error('nei 配置文件不存在，请先配置项目的nei关联，并核对 config 中的 nei.config是否合法');
       }
 
       if (doUpdate) {
-        return _nei2.default.update().then(recieveUpdate).then(updateRoutes);
+        return this.async(function (resolve) {
+          _nei2.default.update().then(_this.recieveUpdate).then(function () {
+            _this.updateRoutes(_this.routes);
+          });
+        });
       }
 
       try {
-        routes = require(this.neiRoute);
+        this.routes = this.updateRoutes(require(this.config));
       } catch (e) {
         _helper.util.error('foxman 未找到格式化过的内 nei route，请先执行 foxman -u ');
       }
+    }
+  }, {
+    key: 'formatArgs',
+    value: function formatArgs() {
+      var _this2 = this;
 
-      return updateRoutes(routes);
+      ['config', 'mockTpl', 'mockApi'].forEach(function (item) {
+        _this2[item] = _path2.default.resolve(_this2.app.root, _this2[item]);
+      });
+    }
+  }, {
+    key: 'recieveUpdate',
+    value: function recieveUpdate(config) {
+      // 更新
+      try {
+        delete require.cache[require.resolve(this.config)];
+      } catch (e) {}
+
+      var rules = require(this.config).routes;
+      this.routes = this.formatRoutes(rules);
+      return this.updateLocalFiles(this.routes);
     }
   }, {
     key: 'formatRoutes',

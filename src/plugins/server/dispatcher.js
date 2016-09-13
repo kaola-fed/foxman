@@ -97,16 +97,12 @@ export default ( config )=>{
     let dispatcherMap = {
       'dir': dirDispatcher,
       'sync': syncDispatcher,
-      'async': asyncDispather
+      'async': asyncDispather,
     }
+
     let dispatcher;
     if( dispatcher = dispatcherMap[ this.dispatcher.type ] ){
       yield dispatcher( this.dispatcher, ...args );
     }
-    // for (let dispatcher of dispatcherMap) {
-    //     if (dispatcher.test()) {
-    //         return yield dispatcher.handler();
-    //     }
-    // }
   }
 }

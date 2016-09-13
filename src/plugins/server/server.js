@@ -14,7 +14,6 @@ class Server {
         Object.assign( this, config );
 
         this.formatArgs();
-
         if( !this.syncDataMatch ){
           this.syncDataMatch = ( url ) => path.resolve( config.syncData ,url );
         }

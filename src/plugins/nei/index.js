@@ -12,52 +12,50 @@ class NeiPlugin  {
       this.options = options;
       Object.assign(this, options);
     }
-    formatArgs(){
-      ['config', 'mockTpl', 'mockApi'].forEach( ( item ) => {
-          this[item] = path.resolve(this.app.root, this[item]);
-      });
-    }
+    
     init() {
       this.formatArgs();
-      const recieveUpdate = (config) => {
-        // 更新
-        try{
-          delete require.cache[require.resolve(this.config)];
-        }catch(e){}
-
-        const rules = require( this.config ).routes;
-        const routes = this.formatRoutes( rules );
-        return this.updateLocalFiles( routes );
-      }
-      const updateRoutes = (routes) => {
-        this.updateRoutes(routes);
-      }
 
       const doUpdate = this.app.config.update;
-
-      let neiConfig, routes;
-
       this.neiRoute = path.resolve( this.app.config.root, 'nei.route.js');
 
       try {
-        neiConfig = require( this.config );
+        require( this.config );
       } catch ( e ) {
         util.error('nei 配置文件不存在，请先配置项目的nei关联，并核对 config 中的 nei.config是否合法');
       }
 
       if( doUpdate ) {
-        return neiTools.update().then(recieveUpdate).then(updateRoutes);
+        return this.async(( resolve )=>{
+            neiTools.update().then( this.recieveUpdate ).then( () => {
+              this.updateRoutes( this.routes );
+            });
+        });
       }
 
       try {
-        routes = require(this.neiRoute);
+        this.routes = this.updateRoutes( require( this.config ) );
       } catch ( e ) {
         util.error('foxman 未找到格式化过的内 nei route，请先执行 foxman -u ');
       }
-
-      return updateRoutes(routes);
     }
 
+    formatArgs(){
+      ['config', 'mockTpl', 'mockApi'].forEach( ( item ) => {
+          this[item] = path.resolve(this.app.root, this[item]);
+      });
+    }
+
+    recieveUpdate(config) {
+      // 更新
+      try{
+        delete require.cache[require.resolve(this.config)];
+      }catch(e){}
+
+      const rules = require( this.config ).routes;
+      this.routes = this.formatRoutes( rules );
+      return this.updateLocalFiles( this.routes );
+    }
     formatRoutes( rules ){
       let server = this.app.server;
       let routes = [];

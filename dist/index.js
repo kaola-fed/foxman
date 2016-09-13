@@ -26,6 +26,10 @@ var _nei = require('./plugins/nei');
 
 var _nei2 = _interopRequireDefault(_nei);
 
+var _asynctest = require('./plugins/asynctest');
+
+var _asynctest2 = _interopRequireDefault(_asynctest);
+
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
@@ -39,51 +43,47 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var owner = void 0;
 
 var Owner = function Owner(config) {
-        _classCallCheck(this, Owner);
+    _classCallCheck(this, Owner);
 
-        var app = (0, _index2.default)();
-        var root = app.root = config.root;
-        /**
-         * __setConfig
-         */
-        app.setConfig(config);
+    var app = (0, _index2.default)();
+    var root = app.root = config.root;
+    /**
+     * __setConfig
+     */
+    app.setConfig(config);
 
-        /**
-         * 内置组件
-         */
-        app.use(new _watcher2.default(Object.assign(config.watch, {
-                root: root
-        })));
+    /**
+     * 内置组件
+     */
+    app.use(new _watcher2.default(Object.assign(config.watch, {
+        root: root
+    })));
 
-        app.use(new _server2.default(Object.assign(config.server, {
-                root: root
-        })));
+    app.use(new _server2.default(Object.assign(config.server, {
+        root: root
+    })));
 
-        app.use(new _precompiler2.default({
-                preCompilers: config.preCompilers,
-                root: root
-        })); /** main **/
+    app.use(new _precompiler2.default({
+        preCompilers: config.preCompilers,
+        root: root
+    }));
 
-        app.use(new _reloader2.default({})); /** reloader **/
+    app.use(new _reloader2.default({}));
 
-        if (!!config.nei) app.use(new _nei2.default(config.nei));
+    if (!!config.nei) app.use(new _nei2.default(config.nei));
 
-        /**
-         * __load ex Plugins
-         */
-        app.use(config.plugins);
+    /**
+     * __load ex Plugins
+     */
+    app.use(config.plugins);
 
-        /**
-         * __ready
-         */
-        app.run();
-
-        /** start server **/
-
-        /** start server **/
+    /**
+     * __ready
+     */
+    app.run();
 };
 
 module.exports = function (config) {
-        if (!owner) owner = new Owner(config);
-        return owner;
+    if (!owner) owner = new Owner(config);
+    return owner;
 };

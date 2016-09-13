@@ -16,7 +16,7 @@ import path from 'path';
  */
 export default ( config )=>{
 
-  return function *( next ) {
+  return function * ( next ) {
 
     /**
      * ① 拦截 router
@@ -25,8 +25,7 @@ export default ( config )=>{
     const [routers, method] = [config.routers, this.request.method];
     let requestPath = this.request.path;
 
-    const routeMap = [
-      {
+    const routeMap = [{
         test: '/',
         handler(){
           this.dispatcher = util.dispatcherTypeCreator(

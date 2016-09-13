@@ -52,12 +52,10 @@ var Reloader = function (_EventEmitter) {
             var reloadResources = [_path2.default.resolve(server.viewRoot, '**', '*.' + server.extension), _path2.default.resolve(server.syncData, '**', '*'), _path2.default.resolve(server.asyncData, '**', '*')];
 
             server.static.forEach(function (item) {
-                reloadResources.push(_path2.default.resolve(item, '**', '*.css'));
-                reloadResources.push(_path2.default.resolve(item, '**', '*.js'));
+                reloadResources.push(_path2.default.resolve(item, '**', '*'));
             });
 
             this.watcher.onChange(reloadResources, function (arg0, arg1) {
-                // util.log(`changed: ${arg0}`)
                 _this2.reload(arg0);
             });
         }

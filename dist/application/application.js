@@ -41,20 +41,128 @@ var Application = function (_EventEmitter) {
     }, {
         key: 'use',
         value: function use(plugin) {
+            var _this2 = this;
+
             if (Array.isArray(plugin)) return plugin.forEach(this.use.bind(this));
             this.plugins.push(Object.assign(plugin, {
                 app: this,
                 name: plugin.constructor.name,
-                id: this.uid()
+                id: this.uid(),
+                async: function async() {
+                    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                        args[_key] = arguments[_key];
+                    }
+
+                    return _this2.async.apply(plugin, args);
+                }
             }));
             _helper.util.debugLog('plugin ' + (plugin.name || plugin.id) + ' is loaded');
         }
     }, {
+        key: 'async',
+        value: function async(fn) {
+            var pending = new Promise(function (resolve) {
+                return fn(resolve);
+            });
+
+            if (this.pendings) {
+                return this.pendings.push(pending);
+            }
+
+            this.pendings = [pending];
+        }
+    }, {
+        key: 'excute',
+        value: function excute() {
+            return regeneratorRuntime.mark(function _callee() {
+                var crt = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+                var plugins, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, plugin;
+
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                plugins = this.plugins;
+                                _iteratorNormalCompletion = true;
+                                _didIteratorError = false;
+                                _iteratorError = undefined;
+                                _context.prev = 4;
+                                _iterator = plugins[Symbol.iterator]();
+
+                            case 6:
+                                if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
+                                    _context.next = 15;
+                                    break;
+                                }
+
+                                plugin = _step.value;
+
+                                plugin.init && plugin.init();
+
+                                if (!plugin.pendings) {
+                                    _context.next = 12;
+                                    break;
+                                }
+
+                                _context.next = 12;
+                                return Promise.all(plugin.pendings);
+
+                            case 12:
+                                _iteratorNormalCompletion = true;
+                                _context.next = 6;
+                                break;
+
+                            case 15:
+                                _context.next = 21;
+                                break;
+
+                            case 17:
+                                _context.prev = 17;
+                                _context.t0 = _context['catch'](4);
+                                _didIteratorError = true;
+                                _iteratorError = _context.t0;
+
+                            case 21:
+                                _context.prev = 21;
+                                _context.prev = 22;
+
+                                if (!_iteratorNormalCompletion && _iterator.return) {
+                                    _iterator.return();
+                                }
+
+                            case 24:
+                                _context.prev = 24;
+
+                                if (!_didIteratorError) {
+                                    _context.next = 27;
+                                    break;
+                                }
+
+                                throw _iteratorError;
+
+                            case 27:
+                                return _context.finish(24);
+
+                            case 28:
+                                return _context.finish(21);
+
+                            case 29:
+                            case 'end':
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, this, [[4, 17, 21, 29], [22,, 24, 28]]);
+            });
+        }
+    }, {
         key: 'run',
         value: function run() {
-            this.plugins.forEach(function (plugin) {
-                plugin.init && plugin.init();
-            });
+            var pipeline = this.excute().call(this);
+            var final = {};
+            while (!final.done) {
+                final = pipeline.next();
+            }
         }
     }]);
 

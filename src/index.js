@@ -6,6 +6,7 @@ import WatcherPlugin from './plugins/watcher/';
 import PreCompilerPlugin from './plugins/precompiler/';
 import ReloadPlugin from './plugins/reloader';
 import NeiPlugin from './plugins/nei';
+import AsyncTest from './plugins/asynctest';
 
 import path from 'path';
 import {
@@ -23,6 +24,8 @@ class Owner {
          */
         app.setConfig(config);
 
+
+
         /**
          * 内置组件
          */
@@ -37,13 +40,14 @@ class Owner {
         app.use( new PreCompilerPlugin({
             preCompilers: config.preCompilers,
             root
-        })); /** main **/
+        }));
 
-        app.use( new ReloadPlugin({})); /** reloader **/
+        app.use( new ReloadPlugin({}));
+
 
         if( !!config.nei )
           app.use( new NeiPlugin(config.nei) );
-
+          
         /**
          * __load ex Plugins
          */
@@ -54,10 +58,6 @@ class Owner {
          */
         app.run();
 
-        /** start server **/
-
-
-        /** start server **/
     }
 }
 

@@ -13,17 +13,17 @@ class Reloader extends EventEmitter {
   }
   bindChange(){
     let [server,watcher] = [this.server, this.watcher];
-    let reloadResources = [path.resolve(server.viewRoot,'**','*.' + server.extension),
-                      path.resolve(server.syncData,'**','*'),
-                      path.resolve(server.asyncData,'**','*')];
+    let reloadResources = [
+      path.resolve(server.viewRoot, '**', '*.' + server.extension),
+      path.resolve(server.syncData, '**', '*'),
+      path.resolve(server.asyncData, '**', '*')
+    ];
 
     server.static.forEach( item => {
-      reloadResources.push(path.resolve(item, '**', '*.css'));
-      reloadResources.push(path.resolve(item, '**', '*.js'));
+      reloadResources.push(path.resolve(item, '**', '*'));
     });
 
     this.watcher.onChange( reloadResources, ( arg0, arg1  ) => {
-      // util.log(`changed: ${arg0}`)
       this.reload( arg0 );
     });
   }

@@ -1,14 +1,14 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+		value: true
 });
 
 exports.default = function () {
-    if (!app) {
-        app = new _application2.default();
-    }
-    return app;
+		if (!app) {
+				app = new _application2.default();
+		}
+		return app;
 };
 
 var _application = require('./application');
