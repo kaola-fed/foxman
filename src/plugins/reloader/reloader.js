@@ -7,7 +7,6 @@ class Reloader extends EventEmitter {
   constructor(options) {
     super();
     Object.assign(this, options);
-
     this.bindChange();
     this.buildWebSocket();
   }
@@ -20,9 +19,9 @@ class Reloader extends EventEmitter {
     ];
 
     server.static.forEach( item => {
-      reloadResources.push(path.resolve(item, '**', '*'));
+      reloadResources.push(path.resolve(item, '**', '*.css'));
+      reloadResources.push(path.resolve(item, '**', '*.js'));
     });
-
     this.watcher.onChange( reloadResources, ( arg0, arg1  ) => {
       this.reload( arg0 );
     });

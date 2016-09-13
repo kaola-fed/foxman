@@ -53,11 +53,10 @@ class PreCompilerPlugin  {
               }
             }));
         });
-
         files.forEach((file) => {
             let [watchList, filename] = [ [], file.filename ];
 
-            if( excludeReg.test( 'src/mcss/1.mcss' ) ) {
+            if( excludes.length>0 && excludeReg.test( filename ) ) {
               return false;
             }
 

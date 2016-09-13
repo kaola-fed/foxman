@@ -35,7 +35,6 @@ var Reloader = function (_EventEmitter) {
         var _this = _possibleConstructorReturn(this, (Reloader.__proto__ || Object.getPrototypeOf(Reloader)).call(this));
 
         Object.assign(_this, options);
-
         _this.bindChange();
         _this.buildWebSocket();
         return _this;
@@ -52,9 +51,9 @@ var Reloader = function (_EventEmitter) {
             var reloadResources = [_path2.default.resolve(server.viewRoot, '**', '*.' + server.extension), _path2.default.resolve(server.syncData, '**', '*'), _path2.default.resolve(server.asyncData, '**', '*')];
 
             server.static.forEach(function (item) {
-                reloadResources.push(_path2.default.resolve(item, '**', '*'));
+                reloadResources.push(_path2.default.resolve(item, '**', '*.css'));
+                reloadResources.push(_path2.default.resolve(item, '**', '*.js'));
             });
-
             this.watcher.onChange(reloadResources, function (arg0, arg1) {
                 _this2.reload(arg0);
             });

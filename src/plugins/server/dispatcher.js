@@ -37,10 +37,11 @@ export function* syncDispatcher(dispatcher, config, next) {
 
     if( !dataModel ) {
       this.type = 500;
-      return yield this.render('e', { title: '出错了', e:{
+      yield this.render('e', { title: '出错了', e:{
         code: 500,
         msg: '请求代理服务器异常'
       }});
+      return yield next;
     }
 
     const output = config.renderUtil().parse( path.relative( config.viewRoot, filePath ), dataModel );
@@ -77,6 +78,7 @@ export function* syncDispatcher(dispatcher, config, next) {
 
     this.type = 'text/html; charset=utf-8';
     this.body = html.join('');
+    return yield next;
 }
 
 export function* asyncDispather( dispatcher, config, next) {

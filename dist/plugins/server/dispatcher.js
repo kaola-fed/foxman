@@ -85,7 +85,7 @@ function syncDispatcher(dispatcher, config, next) {
                     dataModel = _context2.sent;
 
                     if (dataModel) {
-                        _context2.next = 10;
+                        _context2.next = 12;
                         break;
                     }
 
@@ -97,14 +97,18 @@ function syncDispatcher(dispatcher, config, next) {
                         } });
 
                 case 9:
+                    _context2.next = 11;
+                    return next;
+
+                case 11:
                     return _context2.abrupt('return', _context2.sent);
 
-                case 10:
+                case 12:
                     output = config.renderUtil().parse(_path2.default.relative(config.viewRoot, filePath), dataModel);
                     stderr = output.stderr;
                     stdout = output.stdout;
                     errInfo = [];
-                    _context2.next = 16;
+                    _context2.next = 18;
                     return new Promise(function (resolve, reject) {
                         stderr.on('data', function (chunk) {
                             errInfo.push(chunk);
@@ -114,30 +118,30 @@ function syncDispatcher(dispatcher, config, next) {
                         });
                     });
 
-                case 16:
+                case 18:
                     e = _context2.sent;
 
                     if (!e) {
-                        _context2.next = 23;
+                        _context2.next = 25;
                         break;
                     }
 
-                    _context2.next = 20;
+                    _context2.next = 22;
                     return this.render('e', { title: '出错了', e: {
                             code: 500,
                             msg: e
                         } });
 
-                case 20:
-                    _context2.next = 22;
+                case 22:
+                    _context2.next = 24;
                     return next;
 
-                case 22:
+                case 24:
                     return _context2.abrupt('return', _context2.sent);
 
-                case 23:
+                case 25:
                     html = [];
-                    _context2.next = 26;
+                    _context2.next = 28;
                     return new Promise(function (resolve, reject) {
                         stdout.on('data', function (chunk) {
                             html.push(chunk);
@@ -147,12 +151,17 @@ function syncDispatcher(dispatcher, config, next) {
                         });
                     });
 
-                case 26:
+                case 28:
 
                     this.type = 'text/html; charset=utf-8';
                     this.body = html.join('');
+                    _context2.next = 32;
+                    return next;
 
-                case 28:
+                case 32:
+                    return _context2.abrupt('return', _context2.sent);
+
+                case 33:
                 case 'end':
                     return _context2.stop();
             }

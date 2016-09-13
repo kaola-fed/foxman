@@ -84,13 +84,12 @@ var PreCompilerPlugin = function () {
                     };
                 }));
             });
-
             files.forEach(function (file) {
                 var watchList = [];
                 var filename = file.filename;
 
 
-                if (excludeReg.test('src/mcss/1.mcss')) {
+                if (excludes.length > 0 && excludeReg.test(filename)) {
                     return false;
                 }
 
