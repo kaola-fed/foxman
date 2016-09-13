@@ -1,20 +1,22 @@
 'use strict';
 const path = require('path');
-
 const mcss = require('foxman-mcss');
 const autoprefix = require('gulp-autoprefixer');
-
 const routers = require('./route');
-
 const root = path.resolve(__dirname, 'src', 'main', 'webapp');
 
 module.exports = {
     root,
     plugins: [
     ],
+    /**nei:{
+      config:"",
+      mockTpl:"",
+      mockApi:""
+    }**/
     preCompilers: [{
         test: ['src/mcss/**/*.mcss'],
-        exclude: ['1.mcss','2.mcss'],
+        /** exclude: ['src\/mcss\/_config.mcss],**/
         handler: (dest) => [
             mcss({
                 "include": [ path.resolve(root,"src/javascript/kaola-fed-lib/components/h5"),
@@ -32,7 +34,7 @@ module.exports = {
     watch: {},
     tplConfig: {
       extension: 'ftl',
-      renderUtil: null /**  tpl parser, default is ftl render **/
+      /** renderUtil: null **/
     },
     server: {
       routers,

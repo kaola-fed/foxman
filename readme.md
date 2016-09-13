@@ -22,76 +22,58 @@ $ npm install foxman -g
 ```js
 'use strict';
 const path = require('path');
-
-const mcss = require('../../foxman-mcss');
+const mcss = require('foxman-mcss');
 const autoprefix = require('gulp-autoprefixer');
-
-const reloadPlugin = require('./plugin.reload');
-
+const routers = require('./route');
 const root = path.resolve(__dirname, 'src', 'main', 'webapp');
-
-/**
- * a route table to query tpl and model
- * @type {Array}
- */
-const router = [
-  {
-    method: 'GET', url: '/index.html', sync: false, filePath: 'index.ftl',
-    method: 'GET', url: '/index2.html', sync: false, filePath: 'index2.ftl'
-  }
-]
 
 module.exports = {
     root,
     plugins: [
-        new reloadPlugin({
-            name: 'xujunyu'
-        })
     ],
+    /**nei:{
+      config:"",
+      mockTpl:"",
+      mockApi:""
+    }**/
     preCompilers: [{
-        /*  [1] relative to root
-         ** [2] abs path is started with /
-         */
-        test: 'src/mcss/**/*.mcss', // String or ArrayList<String>
+        test: ['src/mcss/**/*.mcss'],
+        /** exclude: ['src\/mcss\/_config.mcss],**/
         handler: (dest) => [
-            mcss(),
+            mcss({
+                "include": [ path.resolve(root,"src/javascript/kaola-fed-lib/components/h5"),
+                             path.resolve(root,"src/javascript/pages/h5/components")],
+                "exclude": "(\\\\|\\/)_",
+                "format": 1
+            }),
             autoprefix({
                 browsers: ['Android >= 2.3'],
                 cascade: false
             }),
-            dest('src/css/')
+            dest('src/css')
         ]
     }],
-    watch: {
-        /**
-         * absolute
-         * @type {[type]}
-         */
+    watch: {},
+    tplConfig: {
+      extension: 'ftl',
+      /** renderUtil: null **/
     },
     server: {
-        port: 3000,
-        router,
-        proxy: false,
-        tpl: {
-          suffix: 'ftl',
-          /**
-           * combime
-           * @param  {[type]} tpl  [description]
-           * @param  {[type]} data [description]
-           * @return {[type]}      [description]
-           */
-          handler: null /**  parse Util Class default is ftl render **/
-        },
-        dataMatch: ( syncFilePath ) => path.resolve( this.syncData, syncFilePath + '.json' ),
-        viewRoot: path.resolve( root, 'WEB-INF' ),
-        syncData: path.resolve( __dirname, 'mock', 'fakeData' ),
-        asyncData: path.resolve( __dirname, 'mock', 'json' ),
-        static: [
-            path.resolve(__dirname, 'static')
-        ]
+      routers,
+      port: 3000,
+      proxy: {
+        test1: ( url ) => {
+          let devMark = 'isDev=1000';
+          let result = (-1===url.indexOf('?')?`?${devMark}`:`&${devMark}`);
+          return 'http://10.240.178.181:90/' + url.replace(/^\//,'') + result;
+        }
+      },
+      syncData: path.resolve(__dirname,'mock/fakeData'),
+      viewRoot: 'WEB-INF',
+      asyncData: path.resolve(__dirname,'mock/json'),
+      static: [ 'src' ]
     }
 };
-
 ```
 
 **Step 2**: run `foxman`
