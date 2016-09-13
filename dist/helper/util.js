@@ -157,6 +157,7 @@ function request(options) {
     });
 
     req.on('error', function (e) {
+      reject();
       console.log('problem with request: ' + e.message);
     });
     req.end();

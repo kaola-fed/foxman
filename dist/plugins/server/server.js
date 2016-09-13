@@ -46,6 +46,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var Server = function () {
     function Server(config) {
+        var _this = this;
+
         _classCallCheck(this, Server);
 
         this.app = (0, _koa2.default)();
@@ -54,13 +56,13 @@ var Server = function () {
         this.formatArgs();
         if (!this.syncDataMatch) {
             this.syncDataMatch = function (url) {
-                return _path2.default.resolve(config.syncData, url);
+                return _path2.default.resolve(_this.syncData, url);
             };
         }
 
         if (!this.asyncDataMatch) {
             this.asyncDataMatch = function (url) {
-                return _path2.default.join(config.asyncData, url);
+                return _path2.default.join(_this.asyncData, url);
             };
         }
 
@@ -72,17 +74,15 @@ var Server = function () {
     _createClass(Server, [{
         key: 'formatArgs',
         value: function formatArgs() {
-            var _this = this;
+            var _this2 = this;
 
             ['syncData', 'viewRoot', 'asyncData'].forEach(function (item) {
-                _this[item] = _path2.default.resolve(_this.root, _this[item]);
+                _this2[item] = _path2.default.resolve(_this2.root, _this2[item]);
             });
 
             this.static.forEach(function (item, idx) {
-                _this.static[idx] = _path2.default.resolve(_this.root, item);
+                _this2.static[idx] = _path2.default.resolve(_this2.root, item);
             });
-
-            console.log(this);
         }
     }, {
         key: 'delayInit',
@@ -114,7 +114,7 @@ var Server = function () {
     }, {
         key: 'setStaticHandler',
         value: function setStaticHandler() {
-            var _this2 = this;
+            var _this3 = this;
 
             var rootdir = void 0;
             var dir = void 0;
@@ -125,7 +125,7 @@ var Server = function () {
                 if (!dir || !dir[0]) return;
                 rootdir = item.replace(/[^(\\\/)]*$/, '');
 
-                _this2.app.use((0, _koaServe2.default)(dir[0], rootdir));
+                _this3.app.use((0, _koaServe2.default)(dir[0], rootdir));
             });
             this.app.use((0, _koaServe2.default)('resource', global.__rootdir));
         }

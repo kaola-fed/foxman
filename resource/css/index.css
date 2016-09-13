@@ -96,3 +96,23 @@ body,html{height:100%;-webkit-tap-highlight-color:transparent}body{overflow-x:hi
   align-items: center;
   height: 24px;
 }
+
+.err_show{
+  padding: 15px;
+  border: 1px solid #eee;
+  cursor: pointer;
+  margin-top:initial;
+  width: 400px;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.err_box{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - 52px );
+  padding: initial;
+}

@@ -6,7 +6,7 @@ import WatcherPlugin from './plugins/watcher/';
 import PreCompilerPlugin from './plugins/precompiler/';
 import ReloadPlugin from './plugins/reloader';
 import NeiPlugin from './plugins/nei';
-import AsyncTest from './plugins/asynctest';
+import ProxyPlugin from './plugins/proxy';
 
 import path from 'path';
 import {
@@ -23,8 +23,6 @@ class Owner {
          * __setConfig
          */
         app.setConfig(config);
-
-
 
         /**
          * 内置组件
@@ -44,15 +42,18 @@ class Owner {
 
         app.use( new ReloadPlugin({}));
 
-
         if( !!config.nei )
-          app.use( new NeiPlugin(config.nei) );
-          
+          app.use( new NeiPlugin( config.nei ) );
+
         /**
          * __load ex Plugins
          */
         app.use( config.plugins );
 
+        app.use( new ProxyPlugin({
+          proxy: config.server.proxy,
+          proxyServer: config.argv.proxy
+        }));
         /**
          * __ready
          */

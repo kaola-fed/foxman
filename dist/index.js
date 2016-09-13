@@ -26,9 +26,9 @@ var _nei = require('./plugins/nei');
 
 var _nei2 = _interopRequireDefault(_nei);
 
-var _asynctest = require('./plugins/asynctest');
+var _proxy = require('./plugins/proxy');
 
-var _asynctest2 = _interopRequireDefault(_asynctest);
+var _proxy2 = _interopRequireDefault(_proxy);
 
 var _path = require('path');
 
@@ -77,6 +77,10 @@ var Owner = function Owner(config) {
      */
     app.use(config.plugins);
 
+    app.use(new _proxy2.default({
+        proxy: config.server.proxy,
+        proxyServer: config.argv.proxy
+    }));
     /**
      * __ready
      */

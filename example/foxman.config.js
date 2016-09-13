@@ -4,7 +4,7 @@ const path = require('path');
 const mcss = require('foxman-mcss');
 const autoprefix = require('gulp-autoprefixer');
 
-const routers = [];
+const routers = require('./route');
 
 const root = path.resolve(__dirname, 'src', 'main', 'webapp');
 
@@ -12,11 +12,6 @@ module.exports = {
     root,
     plugins: [
     ],
-    nei: {
-      config: 'nei.xxxx.xxxxxxxxxxxxxxxx/server.config.js',
-      mockTpl: 'backend/template/mock',
-      mockApi: 'backend/src/mock'
-    },
     preCompilers: [{
         test: ['src/mcss/**/*.mcss'],
         exclude: ['1.mcss','2.mcss'],
@@ -34,26 +29,24 @@ module.exports = {
             dest('src/css')
         ]
     }],
-    watch: {
-        /**
-         * absolute
-         * @type {[type]}
-         */
-    },
+    watch: {},
     tplConfig: {
       extension: 'ftl',
-      // TODO: 外部的渲染工具
-      renderUtil: null /**  parse Util Class default is ftl render **/
+      renderUtil: null /**  tpl parser, default is ftl render **/
     },
     server: {
       routers,
       port: 3000,
       proxy: {
-        test1: 'http://10.240.178.181:90'
+        test1: ( url ) => {
+          let devMark = 'isDev=1000';
+          let result = (-1===url.indexOf('?')?`?${devMark}`:`&${devMark}`);
+          return 'http://10.240.178.181:90/' + url.replace(/^\//,'') + result;
+        }
       },
-      syncData: 'mock/fakeData',
-      viewRoot: 'WEB-INF/template',
-      asyncData: 'mock/json',
+      syncData: path.resolve(__dirname,'mock/fakeData'),
+      viewRoot: 'WEB-INF',
+      asyncData: path.resolve(__dirname,'mock/json'),
       static: [ 'src' ]
     }
 };

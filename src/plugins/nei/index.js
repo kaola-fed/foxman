@@ -12,11 +12,10 @@ class NeiPlugin  {
       this.options = options;
       Object.assign(this, options);
     }
-    
+
     init() {
       this.formatArgs();
-
-      const doUpdate = this.app.config.update;
+      const doUpdate = this.app.config.argv.update || false;
       this.neiRoute = path.resolve( this.app.config.root, 'nei.route.js');
 
       try {

@@ -76,31 +76,32 @@ export function writeUnExistsFile ( file, text ) {
 			}
 			writeFile(file, text).then(...args);
 		}
-
-			search();
+		search();
 	});
 }
 
 export function jsonResover ( url ) {
 	return new Promise( (resolve, reject) => {
 		if(/^http/g.test(url)){
-			_.log('waiting for request');
+			_.log(`请求转发:${url}`);
 			_.request({url}).then((htmlBuf)=>{
 				let json;
 				try{
-					json = JSON.parse(htmlBuf.toString('utf-8'))
+					json = JSON.parse(htmlBuf.toString('utf-8'));
 				} catch (e) {
-					json = {};
+					json = null;
 				}
-				resolve(json);
+				resolve( json );
+			},()=>{
+				resolve( null );
 			});
 			return;
 		}
 
 		readFile(url).then( (data) => {
-				resolve(JSON.parse(data))
-		},()=>{
-			resolve({});
+				resolve( JSON.parse(data) );
+		},(err)=>{
+			resolve( {} );
 		});
 	});
 }

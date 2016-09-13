@@ -121,6 +121,7 @@ export function request(options) {
 		});
 
 		req.on('error', (e) => {
+      reject();
 		  console.log(`problem with request: ${e.message}`);
 		});
 		req.end();

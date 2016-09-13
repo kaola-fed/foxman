@@ -47,8 +47,7 @@ var NeiPlugin = function () {
       var _this = this;
 
       this.formatArgs();
-
-      var doUpdate = this.app.config.update;
+      var doUpdate = this.app.config.argv.update || false;
       this.neiRoute = _path2.default.resolve(this.app.config.root, 'nei.route.js');
 
       try {

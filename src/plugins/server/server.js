@@ -15,11 +15,11 @@ class Server {
 
         this.formatArgs();
         if( !this.syncDataMatch ){
-          this.syncDataMatch = ( url ) => path.resolve( config.syncData ,url );
+          this.syncDataMatch = ( url ) => path.resolve( this.syncData ,url );
         }
 
         if( !this.asyncDataMatch ){
-          this.asyncDataMatch = ( url ) => path.join(config.asyncData, url );
+          this.asyncDataMatch = ( url ) => path.join( this.asyncData, url );
         }
 
         this.setRender();
@@ -35,8 +35,6 @@ class Server {
       this.static.forEach( (item, idx )=>{
         this.static[idx] = path.resolve(this.root, item);
       });
-
-      console.log(this);
     }
 
     delayInit(){

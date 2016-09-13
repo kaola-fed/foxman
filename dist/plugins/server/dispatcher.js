@@ -24,10 +24,12 @@ var _marked = [dirDispatcher, syncDispatcher, asyncDispather].map(regeneratorRun
 /**
  * default dispatcher
  * @param  {[type]} config  [description]
- * @param  {[type]} context [description]
+ * @param  {[type]} this [description]
  * @return {[type]}         [description]
  */
-function dirDispatcher(dispatcher, config, context, next) {
+function dirDispatcher(dispatcher, config, next) {
+    var _this = this;
+
     var viewPath, files, promises, result, fileList;
     return regeneratorRuntime.wrap(function dirDispatcher$(_context) {
         while (1) {
@@ -51,11 +53,11 @@ function dirDispatcher(dispatcher, config, context, next) {
                         return Object.assign(item, {
                             name: files[idx],
                             isFile: item.isFile(),
-                            requestPath: [context.request.path, files[idx], item.isFile() ? '' : '/'].join('')
+                            requestPath: [_this.request.path, files[idx], item.isFile() ? '' : '/'].join('')
                         });
                     });
                     _context.next = 11;
-                    return context.render('cataLog', {
+                    return this.render('cataLog', {
                         title: '查看列表',
                         fileList: fileList
                     });
@@ -68,7 +70,7 @@ function dirDispatcher(dispatcher, config, context, next) {
     }, _marked[0], this);
 }
 
-function syncDispatcher(dispatcher, config, context, next) {
+function syncDispatcher(dispatcher, config, next) {
     var filePath, dataPath, dataModel, output, stderr, stdout, errInfo, e, html;
     return regeneratorRuntime.wrap(function syncDispatcher$(_context2) {
         while (1) {
@@ -80,12 +82,29 @@ function syncDispatcher(dispatcher, config, context, next) {
                     return _helper.fileUtil.jsonResover(dataPath);
 
                 case 4:
-                    dataModel = dataModel = _context2.sent;
+                    dataModel = _context2.sent;
+
+                    if (dataModel) {
+                        _context2.next = 10;
+                        break;
+                    }
+
+                    this.type = 500;
+                    _context2.next = 9;
+                    return this.render('e', { title: '出错了', e: {
+                            code: 500,
+                            msg: '请求代理服务器异常'
+                        } });
+
+                case 9:
+                    return _context2.abrupt('return', _context2.sent);
+
+                case 10:
                     output = config.renderUtil().parse(_path2.default.relative(config.viewRoot, filePath), dataModel);
                     stderr = output.stderr;
                     stdout = output.stdout;
                     errInfo = [];
-                    _context2.next = 11;
+                    _context2.next = 16;
                     return new Promise(function (resolve, reject) {
                         stderr.on('data', function (chunk) {
                             errInfo.push(chunk);
@@ -95,28 +114,30 @@ function syncDispatcher(dispatcher, config, context, next) {
                         });
                     });
 
-                case 11:
+                case 16:
                     e = _context2.sent;
 
                     if (!e) {
-                        _context2.next = 19;
+                        _context2.next = 23;
                         break;
                     }
 
-                    console.log(e.yellow);
-                    _context2.next = 16;
-                    return context.render('e', { title: '出错了', e: e });
+                    _context2.next = 20;
+                    return this.render('e', { title: '出错了', e: {
+                            code: 500,
+                            msg: e
+                        } });
 
-                case 16:
-                    _context2.next = 18;
+                case 20:
+                    _context2.next = 22;
                     return next;
 
-                case 18:
+                case 22:
                     return _context2.abrupt('return', _context2.sent);
 
-                case 19:
+                case 23:
                     html = [];
-                    _context2.next = 22;
+                    _context2.next = 26;
                     return new Promise(function (resolve, reject) {
                         stdout.on('data', function (chunk) {
                             html.push(chunk);
@@ -126,12 +147,12 @@ function syncDispatcher(dispatcher, config, context, next) {
                         });
                     });
 
-                case 22:
+                case 26:
 
-                    context.type = 'text/html; charset=utf-8';
-                    context.body = html.join('');
+                    this.type = 'text/html; charset=utf-8';
+                    this.body = html.join('');
 
-                case 24:
+                case 28:
                 case 'end':
                     return _context2.stop();
             }
@@ -139,7 +160,7 @@ function syncDispatcher(dispatcher, config, context, next) {
     }, _marked[1], this);
 }
 
-function asyncDispather(dispatcher, config, context, next) {
+function asyncDispather(dispatcher, config, next) {
     var asyncDataPath, api;
     return regeneratorRuntime.wrap(function asyncDispather$(_context3) {
         while (1) {
@@ -150,16 +171,38 @@ function asyncDispather(dispatcher, config, context, next) {
                      * @type {[type]}
                      */
                     asyncDataPath = dispatcher.dataPath;
-                    api = _helper.fileUtil.getFileByStream(asyncDataPath);
+                    _context3.next = 3;
+                    return _helper.fileUtil.jsonResover(asyncDataPath);
 
+                case 3:
+                    api = _context3.sent;
 
-                    context.type = 'application/json; charset=utf-8';
-                    context.body = api;
+                    if (api) {
+                        _context3.next = 10;
+                        break;
+                    }
 
-                    _context3.next = 6;
+                    _context3.next = 7;
+                    return this.render('e', { title: '出错了', e: {
+                            code: 500,
+                            msg: '请求代理服务器异常'
+                        } });
+
+                case 7:
+                    _context3.next = 9;
                     return next;
 
-                case 6:
+                case 9:
+                    return _context3.abrupt('return', _context3.sent);
+
+                case 10:
+                    this.type = 'application/json; charset=utf-8';
+                    this.body = api;
+
+                    _context3.next = 14;
+                    return next;
+
+                case 14:
                 case 'end':
                     return _context3.stop();
             }
@@ -170,7 +213,8 @@ function asyncDispather(dispatcher, config, context, next) {
 exports.default = function (config) {
 
     return regeneratorRuntime.mark(function _callee(next) {
-        var request, url, args, dispatcherMap, dispatcher;
+        var request, url, args, dispatcherMap, dispatcher, _dispatcher;
+
         return regeneratorRuntime.wrap(function _callee$(_context4) {
             while (1) {
                 switch (_context4.prev = _context4.next) {
@@ -181,7 +225,7 @@ exports.default = function (config) {
                          */
                         request = this.request;
                         url = request.path;
-                        args = [config, this, next];
+                        args = [config, next];
                         dispatcherMap = {
                             'dir': dirDispatcher,
                             'sync': syncDispatcher,
@@ -195,7 +239,7 @@ exports.default = function (config) {
                         }
 
                         _context4.next = 8;
-                        return dispatcher.apply(undefined, [this.dispatcher].concat(args));
+                        return (_dispatcher = dispatcher).call.apply(_dispatcher, [this, this.dispatcher].concat(args));
 
                     case 8:
                     case 'end':

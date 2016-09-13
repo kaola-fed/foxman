@@ -10,6 +10,12 @@ var argv = require('yargs')
         describe: 'Config file. Options read readme.md' ,
         boolean: 0
     })
+    .option('proxy', {
+        alias: 'p',
+        demand: false,
+        default: false,
+        describe: `define proxy in foxman.config.js and set the name here`
+    })
     .option('update', {
         alias: 'u',
         demand: false,
@@ -33,8 +39,6 @@ try {
     process.exit(1);
 }
 
-Object.assign(config, {
-    update: argv.update || false
-});
+Object.assign(config, { argv });
 
 require('../app.js')(config);

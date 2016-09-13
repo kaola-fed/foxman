@@ -5,10 +5,10 @@ import { util, fileUtil } from '../../helper';
 /**
  * default dispatcher
  * @param  {[type]} config  [description]
- * @param  {[type]} context [description]
+ * @param  {[type]} this [description]
  * @return {[type]}         [description]
  */
-export function* dirDispatcher( dispatcher, config, context, next) {
+export function* dirDispatcher( dispatcher, config, next) {
 
     const viewPath = dispatcher.path;
     const files = yield fileUtil.getDirInfo( viewPath );
@@ -19,23 +19,31 @@ export function* dirDispatcher( dispatcher, config, context, next) {
         return Object.assign(item, {
             name: files[idx],
             isFile: item.isFile(),
-            requestPath: [context.request.path, files[idx], item.isFile() ? '' : '/'].join('')
+            requestPath: [this.request.path, files[idx], item.isFile() ? '' : '/'].join('')
         });
     });
 
-    yield context.render('cataLog', {
+    yield this.render('cataLog', {
         title: '查看列表',
         fileList
     });
 }
 
-export function* syncDispatcher(dispatcher, config, context, next) {
+export function* syncDispatcher(dispatcher, config, next) {
 
     const filePath = dispatcher.path;
     const dataPath = dispatcher.dataPath;
-    let dataModel = dataModel = yield fileUtil.jsonResover(dataPath);
+    const dataModel = yield fileUtil.jsonResover(dataPath);
 
-    const output = config.renderUtil().parse( path.relative( config.viewRoot, filePath), dataModel);
+    if( !dataModel ) {
+      this.type = 500;
+      return yield this.render('e', { title: '出错了', e:{
+        code: 500,
+        msg: '请求代理服务器异常'
+      }});
+    }
+
+    const output = config.renderUtil().parse( path.relative( config.viewRoot, filePath ), dataModel );
     const stderr = output.stderr;
     const stdout = output.stdout;
 
@@ -50,8 +58,10 @@ export function* syncDispatcher(dispatcher, config, context, next) {
     });
 
     if( !! e ) {
-      console.log(e.yellow);
-      yield context.render('e', { title: '出错了', e });
+      yield this.render('e', { title: '出错了', e:{
+        code: 500,
+        msg: e
+      }});
       return yield next;
     }
 
@@ -65,20 +75,26 @@ export function* syncDispatcher(dispatcher, config, context, next) {
       });
     });
 
-    context.type = 'text/html; charset=utf-8';
-    context.body = html.join('');
+    this.type = 'text/html; charset=utf-8';
+    this.body = html.join('');
 }
 
-export function* asyncDispather( dispatcher, config, context, next) {
+export function* asyncDispather( dispatcher, config, next) {
     /**
      * 异步接口处理
      * @type {[type]}
      */
     const asyncDataPath = dispatcher.dataPath;
-    const api = fileUtil.getFileByStream(asyncDataPath);
-
-    context.type = 'application/json; charset=utf-8';
-    context.body = api;
+    const api = yield fileUtil.jsonResover(asyncDataPath);
+    if( !api ) {
+      yield this.render('e', { title: '出错了', e :{
+        code: 500,
+        msg: '请求代理服务器异常'
+      }});
+      return yield next;
+    }
+    this.type = 'application/json; charset=utf-8';
+    this.body = api;
 
     yield next;
 }
@@ -92,7 +108,7 @@ export default ( config )=>{
      */
     const request = this.request;
     const url = request.path;
-    let args = [config, this, next];
+    let args = [config, next];
 
     let dispatcherMap = {
       'dir': dirDispatcher,
@@ -102,7 +118,7 @@ export default ( config )=>{
 
     let dispatcher;
     if( dispatcher = dispatcherMap[ this.dispatcher.type ] ){
-      yield dispatcher( this.dispatcher, ...args );
+      yield dispatcher.call(this, this.dispatcher, ...args );
     }
   }
 }

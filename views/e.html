@@ -1,5 +1,9 @@
-<div class="hd" style="display: flex;justify-content: center;">
-  <div class="weui_cells weui_cells_access" style="padding: 15px; border: 1px solid #eee;cursor: pointer;margin-top:initial;">
-    <pre><%-e%></pre>
-  </div>
+<div class="weui_msg err_box">
+    <div class="weui_icon_area"><i class="weui_icon_msg weui_icon_warn"></i></div>
+    <div class="weui_text_area">
+        <h2 class="weui_msg_title"><%-e.code%></h2>
+        <p class="weui_msg_desc">
+          <pre style="text-align: left;"><%-e.msg%></pre>
+        </p>
+    </div>
 </div>

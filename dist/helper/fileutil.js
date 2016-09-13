@@ -116,7 +116,6 @@ function writeUnExistsFile(file, text) {
 			}
 			(_writeFile = writeFile(file, text)).then.apply(_writeFile, args);
 		};
-
 		search();
 	});
 }
@@ -124,22 +123,24 @@ function writeUnExistsFile(file, text) {
 function jsonResover(url) {
 	return new Promise(function (resolve, reject) {
 		if (/^http/g.test(url)) {
-			_util2.default.log('waiting for request');
+			_util2.default.log('请求转发:' + url);
 			_util2.default.request({ url: url }).then(function (htmlBuf) {
 				var json = void 0;
 				try {
 					json = JSON.parse(htmlBuf.toString('utf-8'));
 				} catch (e) {
-					json = {};
+					json = null;
 				}
 				resolve(json);
+			}, function () {
+				resolve(null);
 			});
 			return;
 		}
 
 		readFile(url).then(function (data) {
 			resolve(JSON.parse(data));
-		}, function () {
+		}, function (err) {
 			resolve({});
 		});
 	});
