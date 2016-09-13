@@ -69,102 +69,81 @@ function dirDispatcher(dispatcher, config, context, next) {
 }
 
 function syncDispatcher(dispatcher, config, context, next) {
-    var _this = this;
-
-    var filePath, dataPath, dataModel, output, errInfo;
-    return regeneratorRuntime.wrap(function syncDispatcher$(_context3) {
+    var filePath, dataPath, dataModel, output, stderr, stdout, errInfo, e, html;
+    return regeneratorRuntime.wrap(function syncDispatcher$(_context2) {
         while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context2.prev = _context2.next) {
                 case 0:
                     filePath = dispatcher.path;
                     dataPath = dispatcher.dataPath;
-                    dataModel = {};
-                    _context3.prev = 3;
-                    _context3.next = 6;
+                    _context2.next = 4;
                     return _helper.fileUtil.jsonResover(dataPath);
 
-                case 6:
-                    dataModel = _context3.sent;
-
-                    console.log(dataModel);
-                    _context3.next = 13;
-                    break;
-
-                case 10:
-                    _context3.prev = 10;
-                    _context3.t0 = _context3['catch'](3);
-
-                    _helper.util.warnLog(dataPath + ' is not found!');
-
-                case 13:
-                    output = config.renderUtil().parse(filePath.replace(config.viewRoot, ''), dataModel);
-                    errInfo = Buffer.from('<meta charset="utf-8"><pre>');
-                    _context3.next = 17;
+                case 4:
+                    dataModel = dataModel = _context2.sent;
+                    output = config.renderUtil().parse(_path2.default.relative(config.viewRoot, filePath), dataModel);
+                    stderr = output.stderr;
+                    stdout = output.stdout;
+                    errInfo = [];
+                    _context2.next = 11;
                     return new Promise(function (resolve, reject) {
-                        output.stderr.on('data', function (chunk) {
-                            errInfo = _helper.util.bufferConcat(errInfo, Buffer.from(chunk));
+                        stderr.on('data', function (chunk) {
+                            errInfo.push(chunk);
                         });
-                        output.stderr.on('end', function () {
-                            if (errInfo.length != 0) {
-                                _helper.util.warnLog(errInfo.toString('utf-8').red);
-                                context.type = 'text/html; charset=utf-8';
-
-                                context.body = _helper.util.bufferConcat(errInfo, Buffer.from('</pre>'));
-                            }
-                            resolve();
+                        stderr.on('end', function () {
+                            resolve(errInfo.join(''));
                         });
                     });
 
-                case 17:
-                    if (!(errInfo.length == 0)) {
-                        _context3.next = 19;
+                case 11:
+                    e = _context2.sent;
+
+                    if (!e) {
+                        _context2.next = 19;
                         break;
                     }
 
-                    return _context3.delegateYield(regeneratorRuntime.mark(function _callee() {
-                        var htmlBuf;
-                        return regeneratorRuntime.wrap(function _callee$(_context2) {
-                            while (1) {
-                                switch (_context2.prev = _context2.next) {
-                                    case 0:
-                                        htmlBuf = Buffer.alloc(0);
-                                        _context2.next = 3;
-                                        return new Promise(function (resolve, reject) {
-                                            output.stdout.on('data', function (chunk) {
-                                                htmlBuf = _helper.util.bufferConcat(htmlBuf, chunk);
-                                            });
-                                            output.stdout.on('end', function () {
-                                                context.type = 'text/html; charset=utf-8';
-                                                context.body = htmlBuf;
-                                                resolve();
-                                            });
-                                        });
+                    console.log(e.yellow);
+                    _context2.next = 16;
+                    return context.render('e', { title: '出错了', e: e });
 
-                                    case 3:
-                                    case 'end':
-                                        return _context2.stop();
-                                }
-                            }
-                        }, _callee, _this);
-                    })(), 't1', 19);
-
-                case 19:
-                    _context3.next = 21;
+                case 16:
+                    _context2.next = 18;
                     return next;
 
-                case 21:
+                case 18:
+                    return _context2.abrupt('return', _context2.sent);
+
+                case 19:
+                    html = [];
+                    _context2.next = 22;
+                    return new Promise(function (resolve, reject) {
+                        stdout.on('data', function (chunk) {
+                            html.push(chunk);
+                        });
+                        stdout.on('end', function () {
+                            resolve(html);
+                        });
+                    });
+
+                case 22:
+
+                    context.type = 'text/html; charset=utf-8';
+                    context.body = html.join('');
+
+                case 24:
                 case 'end':
-                    return _context3.stop();
+                    return _context2.stop();
             }
         }
-    }, _marked[1], this, [[3, 10]]);
+    }, _marked[1], this);
 }
 
 function asyncDispather(dispatcher, config, context, next) {
     var asyncDataPath, api;
-    return regeneratorRuntime.wrap(function asyncDispather$(_context4) {
+    return regeneratorRuntime.wrap(function asyncDispather$(_context3) {
         while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context3.prev = _context3.next) {
                 case 0:
                     /**
                      * 异步接口处理
@@ -177,12 +156,12 @@ function asyncDispather(dispatcher, config, context, next) {
                     context.type = 'application/json; charset=utf-8';
                     context.body = api;
 
-                    _context4.next = 6;
+                    _context3.next = 6;
                     return next;
 
                 case 6:
                 case 'end':
-                    return _context4.stop();
+                    return _context3.stop();
             }
         }
     }, _marked[2], this);
@@ -190,11 +169,11 @@ function asyncDispather(dispatcher, config, context, next) {
 
 exports.default = function (config) {
 
-    return regeneratorRuntime.mark(function _callee2(next) {
+    return regeneratorRuntime.mark(function _callee(next) {
         var request, url, args, dispatcherMap, dispatcher;
-        return regeneratorRuntime.wrap(function _callee2$(_context5) {
+        return regeneratorRuntime.wrap(function _callee$(_context4) {
             while (1) {
-                switch (_context5.prev = _context5.next) {
+                switch (_context4.prev = _context4.next) {
                     case 0:
                         /**
                          * 分配给不同的处理器
@@ -211,18 +190,18 @@ exports.default = function (config) {
                         dispatcher = void 0;
 
                         if (!(dispatcher = dispatcherMap[this.dispatcher.type])) {
-                            _context5.next = 8;
+                            _context4.next = 8;
                             break;
                         }
 
-                        _context5.next = 8;
+                        _context4.next = 8;
                         return dispatcher.apply(undefined, [this.dispatcher].concat(args));
 
                     case 8:
                     case 'end':
-                        return _context5.stop();
+                        return _context4.stop();
                 }
             }
-        }, _callee2, this);
+        }, _callee, this);
     });
 };

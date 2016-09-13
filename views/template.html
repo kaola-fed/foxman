@@ -2,11 +2,30 @@
 <html>
   <head>
     <title><%-title%></title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
     <link rel="stylesheet" href="/resource/css/weui.min.css" charset="utf-8">
     <link rel="stylesheet" href="/resource/css/index.css" charset="utf-8">
   </head>
   <body>
-    <%-body%>
+    <div class="container" id="container">
+    	<div class="cell">
+    		<div class="hd">
+    		    <h1 class="page_title">Foxman</h1>
+    				<p class="page_desc">为注重开发体验的前端开发者量身定制</p>
+    		</div>
+          <%-body%>
+        </div>
+        <div class="m-tabbar">
+          <div class="tabbar-inner">
+            <a href="javascript: location.href = location.pathname.replace(/[^\/]+(\/)?$/,'?mode=1');" class="u-back">  </a>
+              <div class="u-nav">
+                <p class="u-navitem">
+                  Foxman
+                </p>
+              </div>
+          </div>
+        </div>
+      </div>
   </body>
 </html>

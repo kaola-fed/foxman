@@ -33,47 +33,40 @@ export function* syncDispatcher(dispatcher, config, context, next) {
 
     const filePath = dispatcher.path;
     const dataPath = dispatcher.dataPath;
-    let dataModel = {};
-    try {
-        dataModel = yield fileUtil.jsonResover(dataPath);
-        console.log(dataModel);
-    } catch (err) {
-        util.warnLog(`${dataPath} is not found!`);
-    }
+    let dataModel = dataModel = yield fileUtil.jsonResover(dataPath);
 
-    const output = config.renderUtil().parse(filePath.replace(config.viewRoot, ''), dataModel);
+    const output = config.renderUtil().parse( path.relative( config.viewRoot, filePath), dataModel);
+    const stderr = output.stderr;
+    const stdout = output.stdout;
 
-    let errInfo = Buffer.from('<meta charset="utf-8"><pre>');
-    yield new Promise(( resolve, reject )=>{
-      output.stderr.on('data', (chunk)=> {
-          errInfo = util.bufferConcat(errInfo, Buffer.from(chunk))
+    let errInfo = [];
+    let e = yield new Promise(function ( resolve, reject ){
+      stderr.on('data', (chunk)=> {
+          errInfo.push(chunk);
       });
-      output.stderr.on('end', ()=> {
-          if( errInfo.length != 0 ){
-            util.warnLog(errInfo.toString('utf-8').red);
-            context.type = 'text/html; charset=utf-8';
-
-            context.body = util.bufferConcat(errInfo, Buffer.from('</pre>')) ;
-          }
-          resolve();
+      stderr.on('end', () => {
+          resolve(errInfo.join(''));
       });
     });
 
-    if( errInfo.length == 0 ){
-      let htmlBuf = Buffer.alloc(0);
-      yield new Promise(( resolve, reject )=>{
-        output.stdout.on('data',(chunk)=>{
-          htmlBuf = util.bufferConcat(htmlBuf, chunk);
-        });
-        output.stdout.on('end',()=>{
-          context.type = 'text/html; charset=utf-8';
-          context.body = htmlBuf;
-          resolve();
-        });
-      });
+    if( !! e ) {
+      console.log(e.yellow);
+      yield context.render('e', { title: '出错了', e });
+      return yield next;
     }
 
-    yield next;
+    let html = [];
+    yield new Promise(( resolve, reject )=>{
+      stdout.on('data',(chunk)=>{
+        html.push(chunk);
+      });
+      stdout.on('end',()=>{
+        resolve(html);
+      });
+    });
+
+    context.type = 'text/html; charset=utf-8';
+    context.body = html.join('');
 }
 
 export function* asyncDispather( dispatcher, config, context, next) {
