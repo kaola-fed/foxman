@@ -45,7 +45,11 @@ export default (config) => {
         /**
          * mode 1 拦截文件夹的路径
          */
-          
+        if ((this.request.query.mode == 1) && this.request.path.endsWith('/')) {
+            let dirPath = path.join( config.viewRoot, this.request.path );
+            routeMap.get('/').call( this, { dirPath });
+            return yield next;
+        }
 
         /**
          * ① 拦截 router
@@ -121,7 +125,7 @@ export default (config) => {
         if ( this.request.query.mode != 1) {
             return;
         }
-
+        
         for (let [route, handler] of routeMap) {
             if ( requestPath.endsWith(route)  ) {
                 util.debugLog(_.inspect(requestInfo));
