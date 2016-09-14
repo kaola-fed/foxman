@@ -2,7 +2,7 @@ import {
     util
 } from '../../../helper';
 import path from 'path';
-
+import _ from 'util';
 /**
  * 全局中间件,会将具体的页面转换成需要的资源
  * 1.同步
@@ -45,11 +45,7 @@ export default (config) => {
         /**
          * mode 1 拦截文件夹的路径
          */
-        if ((this.request.query.mode == 1) && this.request.path.endsWith('/')) {
-            let dirPath = path.join( config.viewRoot, this.request.path );
-            routeMap.get('/').call( this, { dirPath });
-            return yield next;
-        }
+          
 
         /**
          * ① 拦截 router
@@ -60,7 +56,7 @@ export default (config) => {
         /**
          * 入口时，自动转换
          */
-        let requestPath = (this.request.path == '/')?this.request.path:'/index.html';
+        let requestPath = ( this.request.path == '/' ) ? '/index.html' : this.request.path;
         
         /**
          * 路径统一绝对路径
@@ -122,8 +118,13 @@ export default (config) => {
         /**
          * ② 未拦截到 router
          */
+        if ( this.request.query.mode != 1) {
+            return;
+        }
+
         for (let [route, handler] of routeMap) {
-            if (requestPath.endsWith(route)) {
+            if ( requestPath.endsWith(route)  ) {
+                util.debugLog(_.inspect(requestInfo));
                 handler.call(this, requestInfo);
                 return yield next;
             }

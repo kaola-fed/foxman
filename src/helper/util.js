@@ -8,7 +8,7 @@ import url from 'url';
 
 export function debugLog(msg) {
   if(process.env.NODE_ENV === 'development'){
-    console.log('[D]'.blue+' '+msg);
+    console.log('[DEBUG]'.blue+' '+msg);
   }
 }
 

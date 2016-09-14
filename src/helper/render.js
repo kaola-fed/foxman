@@ -23,7 +23,7 @@ class RenderUtil {
 
         let cmd = spawn('java', ['-jar', jarFile, settings, p1, dataModel]);
         cmd.stderr.setEncoding('utf-8');
-
+        
         return {
             stderr: cmd.stderr,
             stdout: cmd.stdout
