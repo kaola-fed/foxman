@@ -32,13 +32,13 @@ module.exports = {
         ]
     }],
     watch: {},
-    tplConfig: {
-      extension: 'ftl',
-      /** renderUtil: null **/
-    },
     server: {
       routers,
       port: 3000,
+      tpl: {
+        extension: 'ftl',
+        /** renderUtil: null **/
+      },
       proxy: {
         test1: ( url ) => {
           let devMark = 'isDev=1000';

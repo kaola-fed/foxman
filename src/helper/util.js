@@ -59,7 +59,7 @@ export function jsSpawn (args){
 }
 
 export function removeHeadBreak ( str ) {
-  return str.replace( /^(\/||\\)/, '' );
+  return str.replace( /^(\/|\\)/, '' );
 }
 
 export function removeSuffix( str ) {
@@ -67,7 +67,6 @@ export function removeSuffix( str ) {
 }
 
 export function jsonPathResolve ( url ) {
-  console.log(url);
   url = removeSuffix( url ) + '.json';
 
   if( /\.[^\.]*$/.test( url ) ){

@@ -44,10 +44,9 @@ class Server {
       app.use( dispatcher( this ) );
     }
     setRender() {
-        if( this.tplConfig ){
-          Object.assign(this, this.tplConfig);
+        if( this.tpl ){
+          Object.assign(this, this.tpl);
         }
-
         this.renderUtil = this.renderUtil || renderUtil;
         this.extension = this.extension || 'ftl';
 
