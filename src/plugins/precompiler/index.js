@@ -46,7 +46,7 @@ class PreCompilerPlugin  {
         let files = [];
         patterns.forEach((pattern) => {
             files = files.concat( globule.find( path.resolve(root ,pattern) ).map(( filename )=>{
-              util.log(`source file: ${filename}`);
+              util.log(`add ${filename}`);
               return {
                 pattern: path.resolve(root, pattern.replace(/\*+.*$/ig,'')),
                 filename

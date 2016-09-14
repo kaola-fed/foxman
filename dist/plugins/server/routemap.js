@@ -28,31 +28,31 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @return {[type]}        [description]
  */
 
-var commonDispatcher = function commonDispatcher(config) {
+var fileDispatcher = function fileDispatcher(config) {
     var routeMap = new Map();
     routeMap.set('/', function (_ref) {
         var dirPath = _ref.dirPath;
 
-        undefined.dispatcher = _helper.util.dispatcherTypeCreator('dir', dirPath, null);
+        this.dispatcher = _helper.util.dispatcherTypeCreator('dir', dirPath, null);
     });
 
     routeMap.set('.' + config.extension, function (_ref2) {
-        var tplPath = _ref2.tplPath;
+        var commonTplPath = _ref2.commonTplPath;
         var commonSync = _ref2.commonSync;
 
-        undefined.dispatcher = _helper.util.dispatcherTypeCreator('sync', tplPath, commonSync);
+        this.dispatcher = _helper.util.dispatcherTypeCreator('sync', commonTplPath, commonSync);
     });
 
     routeMap.set('.json', function (_ref3) {
         var commonAsync = _ref3.commonAsync;
 
-        undefined.dispatcher = _helper.util.dispatcherTypeCreator('async', commonAsync, commonAsync);
+        this.dispatcher = _helper.util.dispatcherTypeCreator('async', commonAsync, commonAsync);
     });
     return routeMap;
 };
 
 exports.default = function (config) {
-    var routeMap = commonDispatcher(config);
+    var routeMap = fileDispatcher(config);
     return regeneratorRuntime.mark(function _callee(next) {
         var dirPath, routers, method, requestPath, requestInfo, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, router, tplPath, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, _step2$value, route, handler;
 
@@ -61,21 +61,20 @@ exports.default = function (config) {
                 switch (_context.prev = _context.next) {
                     case 0:
                         if (!(this.request.query.mode == 1 && this.request.path.endsWith('/'))) {
-                            _context.next = 7;
+                            _context.next = 6;
                             break;
                         }
 
                         dirPath = _path2.default.join(config.viewRoot, this.request.path);
 
-                        console.log(this);
                         routeMap.get('/').call(this, { dirPath: dirPath });
-                        _context.next = 6;
+                        _context.next = 5;
                         return next;
 
-                    case 6:
+                    case 5:
                         return _context.abrupt('return', _context.sent);
 
-                    case 7:
+                    case 6:
 
                         /**
                          * ① 拦截 router
@@ -100,8 +99,7 @@ exports.default = function (config) {
                          * @type {[string]}
                          */
 
-                        requestInfo.tplPath = _path2.default.join(config.viewRoot, this.request.path);
-                        requestInfo.computedTplPath = _path2.default.join(config.viewRoot, requestPath);
+                        requestInfo.commonTplPath = _path2.default.join(config.viewRoot, this.request.path);
 
                         /**
                          * 根据用户定义的规则和url,生成通用的同步数据路径
@@ -121,23 +119,23 @@ exports.default = function (config) {
                         _iteratorNormalCompletion = true;
                         _didIteratorError = false;
                         _iteratorError = undefined;
-                        _context.prev = 19;
+                        _context.prev = 17;
                         _iterator = routers[Symbol.iterator]();
 
-                    case 21:
+                    case 19:
                         if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                            _context.next = 33;
+                            _context.next = 31;
                             break;
                         }
 
                         router = _step.value;
 
                         if (!(router.method.toUpperCase() == method.toUpperCase() && router.url == this.request.path)) {
-                            _context.next = 30;
+                            _context.next = 28;
                             break;
                         }
 
-                        tplPath = _helper.util.removeSuffix(router.filePath) + '.' + config.extension;
+                        tplPath = _path2.default.join(config.viewRoot, _helper.util.removeSuffix(router.filePath) + '.' + config.extension);
                         /**
                          * 同步接口
                          * 可能插件会生成一个 syncData ,若已生成则用插件的
@@ -145,7 +143,7 @@ exports.default = function (config) {
                          */
 
                         if (router.sync) {
-                            this.dispatcher = _helper.util.dispatcherTypeCreator('sync', _path2.default.join(config.viewRoot, tplPath), router.syncData || requestInfo.commonSync);
+                            this.dispatcher = _helper.util.dispatcherTypeCreator('sync', tplPath, router.syncData || requestInfo.commonSync);
                         } else {
                             /**
                              * 如果插件已生成了 asyncData 属性,则用插件的
@@ -153,53 +151,53 @@ exports.default = function (config) {
                              */
                             this.dispatcher = _helper.util.dispatcherTypeCreator('async', requestInfo.commonAsync, router.asyncData || requestInfo.commonAsync);
                         }
-                        _helper.util.log('请求url:' + router.url);
-                        _context.next = 29;
+                        _helper.util.log(router.method + ' ' + router.url);
+                        _context.next = 27;
                         return next;
 
-                    case 29:
+                    case 27:
                         return _context.abrupt('return', _context.sent);
 
-                    case 30:
+                    case 28:
                         _iteratorNormalCompletion = true;
-                        _context.next = 21;
+                        _context.next = 19;
+                        break;
+
+                    case 31:
+                        _context.next = 37;
                         break;
 
                     case 33:
-                        _context.next = 39;
-                        break;
-
-                    case 35:
-                        _context.prev = 35;
-                        _context.t0 = _context['catch'](19);
+                        _context.prev = 33;
+                        _context.t0 = _context['catch'](17);
                         _didIteratorError = true;
                         _iteratorError = _context.t0;
 
-                    case 39:
-                        _context.prev = 39;
-                        _context.prev = 40;
+                    case 37:
+                        _context.prev = 37;
+                        _context.prev = 38;
 
                         if (!_iteratorNormalCompletion && _iterator.return) {
                             _iterator.return();
                         }
 
-                    case 42:
-                        _context.prev = 42;
+                    case 40:
+                        _context.prev = 40;
 
                         if (!_didIteratorError) {
-                            _context.next = 45;
+                            _context.next = 43;
                             break;
                         }
 
                         throw _iteratorError;
 
+                    case 43:
+                        return _context.finish(40);
+
+                    case 44:
+                        return _context.finish(37);
+
                     case 45:
-                        return _context.finish(42);
-
-                    case 46:
-                        return _context.finish(39);
-
-                    case 47:
 
                         /**
                          * ② 未拦截到 router
@@ -207,12 +205,12 @@ exports.default = function (config) {
                         _iteratorNormalCompletion2 = true;
                         _didIteratorError2 = false;
                         _iteratorError2 = undefined;
-                        _context.prev = 50;
+                        _context.prev = 48;
                         _iterator2 = routeMap[Symbol.iterator]();
 
-                    case 52:
+                    case 50:
                         if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
-                            _context.next = 64;
+                            _context.next = 62;
                             break;
                         }
 
@@ -221,61 +219,61 @@ exports.default = function (config) {
                         handler = _step2$value[1];
 
                         if (!requestPath.endsWith(route)) {
-                            _context.next = 61;
+                            _context.next = 59;
                             break;
                         }
 
-                        handler.call(this);
-                        _context.next = 60;
+                        handler.call(this, requestInfo);
+                        _context.next = 58;
                         return next;
 
-                    case 60:
+                    case 58:
                         return _context.abrupt('return', _context.sent);
 
-                    case 61:
+                    case 59:
                         _iteratorNormalCompletion2 = true;
-                        _context.next = 52;
+                        _context.next = 50;
+                        break;
+
+                    case 62:
+                        _context.next = 68;
                         break;
 
                     case 64:
-                        _context.next = 70;
-                        break;
-
-                    case 66:
-                        _context.prev = 66;
-                        _context.t1 = _context['catch'](50);
+                        _context.prev = 64;
+                        _context.t1 = _context['catch'](48);
                         _didIteratorError2 = true;
                         _iteratorError2 = _context.t1;
 
-                    case 70:
-                        _context.prev = 70;
-                        _context.prev = 71;
+                    case 68:
+                        _context.prev = 68;
+                        _context.prev = 69;
 
                         if (!_iteratorNormalCompletion2 && _iterator2.return) {
                             _iterator2.return();
                         }
 
-                    case 73:
-                        _context.prev = 73;
+                    case 71:
+                        _context.prev = 71;
 
                         if (!_didIteratorError2) {
-                            _context.next = 76;
+                            _context.next = 74;
                             break;
                         }
 
                         throw _iteratorError2;
 
+                    case 74:
+                        return _context.finish(71);
+
+                    case 75:
+                        return _context.finish(68);
+
                     case 76:
-                        return _context.finish(73);
-
-                    case 77:
-                        return _context.finish(70);
-
-                    case 78:
                     case 'end':
                         return _context.stop();
                 }
             }
-        }, _callee, this, [[19, 35, 39, 47], [40,, 42, 46], [50, 66, 70, 78], [71,, 73, 77]]);
+        }, _callee, this, [[17, 33, 37, 45], [38,, 40, 44], [48, 64, 68, 76], [69,, 71, 75]]);
     });
 };

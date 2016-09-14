@@ -77,7 +77,7 @@ var PreCompilerPlugin = function () {
             var files = [];
             patterns.forEach(function (pattern) {
                 files = files.concat(_globule2.default.find(_path2.default.resolve(root, pattern)).map(function (filename) {
-                    _helper.util.log('source file: ' + filename);
+                    _helper.util.log('add ' + filename);
                     return {
                         pattern: _path2.default.resolve(root, pattern.replace(/\*+.*$/ig, '')),
                         filename: filename
