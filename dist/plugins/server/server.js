@@ -158,7 +158,7 @@ var Server = function () {
     value: function createServer() {
       var port = this.port || 3000;
       this.serverApp = _http2.default.createServer(this.app.callback()).listen(port);
-      _helper.util.log('server is running on port ' + port + '~ ');
+      _helper.util.log('server is running on ' + port);
     }
   }]);
 

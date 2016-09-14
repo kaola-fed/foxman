@@ -14,7 +14,7 @@ class Server {
         Object.assign( this, config );
 
         this.formatArgs();
-        
+
         if( !this.syncDataMatch ){
           this.syncDataMatch = ( url ) => path.resolve( this.syncData ,url );
         }
@@ -90,7 +90,7 @@ class Server {
     createServer() {
         const port = this.port || 3000;
         this.serverApp = http.createServer(this.app.callback()).listen(port);
-        util.log(`server is running on port ${port}~ `);
+        util.log(`server is running on ${port}`);
     }
 }
 
