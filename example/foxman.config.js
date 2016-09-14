@@ -13,11 +13,11 @@ module.exports = {
     root,
     plugins: [
     ],
-    /**nei:{
-      config:"",
-      mockTpl:"",
-      mockApi:""
-    }**/
+    // nei:{
+    //   config:"",
+    //   mockTpl:"",
+    //   mockApi:""
+    // },
     preCompilers: [{
         test: ['src/mcss/**/*.mcss'],
         /** exclude: ['src\/mcss\/_config.mcss],**/

@@ -21,22 +21,24 @@ class NeiPlugin  {
       try {
         require( this.config );
       } catch ( e ) {
-        util.error('nei 配置文件不存在，请先配置项目的nei关联，并核对 config 中的 nei.config是否合法');
+        util.error('nei 配置文件不存在，请先配置项目的nei关联，并核对 config 中的 nei.config 是否合法');
       }
 
       if( doUpdate ) {
-        return this.async(( resolve )=>{
+        return this.pending(( resolve )=>{
             neiTools.update().then( this.recieveUpdate ).then( () => {
-              this.updateRoutes( this.routes );
-            });
+              return this.updateRoutes( this.routes );
+            }).then( resolve );
         });
       }
 
       try {
-        this.routes = this.updateRoutes( require( this.config ) );
+        this.routes = require( this.neiRoute );
       } catch ( e ) {
         util.error('foxman 未找到格式化过的内 nei route，请先执行 foxman -u ');
       }
+
+      this.updateRoutes( this.routes );
     }
 
     formatArgs(){
@@ -147,10 +149,16 @@ class NeiPlugin  {
           });
         })
       });
-      Promise.all(promises).then(() => {
-        let server = this.app.server;
-        server.routers = routes.concat( server.routers );
+
+      return new Promise(( ...args )=>{
+        Promise.all(promises).then(() => {
+          let server = this.app.server;
+          server.routers = routes.concat( server.routers );
+
+          args[0]();
+        });
       });
+
     }
 
     genNeiApiUrl ( route ) {

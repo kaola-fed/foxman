@@ -20,12 +20,12 @@ export default class Application extends EventEmitter {
             app: this,
             name: plugin.constructor.name,
             id: this.uid(),
-            async: (...args) => this.async.apply(plugin, args )
+            pending: (...args) => this.pending.apply(plugin, args )
         }));
         util.debugLog(`plugin ${plugin.name || plugin.id} is loaded`);
     }
 
-    async( fn ){
+    pending( fn ) {
       let pending = new Promise((resolve)=>{ return fn( resolve ) });
 
       if( this.pendings ){
