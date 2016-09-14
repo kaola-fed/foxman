@@ -1,6 +1,5 @@
 import path from 'path';
-import renderUtil from '../../helper/render';
-import { util, fileUtil } from '../../helper';
+import { util, fileUtil, renderUtil } from '../../../helper';
 
 /**
  * default dispatcher

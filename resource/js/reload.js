@@ -40,6 +40,7 @@
         var sheet;
         for (var i = 0; i < sheets.length; i++) {
             sheet = sheets[i];
+
             if (sheet.rel == 'stylesheet' && sheet.href.indexOf(filename) !== -1) {
                 if (sheet.href.indexOf('ftlStyleVersion') === -1) {
                     sheet.href += ((sheet.href.indexOf('?') === -1 ? '?' : '&') +  'ftlStyleVersion' + '=' + new Date().getTime());

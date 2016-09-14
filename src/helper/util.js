@@ -67,6 +67,7 @@ export function removeSuffix( str ) {
 }
 
 export function jsonPathResolve ( url ) {
+  console.log(url);
   url = removeSuffix( url ) + '.json';
 
   if( /\.[^\.]*$/.test( url ) ){

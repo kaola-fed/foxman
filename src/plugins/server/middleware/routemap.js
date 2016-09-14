@@ -1,6 +1,6 @@
 import {
     util
-} from '../../helper';
+} from '../../../helper';
 import path from 'path';
 
 /**
@@ -56,11 +56,12 @@ export default (config) => {
          * @type {[type]}
          */
         const [routers, method] = [config.routers, this.request.method];
-        let requestPath = this.request.path;
 
-        if (requestPath == '/') {
-          requestPath = '/index.html';
-        }
+        /**
+         * 入口时，自动转换
+         */
+        let requestPath = (this.request.path == '/')?this.request.path:'/index.html';
+        
         /**
          * 路径统一绝对路径
          */
@@ -68,7 +69,6 @@ export default (config) => {
         /**
          * computedTplPath 与 tplPath 的区别是 在 请求url为'/'的时候
          * 前者为 '.../tpl/',
-         * 后者为 '.../tpl/index.html'
          * @type {[string]}
          */
         requestInfo.commonTplPath = path.join( config.viewRoot, this.request.path );

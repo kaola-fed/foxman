@@ -4,8 +4,8 @@ import path from 'path';
 import serve from 'koa-serve';
 import renderUtil from '../../helper/render';
 import render from 'koa-ejs';
-import dispatcher from './dispatcher';
-import routeMap from './routemap'
+import dispatcher from './middleware/dispatcher';
+import routeMap from './middleware/routemap'
 import { util , genRouteMap} from '../../helper';
 
 class Server {
