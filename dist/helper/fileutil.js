@@ -55,6 +55,7 @@ function getDirInfo(dir) {
 		});
 	});
 }
+
 function getFileStat(file) {
 	return new Promise(function (resolve, reject) {
 		_fs2.default.lstat(file, function (err, stat) {

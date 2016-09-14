@@ -47,12 +47,29 @@ exports.default = function (config) {
                                 this.dispatcher = _helper.util.dispatcherTypeCreator('async', commonAsync, commonAsync);
                             }
                         }];
+                        /**
+                         * mode 1 拦截文件夹的路径
+                         */
+
+                        if (!(this.request.query.mode == 1 && this.request.path.endsWith('/'))) {
+                            _context.next = 7;
+                            break;
+                        }
+
+                        _helper.util.log('文件夹类型');
+                        routeMap[0].handler.call(this);
+                        _context.next = 6;
+                        return next;
+
+                    case 6:
+                        return _context.abrupt('return', _context.sent);
+
+                    case 7:
 
                         /**
                          * ① 拦截 router
                          * @type {[type]}
                          */
-
                         routers = config.routers;
                         method = this.request.method;
                         requestPath = this.request.path;
@@ -66,27 +83,8 @@ exports.default = function (config) {
                          */
                         realTplPath = _path2.default.join(config.viewRoot, this.request.path);
                         tplPath = _path2.default.join(config.viewRoot, requestPath);
-                        commonSync = config.syncDataMatch(requestPath.replace(/^(\/||\\)/, '').replace(/\.[^.]*$/, '') + '.json');
+                        commonSync = config.syncDataMatch(_helper.util.jsonPathResolve(requestPath));
                         commonAsync = config.asyncDataMatch(_helper.util.jsonPathResolve(requestPath));
-
-                        /**
-                         * mode 1 拦截文件夹的路径
-                         */
-
-                        if (!(this.request.query.mode == 1 && this.request.path.endsWith('/'))) {
-                            _context.next = 15;
-                            break;
-                        }
-
-                        _helper.util.log('文件夹类型');
-                        routeMap[0].handler.call(this);
-                        _context.next = 14;
-                        return next;
-
-                    case 14:
-                        return _context.abrupt('return', _context.sent);
-
-                    case 15:
                         i = 0;
 
                     case 16:

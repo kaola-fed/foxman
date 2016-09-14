@@ -27,6 +27,7 @@ export function getDirInfo(dir){
 		});
 	});
 }
+
 export function getFileStat(file){
 	return new Promise(function (resolve, reject) {
 		fs.lstat(file, function (err, stat) {

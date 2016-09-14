@@ -31,12 +31,11 @@ export default class Application extends EventEmitter {
       if( this.pendings ){
         return this.pendings.push(pending);
       }
-
       this.pendings = [ pending ];
     }
 
     excute(){
-      return function * ( crt = 0 ) {
+      return function * () {
         const plugins = this.plugins;
         for( let plugin of plugins ){
           plugin.init && plugin.init();

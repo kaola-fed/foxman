@@ -46,8 +46,8 @@ var options = {
 var nei = new _args2.default(options),
     neiTools = {
   update: function update() {
+    nei.exec('update');
     return new Promise(function (resolve, reject) {
-      nei.exec('update');
       nei.on('updateend', function () {
         resolve.apply(undefined, arguments);
       });

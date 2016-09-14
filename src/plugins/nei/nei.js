@@ -23,8 +23,8 @@ const options = {
 let nei = new Application(options),
     neiTools = {
       update () {
+        nei.exec('update');
         return new Promise((resolve, reject)=>{
-          nei.exec('update');
           nei.on('updateend', (...args) => {
             resolve(...args);
           });

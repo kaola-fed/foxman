@@ -48,7 +48,7 @@ var ProxyPlugin = function () {
             var routes = this.app.server.routers;
 
             routes.forEach(function (router) {
-                var proxyUrl = resolve(router.url.replace(/^(\/)/, ''));
+                var proxyUrl = router.url.replace(/^(\/)/, '');
 
                 if (router.sync) {
                     router.syncData = proxyUrl;

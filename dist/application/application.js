@@ -68,15 +68,12 @@ var Application = function (_EventEmitter) {
             if (this.pendings) {
                 return this.pendings.push(pending);
             }
-
             this.pendings = [pending];
         }
     }, {
         key: 'excute',
         value: function excute() {
             return regeneratorRuntime.mark(function _callee() {
-                var crt = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-
                 var plugins, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, plugin;
 
                 return regeneratorRuntime.wrap(function _callee$(_context) {

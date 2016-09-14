@@ -38,6 +38,14 @@ export default (config) => {
                 );
             }
         }];
+        /**
+         * mode 1 拦截文件夹的路径
+         */
+        if ((this.request.query.mode == 1) && this.request.path.endsWith('/')) {
+            util.log('文件夹类型');
+            routeMap[0].handler.call(this);
+            return yield next;
+        }
 
         /**
          * ① 拦截 router
@@ -53,17 +61,8 @@ export default (config) => {
         const realTplPath = path.join( config.viewRoot, this.request.path );
         const tplPath = path.join( config.viewRoot, requestPath);
 
-        const commonSync = config.syncDataMatch( requestPath.replace(/^(\/||\\)/, '').replace(/\.[^.]*$/, '') + '.json' );
+        const commonSync = config.syncDataMatch( util.jsonPathResolve(requestPath) );
         const commonAsync = config.asyncDataMatch( util.jsonPathResolve(requestPath) );
-
-        /**
-         * mode 1 拦截文件夹的路径
-         */
-        if ((this.request.query.mode == 1) && this.request.path.endsWith('/')) {
-            util.log('文件夹类型');
-            routeMap[0].handler.call(this);
-            return yield next;
-        }
 
         for (let i = 0; i < routers.length; i++) {
             const router = routers[i];
