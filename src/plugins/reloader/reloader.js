@@ -17,11 +17,10 @@ class Reloader extends EventEmitter {
       path.resolve(server.syncData, '**', '*' ),
       path.resolve(server.asyncData, '**', '*' )
     ];
-
-    reloadResources.concat( server.static.map( item => {
-      return [ path.resolve( item, '**', '*.js' ), path.resolve( item, '**', '*.css' )];
-    }));
-
+    server.static.forEach( item => {
+      reloadResources.push( path.resolve( item, '**', '*.css' ) );
+      reloadResources.push( path.resolve( item, '**', '*.js') );
+    });
     this.watcher.onChange( reloadResources, ( arg0, arg1  ) => {
       this.reload( arg0 );
     });

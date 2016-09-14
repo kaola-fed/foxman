@@ -1,8 +1,8 @@
 import {
     util
-} from '../../helper';
+} from '../../../helper';
 import path from 'path';
-
+import _ from 'util';
 /**
  * 全局中间件,会将具体的页面转换成需要的资源
  * 1.同步
@@ -56,11 +56,12 @@ export default (config) => {
          * @type {[type]}
          */
         const [routers, method] = [config.routers, this.request.method];
-        let requestPath = this.request.path;
 
-        if (requestPath == '/') {
-          requestPath = '/index.html';
-        }
+        /**
+         * 入口时，自动转换
+         */
+        let requestPath = ( this.request.path == '/' ) ? '/index.html' : this.request.path;
+        
         /**
          * 路径统一绝对路径
          */
@@ -68,7 +69,6 @@ export default (config) => {
         /**
          * computedTplPath 与 tplPath 的区别是 在 请求url为'/'的时候
          * 前者为 '.../tpl/',
-         * 后者为 '.../tpl/index.html'
          * @type {[string]}
          */
         requestInfo.commonTplPath = path.join( config.viewRoot, this.request.path );
@@ -122,8 +122,13 @@ export default (config) => {
         /**
          * ② 未拦截到 router
          */
+        if ( this.request.query.mode != 1) {
+            return;
+        }
+        
         for (let [route, handler] of routeMap) {
-            if (requestPath.endsWith(route)) {
+            if ( requestPath.endsWith(route)  ) {
+                util.debugLog(_.inspect(requestInfo));
                 handler.call(this, requestInfo);
                 return yield next;
             }

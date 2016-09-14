@@ -1,6 +1,5 @@
 import path from 'path';
-import renderUtil from '../../helper/render';
-import { util, fileUtil } from '../../helper';
+import { util, fileUtil, renderUtil } from '../../../helper';
 
 /**
  * default dispatcher
@@ -34,7 +33,6 @@ export function* syncDispatcher(dispatcher, config, next) {
     const filePath = dispatcher.path;
     const dataPath = dispatcher.dataPath;
     const dataModel = yield fileUtil.jsonResover(dataPath);
-
     if( !dataModel ) {
       this.type = 500;
       yield this.render('e', { title: '出错了', e:{
@@ -66,8 +64,12 @@ export function* syncDispatcher(dispatcher, config, next) {
       return yield next;
     }
 
-    let html = [];
-    yield new Promise(( resolve, reject )=>{
+    
+    let html = yield new Promise(( resolve, reject )=>{
+      let html = [];
+      if( !stdout.readable ) {
+        return resolve(html);
+      }
       stdout.on('data',(chunk)=>{
         html.push(chunk);
       });
@@ -75,7 +77,6 @@ export function* syncDispatcher(dispatcher, config, next) {
         resolve(html);
       });
     });
-
     this.type = 'text/html; charset=utf-8';
     this.body = html.join('');
     return yield next;
@@ -117,7 +118,7 @@ export default ( config )=>{
       'sync': syncDispatcher,
       'async': asyncDispather,
     }
-
+    util.debugLog(JSON.stringify(this.dispatcher));
     let dispatcher;
     if( dispatcher = dispatcherMap[ this.dispatcher.type ] ){
       yield dispatcher.call(this, this.dispatcher, ...args );

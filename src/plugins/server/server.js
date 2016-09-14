@@ -4,8 +4,8 @@ import path from 'path';
 import serve from 'koa-serve';
 import renderUtil from '../../helper/render';
 import render from 'koa-ejs';
-import dispatcher from './dispatcher';
-import routeMap from './routemap'
+import dispatcher from './middleware/dispatcher';
+import routeMap from './middleware/routemap'
 import { util , genRouteMap} from '../../helper';
 
 class Server {
@@ -44,10 +44,9 @@ class Server {
       app.use( dispatcher( this ) );
     }
     setRender() {
-        if( this.tplConfig ){
-          Object.assign(this, this.tplConfig);
+        if( this.tpl ){
+          Object.assign(this, this.tpl);
         }
-
         this.renderUtil = this.renderUtil || renderUtil;
         this.extension = this.extension || 'ftl';
 

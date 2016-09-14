@@ -16,8 +16,8 @@
     }
   },
   "scripts": {
-    "build": "babel src -d dist",
-    "dev": "babel src -w -d dist",
+    "build": "babel src -d dist -s",
+    "dev": "babel src -w -d dist -s",
     "test": "mocha ./test/test"
   },
   "repository": {

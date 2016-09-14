@@ -2,3 +2,4 @@
 *.idea*
 /npm-debug.log
 dev.bat
+*dist*

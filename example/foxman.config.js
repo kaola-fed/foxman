@@ -2,8 +2,12 @@
 const path = require('path');
 const mcss = require('foxman-mcss');
 const autoprefix = require('gulp-autoprefixer');
-const routers = require('./route');
 const root = path.resolve(__dirname, 'src', 'main', 'webapp');
+const routers = [{
+  method: 'GET', url: '/index.html', sync: true, filePath: 'pages/h5/info/detail'
+},{
+  method: 'GET', url: '/index2.html', sync: false, filePath: 'index'
+}];
 
 module.exports = {
     root,
@@ -19,9 +23,8 @@ module.exports = {
         /** exclude: ['src\/mcss\/_config.mcss],**/
         handler: (dest) => [
             mcss({
-                "include": [ path.resolve(root,"src/javascript/kaola-fed-lib/components/h5"),
-                             path.resolve(root,"src/javascript/pages/h5/components")],
-                "exclude": "(\\\\|\\/)_",
+                // "include": [],
+                // "exclude": "(\\\\|\\/)_",
                 "format": 1
             }),
             autoprefix({
@@ -32,13 +35,13 @@ module.exports = {
         ]
     }],
     watch: {},
-    tplConfig: {
-      extension: 'ftl',
-      /** renderUtil: null **/
-    },
     server: {
       routers,
       port: 3000,
+      tpl: {
+        extension: 'ftl',
+        /** renderUtil: null **/
+      },
       proxy: {
         test1: ( url ) => {
           let devMark = 'isDev=1000';
