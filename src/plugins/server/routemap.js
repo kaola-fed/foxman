@@ -16,34 +16,39 @@ import path from 'path';
  * @param  {[type]} config [description]
  * @return {[type]}        [description]
  */
-export default (config) => {
 
+const commonDispatcher = (config) => {
+  const routeMap = new Map();
+  routeMap.set('/', ( { dirPath } ) => {
+    this.dispatcher = util.dispatcherTypeCreator(
+        'dir', dirPath, null
+    );
+  });
+
+  routeMap.set(`.${config.extension}`, ({ tplPath, commonSync}) => {
+    this.dispatcher = util.dispatcherTypeCreator(
+        'sync', tplPath, commonSync
+    );
+  });
+
+  routeMap.set('.json', ({commonAsync}) => {
+    this.dispatcher = util.dispatcherTypeCreator(
+        'async', commonAsync, commonAsync
+    );
+  });
+  return routeMap;
+}
+
+export default (config) => {
+    const routeMap = commonDispatcher(config);
     return function*(next) {
-        const routeMap = [{
-            test: '/', handler() {
-                this.dispatcher = util.dispatcherTypeCreator(
-                    'dir', realTplPath, null
-                );
-            }
-        }, {
-            test: `.${config.extension}`,handler() {
-                this.dispatcher = util.dispatcherTypeCreator(
-                    'sync', tplPath, commonSync
-                );
-            }
-        }, {
-            test: '.json', handler() {
-                this.dispatcher = util.dispatcherTypeCreator(
-                    'async', commonAsync, commonAsync
-                );
-            }
-        }];
         /**
          * mode 1 拦截文件夹的路径
          */
         if ((this.request.query.mode == 1) && this.request.path.endsWith('/')) {
-            util.log('文件夹类型');
-            routeMap[0].handler.call(this);
+            let dirPath = path.join( config.viewRoot, this.request.path );
+            console.log(this);
+            routeMap.get('/').call( this, { dirPath });
             return yield next;
         }
 
@@ -54,22 +59,41 @@ export default (config) => {
         const [routers, method] = [config.routers, this.request.method];
         let requestPath = this.request.path;
 
-        if (requestPath == '/') { requestPath = '/index.html'; }
+        if (requestPath == '/') {
+          requestPath = '/index.html';
+        }
         /**
          * 路径统一绝对路径
          */
-        const realTplPath = path.join( config.viewRoot, this.request.path );
-        const tplPath = path.join( config.viewRoot, requestPath);
+        const requestInfo = {};
+        /**
+         * computedTplPath 与 tplPath 的区别是 在 请求url为'/'的时候
+         * 前者为 '.../tpl/',
+         * 后者为 '.../tpl/index.html'
+         * @type {[string]}
+         */
+        requestInfo.tplPath = path.join( config.viewRoot, this.request.path );
+        requestInfo.computedTplPath = path.join( config.viewRoot, requestPath);
 
-        const commonSync = config.syncDataMatch( util.jsonPathResolve(requestPath) );
-        const commonAsync = config.asyncDataMatch( util.jsonPathResolve(requestPath) );
+        /**
+         * 根据用户定义的规则和url,生成通用的同步数据路径
+         * @type {[string]}
+         */
+        requestInfo.commonSync = config.syncDataMatch( util.jsonPathResolve(requestPath) );
 
-        for (let i = 0; i < routers.length; i++) {
-            const router = routers[i];
+        /**
+         * 根据用户定义的规则和url,生成通用的异步数据路径
+         * @type {[string]}
+         */
+        requestInfo.commonAsync = config.asyncDataMatch( util.jsonPathResolve(requestPath) );
 
+        /**
+         * 遍历路由表,并给请求对象处理,生成 this.dispatcher
+         */
+        for ( let router of routers ) {
             if (router.method.toUpperCase() == method.toUpperCase() &&
                 router.url == this.request.path) {
-                const fileWithoutExt = util.removeSuffix(router.filePath);
+                let tplPath = `${util.removeSuffix(router.filePath)}.${config.extension}`;
                 /**
                  * 同步接口
                  * 可能插件会生成一个 syncData ,若已生成则用插件的
@@ -78,8 +102,8 @@ export default (config) => {
                 if (router.sync) {
                     this.dispatcher = util.dispatcherTypeCreator(
                         'sync',
-                        path.join(config.viewRoot, `${fileWithoutExt}.${config.extension}`),
-                        router.syncData || commonSync
+                        path.join(config.viewRoot, tplPath),
+                        router.syncData || requestInfo.commonSync
                     );
                 } else {
                     /**
@@ -88,8 +112,8 @@ export default (config) => {
                      */
                     this.dispatcher = util.dispatcherTypeCreator(
                         'async',
-                        commonAsync,
-                        router.asyncData || commonAsync
+                        requestInfo.commonAsync,
+                        router.asyncData || requestInfo.commonAsync
                     );
                 }
                 util.log(`请求url:${router.url}`);
@@ -100,9 +124,9 @@ export default (config) => {
         /**
          * ② 未拦截到 router
          */
-        for (let route of routeMap) {
-            if (requestPath.endsWith(route.test)) {
-                route.handler.call(this);
+        for (let [route, handler] of routeMap) {
+            if (requestPath.endsWith(route)) {
+                handler.call(this);
                 return yield next;
             }
         }
