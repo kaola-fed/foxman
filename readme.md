@@ -13,7 +13,7 @@
 $ npm install foxman -g
 ```
 # Preview
-![http://note.youdao.com/yws/public/resource/c0ad463e177be9880ecc3b0293558130/xmlnote/A476DE54F65648458ADAEA221AA07046/6041](http://note.youdao.com/yws/public/resource/c0ad463e177be9880ecc3b0293558130/xmlnote/A476DE54F65648458ADAEA221AA07046/6041)
+![http://note.youdao.com/yws/public/resource/c0ad463e177be9880ecc3b0293558130/xmlnote/AB403D840B894D03980520552B3EF39A/6045](http://note.youdao.com/yws/public/resource/c0ad463e177be9880ecc3b0293558130/xmlnote/AB403D840B894D03980520552B3EF39A/6045)
 
 # Usage
 
