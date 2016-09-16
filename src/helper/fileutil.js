@@ -102,7 +102,7 @@ export function jsonResover ( url ) {
 		readFile(url).then( (data) => {
 			resolve( JSON.parse(data) );
 		},(err)=>{
-			console.log(err);
+			_.warnLog(`localFile ${url} is not found, so output {}`);
 			resolve( {} );
 		});
 	});
