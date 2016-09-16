@@ -32,9 +32,15 @@ export function createSystemId(){ // uid
   }
 }
 
-export function firstUpperCase (str) {
+export function initialsCapitals (str) {
   return str.replace(/\b(\w)(\w*)/g, function($0, $1, $2) {
       return $1.toUpperCase() + $2;
+  });
+}
+
+export function initialsLower (str) {
+  return str.replace(/\b(\w)(\w*)/g, function($0, $1, $2) {
+      return $1.toLowerCase() + $2;
   });
 }
 
@@ -134,7 +140,8 @@ export default {
   warnLog,
   log,
   createSystemId,
-  firstUpperCase,
+  initialsLower,
+  initialsCapitals,
   exec,
   jsSpawn,
   jsonPathResolve,

@@ -91,7 +91,9 @@ export default (config) => {
         for ( let router of routers ) {
             if (router.method.toUpperCase() == method.toUpperCase() &&
                 router.url == this.request.path) {
+
                 let tplPath = path.join(config.viewRoot, `${util.removeSuffix(router.filePath)}.${config.extension}`);
+                
                 /**
                  * 同步接口
                  * 可能插件会生成一个 syncData ,若已生成则用插件的
@@ -108,10 +110,11 @@ export default (config) => {
                      * 如果插件已生成了 asyncData 属性,则用插件的
                      * 即: 插件对于响应,有更高的权限
                      */
+                    let modelPath = path.join(config.asyncData, `${router.filePath}.json`);
                     this.dispatcher = util.dispatcherTypeCreator(
                         'async',
-                        requestInfo.commonAsync,
-                        router.asyncData || requestInfo.commonAsync
+                        modelPath,
+                        router.asyncData || modelPath
                     );
                 }
                 util.log(`${router.method} ${router.url}`);
@@ -122,9 +125,6 @@ export default (config) => {
         /**
          * ② 未拦截到 router
          */
-        if ( this.request.query.mode != 1) {
-            return;
-        }
         
         for (let [route, handler] of routeMap) {
             if ( requestPath.endsWith(route)  ) {

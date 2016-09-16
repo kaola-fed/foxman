@@ -16,7 +16,9 @@ const options = {
         /**
          * 往外传递
         */
-        subMain.on('updateend', (...args) => { this.emit('updateend',...args); })
+        subMain.on('updateend', (...args) => { 
+          this.emit('updateend',...args); 
+        });
     }
 };
 
