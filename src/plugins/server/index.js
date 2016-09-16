@@ -6,7 +6,7 @@ class ServerPlugin  {
       this.options = options;
     }
     init (){
-        ( this.app.server = new Server( this.options ) ).createServer();
+        ( this.server = new Server( this.options ) ).createServer();
     }
 }
 export default ServerPlugin;

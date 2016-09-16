@@ -4,7 +4,7 @@ const mcss = require('foxman-mcss');
 const autoprefix = require('gulp-autoprefixer');
 const root = path.resolve(__dirname, 'src', 'main', 'webapp');
 const routers = [{
-  method: 'GET', url: '/index.html', sync: true, filePath: 'pages/h5/info/detail'
+  method: 'GET', url: '/index.html', sync: true, filePath: 'page/4pl/expenseTemplate/list'
 },{
   method: 'GET', url: '/index2.html', sync: false, filePath: 'index'
 }];
@@ -14,9 +14,9 @@ module.exports = {
     plugins: [
     ],
     // nei:{
-    //   config:"",
-    //   mockTpl:"",
-    //   mockApi:""
+    //   configPath: path.resolve( __dirname, 'nei.xxx.xxx/server.config'),
+    //   mockTpl: 'backend/template/mock',
+    //   mockApi: 'backend/src/mock'
     // },
     preCompilers: [{
         test: ['src/mcss/**/*.mcss'],
@@ -37,7 +37,7 @@ module.exports = {
     watch: {},
     server: {
       routers,
-      port: 3000,
+      port: 5000,
       tpl: {
         extension: 'ftl',
         /** renderUtil: null **/

@@ -32,6 +32,7 @@ export function* syncDispatcher(dispatcher, config, next) {
 
     const filePath = dispatcher.path;
     const dataPath = dispatcher.dataPath;
+    console.log(dataPath);
     const dataModel = yield fileUtil.jsonResover(dataPath);
     if( !dataModel ) {
       this.type = 500;

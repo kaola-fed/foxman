@@ -100,8 +100,9 @@ export function jsonResover ( url ) {
 		}
 
 		readFile(url).then( (data) => {
-				resolve( JSON.parse(data) );
+			resolve( JSON.parse(data) );
 		},(err)=>{
+			_.warnLog(`localFile ${url} is not found, so output {}`);
 			resolve( {} );
 		});
 	});

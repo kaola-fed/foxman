@@ -19,8 +19,8 @@ class PreCompilerPlugin  {
     constructor(options){
       this.options = options;
     }
-    init() {
-        this.watcher = this.app.watcher;
+    init( watcherPlugin ) {
+        this.watcher = watcherPlugin.watcher;
         this.mapCompiler( this.options.preCompilers );
     }
     mapCompiler( preCompilers ) {

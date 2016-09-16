@@ -11,7 +11,7 @@ class WatcherPlugin {
         this.root = options.root;
     }
     init() {
-        this.app.watcher = new Watcher(this.root);
+        this.watcher = new Watcher(this.root);
     }
 }
 export default WatcherPlugin;

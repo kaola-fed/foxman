@@ -8,13 +8,13 @@ class ReloadPlugin {
     constructor(options) {
         this.options = options;
     }
-    init() {
-        let server = this.app.server;
+    init( watcherPlugin, serverPlugin ) {
+        const server = serverPlugin.server;
+        const watcher = watcherPlugin.watcher;
         server.appendHtml("<script src='/resource/js/reload.js'></script>");
 
         this.reloader = new Reloader(Object.assign({
-            watcher: this.app.watcher,
-            server: this.app.server
+            watcher, server
         }, this.options));
     }
 }
