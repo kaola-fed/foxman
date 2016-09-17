@@ -37,7 +37,7 @@ const fileDispatcher = (config) => {
     );
   });
   return routeMap;
-}
+};
 
 export default (config) => {
     const routeMap = fileDispatcher(config);
