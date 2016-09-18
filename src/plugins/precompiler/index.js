@@ -41,7 +41,7 @@ class PreCompilerPlugin  {
 
         if ( !Array.isArray(patterns) ) {
             patterns = [ patterns ]
-        };
+        }
 
         let files = [];
         patterns.forEach((pattern) => {

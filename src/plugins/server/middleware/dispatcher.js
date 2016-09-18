@@ -4,7 +4,7 @@ import { util, fileUtil, renderUtil } from '../../../helper';
 /**
  * default dispatcher
  * @param  {[type]} config  [description]
- * @param  {[type]} this [description]
+ * @param  {[type]} next [description]
  * @return {[type]}         [description]
  */
 export function* dirDispatcher( dispatcher, config, next) {
@@ -28,12 +28,19 @@ export function* dirDispatcher( dispatcher, config, next) {
     });
 }
 
+/**
+ * 同步请求响应
+ * @param dispatcher
+ * @param config
+ * @param next
+ * @returns {*}
+ */
 export function* syncDispatcher(dispatcher, config, next) {
 
     const filePath = dispatcher.path;
     const dataPath = dispatcher.dataPath;
-    console.log(dataPath);
     const dataModel = yield fileUtil.jsonResover(dataPath);
+
     if( !dataModel ) {
       this.type = 500;
       yield this.render('e', { title: '出错了', e:{
@@ -65,7 +72,6 @@ export function* syncDispatcher(dispatcher, config, next) {
       return yield next;
     }
 
-    
     let html = yield new Promise(( resolve, reject )=>{
       let html = [];
       if( !stdout.readable ) {
@@ -78,11 +84,19 @@ export function* syncDispatcher(dispatcher, config, next) {
         resolve(html);
       });
     });
+
     this.type = 'text/html; charset=utf-8';
     this.body = html.join('');
     return yield next;
 }
 
+/**
+ * 异步请求响应
+ * @param dispatcher
+ * @param config
+ * @param next
+ * @returns {*}
+ */
 export function* asyncDispather( dispatcher, config, next) {
     /**
      * 异步接口处理
@@ -118,7 +132,7 @@ export default ( config )=>{
       'dir': dirDispatcher,
       'sync': syncDispatcher,
       'async': asyncDispather,
-    }
+    };
     util.debugLog(JSON.stringify(this.dispatcher));
     let dispatcher;
     if( dispatcher = dispatcherMap[ this.dispatcher.type ] ){
