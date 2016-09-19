@@ -1,6 +1,7 @@
-
 const config = require('./foxman.config');
 
-// const mcss = require('foxman-mcss');
-
-require('../')(config);
+config.argv = {
+    proxy: false,
+    update: false
+};
+require('../app.js')(config);
