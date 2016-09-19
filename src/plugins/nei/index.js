@@ -66,6 +66,7 @@ class NeiPlugin  {
       this.routes = this.formatRoutes( rules );
       return this.updateLocalFiles( this.routes );
     }
+    
     formatRoutes( rules ){
       let server = this.server;
       let routes = [];
@@ -113,9 +114,9 @@ class NeiPlugin  {
         return new Promise( ( resolve, reject ) => {
           let dataPath;
           if( route.sync ) {
-              dataPath = server.syncDataMatch( route.filePath );
+              dataPath = server.syncDataMatch( util.jsonPathResolve( route.filePath ) );
           } else {
-              dataPath = path.resolve( server.asyncData, util.jsonPathResolve( route.filePath ));
+              dataPath = path.resolve( server.asyncData, util.jsonPathResolve( route.filePath ) );
           }
 
           fs.stat( dataPath, ( error, stat ) => {
@@ -171,9 +172,6 @@ class NeiPlugin  {
 
     }
 
-    genNeiApiUrl ( route ) {
-      return path.resolve(route.sync? this.mockTpl: this.mockApi, route.filePath +'.json' );
-    }
 }
 
 export default NeiPlugin;

@@ -1,4 +1,3 @@
-// import Reloader from './reloader';
 import {
     util,
     fileUtil
@@ -21,7 +20,7 @@ class ProxyPlugin {
         if ( !this.proxyServer ) {
             return false;
         }
-        this.app.server = serverPlugin.server;
+        this.server = serverPlugin.server;
         
         if ( Object.keys( this.proxy ).indexOf( this.proxyServer ) == -1) {
             util.error('请核对配置文件，并设置正确的 proxyServerName ');
@@ -29,7 +28,7 @@ class ProxyPlugin {
         this.updateRoutes( this.proxy[this.proxyServer] );
     }
     updateRoutes(resolve) {
-        const routes = this.app.server.routers;
+        const routes = this.server.routers;
 
         routes.forEach((router) => {
             const proxyUrl =  router.url.replace(/^(\/)/, '') ;

@@ -17,7 +17,7 @@ class Reloader extends EventEmitter {
     let reloadResources = [
       path.resolve(server.viewRoot, '**', '*.' + server.extension ),
       path.resolve(server.syncData, '**', '*' ),
-      path.resolve(server.asyncData, '**', '*' )
+      // path.resolve(server.asyncData, '**', '*' )
     ];
 
     server.static.forEach( item => {

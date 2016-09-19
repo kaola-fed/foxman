@@ -3,11 +3,7 @@ const path = require('path');
 const mcss = require('foxman-mcss');
 const autoprefix = require('gulp-autoprefixer');
 const root = path.resolve(__dirname, 'src', 'main', 'webapp');
-const routers = [{
-  method: 'GET', url: '/index.html', sync: true, filePath: 'page/4pl/expenseTemplate/list'
-},{
-  method: 'GET', url: '/index2.html', sync: false, filePath: 'index'
-}];
+const routers = require('./route')
 
 module.exports = {
     root,
@@ -19,20 +15,20 @@ module.exports = {
     //   mockApi: 'backend/src/mock'
     // },
     preCompilers: [{
-        test: ['src/mcss/**/*.mcss'],
-        /** exclude: ['src\/mcss\/_config.mcss],**/
-        handler: (dest) => [
-            mcss({
-                // "include": [],
-                // "exclude": "(\\\\|\\/)_",
-                "format": 1
-            }),
-            autoprefix({
-                browsers: ['Android >= 2.3'],
-                cascade: false
-            }),
-            dest('src/css')
-        ]
+      test: ['src/mcss/**/*.mcss'],
+      /** exclude: ['src\/mcss\/_config.mcss],**/
+      handler: (dest) => [
+        mcss({
+            // "include": [],
+            // "exclude": "(\\\\|\\/)_",
+            "format": 1
+        }),
+        autoprefix({
+            browsers: ['Android >= 2.3'],
+            cascade: false
+        }),
+        dest('src/css')
+      ]
     }],
     watch: {},
     server: {
