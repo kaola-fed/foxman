@@ -5,6 +5,7 @@ import child_process from 'child_process';
 import 'colors';
 import http from 'http';
 import url from 'url';
+import path from 'path';
 
 export function debugLog(msg) {
   if(process.env.NODE_ENV === 'development'){
@@ -109,7 +110,7 @@ export function request(options) {
 	options = Object.assign({
 		method: 'GET',
 		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded',
+			'Content-Type': 'application/x-www-form-urlencoded'
 		}
 	}, urlInfo);
 
@@ -133,22 +134,24 @@ export function request(options) {
 		req.end();
 	})
 }
-
+export function typeOf( obj ) {
+    return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
+}
 export default {
-  debugLog,
-  error,
-  warnLog,
-  log,
-  createSystemId,
-  initialsLower,
-  initialsCapitals,
-  exec,
-  jsSpawn,
-  jsonPathResolve,
-  removeHeadBreak,
-  removeSuffix,
-  appendHeadBreak,
-  bufferConcat,
-  dispatcherTypeCreator,
-  request
+    debugLog,
+    error,
+    warnLog,
+    log,
+    createSystemId,
+    initialsLower,
+    initialsCapitals,
+    exec,
+    jsSpawn,
+    jsonPathResolve,
+    removeHeadBreak,
+    removeSuffix,
+    appendHeadBreak,
+    bufferConcat,
+    dispatcherTypeCreator,
+    request
 };

@@ -1,8 +1,6 @@
 import {
-    util,
-    fileUtil
+    util
 } from '../../helper';
-import url from 'url';
 /**
  * 全局代理插件
  */

@@ -1,177 +1,182 @@
 import neiTools from './nei';
 import path from 'path';
 import fs from 'fs';
-import { util,fileUtil } from '../../helper';
+import os from 'os';
+import {util, fileUtil} from '../../helper';
 import _ from 'util';
+import globule from 'globule';
 
 /**
  * Nei 插件
  */
-class NeiPlugin  {
-    constructor(options){
-      this.options = options;
-      Object.assign(this, options);
+class NeiPlugin {
+    constructor(options) {
+        this.options = options;
     }
 
-    init( serverPlugin ) {
-      this.server = serverPlugin.server;
+    init(serverPlugin) {
+        const key =  this.options.neiKey;
+        const homedir = os.homedir();
+        const baseDir = `${homedir}\\localMock\\${key}\\`;
+        const pattern = path.resolve( baseDir, '**/nei.json');
+        const hasBuild = globule.find( pattern ).length > 0 ;
+        
+        this.server = serverPlugin.server;
+        const doUpdate = this.config.argv.update || false;
+        this.neiRoute = path.resolve(baseDir, 'nei.route.js');
 
-      this.formatArgs();
-      const doUpdate = this.config.argv.update || false;
-      this.neiRoute = path.resolve( this.config.root, 'nei.route.js');
-      
-      try {
-        require( this.configPath );
-      } catch ( e ) {
-        util.error('nei 配置文件不存在，请先配置项目的nei关联，并核对 foxman.config 中的 nei.configPath 是否正确');
-      }
-
-      if( doUpdate ) {
-        return this.pending(( resolve )=>{
-            neiTools
-            .update()
-            .then(() => {
-              this.recieveUpdate()
-            })
-            .then(() => {
-              return this.updateRoutes( this.routes );
-            }).then( resolve );
-        });
-      }
-
-      try {
-        this.routes = require( this.neiRoute );
-      } catch ( e ) {
-        util.error('foxman 未找到格式化过的内 nei route，请先执行 foxman -u ');
-      }
-
-      this.updateRoutes( this.routes );
-    }
-
-    formatArgs(){
-      ['configPath', 'mockTpl', 'mockApi'].forEach( ( item ) => {
-          this[item] = path.resolve(this.config.root, this[item]);
-      });
-    }
-
-    recieveUpdate(config) {
-      
-      // 更新
-      try{
-        delete require.cache[require.resolve(this.configPath)];
-      }catch(e){}
-
-      const rules = require( this.configPath ).routes;
-      
-      this.routes = this.formatRoutes( rules );
-      return this.updateLocalFiles( this.routes );
-    }
-    
-    formatRoutes( rules ){
-      let server = this.server;
-      let routes = [];
-      let neiRoute = this.neiRoute;
-
-      for( let ruleName in rules ){
-        if(rules.hasOwnProperty(ruleName)){
-          let filePath, id;
-          let rule = rules[ruleName];
-          let [method, url] = ruleName.split(' ');
-
-          // nei url 默认都是不带 / ,检查是否有
-          url = util.appendHeadBreak( url );
-
-          let sync = rule.hasOwnProperty('list');
-
-          if( sync ){
-            [filePath, id] = [rule.list[0].path, rule.list[0].id];
-          } else {
-            [filePath, id] = [rule.path,rule.id];
-          }
-
-          routes.push({
-            method, url,
-            sync, filePath, id
-          });
+        if (doUpdate) {
+            return this.pending((resolve)=> {
+                neiTools
+                    .run({
+                        key, baseDir, hasBuild
+                    })
+                    .then((config) => {
+                        this.getUpdate(config);
+                    })
+                    .then(() => {
+                        return this.updateRoutes(this.routes);
+                    }).then(resolve);
+            });
         }
-      }
-      fileUtil.writeFile(neiRoute, `module.exports = ${_.inspect(routes,{maxArrayLength: null})}`, () => {
 
-      },(e)=>{
-        util.error(e);
-      });
+        const serverConfigFiles = globule.find( path.resolve( baseDir, '**/server.config.js') );
 
-      return routes;
-    }
-
-    updateLocalFiles ( routes = []) {
-
-      let server = this.server;
-
-      let [syncData, asyncData] = [server.syncData, server.asyncData];
-
-      const promises = routes.map( ( route ) =>{
-        return new Promise( ( resolve, reject ) => {
-          let dataPath;
-          if( route.sync ) {
-              dataPath = server.syncDataMatch( util.jsonPathResolve( route.filePath ) );
-          } else {
-              dataPath = path.resolve( server.asyncData, util.jsonPathResolve( route.filePath ) );
-          }
-
-          fs.stat( dataPath, ( error, stat ) => {
-            /**
-             * 文件不存在或者文件内容为空
-             */
-            if( error ){
-                util.log('make empty file: ' + dataPath);
-                fileUtil.writeUnExistsFile( dataPath, "" ).then( resolve , reject );
-                return 0;
+        try {
+            if(serverConfigFiles.length == 0) {
+                throw new Error('can`t find server.config');
             }
-            resolve();
-          });
-        })
-      });
-      return new Promise((...args)=>{
-        Promise.all( promises ).then(()=>{
-          args[0](routes);
-        }).catch((e)=>{
-          util.error(e);
-        });
-      });
+            this.setNeiMockDir(require(serverConfigFiles[0]));
+            this.routes = require(this.neiRoute);
+        } catch (e) {
+            util.error([
+                'nei资源不完整，请执行 \n',
+                '$ foxman -u'].join(''));
+        }
+
+        this.updateRoutes(this.routes);
+    }
+    setNeiMockDir(neiConfig){
+        this.mockTpl = neiConfig.mockTpl;
+        this.mockApi = neiConfig.mockApi;
     }
 
-    updateRoutes( routes ){
-      let promises = routes.map( ( route ) => {
-        return new Promise((...args) => {
-          fs.stat( route.filePath, ( error, stat ) => {
-            /**
-             * 文件不存在或者文件内容为空
-             */
-            
-            if( error || !stat.size ){
-                // TODO url creater
-                const dataPath = this.genNeiApiUrl( route );
-                if( route.sync ) {
-                    route.syncData = dataPath;
+    getUpdate(config) {
+        /**
+         * neiConfigRoot
+         * @type {string|*}
+         */
+        const neiConfigRoot = path.resolve( config.neiConfigRoot, 'server.config.js');
+        const neiConfig = require(neiConfigRoot);
+        const rules = neiConfig.routes;
+        this.setNeiMockDir(neiConfig);
+        this.routes = this.formatRoutes(rules);
+        return this.updateLocalFiles(this.routes);
+    }
+
+    formatRoutes(rules) {
+        let server = this.server;
+        let routes = [];
+        let neiRoute = this.neiRoute;
+
+        for (let ruleName in rules) {
+            if (rules.hasOwnProperty(ruleName)) {
+                let filePath, id;
+                let rule = rules[ruleName];
+                let [method, url] = ruleName.split(' ');
+
+                // nei url 默认都是不带 / ,检查是否有
+                url = util.appendHeadBreak(url);
+
+                let sync = rule.hasOwnProperty('list');
+
+                if (sync) {
+                    [filePath, id] = [rule.list[0].path, rule.list[0].id];
                 } else {
-                    route.asyncData = dataPath;
+                    [filePath, id] = [rule.path, rule.id];
                 }
-            }
-            args[0]();
-          });
-        })
-      });
-      return new Promise(( ...args )=>{
-        Promise.all(promises).then(() => {
-          let server = this.server;
-          server.routers = routes.concat( server.routers );
-          args[0]();
-        });
-      });
 
+                routes.push({
+                    method, url,
+                    sync, filePath, id
+                });
+            }
+        }
+        fileUtil.writeFile(neiRoute, `module.exports = ${_.inspect(routes, {maxArrayLength: null})}`, () => {
+        }, (e)=> {
+            util.error(e);
+        });
+        return routes;
     }
 
+    updateLocalFiles(routes = []) {
+
+        let server = this.server;
+        let [syncData, asyncData] = [server.syncData, server.asyncData];
+
+        const promises = routes.map((route) => {
+            return new Promise((resolve, reject) => {
+                let dataPath;
+                if (route.sync) {
+                    dataPath = server.syncDataMatch(util.jsonPathResolve(route.filePath));
+                } else {
+                    dataPath = path.resolve(server.asyncData, util.jsonPathResolve(route.filePath));
+                }
+
+                fs.stat(dataPath, (error, stat) => {
+                    /**
+                     * 文件不存在或者文件内容为空
+                     */
+                    if (error) {
+                        util.log('make empty file: ' + dataPath);
+                        fileUtil.writeUnExistsFile(dataPath, "").then(resolve, reject);
+                        return 0;
+                    }
+                    resolve();
+                });
+            })
+        });
+        return new Promise((...args)=> {
+            Promise.all(promises).then(()=> {
+                args[0](routes);
+            }).catch((e)=> {
+                util.error(e);
+            });
+        });
+    }
+
+    updateRoutes(routes) {
+        let promises = routes.map((route) => {
+            return new Promise((...args) => {
+                fs.stat(route.filePath, (error, stat) => {
+                    /**
+                     * 文件不存在或者文件内容为空
+                     */
+                    if (error || !stat.size) {
+                        // TODO url creater
+                        const dataPath = this.genNeiApiUrl(route);
+                        if (route.sync) {
+                            route.syncData = dataPath;
+                        } else {
+                            route.asyncData = dataPath;
+                        }
+                    }
+                    args[0]();
+                });
+            })
+        });
+        return new Promise((...args)=> {
+            Promise.all(promises).then(() => {
+                let server = this.server;
+                server.routers = routes.concat(server.routers);
+                args[0]();
+            });
+        });
+    }
+
+    genNeiApiUrl(route) {
+        return path.resolve(route.sync ? this.mockTpl : this.mockApi, route.filePath + '.json');
+    }
 }
 
 export default NeiPlugin;

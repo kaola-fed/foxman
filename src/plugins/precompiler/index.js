@@ -1,9 +1,7 @@
 import {
     util
 } from '../../helper';
-
 import PreCompiler from './precompiler';
-import path from 'path';
 import globule from 'globule';
 
 /**
@@ -30,7 +28,6 @@ class PreCompilerPlugin  {
     }
     prepare( preCompiler) {
         const handler = preCompiler.handler;
-        const root = this.options.root;
 
         let excludes = preCompiler.exclude || [];
         if( !Array.isArray(excludes) ) excludes = [ excludes ];
@@ -45,10 +42,10 @@ class PreCompilerPlugin  {
 
         let files = [];
         patterns.forEach((pattern) => {
-            files = files.concat( globule.find( path.resolve(root ,pattern) ).map(( filename )=>{
+            files = files.concat( globule.find( pattern ).map(( filename )=>{
               util.log(`add ${filename}`);
               return {
-                pattern: path.resolve(root, pattern.replace(/\*+.*$/ig,'')),
+                pattern: pattern.replace(/\*+.*$/ig,''),
                 filename
               }
             }));
@@ -61,14 +58,13 @@ class PreCompilerPlugin  {
             }
 
             let compilerInstance = new PreCompiler( {
-                root, file, handler
+                file, handler
             } );
             compilerInstance.run();
 
             this.addWatch( watchList, filename, compilerInstance);
-            compilerInstance.on( 'updateWatch', (event) => {
-                let dependencys = event;
-                let news = dependencys.filter((item) => {
+            compilerInstance.on( 'updateWatch', (dependency) => {
+                let news = dependency.filter((item) => {
                     return ( watchList.indexOf(item) === -1 );
                 });
                 if ( !news.length ) return;

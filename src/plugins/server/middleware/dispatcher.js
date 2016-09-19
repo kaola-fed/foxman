@@ -1,5 +1,5 @@
 import path from 'path';
-import { util, fileUtil, renderUtil } from '../../../helper';
+import { util, fileUtil } from '../../../helper';
 
 /**
  * default dispatcher
@@ -131,7 +131,7 @@ export default ( config )=>{
     let dispatcherMap = {
       'dir': dirDispatcher,
       'sync': syncDispatcher,
-      'async': asyncDispather,
+      'async': asyncDispather
     };
     util.debugLog(JSON.stringify(this.dispatcher));
     let dispatcher;

@@ -1,6 +1,6 @@
 {
   "name": "foxman",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "flexiable mock server for nodejs",
   "main": "app.js",
   "bin": {
@@ -16,8 +16,8 @@
     }
   },
   "scripts": {
-    "build": "babel src -d dist -s",
-    "dev": "babel src -w -d dist -s",
+    "build": "babel src -d dist",
+    "dev": "babel src -w -d dist",
     "test": "mocha ./test/test"
   },
   "repository": {

@@ -6,15 +6,13 @@ import renderUtil from '../../helper/render';
 import render from 'koa-ejs';
 import dispatcher from './middleware/dispatcher';
 import routeMap from './middleware/routemap'
-import { util , genRouteMap} from '../../helper';
+import { util } from '../../helper';
 
 class Server {
     constructor(config) {
         this.app = Koa();
         Object.assign( this, config );
-
-        this.formatArgs();
-
+        
         if( !this.syncDataMatch ){
           this.syncDataMatch = ( url ) => path.resolve( this.syncData ,url );
         }
@@ -28,15 +26,6 @@ class Server {
         this.delayInit();
     }
 
-    formatArgs(){
-      ['syncData', 'viewRoot', 'asyncData'].forEach( ( item ) => {
-          this[item] = path.resolve(this.root, this[item]);
-      });
-
-      this.static.forEach( (item, idx )=>{
-        this.static[idx] = path.resolve(this.root, item);
-      });
-    }
 
     delayInit(){
       const app = this.app;
@@ -53,7 +42,7 @@ class Server {
         this.renderUtil({ viewFolder: this.viewRoot });
 
         render(this.app, {
-            root: path.join(global.__rootdir, 'views'),
+            root: path.resolve(__dirname, '../../../views'),
             layout: 'template',
             viewExt: 'html',
             cache: process.env.NODE_ENV !== "development",
@@ -73,7 +62,7 @@ class Server {
 
             this.app.use( serve(dir[0], rootdir) );
         });
-        this.app.use( serve('resource', global.__rootdir) );
+        this.app.use( serve('resource', path.resolve(__dirname, '../../../')) );
     }
 
     appendHtml ( html ){

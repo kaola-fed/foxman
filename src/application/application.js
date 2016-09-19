@@ -1,60 +1,85 @@
-import EventEmitter from 'events';
-import injector from './injector';
+import EventEmitter from 'events'
 import {
     util
-} from '../helper';
+} from '../helper'
+import instance from './instance'
 
 export default class Application extends EventEmitter {
-  constructor() {
-    super();
-    this.uid = util.createSystemId();
-    this.plugins = [];
-  }
-
-  setConfig( config ) {
-    this.config = config;
-  }
-
-  use( plugin ) {
-    if (Array.isArray(plugin)) return plugin.forEach( this.use.bind(this) );
-    this.plugins.push( Object.assign(plugin, {
-      config: this.config,
-      name: plugin.constructor.name,
-      id: this.uid(),
-      pending: (...args) => this.pending.apply(plugin, args )
-    }) );
-    
-    injector.register( util.initialsLower( plugin.name ), plugin );
-
-    util.debugLog(`plugin ${plugin.name || plugin.id} is loaded`);
-  }
-
-  pending( fn ) {
-    let pending = new Promise( (resolve)=>{ return fn( resolve ) });
-
-    if( this.pendings ){
-      return this.pendings.push(pending);
+    constructor() {
+        super();
+        this.uid = util.createSystemId();
+        /**
+         * 依赖管理
+         * @type {{}}
+         */
+        this.dependency = {};
     }
-    this.pendings = [ pending ];
-  }
 
-  excute(){
-    return function * () {
-      const plugins = this.plugins;
-      for( let plugin of plugins ){
-        plugin.init && injector.resolve( plugin.init, plugin );
-        if( plugin.pendings ){
-            yield Promise.all(plugin.pendings);
+    /**
+     * 服务注册
+     * @param key
+     * @param value
+     */
+    register(key, value) {
+        this.dependency[key] = value;
+    }
+
+    /**
+     * 依赖注入
+     * @param func
+     * @param scope
+     */
+    resolve(func, scope) {
+        const argList = func.toString().match(/^.*?\s*[^\(]*\(\s*([^\)]*)\)/m);
+        const args = ( argList && argList[1] ) ? ( argList[1].replace(/ /g, '').split(',') ) : [];
+
+        let deps = args.map((arg) => {
+            if (!this.dependency[arg]) {
+                util.error(`Plugin ${arg} is not load!`);
+            }
+            return this.dependency[arg];
+        });
+
+        func.apply(scope || {}, deps);
+    }
+
+    setConfig(config) {
+        this.config = config;
+    }
+
+    use(plugin) {
+        if (!plugin) return false;
+        if (Array.isArray(plugin)) return plugin.forEach(this.use.bind(this));
+
+        Object.assign(plugin, {
+            config: this.config,
+            name: plugin.constructor.name,
+            id: this.uid(),
+            pending: (...args) => instance.pending.apply(plugin, args)
+        });
+
+        this.register(util.initialsLower(plugin.name), plugin);
+        util.debugLog(`plugin ${plugin.name || plugin.id} is loaded`);
+    }
+
+    execute() {
+        return function *() {
+            const keys = Object.keys(this.dependency);
+            const plugins = keys.map((key) => this.dependency[key]);
+            for (let plugin of plugins) {
+                plugin.init && this.resolve(plugin.init, plugin);
+                if (plugin.pendings) {
+                    yield Promise.all(plugin.pendings);
+                }
+            }
         }
-      }
     }
-  }
 
-  run() {
-    let pipeline = this.excute().call(this);
-    let final = {};
-    while( !final.done ){
-      final = pipeline.next();
+    run() {
+        let pipeline = this.execute().call(this);
+        let final = {};
+        while (!final.done) {
+            final = pipeline.next();
+        }
     }
-  }
 }

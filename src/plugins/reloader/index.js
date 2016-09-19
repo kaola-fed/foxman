@@ -1,5 +1,4 @@
 import Reloader from './reloader';
-import path from 'path';
 
 /**
  * 监听插件

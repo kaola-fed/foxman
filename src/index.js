@@ -1,5 +1,3 @@
-import 'babel-polyfill';
-
 import Application from './application/index';
 import ServerPlugin from './plugins/server/';
 import WatcherPlugin from './plugins/watcher/';
@@ -8,17 +6,12 @@ import ReloadPlugin from './plugins/reloader';
 import NeiPlugin from './plugins/nei';
 import ProxyPlugin from './plugins/proxy';
 
-import path from 'path';
-import {
-    Event,
-    util
-} from './helper';
 
 let owner;
 class Owner {
-    constructor(config) {
+    constructor( config ) {
+        const root = config.root = process.cwd();
         const app = Application();
-        const root = app.root = config.root;
         /**
          * __setConfig
          */
@@ -42,8 +35,10 @@ class Owner {
 
         app.use( new ReloadPlugin({}));
 
-        if( !!config.nei )
-          app.use( new NeiPlugin( config.nei ) );
+        if( !!config.neiKey )
+          app.use( new NeiPlugin( {
+              neiKey: config.neiKey
+          }));
 
         /**
          * __load ex Plugins
@@ -58,11 +53,10 @@ class Owner {
          * __ready
          */
         app.run();
-
     }
 }
 
 module.exports = function(config) {
     if (!owner) owner = new Owner(config);
     return owner;
-}
+};

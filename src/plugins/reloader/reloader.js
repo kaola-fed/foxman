@@ -1,7 +1,6 @@
 import EventEmitter from 'events';
 import path from 'path';
 import { Server as WebSocketServer } from 'ws';
-import { util } from '../../helper'
 
 class Reloader extends EventEmitter {
   constructor(options) {
