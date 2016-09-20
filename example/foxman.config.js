@@ -3,13 +3,17 @@ const path = require('path');
 const mcss = require('foxman-mcss');
 const autoprefix = require('gulp-autoprefixer');
 const routers = require('./route');
+let r = path.resolve;
+
 let alias = {
-    r: path.resolve(__dirname, 'src', 'main', 'webapp')
+    r: r(__dirname, 'src', 'main', 'webapp')
 };
 module.exports = {
-    neiKey: '4af51152079f243c6dc28ce87908919e',
+    nei: {
+        key: '4af51152079f243c6dc28ce87908919e'
+    },
     preCompilers: [{
-        test: [path.resolve(alias.r, 'src/mcss/**/*.mcss')],
+        test: [r(alias.r, 'src/mcss/**/*.mcss')],
         handler: (dest) => [
             mcss({
                 "include": [],
@@ -20,7 +24,7 @@ module.exports = {
                 browsers: ['Android >= 2.3'],
                 cascade: false
             }),
-            dest(path.resolve(alias.r, 'src/css'))
+            dest(r(alias.r, 'src/css'))
         ]
     }],
     watch:{
@@ -36,9 +40,9 @@ module.exports = {
                 return 'http://10.240.178.181:90/' + url.replace(/^\//, '') + result;
             }
         },
-        viewRoot: path.resolve(alias.r, 'WEB-INF'),
-        syncData: path.resolve(__dirname, 'mock/fakeData'),
-        asyncData: path.resolve(__dirname, 'mock/json'),
-        static: [path.resolve(alias.r, 'src')]
+        viewRoot: r(alias.r, 'WEB-INF'),
+        syncData: r(__dirname, 'mock/fakeData'),
+        asyncData: r(__dirname, 'mock/json'),
+        static: [r(alias.r, 'src')]
     }
 };

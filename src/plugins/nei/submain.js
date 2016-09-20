@@ -1,22 +1,31 @@
 import main from 'nei/main';
-import _path from 'nei/lib/util/path';
 import Builder from 'nei/lib/nei/builder';
 import EventEmitter from 'events';
 import _fs from 'nei/lib/util/file';
 import fs from 'fs';
 import path from 'path';
 import _util from 'nei/lib/util/util';
-let subMain = main;
+import { logger } from 'nei//lib/util/logger';
 
 Object.assign(subMain, EventEmitter.prototype);
+let subMain = main;
 
+/**
+ * 构建项目
+ * @param arg
+ * @param action
+ * @param args
+ */
 subMain.build = function (arg, action, args) {
     this.args = args;
     this.config = {
         action: action
     };
-    const baseDir = args.baseDir || process.cwd();
-    this.config.outputRoot = _path.normalize(_path.absolute((this.args.output || './') + '/', baseDir));
+    /**
+     * 项目nei根路径
+     * @type {string}
+     */
+    this.config.outputRoot = args.basedir;
     this.checkConfig();
     let loadedHandler = (ds) => {
         this.config.pid = ds.project.id;
@@ -41,8 +50,7 @@ subMain.build = function (arg, action, args) {
  * @param  {object}  args - 命令行参数对象
  */
 subMain.update = function (arg, action, args) {
-    const baseDir = args.baseDir || process.cwd();
-    let dir = path.join(baseDir, args.output || './');
+    let dir = args.basedir;
     let projects = this.findProjects(args);
     let buildProject = (neiProjectDir, exitIfNotExist) => {
         let config = _util.file2json(`${neiProjectDir}/nei.json`, exitIfNotExist);
@@ -51,10 +59,10 @@ subMain.update = function (arg, action, args) {
     };
     if (args.key) {
         if (projects.length == 0) {
-            _logger.error(`在 ${dir} 中找不到 key 为 ${args.key} 的项目, 请检查`);
+            logger.error(`在 ${dir} 中找不到 key 为 ${args.key} 的项目, 请检查`);
             return process.exit(1);
         } else if (projects.length > 1) {
-            _logger.error(`存在多个 key 为 ${args.key} 的项目, 请检查`);
+            logger.error(`存在多个 key 为 ${args.key} 的项目, 请检查`);
             return process.exit(1);
         } else {
             buildProject(projects[0], true);
@@ -62,7 +70,7 @@ subMain.update = function (arg, action, args) {
     } else {
         if (projects.length > 1) {
             if (!args.all) {
-                _logger.error(`存在多个 nei 项目, 请通过 key 参数指定需要更新的项目, 或者使用 --all 参数更新所有项目`);
+                logger.error(`存在多个 nei 项目, 请通过 key 参数指定需要更新的项目, 或者使用 --all 参数更新所有项目`);
                 return process.exit(1);
             } else {
                 projects.forEach(buildProject);
@@ -74,11 +82,10 @@ subMain.update = function (arg, action, args) {
 };
 
 subMain.findProjects = function (args) {
-    const baseDir = args.baseDir || process.cwd();
-    let dir = path.join(baseDir, args.output || './');
+    let dir = args.basedir;
     if (!_fs.exist(dir)) {
         // 目录不存在, 退出程序
-        _logger.error(`项目目录 ${dir} 不存在, 请检查`);
+        logger.error(`项目目录 ${dir} 不存在, 请检查`);
         return process.exit(1);
     }
     let files = fs.readdirSync(dir);

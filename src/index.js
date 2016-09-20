@@ -35,9 +35,9 @@ class Owner {
 
         app.use( new ReloadPlugin({}));
 
-        if( !!config.neiKey )
+        if( !!config.nei )
           app.use( new NeiPlugin( {
-              neiKey: config.neiKey
+              key: config.nei.key
           }));
 
         /**
