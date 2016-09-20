@@ -15,21 +15,21 @@ class NeiPlugin {
     }
 
     init(serverPlugin) {
-        const key =  this.options.neiKey;
-        const homedir = os.homedir();
-        const baseDir = `${homedir}\\localMock\\${key}\\`;
-        const pattern = path.resolve( baseDir, '**/nei.json');
-        const hasBuild = globule.find( pattern ).length > 0 ;
+        const key =  this.options.key;
+        const home = os.homedir();
+        const basedir = path.resolve(home, 'localMock', key);
+        const neiPattern = path.resolve( basedir, 'nei**','nei.json');
+        const hasBuild = globule.find( neiPattern ).length > 0 ;
         
         this.server = serverPlugin.server;
         const doUpdate = this.config.argv.update || false;
-        this.neiRoute = path.resolve(baseDir, 'nei.route.js');
+        this.neiRoute = path.resolve(basedir, 'nei.route.js');
 
         if (doUpdate) {
             return this.pending((resolve)=> {
                 neiTools
                     .run({
-                        key, baseDir, hasBuild
+                        key, basedir, hasBuild
                     })
                     .then((config) => {
                         this.getUpdate(config);
@@ -40,7 +40,7 @@ class NeiPlugin {
             });
         }
 
-        const serverConfigFiles = globule.find( path.resolve( baseDir, '**/server.config.js') );
+        const serverConfigFiles = globule.find( path.resolve( baseDir, 'nei**/server.config.js') );
 
         try {
             if(serverConfigFiles.length == 0) {

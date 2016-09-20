@@ -25,7 +25,6 @@ const options = {
             subMain.on('buildSuccess', (arg0) => {
                 this.emit('buildSuccess', arg0);
             });
-
         }
     },
     update (event) {
@@ -45,17 +44,16 @@ const options = {
 let nei = new Application(options),
     neiTools = {
         build(opt){
-            nei.exec( [ 'build -key', opt.key,'-baseDir', opt.baseDir] );
+            nei.exec( [ 'build -key', opt.key,'-basedir', opt.basedir] );
         },
         update (opt) {
-            nei.exec([ 'update -baseDir', opt.baseDir ]);
+            nei.exec([ 'update -basedir', opt.basedir ]);
         },
         run (opt) {
             if (opt.hasBuild) {
-                /* update */
-                this.update({ baseDir: opt.baseDir });
+                this.update(opt);
             } else {
-                this.build({ key: opt.key, baseDir: opt.baseDir });
+                this.build(opt);
             }
 
             return new Promise((resolve, reject)=> {
