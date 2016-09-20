@@ -27,11 +27,10 @@
 
         socket.onopen = function() {
             console.log('[live]:connected');
-        }
+        };
 
         socket.onclose = function() {
             console.log('[live]:closed');
-            setTimeout(openSocket, 1000);
         };
     }
 
@@ -49,7 +48,7 @@
                 }
                 return;
             }
-        };
+        }
     }
 
     openSocket();

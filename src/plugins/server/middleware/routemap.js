@@ -3,6 +3,8 @@ import {
 } from '../../../helper';
 import path from 'path';
 import _ from 'util';
+import pathToRegexp from 'path-to-regexp';
+
 /**
  * 全局中间件,会将具体的页面转换成需要的资源
  * 1.同步
@@ -90,7 +92,7 @@ export default (config) => {
          */
         for ( let router of routers ) {
             if (router.method.toUpperCase() == method.toUpperCase() &&
-                router.url == this.request.path) {
+                pathToRegexp(router.url).test(this.request.path) ) {
                 /**
                  * 同步接口
                  * 可能插件会生成一个 syncData ,若已生成则用插件的
@@ -117,7 +119,7 @@ export default (config) => {
                         router.asyncData || modelPath
                     );
                 }
-                util.log(`${router.method} ${router.url}`);
+                util.log(`${router.method} ${this.request.path} -> ${router.url}`);
                 return yield next;
             }
         }
@@ -125,7 +127,6 @@ export default (config) => {
         /**
          * ② 未拦截到 router
          */
-        
         for (let [route, handler] of routeMap) {
             if ( requestPath.endsWith(route)  ) {
                 util.debugLog(_.inspect(requestInfo));
