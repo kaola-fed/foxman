@@ -13,7 +13,6 @@
 import fs from 'fs';
 import path from 'path';
 import _ from './util';
-import url from 'url';
 
 export function getFileByStream (path) {
 	return fs.ReadStream(path);

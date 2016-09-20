@@ -1,6 +1,7 @@
-
 const config = require('./foxman.config');
 
-// const mcss = require('foxman-mcss');
-
+config.argv = {
+    proxy: false,
+    update: false
+};
 require('../')(config);

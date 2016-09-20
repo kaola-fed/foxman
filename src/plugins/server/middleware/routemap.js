@@ -91,19 +91,19 @@ export default (config) => {
         for ( let router of routers ) {
             if (router.method.toUpperCase() == method.toUpperCase() &&
                 router.url == this.request.path) {
-
-                let tplPath = path.join(config.viewRoot, `${util.removeSuffix(router.filePath)}.${config.extension}`);
-                
                 /**
                  * 同步接口
                  * 可能插件会生成一个 syncData ,若已生成则用插件的
                  * 即: 插件对于响应,有更高的权限
                  */
                 if (router.sync) {
+                    let tplPath = path.join(config.viewRoot, `${util.removeSuffix(router.filePath)}.${config.extension}`);
+                    let tplMockPath = path.join(config.syncData, `${util.removeSuffix(router.filePath)}.json`);
+                    
                     this.dispatcher = util.dispatcherTypeCreator(
                         'sync',
                         tplPath,
-                        router.syncData || requestInfo.commonSync
+                        router.syncData || tplMockPath
                     );
                 } else {
                     /**

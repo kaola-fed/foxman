@@ -2,7 +2,7 @@ import path from 'path';
 import {
     spawn
 } from 'child_process';
-const jarFile = path.join(global.__rootdir, 'lib', 'FMtoll.jar');
+const jarFile = path.resolve(__dirname, '../../lib/FMtoll.jar' );
 
 let renderUtil;
 class RenderUtil {

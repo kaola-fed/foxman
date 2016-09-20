@@ -1,11 +1,6 @@
-import EventEmitter from 'events';
 import {
     resolve
 } from 'path';
-import {
-    Event,
-    util
-} from '../../helper';
 import chokidar from 'chokidar';
 import anymatch from 'anymatch';
 

@@ -1,5 +1,4 @@
 import Server from './server';
-import { Event } from '../../helper';
 
 class ServerPlugin  {
     constructor(options){

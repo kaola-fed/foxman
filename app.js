@@ -7,8 +7,5 @@ const welcome = [
     '#         #      #    #   #      #             #     #       #    #       # #',
     '#         ########   #     #    #               #   #         #   #         #'
 ].join('\n');
-console.log( welcome );
-
-global.__rootdir = __dirname;
+require('babel-polyfill');
 module.exports = require('./dist/index.js');
-
