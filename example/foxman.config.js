@@ -29,18 +29,21 @@ module.exports = {
     preCompilers: [
         {
             test: [r(alias.r, 'src/mcss/**/*.mcss')],
-            handler: (dest) => [
-                mcss({
-                    "include": [],
-                    "exclude": "(\\\\|\\/)_",
-                    "format": 1
-                }),
-                autoprefix({
-                    browsers: ['Android >= 2.3'],
-                    cascade: false
-                }),
-                dest(r(alias.r, 'src/css'))
-            ]
+            handler: (dest) => {
+                
+                return [
+                    mcss({
+                        "include": [],
+                        "exclude": "(\\\\|\\/)_",
+                        "format": 1
+                    }),
+                    autoprefix({
+                        browsers: ['Android >= 2.3'],
+                        cascade: false
+                    }),
+                    dest(r(alias.r, 'src/css'))
+                ]
+            }
         }
     ],
     /**

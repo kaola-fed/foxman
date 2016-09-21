@@ -5,39 +5,42 @@ import {resolve, relative} from 'path';
 import vinylFs from 'vinyl-fs';
 import EventEmitter from 'events';
 
-class PreCompiler extends EventEmitter {
+class PreCompiler extends EventEmitter{
     constructor(options) {
         super();
         Object.assign(this, options);
     }
-
     pipe(...args) {
         this.source = this.source.pipe.apply(this.source, args);
-        Object.assign(args[0], EventEmitter.prototype);
+        args[0].resolveDeps  = (imports)=>{
+            this.emit('updateWatch', imports);
+        };
+        return this;
+    }
 
-        args[0].on('returnDependencys', (event) => {
-            return this.emit('updateWatch', event);
+    run() {
+        let workFlow = this.handler(vinylFs.dest.bind(this));
+        this.source = vinylFs.src(this.pattern);
+        workFlow.forEach((item)=>{
+            this.pipe(item);
         });
         return this;
     }
 
-    dest( arg1 ) {
-        const parent = resolve( this.file.filename, '..');
-        const relativePath = relative( this.file.pattern, parent);
-        const resultPath = resolve( arg1, relativePath);
-
-        return vinylFs.dest.call(vinylFs, resultPath);
+    destInstence (pattern) {
+        return (dest) => {
+            console.log(this.pattern);
+            let sourceRoot = pattern.replace(/\*+.*$/,'');
+            let output = resolve(dest, relative(sourceRoot,this.pattern));
+            return vinylFs.dest.call(vinylFs, resolve(output,'..'));
+        }
     }
-
-    update() {
-        this.source = vinylFs.src(this.file.filename);
-        this.handler( this.dest.bind(this) ).forEach( (item) => {
+    runInstance(pattern){
+        this.source = vinylFs.src(this.pattern);
+        this.handler( this.destInstence.call(this, pattern) ).forEach( (item) => {
             this.pipe(item);
         });
-    }
-
-    run() {
-        this.update();
+        return this;
     }
 }
 export default PreCompiler;
