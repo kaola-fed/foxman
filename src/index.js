@@ -6,7 +6,6 @@ import ReloadPlugin from './plugins/reloader';
 import NeiPlugin from './plugins/nei';
 import ProxyPlugin from './plugins/proxy';
 
-
 let owner;
 class Owner {
     constructor( config ) {
@@ -19,7 +18,7 @@ class Owner {
         /**
          * 内置组件
          */
-        app.use( new WatcherPlugin( Object.assign( config.watch)));
+        app.use( new WatcherPlugin( config.watch ));
 
         app.use( new ServerPlugin( config.server ));
 
@@ -45,9 +44,6 @@ class Owner {
           proxyServer: config.argv.proxy
         }));
 
-        /**
-         * __ready
-         */
         app.run();
     }
 }

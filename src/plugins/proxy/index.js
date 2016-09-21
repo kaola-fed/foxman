@@ -41,20 +41,25 @@ class ProxyPlugin {
         util.log("代理已生效");
 
         function handler() {
+            const requestBody = this.request.body;
             const url = service(this.request.url.replace(/^(\/)/, ''));
             let headers = Object.assign({}, this.request.headers);
             delete headers['accept-encoding'];
             if (host) {
                 headers.host = host;
             }
+            
             return fileUtil.jsonResolver({
                 url,
-                headers
+                headers,
+                requestBody
             }).then((res) => {
-                this.status = res.statusCode;
-                for (let name in res.headers) {
-                    if (res.headers.hasOwnProperty(name)) {
-                        this.set(name, res.headers[name]);
+                if(res){
+                    this.status = res.statusCode;
+                    for (let name in res.headers) {
+                        if (res.headers.hasOwnProperty(name)) {
+                            this.set(name, res.headers[name]);
+                        }
                     }
                 }
                 return new Promise((resolve) => {

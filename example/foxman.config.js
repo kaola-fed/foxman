@@ -6,7 +6,7 @@ const routers = [
     {method: 'GET', url: '/index.html', sync: true, filePath: 'page/list'},
     {method: 'GET', url: '/index2.html', sync: false, filePath: 'index'},
     {method: 'GET', url: '/home/:id', sync: true, filePath: 'page/list'},
-    {method: 'GET', url: '/wxConfig.html', sync: true, filePath: 'page/wxConfig'}
+    {method: 'POST', url: '/wxConfig.html', sync: true, filePath: 'page/wxConfig'}
 ];
 let r = path.resolve;
 let alias = {

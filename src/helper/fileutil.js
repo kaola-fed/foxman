@@ -104,6 +104,7 @@ export function jsonResolver(opt) {
                 res.json = json;
                 resolve(res);
             }, (err)=> {
+                console.log(err);
                 resolve(null);
             });
             return;

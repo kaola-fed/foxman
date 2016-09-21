@@ -117,6 +117,10 @@ export function request(options) {
 
     options = Object.assign({}, urlInfo, options);
     return new Promise(( resolve, reject)=>{
+        const requestBody = options.requestBody;
+
+        delete options.requestBody;
+
         let protocolMap = {
             http: http,
             https: https
@@ -138,6 +142,9 @@ export function request(options) {
             reject();
             console.log(`problem with request: ${e.message}`);
         });
+
+        req.write(requestBody);
+
         req.end();
     })
 }
