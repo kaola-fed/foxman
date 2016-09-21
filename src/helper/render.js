@@ -13,10 +13,6 @@ class RenderUtil {
     }
 
     parse(p1, dataModel) {
-        console.log(arguments);
-        // if (typeof dataModel == 'object') {
-        //     dataModel = JSON.stringify(dataModel);
-        // }
         return new Promise((resolve, reject) => {
             this.freemarker.render(p1, dataModel, function (err, data, out) {
                 resolve({err, data, out});

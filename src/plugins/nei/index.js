@@ -19,7 +19,6 @@ class NeiPlugin {
         const home = os.homedir();
         const basedir = path.resolve(home, 'localMock', key);
         const neiPattern = path.resolve(basedir, 'nei**', 'nei.json');
-        const hasBuild = globule.find(neiPattern).length > 0;
 
         this.server = serverPlugin.server;
         const doUpdate = this.config.argv.update || false;
@@ -29,7 +28,7 @@ class NeiPlugin {
             return this.pending((resolve)=> {
                 neiTools
                     .run({
-                        key, basedir, hasBuild
+                        key, basedir
                     })
                     .then((config) => {
                         this.getUpdate(config);

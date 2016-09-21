@@ -2,7 +2,7 @@
 import util from 'nei/lib/util/util';
 import subMain from './submain';
 import Application from 'nei/lib/util/args';
-
+import {fileUtil} from '../../helper';
 util.checkNodeVersion();
 
 const options = {
@@ -50,11 +50,8 @@ let nei = new Application(options),
             nei.exec(['update -basedir', opt.basedir]);
         },
         run (opt) {
-            if (opt.hasBuild) {
-                this.update(opt);
-            } else {
-                this.build(opt);
-            }
+            fileUtil.delDir(opt.basedir);
+            this.build(opt);
 
             return new Promise((resolve, reject)=> {
                 nei.on('buildSuccess', (arg0) => {
