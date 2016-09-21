@@ -26,15 +26,10 @@ function apiHandler(dispatcher) {
  * @return {[type]}         [description]
  */
 export function* dirDispatcher( dispatcher, config, next) {
-    console.time('dir');
     const viewPath = dispatcher.path;
     const files = yield fileUtil.getDirInfo( viewPath );
-    console.timeEnd('dir');
-    console.time('dir1');
-
     const promises = files.map( ( file ) => fileUtil.getFileStat( path.resolve( viewPath, file ) ) );
     const result = yield Promise.all(promises);
-    console.timeEnd('dir1');
 
     const fileList = result.map((item, idx) => {
         return Object.assign(item, {
@@ -43,12 +38,10 @@ export function* dirDispatcher( dispatcher, config, next) {
             requestPath: [this.request.path, files[idx], item.isFile() ? '' : '/'].join('')
         });
     });
-    console.time('dir2');
     yield this.render('cataLog', {
         title: '查看列表',
         fileList
     });
-    console.timeEnd('dir2');
 }
 
 /**

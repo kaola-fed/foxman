@@ -7,7 +7,7 @@ import getRawBody from 'raw-body';
 export default () =>{
     return function * (next) {
         if(this.request.method.toUpperCase() == 'GET'){
-            this.request.body = Buffer.alloc(0);
+            this.request.body = new Buffer('');
             return yield next;
         }
         this.request.body = yield getRawBody(this.req, {
