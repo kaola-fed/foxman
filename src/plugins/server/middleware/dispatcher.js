@@ -89,24 +89,23 @@ export function* syncDispatcher(dispatcher, config, next) {
  * @param next
  * @returns {*}
  */
-export function* asyncDispather( dispatcher, config, next) {
+export function* asyncDispather(dispatcher, config, next) {
     /**
      * 异步接口处理
      * @type {[type]}
      */
-    const api = yield apiHandler.call(this,dispatcher);
-
-    if( !api ) {
-      yield this.render('e', { title: '出错了', e :{
-        code: 500,
-        msg: '请求代理服务器异常'
-      }});
-      return yield next;
+    let res = yield apiHandler.call(this, dispatcher);
+    if (res && res.json) {
+        this.type = 'application/json; charset=utf-8';
+        this.body = res.json;
+        return yield next;
     }
-
-    this.type = 'application/json; charset=utf-8';
-    this.body = api;
-
+    yield this.render('e', {
+        title: '出错了', e: {
+            code: 500,
+            msg: '请求代理服务器异常'
+        }
+    });
     yield next;
 }
 
@@ -124,7 +123,7 @@ export default ( config )=>{
       'sync': syncDispatcher,
       'async': asyncDispather
     };
-    util.log(`type: ${this.dispatcher.type} path: ${this.dispatcher.path}`);
+    util.log(`type: ${this.dispatcher.type} path: ${this.dispatcher.path||this.dispatcher.dataPath}`);
     let dispatcher;
     if( dispatcher = dispatcherMap[ this.dispatcher.type ] ){
       yield dispatcher.call(this, this.dispatcher, ...args );

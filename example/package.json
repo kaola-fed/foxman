@@ -4,7 +4,7 @@
   "description": "foxman`s test",
   "main": "index.js",
   "dependencies": {
-    "foxman-mcss": "^0.0.6",
+    "foxman-mcss": "^0.0.7",
     "gulp-autoprefixer": "^3.1.1"
   },
   "devDependencies": {},

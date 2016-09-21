@@ -41,7 +41,7 @@ class Owner {
         app.use( new ReloadPlugin({}));
 
         app.use( new ProxyPlugin({
-          proxy: config.server.proxy,
+          proxy: config.proxy,
           proxyServer: config.argv.proxy
         }));
 
