@@ -2,7 +2,7 @@ import http from 'http';
 import Koa from 'koa';
 import path from 'path';
 import serve from 'koa-serve';
-import renderUtil from '../../helper/render';
+import RenderUtil from '../../helper/render';
 import render from 'koa-ejs';
 import dispatcher from './middleware/dispatcher';
 import routeMap from './middleware/routemap'
@@ -36,10 +36,10 @@ class Server {
         if( this.tpl ){
           Object.assign(this, this.tpl);
         }
-        this.renderUtil = this.renderUtil || renderUtil;
+        let Render = this.RenderUtil || RenderUtil;
         this.extension = this.extension || 'ftl';
 
-        this.renderUtil({ viewFolder: this.viewRoot });
+        this.tplRender = new Render({ viewRoot: this.viewRoot });
 
         render(this.app, {
             root: path.resolve(__dirname, '../../../views'),
@@ -59,10 +59,9 @@ class Server {
             dir = /[^(\\\/)]*$/.exec(item);
             if (!dir || !dir[0]) return;
             rootdir = item.replace(/[^(\\\/)]*$/, '');
-
             this.app.use( serve(dir[0], rootdir) );
         });
-        this.app.use( serve('resource', path.resolve(__dirname, '../../../')) );
+        this.app.use( serve('r_f', path.resolve(__dirname, '../../../')) );
     }
 
     appendHtml ( html ){

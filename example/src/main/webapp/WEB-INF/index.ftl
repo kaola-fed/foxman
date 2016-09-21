@@ -6,7 +6,7 @@
 	<link rel="stylesheet"  href="/src/css/_config.css">
 </head>
 <body>
-	test
-	<h1>${hello}1</h1>
+	hello world
+	<h1>${hello}</h1>
 </body>
 </html>

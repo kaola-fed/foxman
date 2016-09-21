@@ -105,7 +105,7 @@ export function jsonResolver ( opt ) {
 			resolve( {json} );
 		},(err)=>{
 			_.warnLog(`localFile ${url} is not found, so output {}`);
-			resolve( {json: void 0} );
+			resolve( {json: {}} );
 		});
 	});
 }

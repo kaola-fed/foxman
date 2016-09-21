@@ -27,22 +27,24 @@ class Owner {
             preCompilers: config.preCompilers
         }));
 
-        app.use( new ReloadPlugin({}));
-
-        if( !!config.nei )
-          app.use( new NeiPlugin( {
-              key: config.nei.key
-          }));
+        if( !!config.nei ){
+            app.use( new NeiPlugin( {
+                key: config.nei.key
+            }));
+        }
 
         /**
          * __load ex Plugins
          */
         app.use( config.plugins );
 
+        app.use( new ReloadPlugin({}));
+
         app.use( new ProxyPlugin({
           proxy: config.server.proxy,
           proxyServer: config.argv.proxy
         }));
+
         /**
          * __ready
          */
