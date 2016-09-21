@@ -4,6 +4,7 @@
 import child_process from 'child_process';
 import 'colors';
 import http from 'http';
+import https from 'https';
 import url from 'url';
 import path from 'path';
 
@@ -90,40 +91,46 @@ export function appendHeadBreak( str ){
 }
 
 export function bufferConcat(...bufs) {
-    let total = bufs.reduce( (pre, crt) => {
-        return (Array.isArray(pre)?pre.length:pre) + crt.length;
+    const sizes = bufs.map((buf)=>{
+       return buf.length;
     });
+    let total = sizes.reduce( (pre, crt) => {
+        return pre + crt;
+    });
+
     return Buffer.concat(bufs, total);
 }
 
-export function dispatcherTypeCreator(type, path, dataPath) {
+export function dispatcherTypeCreator(type, path, dataPath,handler) {
     return {
         type,
         path,
-        dataPath
+        dataPath,
+        handler
     }
 }
 
 export function request(options) {
 
     let urlInfo = url.parse(options.url);
-    options = Object.assign({
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
-    }, urlInfo);
+    delete options.url;
 
+    options = Object.assign({}, urlInfo, options);
     return new Promise(( resolve, reject)=>{
-        let req = http.request(options, (res) => {
-            let htmlBuf = Buffer.alloc(0);
+        let protocolMap = {
+            http: http,
+            https: https
+        };
+        let protocolHandler = protocolMap[urlInfo.protocol.slice(0,-1)];
 
+        let req = protocolHandler.request(options, (res) => {
+            res.body = Buffer.alloc(0);
             res.setEncoding('utf8');
             res.on('data', (chunk) => {
-                htmlBuf = bufferConcat(htmlBuf, Buffer.from(chunk));
+                res.body = bufferConcat(res.body, Buffer.from(chunk));
             });
             res.on('end', () => {
-                resolve(htmlBuf);
+                resolve(res);
             });
         });
 

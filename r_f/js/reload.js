@@ -31,6 +31,7 @@
 
         socket.onclose = function() {
             console.log('[live]:closed');
+            setTimeout(openSocket, 1000);
         };
     }
 

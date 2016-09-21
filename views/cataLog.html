@@ -2,10 +2,10 @@
 		<h1 class="page_title">Foxman</h1>
 		<p class="page_desc">为注重开发体验的前端开发者量身定制</p>
 </div>
-<div class="hd">
+<div>
 	<div class="weui_cells weui_cells_access">
 		<%fileList.forEach((file)=>{%>
-			<a class="weui_cell" href="<%= file.requestPath%>?mode=1">
+			<a class="weui_cell" href="<%= file.requestPath%>">
           <div class="weui_cell_bd weui_cell_primary">
               <p><i class="<%= (file.isFile)?'weui_icon_info_circle':'weui_icon_info'%>"></i><span style="margin-left: 10px;"><%= file.name%></span></p>
           </div>

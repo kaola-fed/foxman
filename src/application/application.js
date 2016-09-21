@@ -69,7 +69,9 @@ export default class Application extends EventEmitter {
             for (let plugin of plugins) {
                 plugin.init && this.resolve(plugin.init, plugin);
                 if (plugin.pendings) {
+                    util.log(`${plugin.name} need pending`);
                     yield Promise.all(plugin.pendings);
+                    util.log(`${plugin.name}' pending is end`);
                 }
             }
         }
@@ -78,8 +80,14 @@ export default class Application extends EventEmitter {
     run() {
         let pipeline = this.execute().call(this);
         let final = {};
-        while (!final.done) {
+        +function loop() {
             final = pipeline.next();
-        }
+            if(!final.done){
+                if(final.value.then){
+                    return final.value.then( result => loop());
+                }
+                loop();
+            }
+        }();
     }
 }

@@ -10,12 +10,11 @@ class ReloadPlugin {
     init( watcherPlugin, serverPlugin ) {
         const server = serverPlugin.server;
         const watcher = watcherPlugin.watcher;
-        server.appendHtml("<script src='/resource/js/reload.js'></script>");
+        server.appendHtml("<script src='/r_f/js/reload.js'></script>");
 
         this.reloader = new Reloader(Object.assign({
             watcher, server
         }, this.options));
     }
 }
-
 export default ReloadPlugin;
