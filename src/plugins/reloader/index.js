@@ -17,5 +17,4 @@ class ReloadPlugin {
         }, this.options));
     }
 }
-
 export default ReloadPlugin;

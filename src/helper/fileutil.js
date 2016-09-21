@@ -68,41 +68,44 @@ export function writeUnExistsFile ( file, text ) {
 						create();
 					}
 			});
-		}
+		};
 		const create = () => {
 			let file = needCreateStack.pop();
 			if(needCreateStack.length != 0){
 					return fs.mkdir(file, create);
 			}
 			writeFile(file, text).then(...args);
-		}
+		};
 		search();
 	});
 }
 
-export function jsonResover ( url ) {
+export function jsonResolver ( opt ) {
 	return new Promise( (resolve, reject) => {
+		const url = opt.url;
+
+		let json;
 		if(/^http/g.test(url)){
 			_.log(`请求转发:${url}`);
-			_.request({url}).then((htmlBuf)=>{
-				let json;
+			_.request(opt).then((res)=>{
 				try{
-					json = JSON.parse(htmlBuf.toString('utf-8'));
+					json = JSON.parse(res.body.toString('utf-8'));
 				} catch (e) {
 					json = null;
 				}
-				resolve( json );
-			},()=>{
+				res.json = json;
+				resolve( res );
+			},(err)=>{
 				resolve( null );
 			});
 			return;
 		}
-
 		readFile(url).then( (data) => {
-			resolve( JSON.parse(data) );
+			json = JSON.parse(data);
+			resolve( {json} );
 		},(err)=>{
 			_.warnLog(`localFile ${url} is not found, so output {}`);
-			resolve( {} );
+			resolve( {json: void 0} );
 		});
 	});
 }
@@ -115,5 +118,5 @@ export default {
 	readFile,
 	writeFile,
 	writeUnExistsFile,
-	jsonResover
+	jsonResolver
 }

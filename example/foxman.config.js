@@ -27,17 +27,25 @@ module.exports = {
             dest(r(alias.r, 'src/css'))
         ]
     }],
-    watch:{
+    watch: {
         root: alias.r
     },
     server: {
         routers,
-        port: 5000,
+        port: 8080,
         proxy: {
-            test1: (url) => {
-                let devMark = 'isDev=1000';
-                let result = (-1 === url.indexOf('?') ? `?${devMark}` : `&${devMark}`);
-                return 'http://10.240.178.181:90/' + url.replace(/^\//, '') + result;
+            host: 'm.kaola.com',
+            service: {
+                /**
+                 * 代理url转换器
+                 * @param url
+                 * @returns {string}
+                 */
+                test(url){
+                    let devMark = 'isDev=1000';
+                    let result = (-1 === url.indexOf('?') ? `?${devMark}` : `&${devMark}`);
+                    return 'http://m.kaola.com/' + url.replace(/^\//, '') + result;
+                }
             }
         },
         viewRoot: r(alias.r, 'WEB-INF'),

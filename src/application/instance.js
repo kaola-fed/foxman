@@ -9,10 +9,10 @@ export default {
      * @returns {Number}
      */
     pending ( fn ) {
-        let pending = new Promise( (resolve)=>{ return fn( resolve ) });
-        if( this.pendings ){
+        let pending = new Promise((resolve)=>{return fn(resolve)});
+        if(this.pendings){
             return this.pendings.push(pending);
         }
-        this.pendings = [ pending ];
+        this.pendings = [pending];
     }
 }

@@ -1,58 +1,59 @@
 import EventEmitter from 'events';
 import path from 'path';
-import { Server as WebSocketServer } from 'ws';
+import {Server as WebSocketServer} from 'ws';
 
 class Reloader extends EventEmitter {
-  constructor(options) {
-    super();
-    Object.assign(this, options);
-    this.bindChange();
-    this.buildWebSocket();
-  }
-  bindChange(){
-    
-    let [server,watcher] = [this.server, this.watcher];
+    constructor(options) {
+        super();
+        Object.assign(this, options);
+        this.bindChange();
+        this.buildWebSocket();
+    }
 
-    let reloadResources = [
-      path.resolve(server.viewRoot, '**', '*.' + server.extension ),
-      path.resolve(server.syncData, '**', '*' ),
-      // path.resolve(server.asyncData, '**', '*' )
-    ];
+    bindChange() {
 
-    server.static.forEach( item => {
-      reloadResources.push( path.resolve( item, '**', '*.css' ) );
-      reloadResources.push( path.resolve( item, '**', '*.js') );
-    });
-    
-    this.watcher.onChange( reloadResources, ( arg0, arg1  ) => {
-      this.reload( arg0 );
-    });
-  }
+        let [server,watcher] = [this.server, this.watcher];
 
-  buildWebSocket(){
-    let serverApp = this.server.serverApp;
-    this.wss = new WebSocketServer({
-        server: serverApp
-    });
+        let reloadResources = [
+            path.resolve(server.viewRoot, '**', '*.' + server.extension),
+            path.resolve(server.syncData, '**', '*')
+        ];
 
-    this.wss.on('connection', (ws) => {
-        ws.on('message', (message) => {
-            console.log('received: %s', message);
+        server.static.forEach(item => {
+            reloadResources.push(path.resolve(item, '**', '*.css'));
+            reloadResources.push(path.resolve(item, '**', '*.js'));
         });
-    });
 
-    this.wss.broadcast = (data) => {
-        this.wss.clients.forEach(function each(client) {
-            client.send(data, function(error) {
-                if (error) {
-                    console.log(error);
-                }
+        this.watcher.onChange(reloadResources, (arg0, arg1) => {
+            this.reload(arg0);
+        });
+    }
+
+    buildWebSocket() {
+        let serverApp = this.server.serverApp;
+        this.wss = new WebSocketServer({
+            server: serverApp
+        });
+
+        this.wss.on('connection', (ws) => {
+            ws.on('message', (message) => {
+                console.log('received: %s', message);
             });
         });
-    };
-  }
-  reload(...args){
-    this.wss.broadcast( path.basename(args[0]) );
-  }
+
+        this.wss.broadcast = (data) => {
+            this.wss.clients.forEach(function each(client) {
+                client.send(data, function (error) {
+                    if (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        };
+    }
+
+    reload(...args) {
+        this.wss.broadcast(path.basename(args[0]));
+    }
 }
 export default Reloader;

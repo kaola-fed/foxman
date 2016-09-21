@@ -1,7 +1,7 @@
 const config = require('./foxman.config');
 
 config.argv = {
-    proxy: false,
-    update: true
+    proxy: 'test',
+    update: false
 };
 require('../')(config);

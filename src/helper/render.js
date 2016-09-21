@@ -13,8 +13,12 @@ class RenderUtil {
         }, settings);
     }
     parse(p1, dataModel) {
+
+        if(typeof dataModel == 'object'){
+            dataModel = JSON.stringify(dataModel);
+        }
+
         let settings = JSON.stringify(this.settings);
-        dataModel = JSON.stringify(dataModel);
         /**
          * [1] 与相对viewRoot的相对位置
          * [2] / 作为分隔符

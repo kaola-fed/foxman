@@ -23,7 +23,7 @@ const fileDispatcher = (config) => {
   const routeMap = new Map();
   routeMap.set('/', function ( { dirPath } ) {
     this.dispatcher = util.dispatcherTypeCreator(
-        'dir', dirPath, null
+        'dir', dirPath, void 0
     );
   });
 
@@ -35,7 +35,7 @@ const fileDispatcher = (config) => {
 
   routeMap.set('.json', function ( { commonAsync } ) {
     this.dispatcher = util.dispatcherTypeCreator(
-        'async', commonAsync, commonAsync
+        'async', void 0, commonAsync
     );
   });
   return routeMap;
@@ -101,11 +101,11 @@ export default (config) => {
                 if (router.sync) {
                     let tplPath = path.join(config.viewRoot, `${util.removeSuffix(router.filePath)}.${config.extension}`);
                     let tplMockPath = path.join(config.syncData, `${util.removeSuffix(router.filePath)}.json`);
-                    
                     this.dispatcher = util.dispatcherTypeCreator(
                         'sync',
                         tplPath,
-                        router.syncData || tplMockPath
+                        tplMockPath,
+                        router.handler
                     );
                 } else {
                     /**
@@ -115,8 +115,9 @@ export default (config) => {
                     let modelPath = path.join(config.asyncData, `${router.filePath}.json`);
                     this.dispatcher = util.dispatcherTypeCreator(
                         'async',
+                        void 0,
                         modelPath,
-                        router.asyncData || modelPath
+                        router.handler
                     );
                 }
                 util.log(`${router.method} ${this.request.path} -> ${router.url}`);

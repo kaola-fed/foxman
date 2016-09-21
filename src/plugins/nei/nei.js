@@ -44,10 +44,10 @@ const options = {
 let nei = new Application(options),
     neiTools = {
         build(opt){
-            nei.exec( [ 'build -key', opt.key,'-basedir', opt.basedir] );
+            nei.exec(['build -key', opt.key, '-basedir', opt.basedir]);
         },
         update (opt) {
-            nei.exec([ 'update -basedir', opt.basedir ]);
+            nei.exec(['update -basedir', opt.basedir]);
         },
         run (opt) {
             if (opt.hasBuild) {

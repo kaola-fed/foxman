@@ -15,12 +15,12 @@ class NeiPlugin {
     }
 
     init(serverPlugin) {
-        const key =  this.options.key;
+        const key = this.options.key;
         const home = os.homedir();
         const basedir = path.resolve(home, 'localMock', key);
-        const neiPattern = path.resolve( basedir, 'nei**','nei.json');
-        const hasBuild = globule.find( neiPattern ).length > 0 ;
-        
+        const neiPattern = path.resolve(basedir, 'nei**', 'nei.json');
+        const hasBuild = globule.find(neiPattern).length > 0;
+
         this.server = serverPlugin.server;
         const doUpdate = this.config.argv.update || false;
         this.neiRoute = path.resolve(basedir, 'nei.route.js');
@@ -36,14 +36,16 @@ class NeiPlugin {
                     })
                     .then(() => {
                         return this.updateRoutes(this.routes);
-                    }).then(resolve);
+                    }).then(()=> {
+                    resolve();
+                });
             });
         }
 
-        const serverConfigFiles = globule.find( path.resolve( baseDir, 'nei**/server.config.js') );
+        const serverConfigFiles = globule.find(path.resolve(basedir, 'nei**/server.config.js'));
 
         try {
-            if(serverConfigFiles.length == 0) {
+            if (serverConfigFiles.length == 0) {
                 throw new Error('can`t find server.config');
             }
             this.setNeiMockDir(require(serverConfigFiles[0]));
@@ -53,10 +55,15 @@ class NeiPlugin {
                 'nei资源不完整，请执行 \n',
                 '$ foxman -u'].join(''));
         }
-
-        this.updateRoutes(this.routes);
+        this.pending((resolve)=> {
+            this.updateRoutes(this.routes)
+                .then(()=> {
+                    resolve();
+                });
+        });
     }
-    setNeiMockDir(neiConfig){
+
+    setNeiMockDir(neiConfig) {
         this.mockTpl = neiConfig.mockTpl;
         this.mockApi = neiConfig.mockApi;
     }
@@ -66,7 +73,7 @@ class NeiPlugin {
          * neiConfigRoot
          * @type {string|*}
          */
-        const neiConfigRoot = path.resolve( config.neiConfigRoot, 'server.config.js');
+        const neiConfigRoot = path.resolve(config.neiConfigRoot, 'server.config.js');
         const neiConfig = require(neiConfigRoot);
         const rules = neiConfig.routes;
         this.setNeiMockDir(neiConfig);
@@ -116,13 +123,10 @@ class NeiPlugin {
 
         const promises = routes.map((route) => {
             return new Promise((resolve, reject) => {
-                let dataPath;
-                if (route.sync) {
-                    dataPath = server.syncDataMatch(util.jsonPathResolve(route.filePath));
-                } else {
-                    dataPath = path.resolve(server.asyncData, util.jsonPathResolve(route.filePath));
-                }
-
+                /**
+                 * 本地路径（非nei）
+                 */
+                let dataPath = this.genCommonPath(route);
                 fs.stat(dataPath, (error, stat) => {
                     /**
                      * 文件不存在或者文件内容为空
@@ -148,18 +152,14 @@ class NeiPlugin {
     updateRoutes(routes) {
         let promises = routes.map((route) => {
             return new Promise((...args) => {
-                fs.stat(route.filePath, (error, stat) => {
+                fs.stat(this.genCommonPath(route), (error, stat) => {
                     /**
                      * 文件不存在或者文件内容为空
                      */
                     if (error || !stat.size) {
-                        // TODO url creater
-                        const dataPath = this.genNeiApiUrl(route);
-                        if (route.sync) {
-                            route.syncData = dataPath;
-                        } else {
-                            route.asyncData = dataPath;
-                        }
+                        route.handler = (ctx) => fileUtil.jsonResolver(this.genNeiApiUrl(route));
+                    } else {
+                        route.handler = (ctx) => fileUtil.jsonResolver(this.genCommonPath(route));
                     }
                     args[0]();
                 });
@@ -172,6 +172,14 @@ class NeiPlugin {
                 args[0]();
             });
         });
+    }
+
+    genCommonPath(route) {
+        let server = this.server;
+        if (route.sync) {
+            return server.syncDataMatch(util.jsonPathResolve(route.filePath));
+        }
+        return server.asyncDataMatch(util.jsonPathResolve(route.filePath));
     }
 
     genNeiApiUrl(route) {

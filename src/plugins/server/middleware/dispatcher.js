@@ -1,9 +1,27 @@
 import path from 'path';
 import { util, fileUtil } from '../../../helper';
 
+function apiHandler(dispatcher) {
+    function isPromise(obj) {
+        return 'function' == typeof obj.then;
+    }
+    if( dispatcher.handler){
+        let res = dispatcher.handler(this);
+        if(!isPromise(res)){
+            res = new Promise((resolve)=>{
+                resolve(res);
+            });
+        }
+        return res;
+    } else {
+        return fileUtil.jsonResolver(dispatcher.dataPath);
+    }
+}
+
 /**
  * default dispatcher
- * @param  {[type]} config  [description]
+ * @param  {[type]} dispatcher  [description]
+ * @param  {[type]} config [description]
  * @param  {[type]} next [description]
  * @return {[type]}         [description]
  */
@@ -36,12 +54,10 @@ export function* dirDispatcher( dispatcher, config, next) {
  * @returns {*}
  */
 export function* syncDispatcher(dispatcher, config, next) {
-
     const filePath = dispatcher.path;
-    const dataPath = dispatcher.dataPath;
-    const dataModel = yield fileUtil.jsonResover(dataPath);
+    let res = yield apiHandler.call(this,dispatcher);
 
-    if( !dataModel ) {
+    if( !res || !res.json ) {
       this.type = 500;
       yield this.render('e', { title: '出错了', e:{
         code: 500,
@@ -50,7 +66,7 @@ export function* syncDispatcher(dispatcher, config, next) {
       return yield next;
     }
 
-    const output = config.renderUtil().parse( path.relative( config.viewRoot, filePath ), dataModel );
+    const output = config.renderUtil().parse( path.relative( config.viewRoot, filePath ), res.json );
     const stderr = output.stderr;
     const stdout = output.stdout;
 
@@ -102,8 +118,8 @@ export function* asyncDispather( dispatcher, config, next) {
      * 异步接口处理
      * @type {[type]}
      */
-    const asyncDataPath = dispatcher.dataPath;
-    const api = yield fileUtil.jsonResover(asyncDataPath);
+    const api = yield apiHandler.call(this,dispatcher);
+
     if( !api ) {
       yield this.render('e', { title: '出错了', e :{
         code: 500,
@@ -111,6 +127,7 @@ export function* asyncDispather( dispatcher, config, next) {
       }});
       return yield next;
     }
+
     this.type = 'application/json; charset=utf-8';
     this.body = api;
 
@@ -125,7 +142,6 @@ export default ( config )=>{
      * @type {Object}
      */
     const request = this.request;
-    const url = request.path;
     let args = [config, next];
 
     let dispatcherMap = {

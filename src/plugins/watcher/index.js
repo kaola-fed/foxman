@@ -1,14 +1,11 @@
-import { util } from '../../helper';
 import Watcher from './watcher';
-import chokidar from 'chokidar';
 
 /**
  * 监听插件
  */
 class WatcherPlugin {
     constructor(options) {
-        this.options = options;
-        this.root = options.root;
+        this.root = options.root || process.cmd();
     }
     init() {
         this.watcher = new Watcher(this.root);
