@@ -5,7 +5,7 @@
 
 [![NPM][nodei-image]][nodei-url]
 
-> 前端开发集成工具，为注重开发体验的前端开发工程师量身定制 
+> 前端集成开发工具，为注重开发体验的前端开发工程师量身定制 
 
 # 预览
 ![http://note.youdao.com/yws/public/resource/c0ad463e177be9880ecc3b0293558130/xmlnote/AB403D840B894D03980520552B3EF39A/6045](http://note.youdao.com/yws/public/resource/c0ad463e177be9880ecc3b0293558130/xmlnote/AB403D840B894D03980520552B3EF39A/6045)

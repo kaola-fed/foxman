@@ -1,7 +1,7 @@
 {
   "name": "foxman",
-  "version": "0.1.9",
-  "description": "flexiable mock server for nodejs",
+  "version": "0.1.10.1",
+  "description": "前端集成开发工具",
   "main": "app.js",
   "bin": {
     "foxman": "bin/foxman"
