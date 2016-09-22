@@ -17,30 +17,43 @@ class PreCompiler extends EventEmitter{
         };
         return this;
     }
-
     run() {
         let workFlow = this.handler(vinylFs.dest.bind(this));
-        this.source = vinylFs.src(this.pattern);
+        this.source = vinylFs.src(this.sourcePattern);
         workFlow.forEach((item)=>{
             this.pipe(item);
         });
         return this;
     }
-
-    destInstence (pattern) {
+}
+class SinglePreCompiler extends PreCompiler{
+    destInstence (sourcePattern) {
         return (dest) => {
-            console.log(this.pattern);
-            let sourceRoot = pattern.replace(/\*+.*$/,'');
-            let output = resolve(dest, relative(sourceRoot,this.pattern));
+            /**
+             * 获取输入文件的相对根目录
+             * @type {XML|string|void|*}
+             */
+            let sourceRoot = sourcePattern.replace(/\*+.*$/,'');
+            /**
+             * 得到输出文件的完整文件名
+             */
+            let output = resolve(dest, relative(sourceRoot,this.sourcePattern));
+            /**
+             * 输出文件
+             */
             return vinylFs.dest.call(vinylFs, resolve(output,'..'));
         }
     }
-    runInstance(pattern){
-        this.source = vinylFs.src(this.pattern);
-        this.handler( this.destInstence.call(this, pattern) ).forEach( (item) => {
+    runInstance(sourcePattern){
+        this.source = vinylFs.src(this.sourcePattern);
+        this.handler( this.destInstence.call(this, sourcePattern) ).forEach( (item) => {
             this.pipe(item);
         });
         return this;
     }
 }
+
+export {SinglePreCompiler};
+
 export default PreCompiler;
+

@@ -3,6 +3,7 @@ import {
     util
 } from '../helper'
 import instance from './instance'
+import cluster from 'cluster';
 
 export default class Application extends EventEmitter {
     constructor() {

@@ -2,7 +2,8 @@ import {
     util
 } from '../../helper';
 import PreCompiler from './precompiler';
-import globule from 'globule';
+import {SinglePreCompiler} from './precompiler';
+
 
 /**
  * 监听插件
@@ -16,52 +17,73 @@ import globule from 'globule';
 class PreCompilerPlugin {
     constructor(options) {
         this.options = options;
+        Object.assign(this,options);
     }
 
     init(watcherPlugin) {
         this.watcher = watcherPlugin.watcher;
         this.mapCompiler(this.options.preCompilers);
     }
-
     mapCompiler(preCompilers) {
         preCompilers.forEach((preCompiler) => {
             this.prepare(preCompiler);
         });
     }
-
     prepare(preCompiler) {
         const handler = preCompiler.handler;
-        let patterns = preCompiler.test;
+        let source = preCompiler.test;
 
-        if (!Array.isArray(patterns)) {
-            patterns = [patterns]
+        if (!Array.isArray(source)) {
+            source = [source]
         }
+        source.forEach((sourcePattern)=> {
+            setTimeout(()=>{
+                let watchMap = {};
 
-        patterns.forEach((pattern)=> {
-            let watchMap = {};
-            new PreCompiler({
-                pattern, handler
-            })
-            .run()
-            .on('updateWatch', (dependencies)=> {
-                const filename = dependencies[0];
-                const diff = [];
-                watchMap[filename] = watchMap[filename] || [];
-                dependencies.forEach((dependency)=> {
-                    if ((watchMap[filename].indexOf(dependency) == -1)) {
-                        watchMap[filename].push(dependency);
-                        diff.push(dependency);
-                    }
-                });
+                new PreCompiler({
+                    sourcePattern, handler
+                })
+                    .run()
+                    .on('updateWatch', (dependencies) => {
+                        const diff = this.getNewDeps(watchMap, dependencies);
+                        if (diff.length == 0) return false;
+                        this.watcher.onChange(diff, (file, arg1) => {
+                            this.createSingleCompiler(handler, watchMap, sourcePattern, dependencies[0]);
+                        });
+                    });
 
-                if (diff.length == 0) return false;
-                this.watcher.onChange(diff, (file, arg1) => {
-                    new PreCompiler({
-                        pattern: filename,
-                        handler
-                    }).runInstance(pattern);
+                this.watcher
+                    .onChange(sourcePattern, (file)=> {
+                        this.createSingleCompiler(handler, watchMap, sourcePattern, file);
+                    });
+            },100);
+        });
+    }
+    createSingleCompiler(handler, watchMap, sourcePattern, input) {
+        let singleCompiler = new SinglePreCompiler({
+            sourcePattern: input,
+            handler
+        })
+            .runInstance(sourcePattern)
+            .on('updateWatch', (deps)=> {
+                const diff = this.getNewDeps(watchMap, deps);
+                if ( !diff.length ) return false;
+
+                this.watcher.onChange(diff, ()=> {
+                    singleCompiler.runInstance(sourcePattern);
                 });
             });
+        return singleCompiler;
+    }
+    getNewDeps(watchMap, deps) {
+        const file = deps[0];
+        watchMap[file] = watchMap[file] || [];
+
+        return deps.filter((dep)=> {
+            if ((watchMap[file].indexOf(dep) == -1)) {
+                watchMap[file].push(dep);
+                return true;
+            }
         });
     }
 }

@@ -1,10 +1,19 @@
-.config2{
-	width:1px;
+.config{
+	width:59px;
+}
+body{
+	margin:2px;
+	background:#00f;
+	padding:10px;
+	color:#fff;
 	display:-webkit-box;
 	display:flex;
 }
+.cfg3{
+	background:#f00;
+}
 .config{
-	width:60px;
+	width:20px;
 }
 body{
 	margin:2px;

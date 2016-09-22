@@ -8,26 +8,37 @@ let watcher;
 class Watcher {
     constructor(...args) {
         this.root = args[0];
+        this.watching = [];
+        this.handlers = [];
+
         this.watcher = chokidar.watch(process.cwd(), {
             ignored: ['**/.git/**', '**/node_modules/**', '**/.gitignore'],
             persistent: true
         });
-        this.watcher.setMaxListeners(0);
-    }
-    removeWatch(files) {
-        this.watcher.unwatch(files);
-    }
-    onChange(...args) {
-        args[0] = (Array.isArray(args[0])) ? (args[0].map((path) => {
-            return resolve(this.root, path);
-        })) : resolve(this.root, args[0]);
 
-        let matcher = anymatch(args[0]);
         this.watcher.on('all', (event, path) => {
-            if (['add', 'change', 'unlink'].indexOf(event) && matcher(path)) {
-                args[1](path);
+            if(-1 == (['add', 'change', 'unlink'].indexOf(event))){
+                return;
             }
+            this.watching.forEach((pattern, idx)=>{
+                if(anymatch(pattern)(path)){
+                    this.handlers[idx](path);
+                }
+            });
         });
+    }
+    removeWatch(watching,fn) {
+        let fnIdx = this.handlers.indexOf(fn);
+        let watchingIdx = this.watching.indexOf(watching);
+
+        if(fnIdx == watchingIdx){
+            this.handlers.splice(fnIdx,1);
+            this.watching.splice(fnIdx,1);
+        }
+    }
+    onChange(files, handler) {
+        this.watching.push(files);
+        this.handlers.push(handler);
     }
 }
 export default function(...args) {

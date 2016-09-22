@@ -1,6 +1,8 @@
 @import './_config2.mcss';
+@import './_config3.mcss';
+
 .config{
-  width: 60px;
+  width: 20px;
 }
 body{
   margin: 2px;

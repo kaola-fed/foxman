@@ -1,5 +1,11 @@
-.config2{
-	width:1px;
+.config{
+	width:59px;
+}
+body{
+	margin:2px;
+	background:#00f;
+	padding:10px;
+	color:#fff;
 	display:-webkit-box;
 	display:flex;
 }
