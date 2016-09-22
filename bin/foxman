@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 'use strict';
-const path = require('path');
-let config ;
-
-const argv = require('yargs')
+var path = require('path');
+var config ;
+var argv = require('yargs')
     .option('config', {
         alias: 'c' ,
         demand: true ,
@@ -41,4 +40,5 @@ try {
 }
 
 Object.assign(config, { argv });
+
 require('../app.js')(config);
