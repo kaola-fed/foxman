@@ -44,7 +44,7 @@ export default (config) => {
          * ① 拦截 router
          * @type {[type]}
          */
-        const [routers, method] = [config.routers, this.request.method];
+        const [routers, method] = [config.routers||[], this.request.method];
 
         /**
          * 入口时，自动转换

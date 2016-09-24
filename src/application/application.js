@@ -88,8 +88,8 @@ export default class Application extends EventEmitter {
                     return loop();
                 }
                 final.value.then(result => loop())
-                    .catch((err) => { 
-                        util.error(err) 
+                    .catch((err) => {
+                        util.error(err)
                     });
             }
         } ();
