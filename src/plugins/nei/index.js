@@ -25,19 +25,20 @@ class NeiPlugin {
         this.neiRoute = path.resolve(basedir, 'nei.route.js');
 
         if (doUpdate) {
-            return this.pending((resolve)=> {
+            return this.pending((resolve) => {
                 neiTools
                     .run({
                         key, basedir
                     })
                     .then((config) => {
-                        this.getUpdate(config);
+                        return this.getUpdate(config);
                     })
                     .then(() => {
                         return this.updateRoutes(this.routes);
-                    }).then(()=> {
-                    resolve();
-                });
+                    })
+                    .then(() => {
+                        resolve();
+                    });
             });
         }
 
@@ -54,9 +55,9 @@ class NeiPlugin {
                 'nei资源不完整，请执行 \n',
                 '$ foxman -u'].join(''));
         }
-        this.pending((resolve)=> {
+        this.pending((resolve) => {
             this.updateRoutes(this.routes)
-                .then(()=> {
+                .then(() => {
                     resolve();
                 });
         });
@@ -108,8 +109,8 @@ class NeiPlugin {
                 });
             }
         }
-        fileUtil.writeFile(neiRoute, `module.exports = ${_.inspect(routes, {maxArrayLength: null})}`, () => {
-        }, (e)=> {
+        fileUtil.writeFile(neiRoute, `module.exports = ${_.inspect(routes, { maxArrayLength: null })}`, () => {
+        }, (e) => {
             util.error(e);
         });
         return routes;
@@ -139,10 +140,10 @@ class NeiPlugin {
                 });
             })
         });
-        return new Promise((...args)=> {
-            Promise.all(promises).then(()=> {
+        return new Promise((...args) => {
+            Promise.all(promises).then(() => {
                 args[0](routes);
-            }).catch((e)=> {
+            }).catch((e) => {
                 util.error(e);
             });
         });
@@ -150,7 +151,7 @@ class NeiPlugin {
 
     updateRoutes(routes) {
         let promises = routes.map((route) => {
-            return new Promise((...args) => {
+            return new Promise((resolve) => {
                 fs.stat(this.genCommonPath(route), (error, stat) => {
                     /**
                      * 文件不存在或者文件内容为空
@@ -160,15 +161,15 @@ class NeiPlugin {
                     } else {
                         route.handler = (ctx) => fileUtil.jsonResolver(this.genCommonPath(route));
                     }
-                    args[0]();
+                    resolve();
                 });
             })
         });
-        return new Promise((...args)=> {
+        return new Promise((resolve) => {
             Promise.all(promises).then(() => {
                 let server = this.server;
                 server.routers = routes.concat(server.routers);
-                args[0]();
+                resolve();
             });
         });
     }
@@ -178,7 +179,7 @@ class NeiPlugin {
         if (route.sync) {
             return server.syncDataMatch(util.jsonPathResolve(route.filePath));
         }
-        return server.asyncDataMatch(util.jsonPathResolve(route.filePath));
+        return server.asyncDataMatch(util.jsonPathResolve(route.filePath.replace(/\/data/g, '')));
     }
 
     genNeiApiUrl(route) {

@@ -1,6 +1,7 @@
 import EventEmitter from 'events';
 import path from 'path';
 import {Server as WebSocketServer} from 'ws';
+import {util, fileUtil} from "../../helper";
 
 class Reloader extends EventEmitter {
     constructor(options) {
@@ -9,26 +10,26 @@ class Reloader extends EventEmitter {
         this.bindChange();
         this.buildWebSocket();
     }
-
     bindChange() {
-
-        let [server,watcher] = [this.server, this.watcher];
+        let [server, watcher] = [this.server, this.watcher];
 
         let reloadResources = [
             path.resolve(server.viewRoot, '**', '*.' + server.extension),
-            path.resolve(server.syncData, '**', '*')
         ];
-
+        let reload = util.throttle((arg0) => {
+            this.reload(arg0);
+        }, 1000);
         server.static.forEach(item => {
             reloadResources.push(path.resolve(item, '**', '*.css'));
             reloadResources.push(path.resolve(item, '**', '*.js'));
         });
 
         this.watcher.onChange(reloadResources, (arg0, arg1) => {
-            this.reload(arg0);
+            if (arg1 != 'add') {
+                reload(arg0);
+            }
         });
     }
-
     buildWebSocket() {
         let serverApp = this.server.serverApp;
         this.wss = new WebSocketServer({
@@ -51,7 +52,6 @@ class Reloader extends EventEmitter {
             });
         };
     }
-
     reload(...args) {
         this.wss.broadcast(path.basename(args[0]));
     }

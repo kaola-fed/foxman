@@ -17,23 +17,23 @@ class Watcher {
         });
 
         this.watcher.on('all', (event, path) => {
-            if(-1 == (['add', 'change', 'unlink'].indexOf(event))){
+            if (-1 == (['add', 'change', 'unlink'].indexOf(event))) {
                 return;
             }
-            this.watching.forEach((pattern, idx)=>{
-                if(anymatch(pattern)(path)){
-                    this.handlers[idx](path);
+            this.watching.forEach((pattern, idx) => {
+                if (anymatch(pattern)(path)) {
+                    this.handlers[idx](path, event);
                 }
             });
         });
     }
-    removeWatch(watching,fn) {
+    removeWatch(watching, fn) {
         let fnIdx = this.handlers.indexOf(fn);
         let watchingIdx = this.watching.indexOf(watching);
 
-        if(fnIdx == watchingIdx){
-            this.handlers.splice(fnIdx,1);
-            this.watching.splice(fnIdx,1);
+        if (fnIdx == watchingIdx) {
+            this.handlers.splice(fnIdx, 1);
+            this.watching.splice(fnIdx, 1);
         }
     }
     onChange(files, handler) {
@@ -41,7 +41,7 @@ class Watcher {
         this.handlers.push(handler);
     }
 }
-export default function(...args) {
+export default function (...args) {
     if (!watcher) watcher = new Watcher(...args);
     return watcher;
 };

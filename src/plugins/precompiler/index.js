@@ -17,7 +17,7 @@ import {SinglePreCompiler} from './precompiler';
 class PreCompilerPlugin {
     constructor(options) {
         this.options = options;
-        Object.assign(this,options);
+        Object.assign(this, options);
     }
 
     init(watcherPlugin) {
@@ -36,8 +36,8 @@ class PreCompilerPlugin {
         if (!Array.isArray(source)) {
             source = [source]
         }
-        source.forEach((sourcePattern)=> {
-            setTimeout(()=>{
+        source.forEach((sourcePattern) => {
+            setTimeout(() => {
                 let watchMap = {};
 
                 new PreCompiler({
@@ -53,10 +53,10 @@ class PreCompilerPlugin {
                     });
 
                 this.watcher
-                    .onChange(sourcePattern, (file)=> {
+                    .onChange(sourcePattern, (file) => {
                         this.createSingleCompiler(handler, watchMap, sourcePattern, file);
                     });
-            },100);
+            }, 100);
         });
     }
     createSingleCompiler(handler, watchMap, sourcePattern, input) {
@@ -65,11 +65,11 @@ class PreCompilerPlugin {
             handler
         })
             .runInstance(sourcePattern)
-            .on('updateWatch', (deps)=> {
+            .on('updateWatch', (deps) => {
                 const diff = this.getNewDeps(watchMap, deps);
-                if ( !diff.length ) return false;
+                if (!diff.length) return false;
 
-                this.watcher.onChange(diff, ()=> {
+                this.watcher.onChange(diff, () => {
                     singleCompiler.runInstance(sourcePattern);
                 });
             });
@@ -79,7 +79,7 @@ class PreCompilerPlugin {
         const file = deps[0];
         watchMap[file] = watchMap[file] || [];
 
-        return deps.filter((dep)=> {
+        return deps.filter((dep) => {
             if ((watchMap[file].indexOf(dep) == -1)) {
                 watchMap[file].push(dep);
                 return true;

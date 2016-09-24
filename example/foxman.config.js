@@ -16,16 +16,15 @@ let alias = {
 module.exports = {
     /**
      * 如有需要，填写nei 的kei 然后执行 foxman -u 初始化工程目录。
-     * nei: {
-     *  key: '${nei key}'
-     * },
      **/
-
     /**
      * task集合(基于gulp文件处理，故所有gulp插件都可用)
      * test -- String or Array<String> 需要进行转换的文件规则
      * handler -- Function 类型，需返回一个数组
      */
+    nei: {
+        key: 'b37164739beedfabde74d3ddf8c4620f'
+    },
     preCompilers: [
         {
             test: [r(alias.r, 'src/mcss/**/*.mcss')],

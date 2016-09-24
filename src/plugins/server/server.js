@@ -16,7 +16,7 @@ class Server {
         Object.assign(this, config);
 
         if (!this.syncDataMatch) {
-            this.syncDataMatch = (url) => path.resolve(this.syncData, url);
+            this.syncDataMatch = (url) => path.join(this.syncData, url);
         }
 
         if (!this.asyncDataMatch) {

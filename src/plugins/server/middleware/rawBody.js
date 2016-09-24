@@ -4,9 +4,9 @@
 import contentType from 'content-type';
 import getRawBody from 'raw-body';
 
-export default () =>{
-    return function * (next) {
-        if(this.request.method.toUpperCase() == 'GET'){
+export default () => {
+    return function* (next) {
+        if (this.request.method.toUpperCase() == 'GET') {
             this.request.body = new Buffer('');
             return yield next;
         }

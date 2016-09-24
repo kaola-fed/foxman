@@ -2,9 +2,9 @@
 *.idea*
 /npm-debug.log
 dev.bat
-*dist*
 nei.route.js
 example/mock
 example/nei*
 example/src/main/webapp/backend/
 foxman.config.all.js
+**dist**

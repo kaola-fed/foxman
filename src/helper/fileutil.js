@@ -52,8 +52,8 @@ export function readFile(file) {
 }
 
 export function writeFile(filename, text) {
-    return new Promise((resolve, reject)=> {
-        fs.writeFile(filename, text, (err)=> {
+    return new Promise((resolve, reject) => {
+        fs.writeFile(filename, text, (err) => {
             if (err) {
                 return reject(err)
             }
@@ -90,12 +90,12 @@ export function writeUnExistsFile(file, text) {
 
 export function jsonResolver(opt) {
     return new Promise((resolve, reject) => {
-        const url = opt.url;
+        let url = (typeof opt == 'string') ? opt : opt.url;
 
         let json;
         if (/^http/g.test(url)) {
             _.log(`请求转发:${url}`);
-            _.request(opt).then((res)=> {
+            _.request(opt).then((res) => {
                 try {
                     json = JSON.parse(res.body.toString('utf-8'));
                 } catch (e) {
@@ -103,29 +103,33 @@ export function jsonResolver(opt) {
                 }
                 res.json = json;
                 resolve(res);
-            }, (err)=> {
+            }, (err) => {
                 console.log(err);
                 resolve(null);
             });
             return;
         }
         readFile(url).then((data) => {
-            json = JSON.parse(data);
-            resolve({json});
-        }, (err)=> {
+            try {
+                json = JSON.parse(data);
+            } catch (e) {
+                json = {};
+            }
+            resolve({ json });
+        }, (err) => {
             _.warnLog(`localFile ${url} is not found, so output {}`);
-            resolve({json: {}});
+            resolve({ json: {} });
         });
     });
 }
 export function delDir(file) {
-    if( fs.statSync(file).isFile() ){
+    if (fs.statSync(file).isFile()) {
         fs.unlinkSync(file);
-    }else{
+    } else {
         var children = fs.readdirSync(file);
-        if(children && children.length!=0){
-            children.forEach(function (item){
-                delDir(path.join(file,item));
+        if (children && children.length != 0) {
+            children.forEach(function (item) {
+                delDir(path.join(file, item));
             });
         }
         fs.rmdirSync(file);

@@ -5,16 +5,16 @@ function apiHandler(dispatcher) {
     function isPromise(obj) {
         return 'function' == typeof obj.then;
     }
-    if( dispatcher.handler){
+    if (dispatcher.handler) {
         let res = dispatcher.handler(this);
-        if(!isPromise(res)){
-            res = new Promise((resolve)=>{
+        if (!isPromise(res)) {
+            res = new Promise((resolve) => {
                 resolve(res);
             });
         }
         return res;
     } else {
-        return fileUtil.jsonResolver({url: dispatcher.dataPath});
+        return fileUtil.jsonResolver({ url: dispatcher.dataPath });
     }
 }
 
@@ -25,10 +25,10 @@ function apiHandler(dispatcher) {
  * @param  {[type]} next [description]
  * @return {[type]}         [description]
  */
-export function* dirDispatcher( dispatcher, config, next) {
+export function* dirDispatcher(dispatcher, config, next) {
     const viewPath = dispatcher.path;
-    const files = yield fileUtil.getDirInfo( viewPath );
-    const promises = files.map( ( file ) => fileUtil.getFileStat( path.resolve( viewPath, file ) ) );
+    const files = yield fileUtil.getDirInfo(viewPath);
+    const promises = files.map((file) => fileUtil.getFileStat(path.resolve(viewPath, file)));
     const result = yield Promise.all(promises);
 
     const fileList = result.map((item, idx) => {
@@ -53,25 +53,29 @@ export function* dirDispatcher( dispatcher, config, next) {
  */
 export function* syncDispatcher(dispatcher, config, next) {
     const filePath = dispatcher.path;
-    let res = yield apiHandler.call(this,dispatcher);
-    if( !res || !res.json ) {
-      this.type = 500;
-      yield this.render('e', { title: '出错了', e:{
-        code: 500,
-        msg: '数据处理异常'
-      }});
-      return yield next;
+    let res = yield apiHandler.call(this, dispatcher);
+    if (!res || !res.json) {
+        this.type = 500;
+        yield this.render('e', {
+            title: '出错了', e: {
+                code: 500,
+                msg: '数据处理异常'
+            }
+        });
+        return yield next;
     }
-    const output = yield config.tplRender.parse( path.relative( config.viewRoot, filePath ), res.json );
-    if(/DONE/ig.test(output.out)){
+    const output = yield config.tplRender.parse(path.relative(config.viewRoot, filePath), res.json);
+    if (/DONE/ig.test(output.out)) {
         this.type = 'text/html; charset=utf-8';
         this.body = output.data;
         return yield next;
     }
-    yield this.render('e', { title: '出错了', e:{
-        code: 500,
-        msg: output.out
-    }});
+    yield this.render('e', {
+        title: '出错了', e: {
+            code: 500,
+            msg: output.out
+        }
+    });
     return yield next;
 }
 
@@ -102,24 +106,25 @@ export function* asyncDispather(dispatcher, config, next) {
     yield next;
 }
 
-export default ( config )=>{
-  return function*( next ) {
-    /**
-     * 分配给不同的处理器
-     * @type {Object}
-     */
-    const request = this.request;
-    let args = [config, next];
+export default (config) => {
+    return function* (next) {
+        /**
+         * 分配给不同的处理器
+         * @type {Object}
+         */
+        const request = this.request;
+        let args = [config, next];
 
-    let dispatcherMap = {
-      'dir': dirDispatcher,
-      'sync': syncDispatcher,
-      'async': asyncDispather
-    };
-    util.log(`type: ${this.dispatcher.type} path: ${this.dispatcher.path||this.dispatcher.dataPath}`);
-    let dispatcher;
-    if( dispatcher = dispatcherMap[ this.dispatcher.type ] ){
-      yield dispatcher.call(this, this.dispatcher, ...args );
+        let dispatcherMap = {
+            'dir': dirDispatcher,
+            'sync': syncDispatcher,
+            'async': asyncDispather
+        };
+        util.log(`${this.request.method} ${this.request.path}`);
+
+        let dispatcher;
+        if (dispatcher = dispatcherMap[this.dispatcher.type]) {
+            yield dispatcher.call(this, this.dispatcher, ...args);
+        }
     }
-  }
 }

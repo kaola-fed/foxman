@@ -7,7 +7,7 @@ class ReloadPlugin {
     constructor(options) {
         this.options = options;
     }
-    init( watcherPlugin, serverPlugin ) {
+    init(watcherPlugin, serverPlugin) {
         const server = serverPlugin.server;
         const watcher = watcherPlugin.watcher;
         server.appendHtml("<script src='/foxman_client/js/reload.js'></script>");

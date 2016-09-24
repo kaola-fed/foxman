@@ -32,7 +32,7 @@ export default class Application extends EventEmitter {
      */
     resolve(func, scope) {
         const argList = func.toString().match(/^.*?\s*[^\(]*\(\s*([^\)]*)\)/m);
-        const args = ( argList && argList[1] ) ? ( argList[1].replace(/ /g, '').split(',') ) : [];
+        const args = (argList && argList[1]) ? (argList[1].replace(/ /g, '').split(',')) : [];
 
         let deps = args.map((arg) => {
             if (!this.dependency[arg]) {
@@ -54,8 +54,8 @@ export default class Application extends EventEmitter {
 
         Object.assign(plugin, {
             config: this.config,
-            name: plugin.constructor.name,
             id: this.uid(),
+            name: plugin.constructor.name,
             pending: (...args) => instance.pending.apply(plugin, args)
         });
 
@@ -64,15 +64,15 @@ export default class Application extends EventEmitter {
     }
 
     execute() {
-        return function *() {
+        return function* () {
             const keys = Object.keys(this.dependency);
             const plugins = keys.map((key) => this.dependency[key]);
             for (let plugin of plugins) {
                 plugin.init && this.resolve(plugin.init, plugin);
                 if (plugin.pendings) {
-                    util.log(`${plugin.name} need pending`);
+                    util.log(`${plugin.name} needs pending`);
                     yield Promise.all(plugin.pendings);
-                    util.log(`${plugin.name}' pending is end`);
+                    util.log(`${plugin.name}'s pending is end`);
                 }
             }
         }
@@ -83,12 +83,15 @@ export default class Application extends EventEmitter {
         let final = {};
         +function loop() {
             final = pipeline.next();
-            if(!final.done){
-                if(final.value.then){
-                    return final.value.then( result => loop());
+            if (!final.done) {
+                if (!final.value.then) {
+                    return loop();
                 }
-                loop();
+                final.value.then(result => loop())
+                    .catch((err) => { 
+                        util.error(err) 
+                    });
             }
-        }();
+        } ();
     }
 }

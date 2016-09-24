@@ -48,13 +48,13 @@ class ProxyPlugin {
             if (host) {
                 headers.host = host;
             }
-            
+
             return fileUtil.jsonResolver({
                 url,
                 headers,
                 requestBody
             }).then((res) => {
-                if(res){
+                if (res) {
                     this.status = res.statusCode;
                     for (let name in res.headers) {
                         if (res.headers.hasOwnProperty(name)) {

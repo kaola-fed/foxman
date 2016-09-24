@@ -1,11 +1,11 @@
 import Server from './server';
 
-class ServerPlugin  {
-    constructor(options){
-      this.options = options;
+class ServerPlugin {
+    constructor(options) {
+        this.options = options;
     }
-    init (){
-        ( this.server = new Server( this.options ) ).createServer();
+    init() {
+        (this.server = new Server(this.options)).createServer();
     }
 }
 export default ServerPlugin;

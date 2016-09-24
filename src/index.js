@@ -8,26 +8,25 @@ import ProxyPlugin from './plugins/proxy';
 
 let owner;
 class Owner {
-    constructor( config ) {
+    constructor(config) {
         const app = Application();
         /**
-         * __setConfig
+         * 設置全局的配置信息 
          */
         app.setConfig(config);
-
         /**
-         * 内置组件
+         * 內置的服務，全局共享
          */
-        app.use( new WatcherPlugin( config.watch ));
+        app.use(new WatcherPlugin(config.watch));
 
-        app.use( new ServerPlugin( config.server ));
+        app.use(new ServerPlugin(config.server));
 
-        app.use( new PreCompilerPlugin({
+        app.use(new PreCompilerPlugin({
             preCompilers: config.preCompilers
         }));
 
-        if( !!config.nei ){
-            app.use( new NeiPlugin( {
+        if (!!config.nei) {
+            app.use(new NeiPlugin({
                 key: config.nei.key
             }));
         }
@@ -35,20 +34,20 @@ class Owner {
         /**
          * __load ex Plugins
          */
-        app.use( config.plugins );
+        app.use(config.plugins);
 
-        app.use( new ReloadPlugin({}));
+        app.use(new ReloadPlugin({}));
 
-        app.use( new ProxyPlugin({
-          proxy: config.proxy,
-          proxyServer: config.argv.proxy
+        app.use(new ProxyPlugin({
+            proxy: config.proxy,
+            proxyServer: config.argv.proxy
         }));
 
         app.run();
     }
 }
 
-module.exports = function(config) {
+module.exports = function (config) {
     if (!owner) owner = new Owner(config);
     return owner;
 };

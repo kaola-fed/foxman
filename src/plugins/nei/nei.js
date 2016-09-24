@@ -8,7 +8,7 @@ util.checkNodeVersion();
 const options = {
     package: require('nei/package.json'),
     message: require('nei/bin/config.js'),
-    build (event) {
+    build(event) {
         var action = 'build';
         var config = event.options || {};
         config = this.format(action, config);
@@ -27,7 +27,7 @@ const options = {
             });
         }
     },
-    update (event) {
+    update(event) {
         var action = 'update';
         var config = event.options || {};
         config = this.format(action, config);
@@ -43,17 +43,21 @@ const options = {
 
 let nei = new Application(options),
     neiTools = {
-        build(opt){
+        build(opt) {
             nei.exec(['build -key', opt.key, '-basedir', opt.basedir]);
         },
-        update (opt) {
+        update(opt) {
             nei.exec(['update -basedir', opt.basedir]);
         },
-        run (opt) {
-            fileUtil.delDir(opt.basedir);
+        run(opt) {
+            try {
+                fileUtil.delDir(opt.basedir);
+            } catch (e) {
+                console.log('初始化nei目录');
+            }
             this.build(opt);
 
-            return new Promise((resolve, reject)=> {
+            return new Promise((resolve, reject) => {
                 nei.on('buildSuccess', (arg0) => {
                     resolve(arg0);
                 });

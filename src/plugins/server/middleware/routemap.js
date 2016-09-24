@@ -16,30 +16,30 @@ import pathToRegexp from 'path-to-regexp';
  */
 
 const fileDispatcher = (config) => {
-  const routeMap = new Map();
-  routeMap.set('/', function ( { commonTplPath } ) {
-    this.dispatcher = util.dispatcherTypeCreator(
-        'dir', commonTplPath, void 0
-    );
-  });
+    const routeMap = new Map();
+    routeMap.set('/', function ({ commonTplPath }) {
+        this.dispatcher = util.dispatcherTypeCreator(
+            'dir', commonTplPath, void 0
+        );
+    });
 
-  routeMap.set(`.${config.extension}`, function ({ commonTplPath, commonSync}) {
-    this.dispatcher = util.dispatcherTypeCreator(
-        'sync', commonTplPath, commonSync
-    );
-  });
+    routeMap.set(`.${config.extension}`, function ({ commonTplPath, commonSync}) {
+        this.dispatcher = util.dispatcherTypeCreator(
+            'sync', commonTplPath, commonSync
+        );
+    });
 
-  routeMap.set('.json', function ( { commonAsync } ) {
-    this.dispatcher = util.dispatcherTypeCreator(
-        'async', void 0, commonAsync
-    );
-  });
-  return routeMap;
+    routeMap.set('.json', function ({ commonAsync }) {
+        this.dispatcher = util.dispatcherTypeCreator(
+            'async', void 0, commonAsync
+        );
+    });
+    return routeMap;
 };
 
 export default (config) => {
     const routeMap = fileDispatcher(config);
-    return function*(next) {
+    return function* (next) {
         /**
          * ① 拦截 router
          * @type {[type]}
@@ -49,8 +49,8 @@ export default (config) => {
         /**
          * 入口时，自动转换
          */
-        let requestPath = ( this.request.path == '/' ) ? '/index.html' : this.request.path;
-        
+        let requestPath = (this.request.path == '/') ? '/index.html' : this.request.path;
+
         /**
          * 路径统一绝对路径
          */
@@ -60,26 +60,26 @@ export default (config) => {
          * 前者为 '.../tpl/',
          * @type {[string]}
          */
-        requestInfo.commonTplPath = path.join( config.viewRoot, this.request.path );
+        requestInfo.commonTplPath = path.join(config.viewRoot, this.request.path);
 
         /**
          * 根据用户定义的规则和url,生成通用的同步数据路径
          * @type {[string]}
          */
-        requestInfo.commonSync = config.syncDataMatch( util.jsonPathResolve(requestPath) );
+        requestInfo.commonSync = config.syncDataMatch(util.jsonPathResolve(requestPath));
 
         /**
          * 根据用户定义的规则和url,生成通用的异步数据路径
          * @type {[string]}
          */
-        requestInfo.commonAsync = config.asyncDataMatch( util.jsonPathResolve(requestPath) );
+        requestInfo.commonAsync = config.asyncDataMatch(util.jsonPathResolve(requestPath));
 
         /**
          * 遍历路由表,并给请求对象处理,生成 this.dispatcher
          */
-        for ( let router of routers ) {
+        for (let router of routers) {
             if (router.method.toUpperCase() == method.toUpperCase() &&
-                pathToRegexp(router.url).test(this.request.path) ) {
+                pathToRegexp(router.url).test(this.request.path)) {
                 /**
                  * 同步接口
                  * 可能插件会生成一个 syncData ,若已生成则用插件的
@@ -107,7 +107,6 @@ export default (config) => {
                         router.handler
                     );
                 }
-                util.log(`${router.method} ${this.request.path} -> ${router.url}`);
                 return yield next;
             }
         }
@@ -115,7 +114,7 @@ export default (config) => {
          * ② 未拦截到 router
          */
         for (let [route, handler] of routeMap) {
-            if ( this.request.path.endsWith(route)  ) {
+            if (this.request.path.endsWith(route)) {
                 handler.call(this, requestInfo);
                 return yield next;
             }
