@@ -23,7 +23,7 @@ module.exports = {
      * handler -- Function 类型，需返回一个数组
      */
     nei: {
-        key: 'b37164739beedfabde74d3ddf8c4620f'
+        key: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
     },
     preCompilers: [
         {
