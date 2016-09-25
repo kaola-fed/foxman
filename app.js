@@ -9,4 +9,5 @@ const welcome = [
 ].join('\n');
 console.log(welcome);
 require('babel-polyfill');
-module.exports = require('./dist/index.js');
+
+module.exports = (process.env.NODE_ENV === 'development')? require('./src/index.js'): require('./dist/index.js');

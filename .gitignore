@@ -8,3 +8,5 @@ example/nei*
 example/src/main/webapp/backend/
 foxman.config.all.js
 **dist**
+src/**/*.js.map
+src/**/*.js
