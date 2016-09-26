@@ -1,9 +1,9 @@
 .config{
-	width:59px;
+	width:11px;
 }
 body{
-	margin:2px;
-	background:#00f;
+	margin:100px;
+	background:#f00;
 	padding:10px;
 	color:#fff;
 	display:-webkit-box;

@@ -15,6 +15,7 @@ class Reloader extends EventEmitter {
 
         let reloadResources = [
             path.resolve(server.viewRoot, '**', '*.' + server.extension),
+            path.resolve(server.syncData, '**', '*.json')
         ];
         let reload = util.throttle((arg0) => {
             this.reload(arg0);

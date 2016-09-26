@@ -12,9 +12,9 @@ class PreCompiler extends EventEmitter {
     }
     pipe(...args) {
         this.source = this.source.pipe.apply(this.source, args);
-        args[0].resolveDeps = (imports) => {
+        args[0].on('returnDependencys', (imports) => {
             this.emit('updateWatch', imports);
-        };
+        });
         return this;
     }
     run() {
