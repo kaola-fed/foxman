@@ -74,42 +74,45 @@ export default (config) => {
          */
         requestInfo.commonAsync = config.asyncDataMatch(util.jsonPathResolve(requestPath));
 
-        /**
-         * 遍历路由表,并给请求对象处理,生成 this.dispatcher
-         */
-        for (let router of routers) {
-            if (router.method.toUpperCase() == method.toUpperCase() &&
-                pathToRegexp(router.url).test(this.request.path)) {
-                /**
-                 * 同步接口
-                 * 可能插件会生成一个 syncData ,若已生成则用插件的
-                 * 即: 插件对于响应,有更高的权限
-                 */
-                if (router.sync) {
-                    let tplPath = path.join(config.viewRoot, `${util.removeSuffix(router.filePath)}.${config.extension}`);
-                    let tplMockPath = path.join(config.syncData, `${util.removeSuffix(router.filePath)}.json`);
-                    this.dispatcher = util.dispatcherTypeCreator(
-                        'sync',
-                        tplPath,
-                        tplMockPath,
-                        router.handler
-                    );
-                } else {
+        if(this.request.query.mode !=1){
+            /**
+             * 遍历路由表,并给请求对象处理,生成 this.dispatcher
+             */
+            for (let router of routers) {
+                if (router.method.toUpperCase() == method.toUpperCase() &&
+                    pathToRegexp(router.url).test(this.request.path)) {
                     /**
-                     * 如果插件已生成了 asyncData 属性,则用插件的
+                     * 同步接口
+                     * 可能插件会生成一个 syncData ,若已生成则用插件的
                      * 即: 插件对于响应,有更高的权限
                      */
-                    let modelPath = path.join(config.asyncData, `${router.filePath}.json`);
-                    this.dispatcher = util.dispatcherTypeCreator(
-                        'async',
-                        void 0,
-                        modelPath,
-                        router.handler
-                    );
+                    if (router.sync) {
+                        let tplPath = path.join(config.viewRoot, `${util.removeSuffix(router.filePath)}.${config.extension}`);
+                        let tplMockPath = path.join(config.syncData, `${util.removeSuffix(router.filePath)}.json`);
+                        this.dispatcher = util.dispatcherTypeCreator(
+                            'sync',
+                            tplPath,
+                            tplMockPath,
+                            router.handler
+                        );
+                    } else {
+                        /**
+                         * 如果插件已生成了 asyncData 属性,则用插件的
+                         * 即: 插件对于响应,有更高的权限
+                         */
+                        let modelPath = path.join(config.asyncData, `${router.filePath}.json`);
+                        this.dispatcher = util.dispatcherTypeCreator(
+                            'async',
+                            void 0,
+                            modelPath,
+                            router.handler
+                        );
+                    }
+                    return yield next;
                 }
-                return yield next;
             }
         }
+        
         /**
          * ② 未拦截到 router
          */
