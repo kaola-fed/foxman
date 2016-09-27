@@ -34,6 +34,7 @@ class PreCompilerPlugin {
     prepare(preCompiler) {
         const handler = preCompiler.handler;
         let source = preCompiler.test;
+        let recentBuild = [];
 
         if (!Array.isArray(source)) {
             source = [source];
@@ -53,12 +54,16 @@ class PreCompilerPlugin {
                 });
             });
             /**
-             * 初始化后的文件新增监听
+             * 新创建的文件的监听
              */
             this.watcher.onNew(sourcePattern, (file, ev, stats) => {
-                if (new Date().getTime() - new Date(stats.birthtime).getTime() <= 1000) {
-                    this.createSingleCompiler(handler, watchMap, sourcePattern, file);
+                if (((ev == 'change') && (-1 == recentBuild.indexOf(file)))
+                    || ((ev == 'add') && (new Date().getTime() - new Date(stats.birthtime).getTime() >= 1000))) {
+                    return false;
                 }
+
+                recentBuild.push(file);
+                this.createSingleCompiler(handler, watchMap, sourcePattern, file);
             });
         });
     }
