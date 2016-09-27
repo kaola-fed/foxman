@@ -4,6 +4,9 @@
 import {resolve, relative} from 'path';
 import vinylFs from 'vinyl-fs';
 import EventEmitter from 'events';
+import {
+    util
+} from '../../helper';
 
 class PreCompiler extends EventEmitter {
     constructor(options) {
@@ -41,14 +44,21 @@ class SinglePreCompiler extends PreCompiler {
             /**
              * 输出文件
              */
-            return vinylFs.dest.call(vinylFs, resolve(output, '..'));
+            let target = resolve(output, '..');
+            util.log(`${this.sourcePattern} -> ${target}`);
+            return vinylFs.dest.call(vinylFs, target);
         }
     }
     runInstance(sourcePattern) {
-        this.source = vinylFs.src(this.sourcePattern);
-        this.handler(this.destInstence.call(this, sourcePattern)).forEach((item) => {
-            this.pipe(item);
-        });
+        try {
+            this.source = vinylFs.src(this.sourcePattern);
+            this.handler(this.destInstence.call(this, sourcePattern)).forEach((item) => {
+                this.pipe(item);
+            });
+
+        } catch (err) {
+            console.log(err);
+        }
         return this;
     }
 }
