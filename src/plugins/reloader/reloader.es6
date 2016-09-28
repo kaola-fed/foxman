@@ -23,6 +23,7 @@ class Reloader extends EventEmitter {
         server.static.forEach(item => {
             reloadResources.push(path.resolve(item, '**', '*.css'));
             reloadResources.push(path.resolve(item, '**', '*.js'));
+            reloadResources.push(path.resolve(item, '**', '*.html'));
         });
 
         this.watcher.onChange(reloadResources, (arg0, arg1) => {
