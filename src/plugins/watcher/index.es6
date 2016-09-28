@@ -5,7 +5,7 @@ import Watcher from './watcher';
  */
 class WatcherPlugin {
     constructor(options) {
-        this.root = options.root || process.cmd();
+        this.root = (options && options.root) || process.cwd();
     }
     init() {
         this.watcher = new Watcher(this.root);
