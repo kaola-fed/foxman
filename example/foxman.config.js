@@ -22,9 +22,9 @@ module.exports = {
      * test -- String or Array<String> 需要进行转换的文件规则
      * handler -- Function 类型，需返回一个数组
      */
-    // nei: {
-    //     key: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-    // },
+    nei: {
+        key: '40708e13f4ef478871a0e548f910b29e'
+    },
     preCompilers: [
         {
             test: [r(alias.r, 'src/mcss/**/*.mcss')],
@@ -84,9 +84,13 @@ module.exports = {
          */
         port: 8080,
         /**
+         * 是否区分方法
+         */
+        divideMethod: false,
+        /**
          * router type 为 sync 的filePath的ftl相对目录
          */
-        viewRoot: r(alias.r, 'WEB-INF'),
+        viewRoot: r(alias.r, 'WEB-INF/template'),
         /**
          * router type 为 sync 的filePath的data相对目录
          */

@@ -23,6 +23,10 @@ class Server {
             this.asyncDataMatch = (url) => path.join(this.asyncData, url);
         }
 
+        if (undefined !== this.divideMethod){
+            this.divideMethod = true;
+        }
+
         this.setRender();
         this.setStaticHandler();
         this.delayInit();

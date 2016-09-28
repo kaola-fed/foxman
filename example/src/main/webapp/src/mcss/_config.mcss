@@ -1,6 +1,5 @@
 @import './_config2.mcss';
 @import './_config3.mcss';
-
 .config{
   width: 221px;
 }

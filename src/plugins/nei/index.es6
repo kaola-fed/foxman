@@ -16,6 +16,7 @@ class NeiPlugin {
 
     init(serverPlugin) {
         const key = this.options.key;
+
         const home = os.homedir();
         const basedir = path.resolve(home, 'localMock', key);
         const neiPattern = path.resolve(basedir, 'nei**', 'nei.json');
@@ -175,11 +176,19 @@ class NeiPlugin {
     }
 
     genCommonPath(route) {
-        let server = this.server;
+        const server = this.server;
+
         if (route.sync) {
             return server.syncDataMatch(util.jsonPathResolve(route.filePath));
         }
-        return server.asyncDataMatch(util.jsonPathResolve(route.filePath.replace(/\/data/g, '')));
+
+        let filePath = route.filePath;
+        if (server.divideMethod) {
+            const methodReg = /(GET)|(DELETE)|(HEAD)|(PATCH)|(POST)|(PUT)\//ig;
+            filePath = filePath.replace(methodReg, '');
+        }
+        
+        return server.asyncDataMatch(util.jsonPathResolve(filePath.replace(/\/data/g, '')));
     }
 
     genNeiApiUrl(route) {

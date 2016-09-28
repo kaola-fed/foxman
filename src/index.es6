@@ -26,9 +26,7 @@ class Owner {
         }));
 
         if (!!config.nei) {
-            app.use(new NeiPlugin({
-                key: config.nei.key
-            }));
+            app.use(new NeiPlugin(config.nei));
         }
 
         /**

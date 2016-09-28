@@ -1,6 +1,7 @@
 .config{
   width: 11px;
 }
+
 body{
   margin: 100px;
   background: red;

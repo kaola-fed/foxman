@@ -58,10 +58,9 @@ class PreCompilerPlugin {
              */
             this.watcher.onNew(sourcePattern, (file, ev, stats) => {
                 if (((ev == 'change') && (-1 == recentBuild.indexOf(file)))
-                    || ((ev == 'add') && (new Date().getTime() - new Date(stats.birthtime).getTime() >= 1000))) {
+                    || ((ev == 'add') && (new Date().getTime() - new Date(stats.ctime).getTime() >= 1000))) {
                     return false;
                 }
-
                 recentBuild.push(file);
                 this.createSingleCompiler(handler, watchMap, sourcePattern, file);
             });
