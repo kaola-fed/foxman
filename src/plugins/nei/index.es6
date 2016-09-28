@@ -184,7 +184,7 @@ class NeiPlugin {
 
         let filePath = route.filePath;
         if (server.divideMethod) {
-            const methodReg = /(GET)|(DELETE)|(HEAD)|(PATCH)|(POST)|(PUT)\//ig;
+            const methodReg = /(GET)|(DELETE)|(HEAD)|(PATCH)|(POST)|(PUT)\//i;
             filePath = filePath.replace(methodReg, '');
         }
         
