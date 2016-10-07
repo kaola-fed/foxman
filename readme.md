@@ -183,9 +183,7 @@ module.exports = {
 *小技巧*：url后带上 **?mode=1** 会以 目录 和 ftl 为维度进行 **response**
 
 ### proxy
-* host
-
-代理转发的给目标服务器时带在 header 上的"Host"属性
+* host -- 代理转发的给目标服务器时带在 header 上的"Host"属性
 
 * service Object
     * key：String 类型，代理的配置信息，如 test， 则可以使用 foxman -p test 启用
