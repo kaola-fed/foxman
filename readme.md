@@ -10,7 +10,7 @@
 
 * 功能
     * mock server
-    * 单一 watchr（所有插件可复用）
+    * 单一 watcher（所有插件可复用）
     * 预编译器整合
     * 整合 nei
     * proxy
@@ -73,8 +73,8 @@ module.exports = {
     **/
     /**
     * task集合(基于gulp文件处理，故所有gulp插件都可用)
-    * test -- String or Array<String> 需要进行转换的文件规则
-    * handler -- Function 类型，需返回一个数组
+    * test String or Array<String> 需要进行转换的文件规则
+    * handler  Function 类型，需返回一个数组
     */
     preCompilers: [
         {
@@ -104,15 +104,15 @@ module.exports = {
     },
     /**
      * 代理配置
-     * host -- request headers 上携带过去的 Host信息
-     * service -- url处理器 foxman -p test 选中 test
+     * host request headers 上携带过去的 Host信息
+     * service url处理器 foxman -p test 选中 test
      */
     proxy: {
         host: 'm.baidu.com',
         service: {
             /**
              *
-             * @param url -- request.url （http://m.baidu.com/(index.html?hello=world)）
+             * @param url  request.url （http://m.baidu.com/(index.html?hello=world)）
              * @returns 完整的请求路径
              */
             test(url){
@@ -183,7 +183,7 @@ module.exports = {
 *小技巧*：url后带上 **?mode=1** 会以 目录 和 ftl 为维度进行 **response**
 
 ### proxy
-* host -- 代理转发的给目标服务器时带在 header 上的"Host"属性
+* host 代理转发的给目标服务器时带在 header 上的"Host"属性
 
 * service Object
     * key：String 类型，代理的配置信息，如 test， 则可以使用 foxman -p test 启用
@@ -198,12 +198,6 @@ module.exports = {
 * server.viewRoot 下文件
 * server.syncData 下文件。
 如果是css文件的变化，会只reload该样式文件，其余的会reload整个页面
-
-## 现状与下一个小目标
-![https://camo.githubusercontent.com/f0d194fd0e30506cf9cd512d06af7c57cf688a50/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f666f786d616e2e737667](https://camo.githubusercontent.com/f0d194fd0e30506cf9cd512d06af7c57cf688a50/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f666f786d616e2e737667)
-![https://camo.githubusercontent.com/6d21e65e073343361af40dd89fc2bf1320bb569e/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f646d2f666f786d616e2e737667](https://camo.githubusercontent.com/6d21e65e073343361af40dd89fc2bf1320bb569e/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f646d2f666f786d616e2e737667)
-
-![https://camo.githubusercontent.com/ab19841049769cdef8f9f3a10961c6be76b70e02/68747470733a2f2f6e6f6465692e636f2f6e706d2f666f786d616e2e706e673f646f776e6c6f6164733d7472756526646f776e6c6f616452616e6b3d747275652673746172733d74727565](https://camo.githubusercontent.com/ab19841049769cdef8f9f3a10961c6be76b70e02/68747470733a2f2f6e6f6465692e636f2f6e706d2f666f786d616e2e706e673f646f776e6c6f6164733d7472756526646f776e6c6f616452616e6b3d747275652673746172733d74727565)
 
 [npm-url]: https://www.npmjs.com/package/foxman
 [npm-image]: https://img.shields.io/npm/v/foxman.svg
