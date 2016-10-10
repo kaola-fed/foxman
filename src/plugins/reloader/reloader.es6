@@ -27,11 +27,8 @@ class Reloader extends EventEmitter {
             reloadResources.push(path.resolve(item, '**', '*.js'));
             reloadResources.push(path.resolve(item, '**', '*.html'));
         });
-
         this.watcher.onUpdate(reloadResources, (arg0, arg1) => {
-            if (arg1 != 'add') {
-                reload(arg0);
-            }
+            reload(arg0);
         });
     }
     buildWebSocket() {
