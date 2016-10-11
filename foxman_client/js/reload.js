@@ -43,7 +43,7 @@
 
             if (sheet.rel == 'stylesheet' && sheet.href.indexOf(filename) !== -1) {
                 if (sheet.href.indexOf('ftlStyleVersion') === -1) {
-                    sheet.href += ((sheet.href.indexOf('?') === -1 ? '?' : '&') +  'ftlStyleVersion' + '=' + new Date().getTime());
+                    sheet.href += ((sheet.href.indexOf('?') === -1 ? '?' : '&') +  'styleVersion' + '=' + new Date().getTime());
                 } else {
                     sheet.href = sheet.href.replace(/(&|\?)ftlStyleVersion=\d+/, '$1ftlStyleVersion=' + new Date().getTime());
                 }
