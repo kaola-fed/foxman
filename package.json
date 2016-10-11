@@ -19,7 +19,7 @@
     "build": "babel src -d dist -s --ignore *.js",
     "dev": "babel src -w -d dist -s --ignore *.js",
     "test": "mocha ./test/test",
-    "pub": "git add -A && git commit -m 'update' && git push && npm run build && npm publish"
+    "pub": "git add -A && git commit -m \"npm publish\" && git push && npm run build && npm publish"
   },
   "repository": {
     "type": "git",
