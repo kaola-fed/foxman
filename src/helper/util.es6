@@ -163,8 +163,9 @@ export function throttle(fn, delay) {
     }
 }
 
+const noteReg = /(([^'"\r\n]*)(\/\/)([^'"]*?)(\n|\r|\r\n))|(\/\*(.*?)\*\/)/g;
 export function replaceCommet(str) {
-    return str.replace( /(\/\*(.*)?\*\/)|(\/\/(.*)?((\n)|(\r)|(\r\n)))/g, '');
+    return str.replace(noteReg, ($0, $1, $2) => ($2 || ''));
 }
 
 export default {

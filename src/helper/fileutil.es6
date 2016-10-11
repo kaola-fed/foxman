@@ -113,6 +113,7 @@ export function jsonResolver(opt) {
                 /**去除注释 */
                 json = JSON.parse(_.replaceCommet(data));
             } catch (e) {
+                console.log(e);
                 json = {};
             }
             resolve({ json });
