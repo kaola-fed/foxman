@@ -1,2 +1,5 @@
 src/
 npm-debug.log
+example/mock
+example/nei*
+example/src/main/webapp/backend/

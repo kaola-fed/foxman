@@ -91,7 +91,6 @@ export function writeUnExistsFile(file, text) {
 export function jsonResolver(opt) {
     return new Promise((resolve, reject) => {
         let url = (typeof opt == 'string') ? opt : opt.url;
-
         let json;
         if (/^http/g.test(url)) {
             _.log(`请求转发:${url}`);
@@ -111,7 +110,8 @@ export function jsonResolver(opt) {
         }
         readFile(url).then((data) => {
             try {
-                json = JSON.parse(data);
+                /**去除注释 */
+                json = JSON.parse(_.replaceCommet(data));
             } catch (e) {
                 json = {};
             }

@@ -162,6 +162,11 @@ export function throttle(fn, delay) {
         }, delay);
     }
 }
+
+export function replaceCommet(str) {
+    return str.replace( /(\/\*(.*)?\*\/)|(\/\/(.*)?((\n)|(\r)|(\r\n)))/g, '');
+}
+
 export default {
     debugLog,
     error,
@@ -179,5 +184,6 @@ export default {
     bufferConcat,
     dispatcherTypeCreator,
     request,
-    throttle
+    throttle,
+    replaceCommet
 };

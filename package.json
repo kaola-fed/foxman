@@ -1,6 +1,6 @@
 {
   "name": "foxman",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "description": "前端集成开发工具",
   "main": "app.js",
   "bin": {
@@ -17,7 +17,7 @@
   },
   "scripts": {
     "build": "babel src -d dist -s --ignore *.js",
-    "dev": "babel src -w -d dist -s --ignore *.js",
+    "dev": "babel src -w -d src -s --ignore *.js",
     "test": "mocha ./test/test",
     "pub": "git add -A && git commit -m \"npm publish\" && git push && npm run build && npm publish"
   },
