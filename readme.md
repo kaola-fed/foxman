@@ -24,7 +24,7 @@
     
 
 ## 界面预览
-![http://note.youdao.com/yws/public/resource/72c37299682b2a61c50c3a0513b22810/xmlnote/CFDA84E903D44B45A4E99A2DE075F203/6722](http://note.youdao.com/yws/public/resource/72c37299682b2a61c50c3a0513b22810/xmlnote/CFDA84E903D44B45A4E99A2DE075F203/6722)
+![http://note.youdao.com/yws/public/resource/c0ad463e177be9880ecc3b0293558130/xmlnote/A476DE54F65648458ADAEA221AA07046/6041](http://note.youdao.com/yws/public/resource/c0ad463e177be9880ecc3b0293558130/xmlnote/A476DE54F65648458ADAEA221AA07046/6041)
 
 ## api概览
 ### （一）安装
