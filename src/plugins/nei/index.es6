@@ -35,10 +35,8 @@ class NeiPlugin {
                         return this.getUpdate(config);
                     })
                     .then(() => {
-                        return this.updateRoutes(this.routes);
-                    })
-                    .then(() => {
                         resolve();
+                        return this.updateRoutes(this.routes);
                     });
             });
         }
@@ -56,12 +54,7 @@ class NeiPlugin {
                 'nei资源不完整，请执行 \n',
                 '$ foxman -u'].join(''));
         }
-        this.pending((resolve) => {
-            this.updateRoutes(this.routes)
-                .then(() => {
-                    resolve();
-                });
-        });
+        this.updateRoutes(this.routes);
     }
 
     setNeiMockDir(neiConfig) {
@@ -150,39 +143,46 @@ class NeiPlugin {
         });
     }
 
-    updateRoutes(routes) {
-        let promises = routes.map((route) => {
-            return new Promise((resolve) => {
-                fs.stat(this.genCommonPath(route), (error, stat) => {
-                    /**
-                     * 文件不存在或者文件内容为空
-                     */
-                    if (error || !stat.size) {
-                        route.handler = (ctx) => fileUtil.jsonResolver(this.genNeiApiUrl(route));
-                    } else {
-                        route.handler = (ctx) => fileUtil.jsonResolver(this.genCommonPath(route));
-                    }
-                    resolve();
-                });
-            })
+    updateRoutes (routes) {
+        const genCommonPath = this.genCommonPath.bind(this);
+        const genNeiApiUrl = this.genNeiApiUrl.bind(this);
+        const server = this.server;
+        server.use( function* () {
+            /**
+             * @TODO
+             * 判断是否使用本地文件的逻辑移动到此处
+             */
+            // const dispatcher = this.dispatcher;
+            // const routeModel = {
+            //     sync: dispatcher.type == 'sync',
+            //     filePath: null
+            // };
+            // const commonPath = genCommonPath(routeModel);
+            // yield new Promise((resolve, reject)=>{
+            //     fs.stat(routeModel, (error, stat) => {
+            //         /**
+            //          * 文件不存在或者文件内容为空
+            //          */
+            //         if (error || !stat.size) {
+            //             route.handler = (ctx) => fileUtil.jsonResolver(genNeiApiUrl(route));
+            //         } else {
+            //             route.handler = (ctx) => fileUtil.jsonResolver(commonPath);
+            //         }
+            //         resolve();
+            //     });
+            // })
         });
-        return new Promise((resolve) => {
-            Promise.all(promises).then(() => {
-                let server = this.server;
-                server.routers = routes.concat(server.routers);
-                resolve();
-            });
-        });
+        server.routers = routes.concat(server.routers);
     }
 
     genCommonPath(route) {
         const server = this.server;
+        let filePath = route.filePath;
 
         if (route.sync) {
             return server.syncDataMatch(util.jsonPathResolve(route.filePath));
         }
-
-        let filePath = route.filePath;
+        
         if (server.divideMethod) {
             const methodReg = /(GET)|(DELETE)|(HEAD)|(PATCH)|(POST)|(PUT)\//i;
             filePath = filePath.replace(methodReg, '');

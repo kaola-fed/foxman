@@ -6,13 +6,15 @@ import RenderUtil from '../../helper/render';
 import render from 'koa-ejs';
 import dispatcher from './middleware/dispatcher';
 import routeMap from './middleware/routemap'
-import {util} from '../../helper';
+import { util } from '../../helper';
 import getRawBody from './middleware/rawbody';
-import {Server as WebSocketServer} from 'ws';
+import { Server as WebSocketServer } from 'ws';
 
 class Server {
     constructor(config) {
+        this.middleware = [];
         this.app = Koa();
+
         Object.assign(this, config);
 
         if (!this.syncDataMatch) {
@@ -23,13 +25,12 @@ class Server {
             this.asyncDataMatch = (url) => path.join(this.asyncData, url);
         }
 
-        if (undefined !== this.divideMethod){
+        if (undefined !== this.divideMethod) {
             this.divideMethod = true;
         }
 
         this.setRender();
         this.setStaticHandler();
-        this.delayInit();
     }
 
 
@@ -37,7 +38,14 @@ class Server {
         const app = this.app;
         app.use(getRawBody());
         app.use(routeMap(this));
+        this.middleware.forEach((g) => {
+            app.use(g);
+        });
         app.use(dispatcher(this));
+    }
+
+    use(middleware) {
+        this.middleware.push(middleware);
     }
 
     setRender() {
@@ -47,7 +55,7 @@ class Server {
         let Render = this.RenderUtil || RenderUtil;
         this.extension = this.extension || 'ftl';
 
-        this.tplRender = new Render({viewRoot: this.viewRoot});
+        this.tplRender = new Render({ viewRoot: this.viewRoot });
 
         render(this.app, {
             root: path.resolve(__dirname, '../../../views'),
@@ -74,7 +82,7 @@ class Server {
 
     appendHtml(html) {
         let extension = this.extension;
-        this.app.use(function *(next) {
+        this.app.use(function* (next) {
             if (/text\/html/ig.test(this.type)) {
                 this.body = this.body + html;
             }
@@ -84,6 +92,8 @@ class Server {
 
     createServer() {
         const port = this.port || 3000;
+
+        this.delayInit();
         this.serverApp = http.createServer(this.app.callback()).listen(port);
         this.wss = this.buildWebSocket(this.serverApp);
         util.log(`server is running on ${port}`);

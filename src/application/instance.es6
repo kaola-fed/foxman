@@ -9,7 +9,15 @@ export default {
      * @returns {Number}
      */
     pending(fn) {
-        let pending = new Promise((resolve) => { return fn(resolve) });
+        let pending = new Promise((resolve) => { 
+            let result = fn(resolve);
+            if( result.value.then ) {
+                return result;
+            } 
+            return new Promise((resolve)=>{
+                resolve(result);
+            });
+        });
         if (this.pendings) {
             return this.pendings.push(pending);
         }

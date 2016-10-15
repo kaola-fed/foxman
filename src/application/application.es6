@@ -63,7 +63,7 @@ export default class Application extends EventEmitter {
                 }
                 final.value.then(result => loop())
                     .catch((err) => {
-                        util.error(err)
+                        util.error(`${err}(from pending)`);
                     });
             } else {
                 runSuccess();
