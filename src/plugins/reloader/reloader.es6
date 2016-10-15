@@ -1,6 +1,5 @@
 import EventEmitter from 'events';
 import path from 'path';
-import {Server as WebSocketServer} from 'ws';
 import {util, fileUtil} from "../../helper";
 
 class Reloader extends EventEmitter {
@@ -8,7 +7,6 @@ class Reloader extends EventEmitter {
         super();
         Object.assign(this, options);
         this.bindChange();
-        this.buildWebSocket();
     }
     bindChange() {
         let [server, watcher] = [this.server, this.watcher];
@@ -19,7 +17,7 @@ class Reloader extends EventEmitter {
         ];
         
         let reload = util.throttle((arg0) => {
-            this.reload(arg0);
+            server.wss.broadcast(path.basename(args[0]));
         }, 1000);
 
         server.static.forEach(item => {
@@ -27,34 +25,7 @@ class Reloader extends EventEmitter {
             reloadResources.push(path.resolve(item, '**', '*.js'));
             reloadResources.push(path.resolve(item, '**', '*.html'));
         });
-        this.watcher.onUpdate(reloadResources, (arg0, arg1) => {
-            reload(arg0);
-        });
-    }
-    buildWebSocket() {
-        let serverApp = this.server.serverApp;
-        this.wss = new WebSocketServer({
-            server: serverApp
-        });
-
-        this.wss.on('connection', (ws) => {
-            ws.on('message', (message) => {
-                console.log('received: %s', message);
-            });
-        });
-
-        this.wss.broadcast = (data) => {
-            this.wss.clients.forEach(function each(client) {
-                client.send(data, function (error) {
-                    if (error) {
-                        console.log(error);
-                    }
-                });
-            });
-        };
-    }
-    reload(...args) {
-        this.wss.broadcast(path.basename(args[0]));
+        this.watcher.onUpdate(reloadResources, reload);
     }
 }
 export default Reloader;

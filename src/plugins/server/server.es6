@@ -8,7 +8,7 @@ import dispatcher from './middleware/dispatcher';
 import routeMap from './middleware/routemap'
 import {util} from '../../helper';
 import getRawBody from './middleware/rawbody';
-
+import {Server as WebSocketServer} from 'ws';
 
 class Server {
     constructor(config) {
@@ -85,7 +85,31 @@ class Server {
     createServer() {
         const port = this.port || 3000;
         this.serverApp = http.createServer(this.app.callback()).listen(port);
+        this.wss = this.buildWebSocket(this.serverApp);
         util.log(`server is running on ${port}`);
+    }
+
+    buildWebSocket(serverApp) {
+        var wss = new WebSocketServer({
+            server: serverApp
+        });
+
+        wss.on('connection', (ws) => {
+            ws.on('message', (message) => {
+                console.log('received: %s', message);
+            });
+        });
+
+        wss.broadcast = (data) => {
+            wss.clients.forEach(function each(client) {
+                client.send(data, function (error) {
+                    if (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        };
+        return wss;
     }
 }
 

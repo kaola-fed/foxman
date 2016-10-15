@@ -29,9 +29,6 @@ class Owner {
             app.use(new NeiPlugin(config.nei));
         }
 
-        /**
-         * __load ex Plugins
-         */
         app.use(config.plugins);
 
         app.use(new ReloadPlugin({}));
