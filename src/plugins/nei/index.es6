@@ -2,7 +2,7 @@ import neiTools from './nei';
 import path from 'path';
 import fs from 'fs';
 import os from 'os';
-import {util, fileUtil} from '../../helper';
+import { util, fileUtil, DispatherTypes } from '../../helper';
 import _ from 'util';
 import globule from 'globule';
 
@@ -52,7 +52,7 @@ class NeiPlugin {
         } catch (e) {
             util.error([
                 'nei资源不完整，请执行 \n',
-                '$ foxman -u'].join(''));
+                '> $ foxman -u'].join(''));
         }
         this.updateRoutes(this.routes);
     }
@@ -98,8 +98,11 @@ class NeiPlugin {
                 }
 
                 routes.push({
-                    method, url,
-                    sync, filePath, id
+                    method, 
+                    url,
+                    sync, 
+                    filePath, 
+                    id
                 });
             }
         }
@@ -143,34 +146,43 @@ class NeiPlugin {
         });
     }
 
-    updateRoutes (routes) {
+    updateRoutes(routes) {
         const genCommonPath = this.genCommonPath.bind(this);
         const genNeiApiUrl = this.genNeiApiUrl.bind(this);
         const server = this.server;
-        server.use( function* () {
+        server.use(function* (next) {
             /**
              * @TODO
              * 判断是否使用本地文件的逻辑移动到此处
              */
-            // const dispatcher = this.dispatcher;
-            // const routeModel = {
-            //     sync: dispatcher.type == 'sync',
-            //     filePath: null
-            // };
-            // const commonPath = genCommonPath(routeModel);
-            // yield new Promise((resolve, reject)=>{
-            //     fs.stat(routeModel, (error, stat) => {
-            //         /**
-            //          * 文件不存在或者文件内容为空
-            //          */
-            //         if (error || !stat.size) {
-            //             route.handler = (ctx) => fileUtil.jsonResolver(genNeiApiUrl(route));
-            //         } else {
-            //             route.handler = (ctx) => fileUtil.jsonResolver(commonPath);
-            //         }
-            //         resolve();
-            //     });
-            // })
+            const dispatcher = this.dispatcher;
+
+            if (dispatcher.type == DispatherTypes.DIR || 
+                !dispatcher.isRouter) {
+                return yield next;
+            }
+            const routeModel = {
+                sync: DispatherTypes.SYNC == dispatcher.type,
+                filePath: dispatcher.filePath,
+            };
+            const commonPath = genCommonPath(routeModel);
+
+            yield new Promise((resolve, reject) => {
+                fs.stat(commonPath, (error, stat) => {
+                    /**
+                     * 文件不存在或者文件内容为空
+                     */
+                    if (error || !stat.size) {
+                        dispatcher.dataPath = genNeiApiUrl(routeModel);
+                    }
+                    // else {
+                    //     dispatcher.dataPath = commonPath;
+                    // }
+                    resolve();
+                });
+            });
+
+            yield next;
         });
         server.routers = routes.concat(server.routers);
     }
@@ -182,12 +194,12 @@ class NeiPlugin {
         if (route.sync) {
             return server.syncDataMatch(util.jsonPathResolve(route.filePath));
         }
-        
+
         if (server.divideMethod) {
             const methodReg = /(GET)|(DELETE)|(HEAD)|(PATCH)|(POST)|(PUT)\//i;
             filePath = filePath.replace(methodReg, '');
         }
-        
+
         return server.asyncDataMatch(util.jsonPathResolve(filePath.replace(/\/data/g, '')));
     }
 

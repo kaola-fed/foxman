@@ -12,6 +12,7 @@ import { Server as WebSocketServer } from 'ws';
 
 class Server {
     constructor(config) {
+        this.htmls = [];
         this.middleware = [];
         this.app = Koa();
 
@@ -33,7 +34,6 @@ class Server {
         this.setStaticHandler();
     }
 
-
     delayInit() {
         const app = this.app;
         app.use(getRawBody());
@@ -42,6 +42,8 @@ class Server {
             app.use(g);
         });
         app.use(dispatcher(this));
+
+        this.htmlAppender(this.htmls.join('\n'));
     }
 
     use(middleware) {
@@ -79,12 +81,15 @@ class Server {
         });
         this.app.use(serve('foxman_client', path.resolve(__dirname, '../../../')));
     }
+    
+    appendHtml(html){
+        this.htmls.push(html);
+    }
 
-    appendHtml(html) {
-        let extension = this.extension;
+    htmlAppender(html) {
         this.app.use(function* (next) {
             if (/text\/html/ig.test(this.type)) {
-                this.body = this.body + html;
+                this.body = this.body + html; 
             }
             yield next;
         });

@@ -1,4 +1,11 @@
 import util from './util';
 import fileUtil from './fileutil';
 
-module.exports = { util, fileUtil };
+const DispatherTypes = {
+    DIR: 'dir',
+    SYNC: 'sync',
+    ASYNC: 'async'
+};
+export {
+    util, fileUtil, DispatherTypes
+};

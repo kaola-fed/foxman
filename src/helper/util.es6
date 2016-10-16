@@ -101,15 +101,6 @@ export function bufferConcat(...bufs) {
     return Buffer.concat(bufs, total);
 }
 
-export function dispatcherTypeCreator(type, path, dataPath, handler) {
-    return {
-        type,
-        path,
-        dataPath,
-        handler
-    }
-}
-
 export function request(options) {
 
     let urlInfo = url.parse(options.url);
@@ -183,7 +174,6 @@ export default {
     removeSuffix,
     appendHeadBreak,
     bufferConcat,
-    dispatcherTypeCreator,
     request,
     throttle,
     replaceCommet

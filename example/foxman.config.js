@@ -48,9 +48,9 @@ module.exports = {
     /**
      * 需要watch的根目录，缺省值为 foxman.config.js 所在目录的所有文件
      */
-    watch: {
-        root: alias.r
-    },
+    // watch: {
+    //     root: alias.r
+    // },
     /**
      * 代理配置
      * host -- request headers 上携带过去的 Host信息

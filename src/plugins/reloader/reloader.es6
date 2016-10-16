@@ -17,7 +17,7 @@ class Reloader extends EventEmitter {
         ];
         
         let reload = util.throttle((arg0) => {
-            server.wss.broadcast(path.basename(args[0]));
+            server.wss.broadcast(path.basename(arg0));
         }, 1000);
 
         server.static.forEach(item => {

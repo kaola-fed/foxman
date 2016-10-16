@@ -1,21 +1,8 @@
 import path from 'path';
-import { util, fileUtil } from '../../../helper';
+import { util, fileUtil, DispatherTypes } from '../../../helper';
 
 function apiHandler(dispatcher) {
-    function isPromise(obj) {
-        return 'function' == typeof obj.then;
-    }
-    if (dispatcher.handler) {
-        let res = dispatcher.handler(this);
-        if (!isPromise(res)) {
-            res = new Promise((resolve) => {
-                resolve(res);
-            });
-        }
-        return res;
-    } else {
-        return fileUtil.jsonResolver({ url: dispatcher.dataPath });
-    }
+    return fileUtil.jsonResolver({ url: dispatcher.dataPath });
 }
 
 /**
@@ -26,7 +13,7 @@ function apiHandler(dispatcher) {
  * @return {[type]}         [description]
  */
 export function* dirDispatcher(dispatcher, config, next) {
-    const viewPath = dispatcher.path;
+    const viewPath = dispatcher.pagePath;
     const files = yield fileUtil.getDirInfo(viewPath);
     const promises = files.map((file) => fileUtil.getFileStat(path.resolve(viewPath, file)));
     const result = yield Promise.all(promises);
@@ -52,7 +39,7 @@ export function* dirDispatcher(dispatcher, config, next) {
  * @returns {*}
  */
 export function* syncDispatcher(dispatcher, config, next) {
-    const filePath = dispatcher.path;
+    const filePath = dispatcher.pagePath;
     let res = yield apiHandler.call(this, dispatcher);
     if (!res || !res.json) {
         this.type = 500;
@@ -116,9 +103,9 @@ export default (config) => {
         let args = [config, next];
 
         let dispatcherMap = {
-            'dir': dirDispatcher,
-            'sync': syncDispatcher,
-            'async': asyncDispather
+            [DispatherTypes.DIR]: dirDispatcher,
+            [DispatherTypes.SYNC]: syncDispatcher,
+            [DispatherTypes.ASYNC]: asyncDispather
         };
         util.log(`${this.request.method} ${this.request.path}`);
 
