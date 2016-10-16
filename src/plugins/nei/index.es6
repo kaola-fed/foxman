@@ -179,10 +179,9 @@ class NeiPlugin {
                      */
                     if (error || !stat.size) {
                         dispatcher.dataPath = genNeiApiUrl(routeModel);
+                    } else {
+                        dispatcher.dataPath = commonPath;
                     }
-                    // else {
-                    //     dispatcher.dataPath = commonPath;
-                    // }
                     resolve();
                 });
             });
