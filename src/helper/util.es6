@@ -35,13 +35,13 @@ export function createSystemId() { // uid
 }
 
 export function initialsCapitals(str) {
-    return str.replace(/\b(\w)(\w*)/g, function ($0, $1, $2) {
+    return str.replace(/^\b(\w)(\w*)/, function ($0, $1, $2) {
         return $1.toUpperCase() + $2;
     });
 }
 
 export function initialsLower(str) {
-    return str.replace(/\b(\w)(\w*)/g, function ($0, $1, $2) {
+    return str.replace(/^\b(\w)(\w*)/, function ($0, $1, $2) {
         return $1.toLowerCase() + $2;
     });
 }
