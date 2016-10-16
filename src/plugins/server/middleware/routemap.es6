@@ -104,7 +104,7 @@ export default (config) => {
                 } else {
                     let dataPath = path.join(config.asyncData, `${router.filePath}.json`);
                     this.dispatcher = {
-                        type: 'sync',
+                        type: 'async',
                         dataPath
                     };
                 }
