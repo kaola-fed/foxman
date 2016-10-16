@@ -1,6 +1,6 @@
 {
   "name": "foxman",
-  "version": "0.1.23",
+  "version": "0.2.1",
   "description": "前端集成开发工具",
   "main": "app.js",
   "bin": {
