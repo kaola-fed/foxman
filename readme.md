@@ -10,10 +10,11 @@
 
 * 功能
     * mock server
-    * 单一 watcher（所有插件可复用）
-    * 预编译器整合
-    * 整合 nei
-    * proxy
+    * 全局的 watcher
+    * 全局的 websocket server
+    * 预处理器整合
+    * nei 数据同步
+    * 接口的代理
     * live reload
 
 * 特点
