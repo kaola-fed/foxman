@@ -1,0 +1,1053 @@
+diff --git a/app.js b/app.js
+index bd479ca..58770a5 100644
+--- a/app.js
++++ b/app.js
+@@ -1,11 +1,11 @@
+ 'use strict';
+ const welcome = [
+-    '#######   ########   ##   ##         #     #             #        #         #',
+-    '#         #      #     # #          # #   # #           # #       # #       #',
+-    '#######   #      #      #          #   # #   #         #   #      #   #     #',
+-    '#         #      #     # #        #     #     #       # # # #     #     #   #',
+-    '#         #      #    #   #      #             #     #       #    #       # #',
+-    '#         ########   #     #    #               #   #         #   #         #'
++    '*******   ********   **   **         *     *             *        *         *',
++    '*         *      *     * *          * *   * *           * *       * *       *',
++    '*******   *      *      *          *   * *   *         *   *      *   *     *',
++    '*         *      *     * *        *     *     *       * * * *     *     *   *',
++    '*         *      *    *   *      *             *     *       *    *       * *',
++    '*         ********   *     *    *               *   *         *   *         *'
+ ].join('\n');
+ console.log(welcome);
+ require('babel-polyfill');
+diff --git a/example/foxman-dev.js b/example/foxman-dev.js
+index ef7ce0d..9df9f90 100644
+--- a/example/foxman-dev.js
++++ b/example/foxman-dev.js
+@@ -1,7 +1,7 @@
+ const config = require('./foxman.config');
+ 
+ config.argv = {
+-    proxy: false,
+-    update: false
++    proxy: 0,
++    update: 0
+ };
+ require('../')(config);
+\ No newline at end of file
+diff --git a/example/foxman.config.js b/example/foxman.config.js
+index afd8084..8751655 100644
+--- a/example/foxman.config.js
++++ b/example/foxman.config.js
+@@ -22,9 +22,9 @@ module.exports = {
+      * test -- String or Array<String> 需要进行转换的文件规则
+      * handler -- Function 类型，需返回一个数组
+      */
+-//     nei: {
+-//         key: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+-//     },
++    nei: {
++        key: 'b37164739beedfabde74d3ddf8c4620f'
++    },
+     preCompilers: [
+         {
+             test: [r(alias.r, 'src/mcss/**/*.mcss')],
+@@ -48,9 +48,9 @@ module.exports = {
+     /**
+      * 需要watch的根目录，缺省值为 foxman.config.js 所在目录的所有文件
+      */
+-    watch: {
+-        root: alias.r
+-    },
++    // watch: {
++    //     root: alias.r
++    // },
+     /**
+      * 代理配置
+      * host -- request headers 上携带过去的 Host信息
+diff --git a/example/src/main/webapp/WEB-INF/template/pages/index/index.ftl b/example/src/main/webapp/WEB-INF/template/pages/index/index.ftl
+index b68450e..b5c80e6 100644
+--- a/example/src/main/webapp/WEB-INF/template/pages/index/index.ftl
++++ b/example/src/main/webapp/WEB-INF/template/pages/index/index.ftl
+@@ -1 +1,10 @@
+-hello world2
+\ No newline at end of file
++<html>
++    <head>
++        <meta charset="utf-8">
++        <title>首页</title>
++    </head>
++    <body>
++        
++        你好${hello}
++    </body>
++</html>
+\ No newline at end of file
+diff --git a/src/application/application.es6 b/src/application/application.es6
+index 56b85c7..67ba550 100644
+--- a/src/application/application.es6
++++ b/src/application/application.es6
+@@ -3,45 +3,17 @@ import {
+     util
+ } from '../helper'
+ import instance from './instance'
+-import cluster from 'cluster';
++import DI from './di';
++
++const dI = new DI();
++const dependency = dI.dependency;
+ 
+ export default class Application extends EventEmitter {
+     constructor() {
+         super();
+         this.uid = util.createSystemId();
+-        /**
+-         * 依赖管理
+-         * @type {{}}
+-         */
+-        this.dependency = {};
+-    }
+-
+-    /**
+-     * 服务注册
+-     * @param key
+-     * @param value
+-     */
+-    register(key, value) {
+-        this.dependency[key] = value;
+-    }
+-
+-    /**
+-     * 依赖注入
+-     * @param func
+-     * @param scope
+-     */
+-    resolve(func, scope) {
+-        const argList = func.toString().match(/^.*?\s*[^\(]*\(\s*([^\)]*)\)/m);
+-        const args = (argList && argList[1]) ? (argList[1].replace(/ /g, '').split(',')) : [];
+-
+-        let deps = args.map((arg) => {
+-            if (!this.dependency[arg]) {
+-                util.error(`Plugin ${arg} is not load!`);
+-            }
+-            return this.dependency[arg];
+-        });
+-
+-        func.apply(scope || {}, deps);
++        
++        this.middleware = [];
+     }
+ 
+     setConfig(config) {
+@@ -56,19 +28,20 @@ export default class Application extends EventEmitter {
+             config: this.config,
+             id: this.uid(),
+             name: plugin.constructor.name,
+-            pending: (...args) => instance.pending.apply(plugin, args)
++            pending: (...args) => instance.pending.apply(plugin, args),
++
+         });
+ 
+-        this.register(util.initialsLower(plugin.name), plugin);
++        dI.register(util.initialsLower(plugin.name), plugin);
+         util.debugLog(`plugin ${plugin.name || plugin.id} is loaded`);
+     }
+ 
+     execute() {
+         return function* () {
+-            const keys = Object.keys(this.dependency);
+-            const plugins = keys.map((key) => this.dependency[key]);
++            const keys = Object.keys(dependency);
++            const plugins = keys.map((key) => dependency[key]);
+             for (let plugin of plugins) {
+-                plugin.init && this.resolve(plugin.init, plugin);
++                plugin.init && dI.resolve(plugin.init, plugin);
+                 if (plugin.pendings) {
+                     util.log(`${plugin.name} needs pending`);
+                     yield Promise.all(plugin.pendings);
+@@ -79,9 +52,10 @@ export default class Application extends EventEmitter {
+     }
+ 
+     run() {
+-        let pipeline = this.execute().call(this);
++        const runSuccess = this.runSuccess; 
++        const pipeline = this.execute().call(this);
+         let final = {};
+-        +function loop() {
++        const loop = () => {
+             final = pipeline.next();
+             if (!final.done) {
+                 if (!final.value.then) {
+@@ -89,9 +63,16 @@ export default class Application extends EventEmitter {
+                 }
+                 final.value.then(result => loop())
+                     .catch((err) => {
+-                        util.error(err)
++                        console.error(err);
+                     });
++            } else {
++                runSuccess();
+             }
+-        } ();
++        };
++        loop();
++    }
++
++    runSuccess(){
++        dependency.serverPlugin.start();
+     }
+ }
+\ No newline at end of file
+diff --git a/src/application/di.es6 b/src/application/di.es6
+new file mode 100644
+index 0000000..d624db0
+--- /dev/null
++++ b/src/application/di.es6
+@@ -0,0 +1,32 @@
++class DI{
++    constructor () {
++        this.dependency = {};
++    }
++     /**
++     * 服务注册
++     * @param key
++     * @param value
++     */
++    register(key, value) {
++        this.dependency[key] = value;
++    }
++    /**
++     * 依赖注入
++     * @param func
++     * @param scope
++     */
++    resolve(func, scope) {
++        const argList = func.toString().match(/^.*?\s*[^\(]*\(\s*([^\)]*)\)/m);
++        const args = (argList && argList[1]) ? (argList[1].replace(/ /g, '').split(',')) : [];
++
++        let deps = args.map((arg) => {
++            if (!this.dependency[arg]) {
++                util.error(`Plugin ${arg} is not load!`);
++            }
++            return this.dependency[arg];
++        });
++
++        func.apply(scope || {}, deps);
++    }
++}
++export default DI;
+\ No newline at end of file
+diff --git a/src/application/instance.es6 b/src/application/instance.es6
+index 85dddbf..0f474bc 100644
+--- a/src/application/instance.es6
++++ b/src/application/instance.es6
+@@ -9,7 +9,15 @@ export default {
+      * @returns {Number}
+      */
+     pending(fn) {
+-        let pending = new Promise((resolve) => { return fn(resolve) });
++        let pending = new Promise((resolve) => {
++            let result = fn(resolve);
++            if( result && result.value && result.value.then ) {
++                return result;
++            } 
++            return new Promise((resolve)=>{
++                resolve(result);
++            });
++        });
+         if (this.pendings) {
+             return this.pendings.push(pending);
+         }
+diff --git a/src/helper/index.es6 b/src/helper/index.es6
+index 686a1d9..0bb4f39 100644
+--- a/src/helper/index.es6
++++ b/src/helper/index.es6
+@@ -1,4 +1,11 @@
+ import util from './util';
+ import fileUtil from './fileutil';
+ 
+-module.exports = { util, fileUtil };
++const DispatherTypes = {
++    DIR: 'dir',
++    SYNC: 'sync',
++    ASYNC: 'async'
++};
++export {
++    util, fileUtil, DispatherTypes
++};
+diff --git a/src/helper/render.es6 b/src/helper/render.es6
+index 07fbd49..e6bfad1 100644
+--- a/src/helper/render.es6
++++ b/src/helper/render.es6
+@@ -21,20 +21,6 @@ class RenderUtil {
+                 resolve({ err, data, out });
+             });
+         });
+-        // let settings = JSON.stringify(this.settings);
+-        // /**
+-        //  * [1] 与相对viewRoot的相对位置
+-        //  * [2] / 作为分隔符
+-        //  */
+-        // p1 = p1.replace(/^\//g, '').replace(/\\/g, '/');
+-        //
+-        // let cmd = spawn('java', ['-jar', jarFile, settings, p1, dataModel]);
+-        // cmd.stderr.setEncoding('utf-8');
+-        //
+-        // return {
+-        //     stderr: cmd.stderr,
+-        //     stdout: cmd.stdout
+-        // };
+     }
+ }
+ export default RenderUtil;
+\ No newline at end of file
+diff --git a/src/helper/util.es6 b/src/helper/util.es6
+index 6bd4308..1c0be42 100644
+--- a/src/helper/util.es6
++++ b/src/helper/util.es6
+@@ -101,15 +101,6 @@ export function bufferConcat(...bufs) {
+     return Buffer.concat(bufs, total);
+ }
+ 
+-export function dispatcherTypeCreator(type, path, dataPath, handler) {
+-    return {
+-        type,
+-        path,
+-        dataPath,
+-        handler
+-    }
+-}
+-
+ export function request(options) {
+ 
+     let urlInfo = url.parse(options.url);
+@@ -183,7 +174,6 @@ export default {
+     removeSuffix,
+     appendHeadBreak,
+     bufferConcat,
+-    dispatcherTypeCreator,
+     request,
+     throttle,
+     replaceCommet
+diff --git a/src/index.es6 b/src/index.es6
+index 372a1fd..a0da30c 100644
+--- a/src/index.es6
++++ b/src/index.es6
+@@ -29,9 +29,6 @@ class Owner {
+             app.use(new NeiPlugin(config.nei));
+         }
+ 
+-        /**
+-         * __load ex Plugins
+-         */
+         app.use(config.plugins);
+ 
+         app.use(new ReloadPlugin({}));
+diff --git a/src/plugins/nei/index.es6 b/src/plugins/nei/index.es6
+index e7fdc6f..a4a60bc 100644
+--- a/src/plugins/nei/index.es6
++++ b/src/plugins/nei/index.es6
+@@ -2,7 +2,7 @@ import neiTools from './nei';
+ import path from 'path';
+ import fs from 'fs';
+ import os from 'os';
+-import {util, fileUtil} from '../../helper';
++import { util, fileUtil, DispatherTypes } from '../../helper';
+ import _ from 'util';
+ import globule from 'globule';
+ 
+@@ -26,25 +26,14 @@ class NeiPlugin {
+         this.neiRoute = path.resolve(basedir, 'nei.route.js');
+ 
+         if (doUpdate) {
+-            return this.pending((resolve) => {
+-                neiTools
+-                    .run({
+-                        key, basedir
+-                    })
+-                    .then((config) => {
+-                        return this.getUpdate(config);
+-                    })
+-                    .then(() => {
+-                        return this.updateRoutes(this.routes);
+-                    })
+-                    .then(() => {
+-                        resolve();
+-                    });
+-            });
++            this.downloadNeiData(key, basedir);
++        } else {
++            this.useLocalData(basedir);
+         }
++    }
+ 
++    useLocalData(basedir) {
+         const serverConfigFiles = globule.find(path.resolve(basedir, 'nei**/server.config.js'));
+-
+         try {
+             if (serverConfigFiles.length == 0) {
+                 throw new Error('can`t find server.config');
+@@ -52,14 +41,23 @@ class NeiPlugin {
+             this.setNeiMockDir(require(serverConfigFiles[0]));
+             this.routes = require(this.neiRoute);
+         } catch (e) {
+-            util.error([
+-                'nei资源不完整，请执行 \n',
+-                '$ foxman -u'].join(''));
++            util.error( 'nei资源不完整，请执行 $ foxman -u' );
+         }
+-        this.pending((resolve) => {
+-            this.updateRoutes(this.routes)
++        this.updateRoutes(this.routes);
++    }
++
++    downloadNeiData(key, basedir) {
++        return this.pending((resolve) => {
++            neiTools
++                .run({
++                    key, basedir
++                })
++                .then((config) => {
++                    return this.getUpdate(config);
++                })
+                 .then(() => {
+                     resolve();
++                    return this.updateRoutes(this.routes);
+                 });
+         });
+     }
+@@ -105,8 +103,11 @@ class NeiPlugin {
+                 }
+ 
+                 routes.push({
+-                    method, url,
+-                    sync, filePath, id
++                    method,
++                    url,
++                    sync,
++                    filePath,
++                    id
+                 });
+             }
+         }
+@@ -151,43 +152,59 @@ class NeiPlugin {
+     }
+ 
+     updateRoutes(routes) {
+-        let promises = routes.map((route) => {
+-            return new Promise((resolve) => {
+-                fs.stat(this.genCommonPath(route), (error, stat) => {
++        const genCommonPath = this.genCommonPath.bind(this);
++        const genNeiApiUrl = this.genNeiApiUrl.bind(this);
++        const server = this.server;
++        server.use(function* (next) {
++            /**
++             * @TODO
++             * 判断是否使用本地文件的逻辑移动到此处
++             */
++            const dispatcher = this.dispatcher;
++
++            if (dispatcher.type == DispatherTypes.DIR ||
++                !dispatcher.isRouter) {
++                return yield next;
++            }
++            const routeModel = {
++                sync: DispatherTypes.SYNC == dispatcher.type,
++                filePath: dispatcher.filePath,
++            };
++            const commonPath = genCommonPath(routeModel);
++
++            yield new Promise((resolve, reject) => {
++                fs.stat(commonPath, (error, stat) => {
+                     /**
+                      * 文件不存在或者文件内容为空
+                      */
+                     if (error || !stat.size) {
+-                        route.handler = (ctx) => fileUtil.jsonResolver(this.genNeiApiUrl(route));
+-                    } else {
+-                        route.handler = (ctx) => fileUtil.jsonResolver(this.genCommonPath(route));
++                        dispatcher.dataPath = genNeiApiUrl(routeModel);
+                     }
++                    // else {
++                    //     dispatcher.dataPath = commonPath;
++                    // }
+                     resolve();
+                 });
+-            })
+-        });
+-        return new Promise((resolve) => {
+-            Promise.all(promises).then(() => {
+-                let server = this.server;
+-                server.routers = routes.concat(server.routers);
+-                resolve();
+             });
++
++            yield next;
+         });
++        server.routers = routes.concat(server.routers);
+     }
+ 
+     genCommonPath(route) {
+         const server = this.server;
++        let filePath = route.filePath;
+ 
+         if (route.sync) {
+             return server.syncDataMatch(util.jsonPathResolve(route.filePath));
+         }
+ 
+-        let filePath = route.filePath;
+         if (server.divideMethod) {
+             const methodReg = /(GET)|(DELETE)|(HEAD)|(PATCH)|(POST)|(PUT)\//i;
+             filePath = filePath.replace(methodReg, '');
+         }
+-        
++
+         return server.asyncDataMatch(util.jsonPathResolve(filePath.replace(/\/data/g, '')));
+     }
+ 
+diff --git a/src/plugins/nei/nei.es6 b/src/plugins/nei/nei.es6
+index d3e6cd1..7ea880c 100644
+--- a/src/plugins/nei/nei.es6
++++ b/src/plugins/nei/nei.es6
+@@ -53,7 +53,7 @@ let nei = new Application(options),
+             try {
+                 fileUtil.delDir(opt.basedir);
+             } catch (e) {
+-                console.log('初始化nei目录');
++                // console.log('初始化nei目录');
+             }
+             this.build(opt);
+ 
+diff --git a/src/plugins/precompiler/index.es6 b/src/plugins/precompiler/index.es6
+index eaae1b7..7a7e0f5 100644
+--- a/src/plugins/precompiler/index.es6
++++ b/src/plugins/precompiler/index.es6
+@@ -57,6 +57,10 @@ class PreCompilerPlugin {
+              * 新创建的文件的监听
+              */
+             this.watcher.onNew(sourcePattern, (file, ev, stats) => {
++                if (((ev == 'change') && (-1 == recentBuild.indexOf(file)))
++                    || ((ev == 'add') && (new Date().getTime() - new Date(stats.ctime).getTime() >= 1000))) {
++                    return false;
++                }
+                 recentBuild.push(file);
+                 this.createSingleCompiler(handler, watchMap, sourcePattern, file);
+             });
+diff --git a/src/plugins/reloader/reloader.es6 b/src/plugins/reloader/reloader.es6
+index 4c86e32..1c01177 100644
+--- a/src/plugins/reloader/reloader.es6
++++ b/src/plugins/reloader/reloader.es6
+@@ -1,6 +1,5 @@
+ import EventEmitter from 'events';
+ import path from 'path';
+-import {Server as WebSocketServer} from 'ws';
+ import {util, fileUtil} from "../../helper";
+ 
+ class Reloader extends EventEmitter {
+@@ -8,53 +7,25 @@ class Reloader extends EventEmitter {
+         super();
+         Object.assign(this, options);
+         this.bindChange();
+-        this.buildWebSocket();
+     }
+     bindChange() {
+-        let [server, watcher] = [this.server, this.watcher];
+-
+-        let reloadResources = [
++        const [server, watcher] = [this.server, this.watcher];
++        let reloadResources;
++        reloadResources = [
+             path.resolve(server.viewRoot, '**', '*.' + server.extension),
+             path.resolve(server.syncData, '**', '*.json')
+         ];
+-        
+-        let reload = util.throttle((arg0) => {
+-            this.reload(arg0);
+-        }, 1000);
+ 
+         server.static.forEach(item => {
+-            reloadResources.push(path.resolve(item, '**', '*.css'));
+-            reloadResources.push(path.resolve(item, '**', '*.js'));
+-            reloadResources.push(path.resolve(item, '**', '*.html'));
+-        });
+-        this.watcher.onUpdate(reloadResources, (arg0, arg1) => {
+-            reload(arg0);
+-        });
+-    }
+-    buildWebSocket() {
+-        let serverApp = this.server.serverApp;
+-        this.wss = new WebSocketServer({
+-            server: serverApp
+-        });
+-
+-        this.wss.on('connection', (ws) => {
+-            ws.on('message', (message) => {
+-                console.log('received: %s', message);
+-            });
+-        });
+-
+-        this.wss.broadcast = (data) => {
+-            this.wss.clients.forEach(function each(client) {
+-                client.send(data, function (error) {
+-                    if (error) {
+-                        console.log(error);
+-                    }
+-                });
+-            });
+-        };
+-    }
+-    reload(...args) {
+-        this.wss.broadcast(path.basename(args[0]));
++            reloadResources = [...reloadResources,
++                path.resolve(item, '**', '*.css'),
++                path.resolve(item, '**', '*.js'),
++                path.resolve(item, '**', '*.html')
++            ]
++        })
++        this.watcher.onUpdate(reloadResources, util.throttle((arg0) => {
++            server.wss.broadcast(path.basename(arg0));
++        }, 1000));
+     }
+ }
+ export default Reloader;
+diff --git a/src/plugins/server/index.es6 b/src/plugins/server/index.es6
+index 4f9e67d..7c95531 100644
+--- a/src/plugins/server/index.es6
++++ b/src/plugins/server/index.es6
+@@ -5,7 +5,10 @@ class ServerPlugin {
+         this.options = options;
+     }
+     init() {
+-        (this.server = new Server(this.options)).createServer();
++        this.server = new Server(this.options);
++    }
++    start() {
++        this.server.createServer();
+     }
+ }
+ export default ServerPlugin;
+diff --git a/src/plugins/server/middleware/dispatcher.es6 b/src/plugins/server/middleware/dispatcher.es6
+index 49ff676..c612f57 100644
+--- a/src/plugins/server/middleware/dispatcher.es6
++++ b/src/plugins/server/middleware/dispatcher.es6
+@@ -1,21 +1,8 @@
+ import path from 'path';
+-import { util, fileUtil } from '../../../helper';
++import { util, fileUtil, DispatherTypes } from '../../../helper';
+ 
+ function apiHandler(dispatcher) {
+-    function isPromise(obj) {
+-        return 'function' == typeof obj.then;
+-    }
+-    if (dispatcher.handler) {
+-        let res = dispatcher.handler(this);
+-        if (!isPromise(res)) {
+-            res = new Promise((resolve) => {
+-                resolve(res);
+-            });
+-        }
+-        return res;
+-    } else {
+-        return fileUtil.jsonResolver({ url: dispatcher.dataPath });
+-    }
++    return fileUtil.jsonResolver({ url: dispatcher.dataPath });
+ }
+ 
+ /**
+@@ -26,7 +13,7 @@ function apiHandler(dispatcher) {
+  * @return {[type]}         [description]
+  */
+ export function* dirDispatcher(dispatcher, config, next) {
+-    const viewPath = dispatcher.path;
++    const viewPath = dispatcher.pagePath;
+     const files = yield fileUtil.getDirInfo(viewPath);
+     const promises = files.map((file) => fileUtil.getFileStat(path.resolve(viewPath, file)));
+     const result = yield Promise.all(promises);
+@@ -52,7 +39,7 @@ export function* dirDispatcher(dispatcher, config, next) {
+  * @returns {*}
+  */
+ export function* syncDispatcher(dispatcher, config, next) {
+-    const filePath = dispatcher.path;
++    const filePath = dispatcher.pagePath;
+     let res = yield apiHandler.call(this, dispatcher);
+     if (!res || !res.json) {
+         this.type = 500;
+@@ -116,9 +103,9 @@ export default (config) => {
+         let args = [config, next];
+ 
+         let dispatcherMap = {
+-            'dir': dirDispatcher,
+-            'sync': syncDispatcher,
+-            'async': asyncDispather
++            [DispatherTypes.DIR]: dirDispatcher,
++            [DispatherTypes.SYNC]: syncDispatcher,
++            [DispatherTypes.ASYNC]: asyncDispather
+         };
+         util.log(`${this.request.method} ${this.request.path}`);
+ 
+diff --git a/src/plugins/server/middleware/routemap.es6 b/src/plugins/server/middleware/routemap.es6
+index cb504e1..bd41270 100644
+--- a/src/plugins/server/middleware/routemap.es6
++++ b/src/plugins/server/middleware/routemap.es6
+@@ -1,5 +1,15 @@
++/**
++ * dispatcher
++ * type
++ * filePath
++ * tplPath
++ * dataPath(sync才有)
++ */
++
++
++
+ import {
+-    util
++    util, DispatherTypes
+ } from '../../../helper';
+ import path from 'path';
+ import _ from 'util';
+@@ -15,116 +25,116 @@ import pathToRegexp from 'path-to-regexp';
+  * @return {[type]}        [description]
+  */
+ 
+-const fileDispatcher = (config) => {
+-    const routeMap = new Map();
+-    routeMap.set('/', function ({ commonTplPath }) {
+-        this.dispatcher = util.dispatcherTypeCreator(
+-            'dir', commonTplPath, void 0
+-        );
++const getDispatcherMap = (config) => {
++
++    const dispatcherMap = new Map();
++
++    dispatcherMap.set('/', {
++        type: DispatherTypes.DIR
+     });
+ 
+-    routeMap.set(`.${config.extension}`, function ({ commonTplPath, commonSync}) {
+-        this.dispatcher = util.dispatcherTypeCreator(
+-            'sync', commonTplPath, commonSync
+-        );
++    dispatcherMap.set(`.${config.extension}`, {
++        type: DispatherTypes.SYNC
+     });
+ 
+-    routeMap.set('.json', function ({ commonAsync }) {
+-        this.dispatcher = util.dispatcherTypeCreator(
+-            'async', void 0, commonAsync
+-        );
++    dispatcherMap.set('.json', {
++        type: DispatherTypes.ASYNC
+     });
+-    return routeMap;
++    
++    return dispatcherMap;
+ };
+ 
+ export default (config) => {
+-    const routeMap = fileDispatcher(config);
++    const dispatcherMap = getDispatcherMap(config);
+     return function* (next) {
+         /**
+          * ① 拦截 router
+          * @type {[type]}
+          */
+-        const [routers, method] = [config.routers||[], this.request.method];
++        const [routers, method] = [config.routers || [], this.request.method];
+ 
+         /**
+          * 入口时，自动转换
+          */
+         let requestPath = (this.request.path == '/') ? '/index.html' : this.request.path;
+ 
+-        /**
+-         * 路径统一绝对路径
+-         */
+-        const requestInfo = {};
+-        /**
+-         * computedTplPath 与 tplPath 的区别是 在 请求url为'/'的时候
+-         * 前者为 '.../tpl/',
+-         * @type {[string]}
+-         */
+-        requestInfo.commonTplPath = path.join(config.viewRoot, this.request.path);
++        // /**
++        //  * 路径统一绝对路径
++        //  */
++        // const requestInfo = {};
++        // /**
++        //  * computedTplPath 与 tplPath 的区别是 在 请求url为'/'的时候
++        //  * 前者为 '.../tpl/',
++        //  * @type {[string]}
++        //  */
++        // requestInfo.pagePath = path.join(config.viewRoot, this.request.path);
+ 
+-        /**
+-         * 根据用户定义的规则和url,生成通用的同步数据路径
+-         * @type {[string]}
+-         */
+-        requestInfo.commonSync = config.syncDataMatch(util.jsonPathResolve(requestPath));
++        // /**
++        //  * 根据用户定义的规则和url,生成通用的同步数据路径
++        //  * @type {[string]}
++        //  */
++        // requestInfo.commonSync = config.syncDataMatch(util.jsonPathResolve(requestPath));
+ 
+-        /**
+-         * 根据用户定义的规则和url,生成通用的异步数据路径
+-         * @type {[string]}
+-         */
+-        requestInfo.commonAsync = config.asyncDataMatch(util.jsonPathResolve(requestPath));
++        // /**
++        //  * 根据用户定义的规则和url,生成通用的异步数据路径
++        //  * @type {[string]}
++        //  */
++        // requestInfo.commonAsync = config.asyncDataMatch(util.jsonPathResolve(requestPath));
+ 
+-        if(this.request.query.mode !=1){
++        if (this.request.query.mode != 1) {
+             /**
+              * 遍历路由表,并给请求对象处理,生成 this.dispatcher
+              */
+             for (let router of routers) {
+ 
+-                if (!config.divideMethod && router.method.toUpperCase() !== method.toUpperCase()){
++                if (!config.divideMethod && router.method.toUpperCase() !== method.toUpperCase()) {
+                     continue;
+                 }
+ 
+                 if (!pathToRegexp(router.url).test(this.request.path)) {
+                     continue;
+                 }
++                let filePath = router.filePath;
+ 
+-                /**
+-                 * 同步接口
+-                 * 可能插件会生成一个 syncData ,若已生成则用插件的
+-                 * 即: 插件对于响应,有更高的权限
+-                 */
+                 if (router.sync) {
+-                    let tplPath = path.join(config.viewRoot, `${util.removeSuffix(router.filePath)}.${config.extension}`);
+-                    let tplMockPath = path.join(config.syncData, `${util.removeSuffix(router.filePath)}.json`);
+-                    this.dispatcher = util.dispatcherTypeCreator(
+-                        'sync',
+-                        tplPath,
+-                        tplMockPath,
+-                        router.handler
+-                    );
++                    let pagePath = path.join(config.viewRoot, `${util.removeSuffix(router.filePath)}.${config.extension}`);
++                    let dataPath = path.join(config.syncData, `${util.removeSuffix(router.filePath)}.json`);
++                    this.dispatcher = {
++                        type: 'sync',
++                        pagePath,
++                        dataPath
++                    };
+                 } else {
+-                    /**
+-                     * 如果插件已生成了 asyncData 属性,则用插件的
+-                     * 即: 插件对于响应,有更高的权限
+-                     */
+-                    let modelPath = path.join(config.asyncData, `${router.filePath}.json`);
+-                    this.dispatcher = util.dispatcherTypeCreator(
+-                        'async',
+-                        void 0,
+-                        modelPath,
+-                        router.handler
+-                    );
++                    let dataPath = path.join(config.asyncData, `${router.filePath}.json`);
++                    this.dispatcher = {
++                        type: 'sync',
++                        dataPath
++                    };
+                 }
++
++                this.dispatcher.filePath = filePath;
++                this.dispatcher.isRouter = true;
+                 return yield next;
+             }
+         }
+-        
++
+         /**
+          * ② 未拦截到 router
+          */
+-        for (let [route, handler] of routeMap) {
+-            if (this.request.path.endsWith(route)) {
+-                handler.call(this, requestInfo);
++        let jsonPath = util.jsonPathResolve(requestPath);
++        for (let [type, route] of dispatcherMap) {
++            if (this.request.path.endsWith(type)) {
++                this.dispatcher = {
++                    type: route.type,
++                    isRouter: false,
++                    filePath: requestPath,
++                    pagePath: path.join(config.viewRoot, this.request.path),
++                    dataPath: {
++                        [DispatherTypes.DIR]: null,
++                        [DispatherTypes.SYNC]: config.syncDataMatch(jsonPath),
++                        [DispatherTypes.ASYNC]: config.asyncDataMatch(jsonPath)
++                    }[route.type]
++                }
+                 return yield next;
+             }
+         }
+diff --git a/src/plugins/server/server.es6 b/src/plugins/server/server.es6
+index c1e7045..d868fe5 100644
+--- a/src/plugins/server/server.es6
++++ b/src/plugins/server/server.es6
+@@ -6,13 +6,16 @@ import RenderUtil from '../../helper/render';
+ import render from 'koa-ejs';
+ import dispatcher from './middleware/dispatcher';
+ import routeMap from './middleware/routemap'
+-import {util} from '../../helper';
++import { util } from '../../helper';
+ import getRawBody from './middleware/rawbody';
+-
++import { Server as WebSocketServer } from 'ws';
+ 
+ class Server {
+     constructor(config) {
++        this.htmls = [];
++        this.middleware = [];
+         this.app = Koa();
++
+         Object.assign(this, config);
+ 
+         if (!this.syncDataMatch) {
+@@ -23,21 +26,28 @@ class Server {
+             this.asyncDataMatch = (url) => path.join(this.asyncData, url);
+         }
+ 
+-        if (undefined !== this.divideMethod){
++        if (undefined !== this.divideMethod) {
+             this.divideMethod = true;
+         }
+ 
+         this.setRender();
+         this.setStaticHandler();
+-        this.delayInit();
+     }
+ 
+-
+     delayInit() {
+         const app = this.app;
+         app.use(getRawBody());
+         app.use(routeMap(this));
++        this.middleware.forEach((g) => {
++            app.use(g);
++        });
+         app.use(dispatcher(this));
++
++        this.htmlAppender(this.htmls.join('\n'));
++    }
++
++    use(middleware) {
++        this.middleware.push(middleware);
+     }
+ 
+     setRender() {
+@@ -47,7 +57,7 @@ class Server {
+         let Render = this.RenderUtil || RenderUtil;
+         this.extension = this.extension || 'ftl';
+ 
+-        this.tplRender = new Render({viewRoot: this.viewRoot});
++        this.tplRender = new Render({ viewRoot: this.viewRoot });
+ 
+         render(this.app, {
+             root: path.resolve(__dirname, '../../../views'),
+@@ -71,12 +81,15 @@ class Server {
+         });
+         this.app.use(serve('foxman_client', path.resolve(__dirname, '../../../')));
+     }
++    
++    appendHtml(html){
++        this.htmls.push(html);
++    }
+ 
+-    appendHtml(html) {
+-        let extension = this.extension;
+-        this.app.use(function *(next) {
++    htmlAppender(html) {
++        this.app.use(function* (next) {
+             if (/text\/html/ig.test(this.type)) {
+-                this.body = this.body + html;
++                this.body = this.body + html; 
+             }
+             yield next;
+         });
+@@ -84,9 +97,35 @@ class Server {
+ 
+     createServer() {
+         const port = this.port || 3000;
++
++        this.delayInit();
+         this.serverApp = http.createServer(this.app.callback()).listen(port);
++        this.wss = this.buildWebSocket(this.serverApp);
+         util.log(`server is running on ${port}`);
+     }
++
++    buildWebSocket(serverApp) {
++        var wss = new WebSocketServer({
++            server: serverApp
++        });
++
++        wss.on('connection', (ws) => {
++            ws.on('message', (message) => {
++                console.log('received: %s', message);
++            });
++        });
++
++        wss.broadcast = (data) => {
++            wss.clients.forEach(function each(client) {
++                client.send(data, function (error) {
++                    if (error) {
++                        console.log(error);
++                    }
++                });
++            });
++        };
++        return wss;
++    }
+ }
+ 
+ export default Server;
+diff --git a/src/plugins/watcher/watcher.es6 b/src/plugins/watcher/watcher.es6
+index afa33a0..3cb2e7b 100644
+--- a/src/plugins/watcher/watcher.es6
++++ b/src/plugins/watcher/watcher.es6
+@@ -10,7 +10,7 @@ class Watcher {
+         let root = args[0] || process.cwd();
+         let watcher = chokidar.watch(root, {
+             ignored: ['**/.git/**', '**/node_modules/**', '**/.gitignore'],
+-            ignoreInitial: true
++            persistent: true
+         });
+ 
+         this.watching = {
+diff --git a/views/cataLog.html b/views/cataLog.html
+index a0d1295..6ec812d 100644
+--- a/views/cataLog.html
++++ b/views/cataLog.html
+@@ -6,11 +6,18 @@
+ 	<div class="weui_cells weui_cells_access">
+ 		<%fileList.forEach((file)=>{%>
+ 			<a class="weui_cell" href="<%= file.requestPath%>">
+-          <div class="weui_cell_bd weui_cell_primary">
+-              <p><i class="<%= (file.isFile)?'weui_icon_info_circle':'weui_icon_info'%>"></i><span style="margin-left: 10px;"><%= file.name%></span></p>
+-          </div>
+-          <div class="weui_cell_ft"><%= (file.isFile)?'文件':'目录'%></div>
+-      </a>
++				<div class="weui-cell__hd">
++					<% if ( file.isFile ) { %>
++					<svg style="display: block;width: 20px;margin-right: 5px;" viewBox="0 0 24 24" width="100%" height="100%"><g fill="none" fill-rule="evenodd"><rect fill="#FA8A66" width="24" height="24" rx="2"></rect><rect fill="#FFF" transform="rotate(30 9 12)" x="8" y="6" width="2" height="12" rx="2"></rect><path d="M17.242 12.853l-2.968 2.27c-.44.335-.523.962-.187 1.4.335.44.963.524 1.4.188l4.01-3.062c.523-.4.523-1.19 0-1.59l-4.01-3.062c-.437-.336-1.065-.252-1.4.187-.336.44-.252 1.066.187 1.402l2.968 2.268z" fill="#FFF"></path><path d="M1 2.005v19.99C1 22.55 1.45 23 2.005 23h19.99C22.55 23 23 22.55 23 21.995V2.005C23 1.45 22.55 1 21.995 1H2.005C1.45 1 1 1.45 1 2.005zm-1 0C0 .898.897 0 2.005 0h19.99C23.102 0 24 .897 24 2.005v19.99C24 23.102 23.103 24 21.995 24H2.005C.898 24 0 23.103 0 21.995V2.005z" fill-opacity=".05" fill="#000"></path></g></svg>
++					<% } else { %>
++					<svg style="display: block;width: 20px;margin-right: 5px;" viewBox="0 0 32 32" width="100%" height="100%"><g fill="none" fill-rule="evenodd"><path d="M0 2.995C0 2.445.442 2 1.01 2h8.91c.557 0 1.326.31 1.72.696L14 5h17.007c.548 0 .993.44.993 1.002v19.996c0 .553-.452 1.002-.993 1.002H.993C.443 27 0 26.545 0 26.005V2.995z" fill="#F9C932"></path><path d="M1 2.995v23.01c0-.007.002-.005-.007-.005h30.014c-.01 0-.007-.003-.007-.002V6.002c0-.008.006-.002.007-.002H13.586l-.293-.293-2.29-2.29c-.203-.203-.716-.417-1-.417H.997C.998 3 1 2.998 1 2.995zm-1 0C0 2.445.445 2 .996 2h9.008c.55 0 1.317.32 1.707.71L14 5h17.007c.548 0 .993.44.993 1.002v19.996c0 .553-.452 1.002-.993 1.002H.993C.443 27 0 26.545 0 26.005V2.995z" fill="#EBBA37"></path><path fill="#FFF" d="M3 5h11v5H3z"></path><path d="M0 9.003C0 8.45.445 8 .996 8h9.008c.55 0 1.317-.32 1.707-.71L14 5h17.007c.548 0 .993.45.993 1.003v23.994c0 .554-.452 1.003-.993 1.003H.993C.443 31 0 30.56 0 29.997V9.003z" fill="#F7D478"></path><path d="M0 9.003C0 8.45.445 8 .996 8h9.008c.55 0 1.317-.32 1.707-.71L14 5h17.007c.548 0 .993.45.993 1.003v23.994c0 .554-.452 1.003-.993 1.003H.993C.443 31 0 30.56 0 29.997V9.003z"></path><path d="M1 9.003v20.994c0 .01-.006.003-.007.003h30.014c-.01 0-.007-.003-.007-.003V6.003C31 6 31 6 31.007 6H14l.707-.293-2.29 2.29C11.84 8.573 10.82 9 10.005 9H.996C1 9 1 9 1 9.003zm-1 0C0 8.45.445 8 .996 8h9.008c.55 0 1.317-.32 1.707-.71L14 5h17.007c.548 0 .993.45.993 1.003v23.994c0 .554-.452 1.003-.993 1.003H.993C.443 31 0 30.56 0 29.997V9.003z" fill="#EBBA37"></path></g></svg>
++					<% } %>
++				</div>
++				<div class="weui_cell_bd weui_cell_primary">
++					<p><span style="margin-left: 10px;"><%= file.name%></span></p>
++				</div>
++				<div class="weui_cell_ft"></div>
++			</a>
+ 		<%})%>
+ 	</div>
+ </div>
