@@ -3,7 +3,7 @@ import Reloader from './reloader';
 /**
  * 监听插件
  */
-class ReloadPlugin {
+class ReloaderPlugin {
     constructor(options) {
         this.options = options;
     }
@@ -17,4 +17,4 @@ class ReloadPlugin {
         }, this.options));
     }
 }
-export default ReloadPlugin;
+export default ReloaderPlugin;

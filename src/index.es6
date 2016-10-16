@@ -1,5 +1,8 @@
 import App from './application';
-import { Server, Watcher, PreCompiler, Reload, Nei, Proxy } from './plugins';
+import {
+    Nei, PreCompiler, Proxy,
+    Reloader, Server, Watcher, Debug
+} from './plugins';
 
 let appContext;
 class AppContext {
@@ -26,7 +29,9 @@ class AppContext {
 
         app.use(config.plugins);
 
-        app.use(new Reload({}));
+        app.use(new Reloader({}));
+        
+        app.use(new Debug({}));
 
         app.use(new Proxy({
             proxy: config.proxy,

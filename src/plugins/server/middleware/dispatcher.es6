@@ -29,6 +29,7 @@ export function* dirDispatcher(dispatcher, config, next) {
         title: '查看列表',
         fileList
     });
+    yield next;
 }
 
 /**
