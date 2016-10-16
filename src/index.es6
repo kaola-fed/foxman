@@ -31,7 +31,9 @@ class AppContext {
 
         app.use(new Reloader({}));
         
-        app.use(new Debug({}));
+        app.use(new Debug({
+            debugTool: config.debugTool
+        }));
 
         app.use(new Proxy({
             proxy: config.proxy,
