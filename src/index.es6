@@ -1,15 +1,10 @@
-import Application from './application/index';
-import ServerPlugin from './plugins/server/';
-import WatcherPlugin from './plugins/watcher/';
-import PreCompilerPlugin from './plugins/precompiler/';
-import ReloadPlugin from './plugins/reloader';
-import NeiPlugin from './plugins/nei';
-import ProxyPlugin from './plugins/proxy';
+import App from './application';
+import { Server, Watcher, PreCompiler, Reload, Nei, Proxy } from './plugins';
 
-let owner;
-class Owner {
+let appContext;
+class AppContext {
     constructor(config) {
-        const app = Application();
+        const app = App();
         /**
          * 設置全局的配置信息 
          */
@@ -17,23 +12,23 @@ class Owner {
         /**
          * 內置的服務，全局共享
          */
-        app.use(new WatcherPlugin(config.watch));
+        app.use(new Watcher(config.watch));
 
-        app.use(new ServerPlugin(config.server));
+        app.use(new Server(config.server));
 
-        app.use(new PreCompilerPlugin({
+        app.use(new PreCompiler({
             preCompilers: config.preCompilers
         }));
 
         if (!!config.nei) {
-            app.use(new NeiPlugin(config.nei));
+            app.use(new Nei(config.nei));
         }
 
         app.use(config.plugins);
 
-        app.use(new ReloadPlugin({}));
+        app.use(new Reload({}));
 
-        app.use(new ProxyPlugin({
+        app.use(new Proxy({
             proxy: config.proxy,
             proxyServer: config.argv.proxy
         }));
@@ -43,6 +38,8 @@ class Owner {
 }
 
 module.exports = function (config) {
-    if (!owner) owner = new Owner(config);
-    return owner;
+    if (!appContext) {
+        appContext = new AppContext(config);
+    }
+    return appContext;
 };

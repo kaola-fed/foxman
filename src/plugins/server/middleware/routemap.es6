@@ -5,9 +5,6 @@
  * tplPath
  * dataPath(sync才有)
  */
-
-
-
 import {
     util, DispatherTypes
 } from '../../../helper';

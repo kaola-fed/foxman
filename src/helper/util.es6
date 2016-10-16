@@ -10,21 +10,21 @@ import path from 'path';
 
 export function debugLog(msg) {
     if (process.env.NODE_ENV === 'development') {
-        console.log('[DEBUG]'.blue + ' ' + msg);
+        console.log('[DEBUG]'.blue + ' ' + initialsCapitals(msg));
     }
 }
 
 export function error(msg) {
-    console.log('[E]'.red + ' ' + msg);
+    console.log('[E]'.red + ' ' + initialsCapitals(msg));
     process.exit(1);
 }
 
 export function log(msg) {
-    console.log('[I]'.green + ' ' + msg);
+    console.log('[I]'.green + ' ' + initialsCapitals(msg));
 }
 
 export function warnLog(msg) {
-    console.log('[W]'.yellow + ' ' + msg);
+    console.log('[W]'.yellow + ' ' + initialsCapitals(msg));
 }
 
 export function createSystemId() { // uid

@@ -14,12 +14,12 @@ class Watcher {
         });
 
         this.watching = {
-            new: [], 
+            new: [],
             change: []
         };
-        
+
         this.handlers = {
-            new: [], 
+            new: [],
             change: []
         };
 
@@ -33,14 +33,14 @@ class Watcher {
         /**
          * create files
          */
-        watcher.on('add', (event, path, stats) => {
-            this.do('new', event, path, stats);
+        watcher.on('add', (path, stats) => {
+            this.do('new', 'new', path, stats);
         });
     }
 
     do(type, event, path, stats) {
         this.watching[type].forEach((pattern, idx) => {
-            if (anymatch(pattern)(path)) {
+            if (pattern && anymatch(pattern)(path)) {
                 this.handlers[type][idx](path, event, stats);
             }
         });
@@ -50,14 +50,14 @@ class Watcher {
     }
 
     onUpdate(...args) {
-        this.addWatch('change',...args);
+        this.addWatch('change', ...args);
     }
 
     onNew(...args) {
         this.addWatch('new', ...args);
     }
 
-    addWatch(type, files, handler){
+    addWatch(type, files, handler) {
         this.watching[type].push(files);
         this.handlers[type].push(handler);
     }

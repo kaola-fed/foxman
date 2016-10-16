@@ -1,8 +1,8 @@
-import EventEmitter from 'events'
+import EventEmitter from 'events';
 import {
     util
-} from '../helper'
-import instance from './instance'
+} from '../helper';
+import instance from './instance';
 import DI from './di';
 
 const dI = new DI();
@@ -33,7 +33,7 @@ export default class Application extends EventEmitter {
         });
 
         dI.register(util.initialsLower(plugin.name), plugin);
-        util.debugLog(`plugin ${plugin.name || plugin.id} is loaded`);
+        util.log(`plugin ${plugin.name || plugin.id} is installed`);
     }
 
     execute() {
