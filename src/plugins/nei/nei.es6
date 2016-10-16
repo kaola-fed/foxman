@@ -53,7 +53,7 @@ let nei = new Application(options),
             try {
                 fileUtil.delDir(opt.basedir);
             } catch (e) {
-                console.log('初始化nei目录');
+                // console.log('初始化nei目录');
             }
             this.build(opt);
 

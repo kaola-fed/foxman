@@ -9,23 +9,23 @@ class Reloader extends EventEmitter {
         this.bindChange();
     }
     bindChange() {
-        let [server, watcher] = [this.server, this.watcher];
-
-        let reloadResources = [
+        const [server, watcher] = [this.server, this.watcher];
+        let reloadResources;
+        reloadResources = [
             path.resolve(server.viewRoot, '**', '*.' + server.extension),
             path.resolve(server.syncData, '**', '*.json')
         ];
-        
-        let reload = util.throttle((arg0) => {
-            server.wss.broadcast(path.basename(arg0));
-        }, 1000);
 
         server.static.forEach(item => {
-            reloadResources.push(path.resolve(item, '**', '*.css'));
-            reloadResources.push(path.resolve(item, '**', '*.js'));
-            reloadResources.push(path.resolve(item, '**', '*.html'));
-        });
-        this.watcher.onUpdate(reloadResources, reload);
+            reloadResources = [...reloadResources,
+                path.resolve(item, '**', '*.css'),
+                path.resolve(item, '**', '*.js'),
+                path.resolve(item, '**', '*.html')
+            ]
+        })
+        this.watcher.onUpdate(reloadResources, util.throttle((arg0) => {
+            server.wss.broadcast(path.basename(arg0));
+        }, 1000));
     }
 }
 export default Reloader;

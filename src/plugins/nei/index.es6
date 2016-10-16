@@ -26,23 +26,14 @@ class NeiPlugin {
         this.neiRoute = path.resolve(basedir, 'nei.route.js');
 
         if (doUpdate) {
-            return this.pending((resolve) => {
-                neiTools
-                    .run({
-                        key, basedir
-                    })
-                    .then((config) => {
-                        return this.getUpdate(config);
-                    })
-                    .then(() => {
-                        resolve();
-                        return this.updateRoutes(this.routes);
-                    });
-            });
+            this.downloadNeiData(key, basedir);
+        } else {
+            this.useLocalData(basedir);
         }
+    }
 
+    useLocalData(basedir) {
         const serverConfigFiles = globule.find(path.resolve(basedir, 'nei**/server.config.js'));
-
         try {
             if (serverConfigFiles.length == 0) {
                 throw new Error('can`t find server.config');
@@ -50,11 +41,25 @@ class NeiPlugin {
             this.setNeiMockDir(require(serverConfigFiles[0]));
             this.routes = require(this.neiRoute);
         } catch (e) {
-            util.error([
-                'nei资源不完整，请执行 \n',
-                '> $ foxman -u'].join(''));
+            util.error( 'nei资源不完整，请执行 $ foxman -u' );
         }
         this.updateRoutes(this.routes);
+    }
+
+    downloadNeiData(key, basedir) {
+        return this.pending((resolve) => {
+            neiTools
+                .run({
+                    key, basedir
+                })
+                .then((config) => {
+                    return this.getUpdate(config);
+                })
+                .then(() => {
+                    resolve();
+                    return this.updateRoutes(this.routes);
+                });
+        });
     }
 
     setNeiMockDir(neiConfig) {
@@ -98,10 +103,10 @@ class NeiPlugin {
                 }
 
                 routes.push({
-                    method, 
+                    method,
                     url,
-                    sync, 
-                    filePath, 
+                    sync,
+                    filePath,
                     id
                 });
             }
@@ -157,7 +162,7 @@ class NeiPlugin {
              */
             const dispatcher = this.dispatcher;
 
-            if (dispatcher.type == DispatherTypes.DIR || 
+            if (dispatcher.type == DispatherTypes.DIR ||
                 !dispatcher.isRouter) {
                 return yield next;
             }

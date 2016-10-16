@@ -9,7 +9,7 @@ export default {
      * @returns {Number}
      */
     pending(fn) {
-        let pending = new Promise((resolve) => { 
+        let pending = new Promise((resolve) => {
             let result = fn(resolve);
             if( result && result.value && result.value.then ) {
                 return result;
