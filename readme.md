@@ -24,8 +24,8 @@
     * yield + generator + promise 处理异步
     
 
-## 界面预览
-![http://note.youdao.com/yws/public/resource/c0ad463e177be9880ecc3b0293558130/xmlnote/A476DE54F65648458ADAEA221AA07046/6041](http://note.youdao.com/yws/public/resource/c0ad463e177be9880ecc3b0293558130/xmlnote/A476DE54F65648458ADAEA221AA07046/6041)
+## 界面展示
+![http://note.youdao.com/yws/public/resource/72c37299682b2a61c50c3a0513b22810/xmlnote/CB0DE48CD3184F9E9B258FD20904A8F1/7199)
 
 ## api概览
 ### （一）安装

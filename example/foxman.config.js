@@ -22,9 +22,9 @@ module.exports = {
      * test -- String or Array<String> 需要进行转换的文件规则
      * handler -- Function 类型，需返回一个数组
      */
-    nei: {
-        key: 'xxxxxxxxxxxxxxxxxxxxxxxx'
-    },
+    // nei: {
+    //     key: 'xxxxxxxxxxxxxxxxxxxxxx'
+    // },
     preCompilers: [
         {
             test: [r(alias.r, 'src/mcss/**/*.mcss')],
