@@ -84,7 +84,7 @@ export default (config) => {
              */
             for (let router of routers) {
 
-                if (!config.divideMethod && router.method.toUpperCase() !== method.toUpperCase()) {
+                if (config.divideMethod && router.method.toUpperCase() !== method.toUpperCase()) {
                     continue;
                 }
 

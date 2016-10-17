@@ -27,7 +27,7 @@ class Server {
         }
 
         if (undefined == this.divideMethod) {
-            this.divideMethod = true;
+            this.divideMethod = false;
         }
 
         this.setRender();

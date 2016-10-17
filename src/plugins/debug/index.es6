@@ -3,8 +3,8 @@ class DebugPlugin {
         this.options = options;
     }
     init(watcherPlugin, serverPlugin) {
-        if(!this.options.debugTool 
-            && (undefined !== this.options.debugTool)){
+        if (!this.options.debugTool
+            && (undefined !== this.options.debugTool)) {
             return 0;
         }
         const server = serverPlugin.server;

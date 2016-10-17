@@ -199,7 +199,7 @@ class NeiPlugin {
             return server.syncDataMatch(util.jsonPathResolve(route.filePath));
         }
 
-        if (server.divideMethod) {
+        if (!server.divideMethod) {
             const methodReg = /(GET)|(DELETE)|(HEAD)|(PATCH)|(POST)|(PUT)\//i;
             filePath = filePath.replace(methodReg, '');
         }

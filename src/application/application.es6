@@ -72,7 +72,7 @@ export default class Application extends EventEmitter {
         loop();
     }
 
-    runSuccess(){
+    runSuccess() {
         dependency.serverPlugin.start();
     }
 }
