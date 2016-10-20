@@ -17,9 +17,9 @@ module.exports = {
     /**
      * 如有需要，填写nei 的kei 然后执行 foxman -u 初始化工程目录。
      **/
-    // nei: {
-    //     key: 'xxxxxxxxxxxxxxxxxxx'
-    // },
+    nei: { 
+        key: '40708e13f4ef478871a0e548f910b29e'
+    },
     /**
      * task集合(基于gulp文件处理，故所有gulp插件都可用)
      * test -- String or Array<String> 需要进行转换的文件规则

@@ -23,9 +23,9 @@ class Reloader extends EventEmitter {
                 path.resolve(item, '**', '*.html')
             ]
         })
-        this.watcher.onUpdate(reloadResources, util.throttle((arg0) => {
+        this.watcher.onUpdate(reloadResources, (arg0) => {
             server.wss.broadcast(path.basename(arg0));
-        }, 1000));
+        });
     }
 }
 export default Reloader;
