@@ -1,6 +1,6 @@
 {
   "name": "foxman",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "前端集成开发工具",
   "main": "app.js",
   "bin": {
@@ -19,7 +19,7 @@
     "build": "babel src -d dist -s --ignore *.js",
     "dev": "babel src -w -d src -s --ignore *.js",
     "test": "mocha ./test/test",
-    "pub": "git add -A && git commit -m \"npm publish\" && git push && npm run build && npm publish"
+    "pub": "git add -A && git commit -m \"发布版本\" && git push && npm run build && npm publish"
   },
   "repository": {
     "type": "git",
@@ -40,21 +40,21 @@
     "babel-preset-es2015": "^6.13.2"
   },
   "dependencies": {
-    "babel-polyfill": "^6.13.0",
-    "anymatch": "^1.3.0",
-    "chokidar": "^1.6.0",
-    "colors": "^1.1.2",
-    "content-type": "^1.0.2",
-    "freemarker.js": "^1.2.2",
-    "globule": "^1.0.0",
-    "koa": "^1.2.1",
-    "koa-ejs": "^3.0.0",
-    "koa-serve": "^0.1.7",
+    "babel-polyfill": "6.13.0",
+    "anymatch": "1.3.0",
+    "chokidar": "1.6.0",
+    "colors": "1.1.2",
+    "content-type": "1.0.2",
+    "freemarker.js": "1.2.2",
+    "globule": "1.0.0",
+    "koa": "1.2.1",
+    "koa-ejs": "3.0.0",
+    "koa-serve": "0.1.7",
     "nei": "^3.0.3",
-    "path-to-regexp": "^1.5.3",
-    "raw-body": "^2.1.7",
-    "vinyl-fs": "^2.4.3",
-    "ws": "^1.1.1",
-    "yargs": "^4.8.1"
+    "path-to-regexp": "1.5.3",
+    "raw-body": "2.1.7",
+    "vinyl-fs": "2.4.3",
+    "ws": "1.1.1",
+    "yargs": "4.8.1"
   }
 }
