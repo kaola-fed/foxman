@@ -61,7 +61,7 @@ export function* syncDispatcher(dispatcher, config, next) {
     yield this.render('e', {
         title: '出错了', e: {
             code: 500,
-            msg: output.out
+            msg: output.out || output.data
         }
     });
     return yield next;
