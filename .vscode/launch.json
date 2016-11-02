@@ -9,7 +9,7 @@
             "stopOnEntry": false,
             "args": [
             ],
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceRoot}/example/",
             "preLaunchTask": null,
             "runtimeExecutable": null,
             "runtimeArgs": [
