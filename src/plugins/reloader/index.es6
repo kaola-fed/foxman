@@ -10,7 +10,10 @@ class ReloaderPlugin {
     init(watcherPlugin, serverPlugin) {
         const server = serverPlugin.server;
         const watcher = watcherPlugin.watcher;
-        server.appendHtml("<script src='/foxman_client/js/reload.js'></script>");
+        server.appendHtml({
+            condition: (request) => true,
+            html: "<script src='/foxman_client/js/reload.js'></script>"
+        });
 
         this.reloader = new Reloader(Object.assign({
             watcher, server

@@ -12,8 +12,8 @@ import { Server as WebSocketServer } from 'ws';
 
 class Server {
     constructor(config) {
-        this.htmls = [];
         this.middleware = [];
+        this.ifAppendHtmls = [];
         this.app = Koa();
 
         Object.assign(this, config);
@@ -43,7 +43,7 @@ class Server {
         });
         app.use(dispatcher(this));
 
-        this.htmlAppender(this.htmls.join('\n'));
+        this.htmlAppender();
     }
 
     use(middleware) {
@@ -82,13 +82,19 @@ class Server {
         this.app.use(serve('foxman_client', path.resolve(__dirname, '../../../')));
     }
     
-    appendHtml(html){
-        this.htmls.push(html);
+    appendHtml(condition){
+        this.ifAppendHtmls.push(condition);
     }
 
-    htmlAppender(html) {
+    htmlAppender() {
+        const ifAppendHtmls = this.ifAppendHtmls;
+        let html; 
+
         this.app.use(function* (next) {
             if (/text\/html/ig.test(this.type)) {
+                html = ifAppendHtmls.map((item) => {
+                    return item.condition(this.request) ? item.html: '';
+                }).join('');
                 this.body = this.body + html; 
             }
             yield next;

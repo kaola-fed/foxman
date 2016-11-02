@@ -79,7 +79,6 @@ module.exports = {
          * 是否区分方法
          */
         divideMethod: false,
-        debugTool: false,
         /**
          * router type 为 sync 的filePath的ftl相对目录
          */
