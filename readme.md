@@ -11,7 +11,6 @@
 [![download][downloads-image]][downloads-url]
 
 [![NPM][nodei-image]][nodei-url]
-
 ## Playground
 ### Features
     * mock server
@@ -34,8 +33,6 @@
 
 ## Quick start
 ### Installation
-
-确认本地安装nodejs，且版本再 0.12.x以上
 ```bash
 $ npm i -g foxman
 ```
@@ -50,9 +47,6 @@ $ npm i -g foxman
 ```
 
 ## Config 
-
-配置文件格式是js，module.exports一个json。而所有的路径统一采用绝对路径的方式配置。
-
 ### Example
 
 ```js
