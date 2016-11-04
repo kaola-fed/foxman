@@ -11,33 +11,15 @@
 [![download][downloads-image]][downloads-url]
 
 [![NPM][nodei-image]][nodei-url]
-## Playground
-### Features
-    * mock server
-    * global watcher
-    * global websocket server
-    * preCompilers
-    * data from nei 
-    * api proxy
-    * living reload
 
-### Styles
-    * es6`s code style
-    * dependency inject
-    * pipeline plugin works
-    * yield &&  generator && promise
-    
-
-## Show
+## Preview
 ![http://note.youdao.com/yws/public/resource/72c37299682b2a61c50c3a0513b22810/xmlnote/CB0DE48CD3184F9E9B258FD20904A8F1/7199](http://note.youdao.com/yws/public/resource/72c37299682b2a61c50c3a0513b22810/xmlnote/CB0DE48CD3184F9E9B258FD20904A8F1/7199)
 
-## Quick start
-### Installation
+## Installation
 ```bash
 $ npm i -g foxman
 ```
-
-### How to use
+## Quick start
 
 > example foxman -c config.js -u -p test
 
@@ -46,9 +28,7 @@ $ npm i -g foxman
 * --proxy: test        # 在foxman.config.js代理一栏中配置（缺省：false）
 ```
 
-## Config 
-### Example
-
+## Setup 
 ```js
 'use strict';
 const path = require('path');
@@ -156,37 +136,6 @@ module.exports = {
     }
 };
 ```
-
-### Details
-#### PreCompiler
-
-use vinyl-fs to output files, so we can use some plugin from gulp.
-
-* **test** -- the glob pattern of files
-* **handler** -- define **function**，**return** an **Array**, the pipeline of gulp plugins
-
-#### Watcher
-the **root** of watcher, default is **__dirname**
-
-#### Server
-* routers is an **Array** 
-    * method -- GET/POST/PUT...
-    * url -- the dispatcher url
-    * sync -- true/false ① sync page ② async data
-    * filePath -- template path or data path 
-* port -- the server port
-* viewRoot -- the rootdir of template
-* syncData -- the rootdir of sync data
-* asyncData -- the rootdir of async data
-* static Array<path> resource dir
-
-*Tips*：append **?mode=1** to url, foxman will show the sync pages of your local dir
-
-#### Living reload
-* js or css in server.static
-* files in server.viewRoot 
-* files in server.syncData
-if the update files is end of '.css', only reload the style.
 
 [npm-url]: https://www.npmjs.com/package/foxman
 [npm-image]: https://img.shields.io/npm/v/foxman.svg
