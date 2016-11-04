@@ -95,6 +95,7 @@ module.exports = {
          * 静态资源目录
          */
         static: [
+            path.join(__dirname, 'src')
         ]
     }
 };
