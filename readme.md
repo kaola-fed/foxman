@@ -53,14 +53,15 @@ module.exports = {
     **/
     /**
     * task集合(基于gulp文件处理，故所有gulp插件都可用)
-    * test String or Array<String> 需要进行转换的文件规则
+    * test String or Array<String> 需要进行转换的文件规则 glob standard
+    * igonre String or Array<String> glob standard
     * handler  Function 类型，需返回一个数组
     */
     preCompilers: [
         {
             test: [r(alias.r, 'src/mcss/**/*.mcss')],
+            ignore: [],
             handler: (dest) => {
-                
                 return [
                     mcss({
                         "include": [],

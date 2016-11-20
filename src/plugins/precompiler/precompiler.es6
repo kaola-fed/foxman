@@ -16,6 +16,9 @@ class PreCompiler extends EventEmitter {
          * Vinyl-fs Ignore File Standard
          */
         if (options.ignore) {
+            if (!Array.isArray(options.ignore)) {
+                options.ignore = [options];
+            }
             this.ignore = options.ignore.map((item) => {
                 return '!' + item;
             });
