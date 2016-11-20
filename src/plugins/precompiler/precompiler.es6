@@ -1,7 +1,7 @@
 /**
  * 预处理器 api，用于
  */
-import {resolve, relative} from 'path';
+import { resolve, relative } from 'path';
 import vinylFs from 'vinyl-fs';
 import EventEmitter from 'events';
 import {
@@ -12,6 +12,14 @@ class PreCompiler extends EventEmitter {
     constructor(options) {
         super();
         Object.assign(this, options);
+        /**
+         * Vinyl-fs Ignore File Standard
+         */
+        if (options.ignore) {
+            this.ignore = options.ignore.map((item) => {
+                return '!' + item;
+            });
+        }
     }
     pipe(...args) {
         this.source = this.source.pipe.apply(this.source, args);
@@ -28,15 +36,14 @@ class PreCompiler extends EventEmitter {
         });
         return this;
     }
-    addExludeReg(sourcePattern){
-        if(!this.exclude){
+    addExludeReg(sourcePattern) {
+        if (!this.ignore) {
             return sourcePattern;
         }
-
-        if(Array.isArray(sourcePattern)){
-            return sourcePattern.concat(this.exclude);
+        if (Array.isArray(sourcePattern)) {
+            return sourcePattern.concat(this.ignore);
         }
-        return [sourcePattern].concat(this.exclude);
+        return [sourcePattern].concat(this.ignore);
     }
 }
 class SinglePreCompiler extends PreCompiler {
@@ -57,7 +64,7 @@ class SinglePreCompiler extends PreCompiler {
             /**
              * 输出文件
              */
-            let target = sourceRoot.endsWith('/')? resolve(output, '..'): output;
+            let target = sourceRoot.endsWith('/') ? resolve(output, '..') : output;
             util.log(`${this.sourcePattern} -> ${target}`);
             return vinylFs.dest(target);
         }
@@ -76,7 +83,7 @@ class SinglePreCompiler extends PreCompiler {
     }
 }
 
-export {SinglePreCompiler};
+export { SinglePreCompiler };
 
 export default PreCompiler;
 

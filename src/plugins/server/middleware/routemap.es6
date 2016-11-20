@@ -37,7 +37,7 @@ const getDispatcherMap = (config) => {
     dispatcherMap.set('.json', {
         type: DispatherTypes.ASYNC
     });
-    
+
     return dispatcherMap;
 };
 

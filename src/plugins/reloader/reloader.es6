@@ -1,6 +1,6 @@
 import EventEmitter from 'events';
 import path from 'path';
-import {util, fileUtil} from "../../helper";
+import { util, fileUtil } from "../../helper";
 
 class Reloader extends EventEmitter {
     constructor(options) {
@@ -18,9 +18,9 @@ class Reloader extends EventEmitter {
 
         server.static.forEach(item => {
             reloadResources = [...reloadResources,
-                path.resolve(item, '**', '*.css'),
-                path.resolve(item, '**', '*.js'),
-                path.resolve(item, '**', '*.html')
+            path.resolve(item, '**', '*.css'),
+            path.resolve(item, '**', '*.js'),
+            path.resolve(item, '**', '*.html')
             ]
         })
         this.watcher.onUpdate(reloadResources, (arg0) => {

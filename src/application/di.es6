@@ -1,12 +1,12 @@
-class DI{
-    constructor () {
+class DI {
+    constructor() {
         this.dependency = {};
     }
-     /**
-     * 服务注册
-     * @param key
-     * @param value
-     */
+    /**
+    * 服务注册
+    * @param key
+    * @param value
+    */
     register(key, value) {
         this.dependency[key] = value;
     }

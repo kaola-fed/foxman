@@ -2,13 +2,13 @@ import {
     util
 } from '../../helper';
 import PreCompiler from './precompiler';
-import {SinglePreCompiler} from './precompiler';
+import { SinglePreCompiler } from './precompiler';
 
 
 /**
  * 监听插件
  test: Array<String> or String
- exclude: Array<String> or String
+ ignore: Array<String> or String
  handler: (dest) => [
  Gulp插件,
  dest(String)
@@ -32,7 +32,7 @@ class PreCompilerPlugin {
     prepare(preCompiler) {
         const handler = preCompiler.handler;
         let source = preCompiler.test;
-        let exclude = preCompiler.exclude;
+        let ignore = preCompiler.ignore;
         let recentBuild = [];
 
         if (!Array.isArray(source)) {
@@ -40,7 +40,7 @@ class PreCompilerPlugin {
         }
         source.forEach((sourcePattern) => {
             let watchMap = {};
-            this.createCompiler(sourcePattern, exclude, watchMap, handler);
+            this.createCompiler(sourcePattern, ignore, watchMap, handler);
             /**
              * 新创建的文件的监听
              */
@@ -50,13 +50,16 @@ class PreCompilerPlugin {
                     return false;
                 }
                 recentBuild.push(file);
-                this.createCompiler(file, exclude, watchMap, handler);
+                this.createCompiler(file, ignore, watchMap, handler);
             });
         });
     }
-    createCompiler(sourcePattern, exclude, watchMap, handler){
+    /**
+     * ignore 为 glob 方式的 ignore
+     */
+    createCompiler(sourcePattern, ignore, watchMap, handler) {
         new PreCompiler({
-            sourcePattern, exclude, handler
+            sourcePattern, ignore, handler
         }).run().on('updateWatch', (dependencies) => {
             const diff = this.getNewDeps(watchMap, dependencies);
             /** 没有更新 */
@@ -64,14 +67,14 @@ class PreCompilerPlugin {
                 return false;
             }
             this.watcher.onUpdate(diff, (file, ev) => {
-                this.createSingleCompiler(sourcePattern, exclude, watchMap, handler, dependencies[0]);
+                this.createSingleCompiler(sourcePattern, ignore, watchMap, handler, dependencies[0]);
             });
         });
     }
-    createSingleCompiler(sourcePattern, exclude, watchMap, handler, input) {
+    createSingleCompiler(sourcePattern, ignore, watchMap, handler, input) {
         let singleCompiler = new SinglePreCompiler({
             sourcePattern: input,
-            exclude,
+            ignore,
             handler
         }).runInstance(sourcePattern);
         return singleCompiler;

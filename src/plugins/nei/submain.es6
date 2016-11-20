@@ -15,7 +15,7 @@ Object.assign(subMain, EventEmitter.prototype);
  * @param action
  * @param args
  */
-subMain.build = function (arg, action, args) {
+subMain.build = function(arg, action, args) {
     this.args = args;
     this.config = {
         action: action
@@ -48,7 +48,7 @@ subMain.build = function (arg, action, args) {
  * @param  {string}  action - 操作命令
  * @param  {object}  args - 命令行参数对象
  */
-subMain.update = function (arg, action, args) {
+subMain.update = function(arg, action, args) {
     let dir = args.basedir;
     let projects = this.findProjects(args);
     let buildProject = (neiProjectDir, exitIfNotExist) => {
@@ -80,7 +80,7 @@ subMain.update = function (arg, action, args) {
     }
 };
 
-subMain.findProjects = function (args) {
+subMain.findProjects = function(args) {
     let dir = args.basedir;
     if (!_fs.exist(dir)) {
         // 目录不存在, 退出程序
