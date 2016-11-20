@@ -5,6 +5,7 @@ const autoprefix = require('gulp-autoprefixer');
 const routers = require('./route');
 
 
+
 module.exports = {
     /**
      * 如有需要，填写nei 的kei 然后执行 foxman -u 初始化工程目录。
@@ -20,7 +21,8 @@ module.exports = {
 
     preCompilers: [
         {
-            test: ['./src/mcss/**/*.mcss'],
+            test: [path.join(__dirname, 'src','mcss','**','*.mcss')],
+            exclude: ['!' + path.join(__dirname,'**','_*.mcss')],
             handler: (dest) => {
                 return [
                     mcss({
@@ -32,7 +34,7 @@ module.exports = {
                         browsers: ['Android >= 2.3'],
                         cascade: false
                     }),
-                    dest('./src/css')
+                    dest(path.join(__dirname, 'src','css'))
                 ]
             }
         }

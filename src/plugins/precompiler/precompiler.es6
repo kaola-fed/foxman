@@ -22,16 +22,29 @@ class PreCompiler extends EventEmitter {
     }
     run() {
         let workFlow = this.handler(vinylFs.dest.bind(this));
-        this.source = vinylFs.src(this.sourcePattern);
+        this.source = vinylFs.src(this.addExludeReg(this.sourcePattern));
         workFlow.forEach((item) => {
             this.pipe(item);
         });
         return this;
     }
+    addExludeReg(sourcePattern){
+        if(!this.exclude){
+            return sourcePattern;
+        }
+
+        if(Array.isArray(sourcePattern)){
+            return sourcePattern.concat(this.exclude);
+        }
+        return [sourcePattern].concat(this.exclude);
+    }
 }
 class SinglePreCompiler extends PreCompiler {
     destInstence(sourcePattern) {
         return (dest) => {
+            /**
+             * @TODO Replace With Glob Standard
+             */
             /**
              * 获取输入文件的相对根目录
              * @type {XML|string|void|*}
@@ -44,14 +57,14 @@ class SinglePreCompiler extends PreCompiler {
             /**
              * 输出文件
              */
-            let target = resolve(output, '..');
+            let target = sourceRoot.endsWith('/')? resolve(output, '..'): output;
             util.log(`${this.sourcePattern} -> ${target}`);
-            return vinylFs.dest.call(vinylFs, target);
+            return vinylFs.dest(target);
         }
     }
     runInstance(sourcePattern) {
         try {
-            this.source = vinylFs.src(this.sourcePattern);
+            this.source = vinylFs.src(this.addExludeReg(this.sourcePattern));
             this.handler(this.destInstence.call(this, sourcePattern)).forEach((item) => {
                 this.pipe(item);
             });

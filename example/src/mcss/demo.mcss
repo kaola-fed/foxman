@@ -1,0 +1,5 @@
+@import './_demoinclude.mcss';
+
+.a {
+    color: #123456;
+}
