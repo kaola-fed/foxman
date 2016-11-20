@@ -13,21 +13,33 @@ function apiHandler(dispatcher) {
  * @return {[type]}         [description]
  */
 export function* dirDispatcher(dispatcher, config, next) {
+    const sortFiles = (list) => {
+        return list.sort((a, b)=>{
+            return a.name.charAt(0).localeCompare(b.name.charAt(0));
+        })
+    }
     const viewPath = dispatcher.pagePath;
     const files = yield fileUtil.getDirInfo(viewPath);
     const promises = files.map((file) => fileUtil.getFileStat(path.resolve(viewPath, file)));
-    const result = yield Promise.all(promises);
-
-    const fileList = result.map((item, idx) => {
+    let result = (yield Promise.all(promises)).map((item, idx) => {
         return Object.assign(item, {
             name: files[idx],
             isFile: item.isFile(),
             requestPath: [this.request.path, files[idx], item.isFile() ? '' : '/'].join('')
         });
     });
+
+    const fileList = sortFiles(result.filter((item)=>{
+        return item.isFile;
+    }));
+    const dirList = sortFiles(result.filter((item)=>{
+        return !item.isFile;
+    }));
+    
+    console.log(dirList.concat(fileList));
     yield this.render('cataLog', {
         title: '查看列表',
-        fileList
+        showList: dirList.concat(fileList)
     });
     yield next;
 }
