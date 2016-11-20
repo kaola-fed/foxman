@@ -36,7 +36,6 @@ export function* dirDispatcher(dispatcher, config, next) {
         return !item.isFile;
     }));
     
-    console.log(dirList.concat(fileList));
     yield this.render('cataLog', {
         title: '查看列表',
         showList: dirList.concat(fileList)
