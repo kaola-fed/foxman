@@ -27,7 +27,6 @@ module.exports = {
                 return [
                     mcss({
                         "include": [],
-                        "exclude": "(\\\\|\\/)_",
                         "format": 1
                     }),
                     autoprefix({
