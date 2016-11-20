@@ -26,14 +26,13 @@ class PreCompilerPlugin {
     }
 
     mapCompiler(preCompilers) {
-        preCompilers.forEach((preCompiler) => {
-            this.prepare(preCompiler);
-        });
+        preCompilers.forEach(this.prepare.bind(this));
     }
 
     prepare(preCompiler) {
         const handler = preCompiler.handler;
         let source = preCompiler.test;
+        let exclude = preCompiler.exclude;
         let recentBuild = [];
 
         if (!Array.isArray(source)) {
@@ -41,18 +40,7 @@ class PreCompilerPlugin {
         }
         source.forEach((sourcePattern) => {
             let watchMap = {};
-            new PreCompiler({
-                sourcePattern, handler
-            }).run().on('updateWatch', (dependencies) => {
-                const diff = this.getNewDeps(watchMap, dependencies);
-                /** 没有更新 */
-                if (!diff.length) {
-                    return false;
-                }
-                this.watcher.onUpdate(diff, (file, ev) => {
-                    this.createSingleCompiler(handler, watchMap, sourcePattern, dependencies[0]);
-                });
-            });
+            this.createCompiler(sourcePattern, exclude, watchMap, handler);
             /**
              * 新创建的文件的监听
              */
@@ -62,14 +50,28 @@ class PreCompilerPlugin {
                     return false;
                 }
                 recentBuild.push(file);
-                this.createSingleCompiler(handler, watchMap, sourcePattern, file);
+                this.createCompiler(file, exclude, watchMap, handler);
             });
         });
     }
-
-    createSingleCompiler(handler, watchMap, sourcePattern, input) {
+    createCompiler(sourcePattern, exclude, watchMap, handler){
+        new PreCompiler({
+            sourcePattern, exclude, handler
+        }).run().on('updateWatch', (dependencies) => {
+            const diff = this.getNewDeps(watchMap, dependencies);
+            /** 没有更新 */
+            if (!diff.length) {
+                return false;
+            }
+            this.watcher.onUpdate(diff, (file, ev) => {
+                this.createSingleCompiler(sourcePattern, exclude, watchMap, handler, dependencies[0]);
+            });
+        });
+    }
+    createSingleCompiler(sourcePattern, exclude, watchMap, handler, input) {
         let singleCompiler = new SinglePreCompiler({
             sourcePattern: input,
+            exclude,
             handler
         }).runInstance(sourcePattern);
         return singleCompiler;

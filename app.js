@@ -1,4 +1,5 @@
 'use strict';
+
 const welcome = [
 ` _____   _____  __    __      ___  ___       ___   __   _`,  
 `|  ___| /  _  \\ \\ \\  / /     /   |/   |     /   | |  \\ | | `,
@@ -8,5 +9,7 @@ const welcome = [
 `|_|     \\_____/ /_/  \\_\\ /_/        |_| /_/   |_| |_|  \\_|` ,
 ].join('\n');
 console.log(welcome);
+
+
 require('babel-polyfill');
 module.exports = (process.env.NODE_ENV === 'development')? require('./src/index.js'): require('./dist/index.js');

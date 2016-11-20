@@ -10,3 +10,4 @@ foxman.config.all.js
 **dist**
 src/**/*.js.map
 src/**/*.js
+example/**/*.css
