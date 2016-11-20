@@ -1,4 +1,4 @@
-import {util, fileUtil} from "../../helper";
+import { util, fileUtil } from "../../helper";
 /**
  * 全局代理插件
  */

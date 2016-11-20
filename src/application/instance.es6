@@ -11,10 +11,10 @@ export default {
     pending(fn) {
         let pending = new Promise((resolve) => {
             let result = fn(resolve);
-            if( result && result.value && result.value.then ) {
+            if (result && result.value && result.value.then) {
                 return result;
-            } 
-            return new Promise((resolve)=>{
+            }
+            return new Promise((resolve) => {
                 resolve(result);
             });
         });

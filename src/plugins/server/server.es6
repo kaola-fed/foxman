@@ -81,21 +81,21 @@ class Server {
         });
         this.app.use(serve('foxman_client', path.resolve(__dirname, '../../../')));
     }
-    
-    appendHtml(condition){
+
+    appendHtml(condition) {
         this.ifAppendHtmls.push(condition);
     }
 
     htmlAppender() {
         const ifAppendHtmls = this.ifAppendHtmls;
-        let html; 
+        let html;
 
         this.app.use(function* (next) {
             if (/text\/html/ig.test(this.type)) {
                 html = ifAppendHtmls.map((item) => {
-                    return item.condition(this.request) ? item.html: '';
+                    return item.condition(this.request) ? item.html : '';
                 }).join('');
-                this.body = this.body + html; 
+                this.body = this.body + html;
             }
             yield next;
         });

@@ -30,7 +30,7 @@ class AppContext {
         app.use(config.plugins);
 
         app.use(new Reloader({}));
-        
+
         app.use(new Debug({
             debugTool: config.server.debugTool
         }));

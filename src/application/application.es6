@@ -12,7 +12,7 @@ export default class Application extends EventEmitter {
     constructor() {
         super();
         this.uid = util.createSystemId();
-        
+
         this.middleware = [];
     }
 
@@ -52,7 +52,7 @@ export default class Application extends EventEmitter {
     }
 
     run() {
-        const runSuccess = this.runSuccess; 
+        const runSuccess = this.runSuccess;
         const pipeline = this.execute().call(this);
         let final = {};
         const loop = () => {

@@ -21,20 +21,19 @@ module.exports = {
 
     preCompilers: [
         {
-            test: [path.join(__dirname, 'src','mcss','**','*.mcss')],
-            exclude: ['!' + path.join(__dirname,'**','_*.mcss')],
+            test: [path.join(__dirname, 'src', 'mcss', '**', '*.mcss')],
+            ignore: [path.join(__dirname, '**', '_*.mcss')],
             handler: (dest) => {
                 return [
                     mcss({
                         "include": [],
-                        "exclude": "(\\\\|\\/)_",
                         "format": 1
                     }),
                     autoprefix({
                         browsers: ['Android >= 2.3'],
                         cascade: false
                     }),
-                    dest(path.join(__dirname, 'src','css'))
+                    dest(path.join(__dirname, 'src', 'css'))
                 ]
             }
         }
@@ -58,7 +57,7 @@ module.exports = {
              * @param url -- request.url （http://m.kaola.com/(index.html?hello=world)）
              * @returns 完整的请求路径
              */
-            test(url){
+            test(url) {
                 let devMark = 'isDev=1000';
                 let result = (-1 === url.indexOf('?') ? `?${devMark}` : `&${devMark}`);
                 return 'http://m.kaola.com/' + url.replace(/^\//, '') + result;
@@ -88,11 +87,11 @@ module.exports = {
         /**
          * router type 为 sync 的filePath的data相对目录
          */
-        syncData: path.join(__dirname, 'mock' ,'sync'),
+        syncData: path.join(__dirname, 'mock', 'sync'),
         /**
          * router type 为 async 的filepath的data相对目录
          */
-        asyncData: path.join(__dirname, 'mock' ,'synasyncc'),
+        asyncData: path.join(__dirname, 'mock', 'synasyncc'),
         /**
          * 静态资源目录
          */

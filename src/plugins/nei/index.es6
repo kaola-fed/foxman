@@ -41,7 +41,7 @@ class NeiPlugin {
             this.setNeiMockDir(require(serverConfigFiles[0]));
             this.routes = require(this.neiRoute);
         } catch (e) {
-            util.error( 'nei资源不完整，请执行 $ foxman -u' );
+            util.error('nei资源不完整，请执行 $ foxman -u');
         }
         this.updateRoutes(this.routes);
     }

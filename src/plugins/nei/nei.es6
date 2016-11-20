@@ -2,7 +2,7 @@
 import util from 'nei/lib/util/util';
 import subMain from './submain';
 import Application from 'nei/lib/util/args';
-import {fileUtil} from '../../helper';
+import { fileUtil } from '../../helper';
 util.checkNodeVersion();
 
 const options = {
