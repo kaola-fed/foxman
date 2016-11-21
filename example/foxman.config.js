@@ -60,7 +60,8 @@ module.exports = {
             test(url) {
                 let devMark = 'isDev=1000';
                 let result = (-1 === url.indexOf('?') ? `?${devMark}` : `&${devMark}`);
-                return 'http://m.kaola.com/' + url.replace(/^\//, '') + result;
+                return 'http://m.kaola.com/wxConfig.html';
+                // return 'http://m.kaola.com/' + url.replace(/^\//, '') + result;
             }
         }
     },

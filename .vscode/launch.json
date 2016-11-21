@@ -23,6 +23,48 @@
             "outDir": null
         },
         {
+            "name": "启动2",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/test/test.proxy.js",
+            "stopOnEntry": false,
+            "args": [
+            ],
+            "cwd": "${workspaceRoot}/test/",
+            "preLaunchTask": null,
+            "runtimeExecutable": null,
+            "runtimeArgs": [
+                "--nolazy"
+            ],
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "console": "internalConsole",
+            "sourceMaps": true,
+            "outDir": null
+        },
+        {
+            "name": "启动3",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/test/test.proxy2.js",
+            "stopOnEntry": false,
+            "args": [
+            ],
+            "cwd": "${workspaceRoot}/test/",
+            "preLaunchTask": null,
+            "runtimeExecutable": null,
+            "runtimeArgs": [
+                "--nolazy"
+            ],
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "console": "internalConsole",
+            "sourceMaps": true,
+            "outDir": null
+        },
+        {
             "name": "附加",
             "type": "node",
             "request": "attach",
