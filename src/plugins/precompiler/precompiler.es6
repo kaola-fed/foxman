@@ -1,7 +1,7 @@
 /**
  * 预处理器 api，用于
  */
-import { resolve, relative } from 'path';
+import { resolve, relative, sep } from 'path';
 import vinylFs from 'vinyl-fs';
 import EventEmitter from 'events';
 import {
@@ -67,7 +67,7 @@ class SinglePreCompiler extends PreCompiler {
             /**
              * 输出文件
              */
-            let target = sourceRoot.endsWith('/') ? resolve(output, '..') : output;
+            let target = sourceRoot.endsWith(sep) ? resolve(output, '..') : output;
             util.log(`${this.sourcePattern} -> ${target}`);
             return vinylFs.dest(target);
         }
