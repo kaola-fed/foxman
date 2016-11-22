@@ -4,9 +4,15 @@ import { util, fileUtil, DispatherTypes } from '../../../helper';
 function apiHandler(dispatcher) {
     if(dispatcher.handler) {
         return dispatcher.handler(this).then((data) => {
+            let json;
+            try {
+                json = JSON.parse(data);
+            } catch (error) {
+                json = {};
+            }
             return new Promise((resolve, reject)=>{
                 resolve({
-                    json: JSON.parse(data)
+                    json: json
                 });
             });
         });
@@ -74,12 +80,10 @@ export function* syncDispatcher(dispatcher, config, next) {
         return yield next;
     }
     const output = yield config.tplRender.parse(path.relative(config.viewRoot, filePath), res.json);
-    console.log(output);
     if (/DONE/ig.test(output.out)) {
         this.type = 'text/html; charset=utf-8';
         this.body = output.data || "这是一个test";
-        return 
-        // return yield next;
+        return yield next;
     }
     yield this.render('e', {
         title: '出错了', e: {

@@ -3,6 +3,7 @@ import http from 'http';
 import httpProxy from 'http-proxy';
 import {ServerResponse} from 'http';
 import zlib from 'zlib';
+import url from 'url';
 
 /**
  * 全局代理插件
@@ -16,21 +17,24 @@ class ProxyPlugin {
     }
 
     init(serverPlugin) {
-        this.proxy = httpProxy.createProxyServer({target: 'http://m.kaola.com/'});
-        this.proxy.on('proxyReq', function(proxyReq, req, res, options) {
-            proxyReq.setHeader('X-Special-Proxy-Header', 'foxman');
-            proxyReq.setHeader('Host', 'm.kaola.com');
-        });
-
-        this.proxy.on('end', function(req, res, proxyRes){
-            res.emit('proxyEnd', req, res, proxyRes);
-        });
         /**
          * 命令行选项
          */
         if (!this.proxyServerConfig || !this.proxyConfig) {
             return false;
         }
+
+        this.proxy = httpProxy.createProxyServer({
+            target: 'http://m.kaola.com'
+        });
+        this.proxy.on('proxyReq', (proxyReq, req, res, options) => {
+            proxyReq.setHeader('X-Special-Proxy-Header', 'foxman');
+            proxyReq.setHeader('Host', this.proxyConfig.host);
+        });
+        this.proxy.on('end', (req, res, proxyRes) => {
+            res.emit('proxyEnd', req, res, proxyRes);
+        });
+
         this.server = serverPlugin.server;
         const proxyConfig = this.proxyConfig;
 
@@ -55,9 +59,10 @@ class ProxyPlugin {
         util.log("代理已生效");
 
         function handler() {
-            const url = service(this.request.url.replace(/^(\/)/, ''));
+            const target = url.parse(service(this.request.url.replace(/^(\/)/, '')));
             const req = this.req;
-            req.url = url;
+            req.url = target.path;
+
             const res = new ServerResponse(req);
             const data = [];
             res.write = function (chunk){
@@ -65,7 +70,9 @@ class ProxyPlugin {
                 return true;
             }
 
-            proxy.web(this.req, res, {});
+            proxy.web(this.req, res, {
+                target: target.protocol +'//'+ (target.host || this.proxyConfig.host)
+            });
 
             return new Promise((resolve,reject)=>{
                 res.once('proxyEnd', (req, res, proxyRes) => {

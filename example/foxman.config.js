@@ -60,7 +60,10 @@ module.exports = {
             test(url) {
                 let devMark = 'isDev=1000';
                 let result = (-1 === url.indexOf('?') ? `?${devMark}` : `&${devMark}`);
-                return 'http://m.kaola.com/wxConfig.html';
+                /**
+                 * hot_hotfix3
+                 */
+                return 'http://106.2.44.36/' + url.replace(/^\//, '') + result;
                 // return 'http://m.kaola.com/' + url.replace(/^\//, '') + result;
             }
         }
