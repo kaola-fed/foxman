@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "启动",
+            "name": "继承",
             "type": "node",
             "request": "launch",
             "program": "${workspaceRoot}/example/foxman-dev.js",
@@ -23,7 +23,7 @@
             "outDir": null
         },
         {
-            "name": "启动2",
+            "name": "proxy",
             "type": "node",
             "request": "launch",
             "program": "${workspaceRoot}/test/test.proxy.js",
@@ -44,10 +44,30 @@
             "outDir": null
         },
         {
-            "name": "启动3",
+            "name": "proxy2",
             "type": "node",
             "request": "launch",
             "program": "${workspaceRoot}/test/test.proxy2.js",
+            "stopOnEntry": false,
+            "args": [
+            ],
+            "cwd": "${workspaceRoot}/test/",
+            "preLaunchTask": null,
+            "runtimeExecutable": null,
+            "runtimeArgs": [
+                "--nolazy"
+            ],
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "console": "internalConsole",
+            "sourceMaps": true,
+            "outDir": null
+        },{
+            "name": "render",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/test/test.render.js",
             "stopOnEntry": false,
             "args": [
             ],

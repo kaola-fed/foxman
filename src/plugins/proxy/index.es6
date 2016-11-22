@@ -28,7 +28,7 @@ class ProxyPlugin {
         /**
          * 命令行选项
          */
-        if (!this.proxyConfig) {
+        if (!this.proxyServerConfig || !this.proxyConfig) {
             return false;
         }
         this.server = serverPlugin.server;

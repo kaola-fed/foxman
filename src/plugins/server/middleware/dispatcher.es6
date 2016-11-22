@@ -73,8 +73,7 @@ export function* syncDispatcher(dispatcher, config, next) {
         });
         return yield next;
     }
-    const output = yield config.tplRender.parse(path.relative(config.viewRoot, filePath), {});
-
+    const output = yield config.tplRender.parse(path.relative(config.viewRoot, filePath), res.json);
     console.log(output);
     if (/DONE/ig.test(output.out)) {
         this.type = 'text/html; charset=utf-8';

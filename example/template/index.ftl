@@ -4,7 +4,7 @@
         <h1>Index</h1>
         <section>
             <ul>
-                saassa
+                ${code}
             </ul>
         </section>
     </body>
