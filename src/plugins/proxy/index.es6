@@ -24,9 +24,7 @@ class ProxyPlugin {
             return false;
         }
 
-        this.proxy = httpProxy.createProxyServer({
-            target: 'http://m.kaola.com'
-        });
+        this.proxy = httpProxy.createProxyServer({});
         this.proxy.on('proxyReq', (proxyReq, req, res, options) => {
             proxyReq.setHeader('X-Special-Proxy-Header', 'foxman');
             proxyReq.setHeader('Host', this.proxyConfig.host);
