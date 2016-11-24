@@ -4,6 +4,8 @@
         "**/._*": true,
         "node_modules/": true,
         "src/**/*.js.map": true,
-        "src/**/*.js": true
+        "src/**/*.js": true,
+        "example/node_modules/": true,
+        "**/npm-debug*": true
     }
 }

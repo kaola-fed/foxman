@@ -1,4 +1,10 @@
 import { util, fileUtil } from "../../helper";
+import http from 'http';
+import httpProxy from 'http-proxy';
+import {ServerResponse} from 'http';
+import zlib from 'zlib';
+import url from 'url';
+
 /**
  * 全局代理插件
  */
@@ -11,27 +17,37 @@ class ProxyPlugin {
     }
 
     init(serverPlugin) {
-
         /**
          * 命令行选项
          */
-        if (!this.proxyServer) {
+        if (!this.proxyServerConfig || !this.proxyConfig) {
             return false;
         }
+
+        this.proxy = httpProxy.createProxyServer({});
+        this.proxy.on('proxyReq', (proxyReq, req, res, options) => {
+            proxyReq.setHeader('X-Special-Proxy-Header', 'foxman');
+            proxyReq.setHeader('Host', this.proxyConfig.host);
+        });
+        this.proxy.on('end', (req, res, proxyRes) => {
+            res.emit('proxyEnd', req, res, proxyRes);
+        });
+
         this.server = serverPlugin.server;
-        const proxy = this.proxy;
+        const proxyConfig = this.proxyConfig;
 
-        proxy.service = proxy.service || {};
+        proxyConfig.service = proxyConfig.service || {};
 
-        if (Object.keys(proxy.service).indexOf(this.proxyServer) == -1) {
+        if (Object.keys(proxyConfig.service).indexOf(this.proxyServerConfig) == -1) {
             util.error('请核对配置文件，并设置正确的代理服务别名');
         }
 
-        this.updateRoutes(proxy.service[this.proxyServer]);
+        this.updateRoutes(proxyConfig.service[this.proxyServerConfig]);
     }
 
     updateRoutes(service) {
         const routes = this.server.routers;
+        const proxy = this.proxy;
         const host = this.proxy.host;
         routes.forEach((router) => {
             router.handler = (ctx) => {
@@ -41,29 +57,45 @@ class ProxyPlugin {
         util.log("代理已生效");
 
         function handler() {
-            const requestBody = this.request.body;
-            const url = service(this.request.url.replace(/^(\/)/, ''));
-            let headers = Object.assign({}, this.request.headers);
-            delete headers['accept-encoding'];
-            if (host) {
-                headers.host = host;
+            const target = url.parse(service(this.request.url.replace(/^(\/)/, '')));
+            const req = this.req;
+            req.url = target.path;
+
+            const res = new ServerResponse(req);
+            const data = [];
+            res.write = function (chunk){
+                data.push(chunk)
+                return true;
             }
 
-            return fileUtil.jsonResolver({
-                url,
-                headers,
-                requestBody
-            }).then((res) => {
-                if (res) {
-                    this.status = res.statusCode;
-                    for (let name in res.headers) {
-                        if (res.headers.hasOwnProperty(name)) {
-                            this.set(name, res.headers[name]);
+            proxy.web(this.req, res, {
+                target: target.protocol +'//'+ (target.host || this.proxyConfig.host)
+            });
+
+            return new Promise((resolve,reject)=>{
+                res.once('proxyEnd', (req, res, proxyRes) => {
+                    for (var name in res._headers) {
+                        if(!~[
+                                'transfer-encoding',
+                                'content-encoding'
+                                ].indexOf(name)){
+                            this.set(name, res._headers[name]);
                         }
                     }
-                }
-                return new Promise((resolve) => {
-                    resolve(res);
+
+                    const buffer = Buffer.concat(data);
+                    const encoding =  res._headers['content-encoding'];
+                    if (encoding == 'gzip') {
+                        zlib.gunzip(buffer, function (err, decoded) {
+                            resolve(decoded.toString());
+                        });
+                    } else if (encoding == 'deflate') {
+                        zlib.inflate(buffer, function (err, decoded) {
+                            resolve(decoded.toString());
+                        });
+                    } else {
+                        resolve(buffer.toString());
+                    }
                 });
             });
         }

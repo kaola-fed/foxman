@@ -1,1 +1,11 @@
-腻害！
+<html>
+    <head></head>
+    <body>
+        <h1>Index</h1>
+        <section>
+            <ul>
+                ${code}
+            </ul>
+        </section>
+    </body>
+</html>

@@ -111,6 +111,8 @@ export default (config) => {
 
                 this.dispatcher.filePath = filePath;
                 this.dispatcher.isRouter = true;
+                this.dispatcher.handler = router.handler;
+                
                 return yield next;
             }
         }

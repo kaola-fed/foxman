@@ -36,8 +36,8 @@ class AppContext {
         }));
 
         app.use(new Proxy({
-            proxy: config.proxy,
-            proxyServer: config.argv.proxy
+            proxyConfig: config.proxy,
+            proxyServerConfig: config.argv.proxy
         }));
 
         app.run();

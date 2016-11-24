@@ -2,6 +2,21 @@ import path from 'path';
 import { util, fileUtil, DispatherTypes } from '../../../helper';
 
 function apiHandler(dispatcher) {
+    if(dispatcher.handler) {
+        return dispatcher.handler(this).then((data) => {
+            let json;
+            try {
+                json = JSON.parse(data);
+            } catch (error) {
+                json = {};
+            }
+            return new Promise((resolve, reject)=>{
+                resolve({
+                    json: json
+                });
+            });
+        });
+    }
     return fileUtil.jsonResolver({ url: dispatcher.dataPath });
 }
 
@@ -53,6 +68,7 @@ export function* dirDispatcher(dispatcher, config, next) {
 export function* syncDispatcher(dispatcher, config, next) {
     const filePath = dispatcher.pagePath;
     let res = yield apiHandler.call(this, dispatcher);
+
     if (!res || !res.json) {
         this.type = 500;
         yield this.render('e', {
@@ -66,7 +82,7 @@ export function* syncDispatcher(dispatcher, config, next) {
     const output = yield config.tplRender.parse(path.relative(config.viewRoot, filePath), res.json);
     if (/DONE/ig.test(output.out)) {
         this.type = 'text/html; charset=utf-8';
-        this.body = output.data;
+        this.body = output.data || "这是一个test";
         return yield next;
     }
     yield this.render('e', {

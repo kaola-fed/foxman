@@ -27,7 +27,8 @@
   },
   "keywords": [
     "nodejs",
-    "stream-server"
+    "mock",
+    "proxy"
   ],
   "author": "junyu",
   "license": "MIT",
@@ -40,21 +41,22 @@
     "babel-preset-es2015": "^6.13.2"
   },
   "dependencies": {
-    "babel-polyfill": "6.13.0",
-    "anymatch": "1.3.0",
-    "chokidar": "1.6.0",
-    "colors": "1.1.2",
-    "content-type": "1.0.2",
-    "freemarker.js": "1.2.2",
-    "globule": "1.0.0",
-    "koa": "1.2.1",
-    "koa-ejs": "3.0.0",
-    "koa-serve": "0.1.7",
+    "anymatch": "^1.3.0",
+    "babel-polyfill": "^6.13.0",
+    "chokidar": "^1.6.0",
+    "colors": "^1.1.2",
+    "content-type": "^1.0.2",
+    "freemarker.js": "^1.2.2",
+    "globule": "^1.0.0",
+    "http-proxy": "^1.15.2",
+    "koa": "^1.2.1",
+    "koa-ejs": "^3.0.0",
+    "koa-serve": "^0.1.7",
     "nei": "^3.0.3",
-    "path-to-regexp": "1.5.3",
-    "raw-body": "2.1.7",
+    "path-to-regexp": "^1.5.3",
+    "raw-body": "^2.1.7",
     "vinyl-fs": "^0.3.14",
-    "ws": "1.1.1",
-    "yargs": "4.8.1"
+    "ws": "^1.1.1",
+    "yargs": "^4.8.1"
   }
 }
