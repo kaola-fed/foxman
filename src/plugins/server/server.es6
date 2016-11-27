@@ -36,7 +36,6 @@ class Server {
 
     delayInit() {
         const app = this.app;
-        app.use(getRawBody());
         app.use(routeMap(this));
         this.middleware.forEach((g) => {
             app.use(g);
