@@ -135,7 +135,6 @@ export default (config) => {
             [DispatherTypes.SYNC]: syncDispatcher,
             [DispatherTypes.ASYNC]: asyncDispather
         };
-        util.log(`${this.request.method} ${this.request.path}`);
 
         let dispatcher;
         if (dispatcher = dispatcherMap[this.dispatcher.type]) {
