@@ -9,6 +9,7 @@ import routeMap from './middleware/routemap'
 import { util } from '../../helper';
 import getRawBody from './middleware/rawbody';
 import { Server as WebSocketServer } from 'ws';
+import logger from 'koa-logger';
 
 class Server {
     constructor(config) {
@@ -30,6 +31,7 @@ class Server {
             this.divideMethod = false;
         }
 
+        this.setLogger();
         this.setRender();
         this.setStaticHandler();
     }
@@ -47,6 +49,10 @@ class Server {
 
     use(middleware) {
         this.middleware.push(middleware);
+    }
+
+    setLogger(){
+        this.app.use(logger());
     }
 
     setRender() {
@@ -106,7 +112,7 @@ class Server {
         this.delayInit();
         this.serverApp = http.createServer(this.app.callback()).listen(port);
         this.wss = this.buildWebSocket(this.serverApp);
-        util.log(`server is running on ${port}`);
+        util.log(`Running on ${port}`);
     }
 
     buildWebSocket(serverApp) {
