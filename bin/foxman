@@ -4,29 +4,19 @@ var path = require('path');
 var config ;
 var argv = require('yargs')
     .option('config', {
-        alias: 'c' ,
-        demand: true ,
-        default: 'foxman.config.js' ,
-        describe: 'Config file. Options read readme.md' ,
-        boolean: 0
+        alias: 'c', demand: false, default: 'foxman.config.js', describe: '输入配置文件相对路径'
     })
     .option('proxy', {
-        alias: 'p',
-        demand: false,
-        default: false,
-        describe: `define proxy in foxman.config.js and set the name here`
+        alias: 'p', demand: false, default: false, describe: '使用配置中的代理，填写代理名即可'
     })
     .option('update', {
-        alias: 'u',
-        demand: false,
-        default: false,
-        describe: 'is update from nei'
+        alias: 'u', demand: false, default: false, describe: '是否远程nei中拉取接口信息'
     })
     .usage('Usage: foxman [options]')
-    .example('foxman -c ./config.json', 'set config file')
-    .help('h')
-    .alias('h', 'help')
-    .epilog('copyright junyu')
+    .example('foxman -c ./config.json -p local -u')
+    .help('help')
+    .alias('help', 'h')
+    .epilog('copyright@June')
     .argv;
 
 
