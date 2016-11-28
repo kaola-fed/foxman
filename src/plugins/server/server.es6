@@ -7,7 +7,6 @@ import render from 'koa-ejs';
 import dispatcher from './middleware/dispatcher';
 import routeMap from './middleware/routemap'
 import { util } from '../../helper';
-import getRawBody from './middleware/rawbody';
 import { Server as WebSocketServer } from 'ws';
 import logger from 'koa-logger';
 
