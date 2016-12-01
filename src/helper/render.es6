@@ -10,7 +10,7 @@ class RenderUtil {
         this.freemarker = new Freemarker(Object.assign({
             viewRoot: settings.viewRoot,
             options: {
-                sourceEncoding: 'utf-8'
+                // sourceEncoding: 'utf-8'
             }
         }, settings));
     }
