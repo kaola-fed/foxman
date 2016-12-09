@@ -4,7 +4,7 @@
     "isShellCommand": true,
     "tasks": [
         {
-            "args": ["src", "-d", "dist", "-s", "-w", "-x", ".es6"],
+            "args": ["src", "-d", "src", "-s", "-w", "-x", ".es6"],
             "taskName": "watch",
             "suppressTaskName": true,
             "isBuildCommand": true,

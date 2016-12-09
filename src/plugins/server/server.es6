@@ -2,7 +2,8 @@ import http from 'http';
 import Koa from 'koa';
 import path from 'path';
 import serve from 'koa-serve';
-import RenderUtil from '../../helper/render';
+// import RenderUtil from '../../helper/render';
+import RenderUtil from '../../helper/fmpp';
 import render from 'koa-ejs';
 import dispatcher from './middleware/dispatcher';
 import routeMap from './middleware/routemap'
