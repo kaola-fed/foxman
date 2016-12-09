@@ -79,16 +79,20 @@ export function* syncDispatcher(dispatcher, config, next) {
         });
         return yield next;
     }
-    const output = yield config.tplRender.parse(path.relative(config.viewRoot, filePath), res.json);
-    if (/DONE/ig.test(output.out)) {
+    const result = yield config.tplRender.parse(filePath, res.json);
+    /**
+     * error
+     * content
+     */
+    if (!result.error) {
         this.type = 'text/html; charset=utf-8';
-        this.body = output.data || "这是一个test";
+        this.body = result.content || "数据未取到";
         return yield next;
     }
     yield this.render('e', {
         title: '出错了', e: {
             code: 500,
-            msg: output.out || output.data
+            msg: result.error
         }
     });
     return yield next;
