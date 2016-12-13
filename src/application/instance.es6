@@ -8,19 +8,19 @@ export default {
      * @param fn
      * @returns {Number}
      */
-    pending(fn) {
-        let pending = new Promise((resolve) => {
-            let result = fn(resolve);
-            if (result && result.value && result.value.then) {
-                return result;
-            }
-            return new Promise((resolve) => {
-                resolve(result);
-            });
-        });
-        if (this.pendings) {
-            return this.pendings.push(pending);
-        }
-        this.pendings = [pending];
-    }
-}
+	pending(fn) {
+		let pending = new Promise((resolve) => {
+			let result = fn(resolve);
+			if (result && result.value && result.value.then) {
+				return result;
+			}
+			return new Promise((resolve) => {
+				resolve(result);
+			});
+		});
+		if (this.pendings) {
+			return this.pendings.push(pending);
+		}
+		this.pendings = [pending];
+	}
+};

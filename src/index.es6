@@ -6,47 +6,47 @@ import {
 
 let appContext;
 class AppContext {
-    constructor(config) {
-        const app = App();
+	constructor(config) {
+		const app = App();
         /**
          * 設置全局的配置信息 
          */
-        app.setConfig(config);
+		app.setConfig(config);
         /**
          * 內置的服務，全局共享
          */
-        app.use(new Watcher(config.watch));
+		app.use(new Watcher(config.watch));
 
-        app.use(new Server(config.server));
+		app.use(new Server(config.server));
 
-        app.use(new PreCompiler({
-            preCompilers: config.preCompilers
-        }));
+		app.use(new PreCompiler({
+			preCompilers: config.preCompilers
+		}));
 
-        if (!!config.nei) {
-            app.use(new Nei(config.nei));
-        }
+		if (config.nei) {
+			app.use(new Nei(config.nei));
+		}
 
-        app.use(config.plugins);
+		app.use(config.plugins);
 
-        app.use(new Reloader({}));
+		app.use(new Reloader({}));
 
-        app.use(new Debug({
-            debugTool: config.server.debugTool
-        }));
+		app.use(new Debug({
+			debugTool: config.server.debugTool
+		}));
 
-        app.use(new Proxy({
-            proxyConfig: config.proxy,
-            proxyServerConfig: config.argv.proxy
-        }));
+		app.use(new Proxy({
+			proxyConfig: config.proxy,
+			proxyServerConfig: config.argv.proxy
+		}));
 
-        app.run();
-    }
+		app.run();
+	}
 }
 
 module.exports = function (config) {
-    if (!appContext) {
-        appContext = new AppContext(config);
-    }
-    return appContext;
+	if (!appContext) {
+		appContext = new AppContext(config);
+	}
+	return appContext;
 };

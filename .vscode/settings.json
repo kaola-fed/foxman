@@ -7,5 +7,8 @@
         "src/**/*.js": true,
         "example/node_modules/": true,
         "**/npm-debug*": true
-    }
+    },
+    "javascript.validate.enable": false,
+    "javascript.validate.semanticValidation": false,
+    "javascript.validate.syntaxValidation": true
 }
