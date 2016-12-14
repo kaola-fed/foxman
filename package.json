@@ -1,6 +1,6 @@
 {
   "name": "foxman",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "前端集成开发工具",
   "main": "app.js",
   "bin": {
@@ -46,7 +46,7 @@
     "babel-polyfill": "^6.13.0",
     "chokidar": "^1.6.0",
     "colors": "^1.1.2",
-    "freemarker": "^1.0.1",
+    "freemarker": "^1.1.1",
     "globule": "^1.0.0",
     "http-proxy": "^1.15.2",
     "koa": "^1.2.1",
