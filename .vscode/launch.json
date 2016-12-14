@@ -23,7 +23,7 @@
             "outDir": null
         },
         {
-            "name": "继承",
+            "name": "example",
             "type": "node",
             "request": "launch",
             "program": "${workspaceRoot}/example/foxman-dev.js",

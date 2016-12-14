@@ -95,7 +95,7 @@ module.exports = {
         /**
          * router type 为 async 的filepath的data相对目录
          */
-        asyncData: path.join(__dirname, 'mock', 'synasyncc'),
+        asyncData: path.join(__dirname, 'mock', 'async'),
         /**
          * 静态资源目录
          */
