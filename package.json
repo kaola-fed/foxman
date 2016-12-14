@@ -17,7 +17,6 @@
   },
   "scripts": {
     "build": "babel src -d dist -s -x .es6",
-    "builddev": "babel src -w -d dist -s -x .es6",
     "dev": "babel src -w -d src -s -x .es6",
     "test": "mocha ./test/test",
     "pub": "git add -A && git commit -m \"发布版本\" && git push && npm run build && npm publish"
