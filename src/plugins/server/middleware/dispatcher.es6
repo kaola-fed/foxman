@@ -8,7 +8,10 @@ function apiHandler(dispatcher) {
 			try {
 				json = JSON.parse(data);
 			} catch (error) {
-				json = {};
+				json = {
+					error: error.toString(),
+					data
+				};
 			}
 			return new Promise(resolve=>{
 				resolve({
