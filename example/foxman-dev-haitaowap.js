@@ -1,7 +1,8 @@
-const config = require('/Users/apple/Desktop/Projects/haitaowap/foxman.config');
+const config = require('/Users/june/Desktop/Projects/haitaowap/foxman.config');
 
 config.argv = {
-    proxy: 'local',
+    proxy: 'test',
     update: 0
 };
 require('../')(config);
+

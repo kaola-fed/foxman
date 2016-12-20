@@ -1,6 +1,6 @@
 {
   "name": "foxman",
-  "version": "0.4.2",
+  "version": "0.4.4",
   "description": "前端集成开发工具",
   "main": "app.js",
   "bin": {
@@ -53,6 +53,7 @@
     "koa-logger": "^1.3.0",
     "koa-serve": "^0.1.7",
     "nei": "^3.0.3",
+    "object-assign": "^4.1.0",
     "path-to-regexp": "^1.5.3",
     "vinyl-fs": "^0.3.14",
     "ws": "^1.1.1",
