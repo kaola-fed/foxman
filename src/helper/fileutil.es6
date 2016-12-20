@@ -124,16 +124,20 @@ export function jsonResolver(opt) {
 	});
 }
 export function delDir(file) {
-	if (fs.statSync(file).isFile()) {
-		fs.unlinkSync(file);
-	} else {
-		var children = fs.readdirSync(file);
-		if (children && children.length != 0) {
-			children.forEach(function (item) {
-				delDir(path.join(file, item));
-			});
+	try {
+		if (fs.statSync(file).isFile()) {
+			fs.unlinkSync(file);
+		} else {
+			var children = fs.readdirSync(file);
+			if (children && children.length != 0) {
+				children.forEach(function (item) {
+					delDir(path.join(file, item));
+				});
+			}
+			fs.rmdirSync(file);
 		}
-		fs.rmdirSync(file);
+	}catch(err) {
+		return -1;
 	}
 }
 

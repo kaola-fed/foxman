@@ -22,8 +22,11 @@ class Reloader extends EventEmitter {
 				path.resolve(item, '**', '*.html')
 			];
 		});
-		
+
 		watcher.onUpdate(reloadResources, (arg0) => {
+			if (~arg0.indexOf('__temp__')) {
+				return -1;
+			}
 			server.wss.broadcast(path.basename(arg0));
 		});
 	}
