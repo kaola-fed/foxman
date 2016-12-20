@@ -14,18 +14,18 @@ class RenderUtil {
 			const _dirPath = path.resolve(p1, '..');
 			const _tempPath = path.join(_dirPath, '__temp__.ftl');
 			const _tpl = Object.keys(data)
-				.filter( item => {
+				.filter(item => {
 					return !~item.indexOf('.');
-				}).map( item => {
+				}).map(item => {
 					return `<#assign ${item} = ${JSON.stringify(data[item])}/>`;
 				});
 
 			fileUtil.readFile(p1)
-				.then((str) => {
+				.then(str => {
 					_tpl.push(str);
 					return fileUtil.writeFile(_tempPath, _tpl.join('\r\n'));
 				})
-				.catch((error) => {
+				.catch(error => {
 					return new Promise((res, rej)=>{
 						rej(error);
 					});
@@ -38,7 +38,7 @@ class RenderUtil {
 						fileUtil.delDir(_tempPath);
 					});
 				})
-				.catch((error) => {
+				.catch(error => {
 					resolve({
 						error,
 						content: null
