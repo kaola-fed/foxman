@@ -1,11 +1,18 @@
 import EventEmitter from 'events';
 import path from 'path';
+import { debounce } from '../../helper/util';
+
+
 
 class Reloader extends EventEmitter {
 	constructor(options) {
 		super();
 		Object.assign(this, options);
 		this.bindChange();
+
+		this.reload = debounce((url) => {
+			this.server.wss.broadcast(url);
+		}, 300, true);
 	}
 	bindChange() {
 		const [server, watcher] = [this.server, this.watcher];
@@ -27,7 +34,7 @@ class Reloader extends EventEmitter {
 			if (~arg0.indexOf('__temp__')) {
 				return -1;
 			}
-			server.wss.broadcast(path.basename(arg0));
+			this.reload(path.basename(arg0));
 		});
 	}
 }
