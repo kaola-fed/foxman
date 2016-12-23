@@ -1,6 +1,7 @@
 import Freemarker from 'freemarker';
 import path from 'path';
 import fileUtil from './fileUtil';
+
 const escapeSymbol = (str) => {
 	return str.replace(/[#@$]/g, function (match) {
 		return escape(match);
