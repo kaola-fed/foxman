@@ -1,6 +1,12 @@
 import Freemarker from 'freemarker';
 import path from 'path';
 import fileUtil from './fileUtil';
+const escapeSymbol = (str) => {
+	return str.replace(/[#@$]/g, function (match) {
+		return escape(match);
+	});
+};
+
 
 class RenderUtil {
 	constructor({viewRoot}) {
@@ -17,7 +23,8 @@ class RenderUtil {
 				.filter(item => {
 					return !~item.indexOf('.');
 				}).map(item => {
-					return `<#assign ${item} = ${JSON.stringify(data[item])}/>`;
+					const _value = escapeSymbol(JSON.stringify(data[item]));
+					return `<#assign ${item} = ${_value}/>`;
 				});
 
 			fileUtil.readFile(p1)
@@ -35,7 +42,7 @@ class RenderUtil {
 						resolve({
 							error, content
 						});
-						fileUtil.delDir(_tempPath);
+						// fileUtil.delDir(_tempPath);
 					});
 				})
 				.catch(error => {
