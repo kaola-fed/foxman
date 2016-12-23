@@ -23,7 +23,7 @@ class RenderUtil {
 			fileUtil.readFile(p1)
 				.then(str => {
 					_tpl.push(str);
-					return fileUtil.writeFile(_tempPath, _tpl.join('\r\n'));
+					return fileUtil.writeFile(_tempPath, _tpl.join('\n'));
 				})
 				.catch(error => {
 					return new Promise((res, rej)=>{
