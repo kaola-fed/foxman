@@ -43,7 +43,7 @@ class RenderUtil {
 						resolve({
 							error, content
 						});
-						// fileUtil.delDir(_tempPath);
+						fileUtil.delDir(_tempPath);
 					});
 				})
 				.catch(error => {
