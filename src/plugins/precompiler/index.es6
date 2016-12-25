@@ -1,6 +1,6 @@
 import PreCompiler from './precompiler';
 import { SinglePreCompiler } from './precompiler';
-import { CompilerModel } from './CompilerModel';
+import CompilerModel from './CompilerModel';
 
 
 /**

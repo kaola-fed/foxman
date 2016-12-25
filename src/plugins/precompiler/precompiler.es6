@@ -1,12 +1,8 @@
-/**
- * 预处理器 api，用于
- */
 import { resolve, relative, sep } from 'path';
 import vinylFs from 'vinyl-fs';
 import EventEmitter from 'events';
-import {
-    util
-} from '../../helper';
+import { util } from '../../helper';
+import diff from 'gulp-diff-build';
 
 class PreCompiler extends EventEmitter {
 	constructor(options) {
@@ -32,12 +28,21 @@ class PreCompiler extends EventEmitter {
 		});
 		return this;
 	}
+	
+	pipePulpDiff (workFlow) {
+		workFlow.splice(-1, 0, diff({
+			clear: true
+		}));
+		return workFlow;
+	}
+
 	run() {
 		let workFlow = this.handler(vinylFs.dest.bind(this));
 		this.source = vinylFs.src(this.addExludeReg(this.sourcePattern));
-		workFlow.forEach((item) => {
-			this.pipe(item);
-		});
+		this.pipePulpDiff(workFlow)
+			.forEach((item) => {
+				this.pipe(item);
+			});
 		return this;
 	}
 	addExludeReg(sourcePattern) {
@@ -76,10 +81,11 @@ class SinglePreCompiler extends PreCompiler {
 	runInstance(sourcePattern) {
 		try {
 			this.source = vinylFs.src(this.addExludeReg(this.sourcePattern));
-			this.handler(this.destInstence.call(this, sourcePattern)).forEach((item) => {
-				this.pipe(item);
-			});
-
+			const workFlow = this.handler(this.destInstence.call(this, sourcePattern));
+			this.pipePulpDiff(workFlow)
+				.forEach((item) => {
+					this.pipe(item);
+				});
 		} catch (err) {
 			console.log(err);
 		}

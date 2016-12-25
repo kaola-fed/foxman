@@ -1,4 +1,4 @@
-export default class CompilerModel {
+class CompilerModel {
 	constructor (options) {
 		Object.assign(this, options);
 	}
@@ -23,3 +23,5 @@ export default class CompilerModel {
 		return this;
 	}
 }
+
+export default CompilerModel;

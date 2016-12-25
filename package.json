@@ -47,6 +47,7 @@
     "colors": "^1.1.2",
     "freemarker": "^1.1.1",
     "globule": "^1.0.0",
+    "gulp-diff-build": "0.0.6",
     "http-proxy": "^1.15.2",
     "koa": "^1.2.1",
     "koa-ejs": "^3.0.0",
