@@ -2,7 +2,7 @@ import { resolve, relative, sep } from 'path';
 import vinylFs from 'vinyl-fs';
 import EventEmitter from 'events';
 import { util } from '../../helper';
-import diff from 'vinyl-fs-diff';
+// import diff from 'vinyl-fs-diff';
 
 class PreCompiler extends EventEmitter {
 	constructor(options) {
@@ -30,7 +30,7 @@ class PreCompiler extends EventEmitter {
 	}
 	
 	pipeGulpDiff (workFlow) {
-		workFlow.splice(-1, 0, diff());
+		// workFlow.splice(-1, 0, diff());
 		return workFlow;
 	}
 
