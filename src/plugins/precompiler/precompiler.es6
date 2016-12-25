@@ -29,15 +29,15 @@ class PreCompiler extends EventEmitter {
 		return this;
 	}
 	
-	pipePulpDiff (workFlow) {
-		workFlow.splice(-1, 0, diff());
+	pipeGulpDiff (workFlow) {
+		// workFlow.splice(-1, 0);
 		return workFlow;
 	}
 
 	run() {
 		let workFlow = this.handler(vinylFs.dest.bind(this));
 		this.source = vinylFs.src(this.addExludeReg(this.sourcePattern));
-		this.pipePulpDiff(workFlow)
+		this.pipeGulpDiff(workFlow)
 			.forEach((item) => {
 				this.pipe(item);
 			});
@@ -80,7 +80,7 @@ class SinglePreCompiler extends PreCompiler {
 		try {
 			this.source = vinylFs.src(this.addExludeReg(this.sourcePattern));
 			const workFlow = this.handler(this.destInstence.call(this, sourcePattern));
-			this.pipePulpDiff(workFlow)
+			this.pipeGulpDiff(workFlow)
 				.forEach((item) => {
 					this.pipe(item);
 				});
