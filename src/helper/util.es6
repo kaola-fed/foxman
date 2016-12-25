@@ -202,6 +202,20 @@ export function debounce (func, wait, immediate) {
 	};
 }
 
+export function removeByItem (list, item) {
+	const index = list.indexOf(item);
+	if (index === -1) return -1;
+	removeByIndex(list, index);
+	return index;
+}
+
+export function removeByIndex (list, index) {
+	list.splice(
+		index,
+		1);
+	return index;
+}
+
 export default {
 	debugLog,
 	error,
@@ -220,5 +234,7 @@ export default {
 	request,
 	throttle,
 	debounce,
-	replaceCommet
+	replaceCommet,
+	removeByItem,
+	removeByIndex
 };

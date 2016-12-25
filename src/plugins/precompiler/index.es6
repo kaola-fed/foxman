@@ -1,5 +1,6 @@
 import PreCompiler from './precompiler';
 import { SinglePreCompiler } from './precompiler';
+import { CompilerModel } from './CompilerModel';
 
 
 /**
@@ -30,63 +31,84 @@ class PreCompilerPlugin {
 		const handler = preCompiler.handler;
 		let source = preCompiler.test;
 		let ignore = preCompiler.ignore;
-		let recentBuild = [];
 
 		if (!Array.isArray(source)) {
 			source = [source];
 		}
 		source.forEach((sourcePattern) => {
-			let watchMap = {};
-			this.createCompiler(sourcePattern, ignore, watchMap, handler);
-            /**
-             * 新创建的文件的监听
-             */
+			const compilerModel = new CompilerModel({
+				sourcePattern,
+				ignore,
+				watchMap: {},
+				handler
+			});
+			this.createCompiler(compilerModel);
+            
 			this.watcher.onNew(sourcePattern, (file, ev, stats) => {
-				if (((ev == 'change') && (-1 == recentBuild.indexOf(file)))
-                    || ((ev == 'add') && (new Date().getTime() - new Date(stats.ctime).getTime() >= 1000))) {
+				if ((ev == 'add') 
+					&& 
+					(new Date().getTime() - new Date(stats.ctime).getTime() >= 1000)) {
 					return false;
 				}
-				recentBuild.push(file);
-				this.createCompiler(file, ignore, watchMap, handler);
+				this.createCompiler(
+					new CompilerModel(compilerModel)
+						.setSourcePattern(file)
+				);
 			});
 		});
 	}
-    /**
-     * ignore 为 glob 方式的 ignore
-     */
-	createCompiler(sourcePattern, ignore, watchMap, handler) {
-		new PreCompiler({
-			sourcePattern, ignore, handler
-		}).run().on('updateWatch', (dependencies) => {
-			const diff = this.getNewDeps(watchMap, dependencies);
-            /** 没有更新 */
-			if (!diff.length) {
-				return false;
-			}
-			this.watcher.onUpdate(diff, () => {
-				this.createSingleCompiler(sourcePattern, ignore, watchMap, handler, dependencies[0]);
+   
+	createCompiler(compilerModel) {
+		// {sourcePattern, ignore, watchMap, handler}
+		new PreCompiler(compilerModel)
+			.run()
+			.on('updateWatch', (dependencies) => {
+				const diff = this.getNewDeps(
+					compilerModel.watchMap, 
+					dependencies);
+				if (!diff.hasNew) {
+					return false;
+				}
+				this.watcher.onUpdate(diff.list, () => {
+					this.createSingleCompiler(
+						new CompilerModel(compilerModel)
+							.setSourcePattern(dependencies[0])
+							.setRelative(compilerModel.sourcePattern), 
+						true);
+				});
 			});
-		});
 	}
-	createSingleCompiler(sourcePattern, ignore, watchMap, handler, input) {
-		let singleCompiler = new SinglePreCompiler({
-			sourcePattern: input,
-			ignore,
-			handler
-		}).runInstance(sourcePattern);
+	createSingleCompiler(compilerModel, isWatch) {
+		let singleCompiler = new SinglePreCompiler(compilerModel).runInstance(compilerModel.relative);
+
+		if(!isWatch) return;
+
+		singleCompiler
+			.on('updateWatch', (dependencies) => {
+				const diff = this.getNewDeps(compilerModel.watchMap, dependencies);
+				if (!diff.hasNew) {
+					return false;
+				}
+				this.watcher.onUpdate(diff.list, () => {
+					this.createSingleCompiler(compilerModel, false);
+				});
+			});
 		return singleCompiler;
 	}
 
 	getNewDeps(watchMap, deps) {
 		const file = deps[0];
 		watchMap[file] = watchMap[file] || [];
-
-		return deps.filter((dep) => {
+		const list = deps.filter((dep) => {
 			if ((watchMap[file].indexOf(dep) == -1)) {
 				watchMap[file].push(dep);
 				return true;
 			}
 		});
+		return {
+			hasNew: list.length != 0,
+			list
+		};
 	}
 }
 

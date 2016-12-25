@@ -1,6 +1,6 @@
 import chokidar from 'chokidar';
 import anymatch from 'anymatch';
-
+import {removeByItem, removeByIndex} from '../../helper/util';
 let watcher;
 class Watcher {
 	constructor(...args) {
@@ -43,9 +43,6 @@ class Watcher {
 		});
 	}
 
-	// removeWatch(watching) {
-	// }
-
 	onUpdate(...args) {
 		this.addWatch('change', ...args);
 	}
@@ -57,6 +54,17 @@ class Watcher {
 	addWatch(type, files, handler) {
 		this.watching[type].push(files);
 		this.handlers[type].push(handler);
+	}
+
+	removeWatch (type, files, handler) {
+		const index = removeByItem(this.handlers[type], handler);
+		if(index !== -1) {
+			removeByIndex(this.watching[type], index);	
+		}
+	}
+
+	removeUpdateWatch (...args) {
+		this.removeWatch('change', ...args);
 	}
 }
 export default function (...args) {
