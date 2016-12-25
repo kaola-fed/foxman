@@ -42,9 +42,7 @@ class PreCompilerPlugin {
 				watchMap: {},
 				handler
 			});
-			this.createCompiler(compilerModel);
-            
-			this.watcher.onNew(sourcePattern, (file, ev, stats) => {
+			const compileFn = (file, ev, stats) => {
 				if ((ev == 'add') 
 					&& 
 					(new Date().getTime() - new Date(stats.ctime).getTime() >= 1000)) {
@@ -54,7 +52,10 @@ class PreCompilerPlugin {
 					new CompilerModel(compilerModel)
 						.setSourcePattern(file)
 				);
-			});
+			};
+			this.createCompiler(compilerModel);
+			this.watcher.onNew(sourcePattern, compileFn);
+			this.watcher.onUpdate(sourcePattern, compileFn);
 		});
 	}
    
@@ -62,17 +63,17 @@ class PreCompilerPlugin {
 		// {sourcePattern, ignore, watchMap, handler}
 		new PreCompiler(compilerModel)
 			.run()
-			.on('updateWatch', (dependencies) => {
+			.on('returnDeps', (info) => {
 				const diff = this.getNewDeps(
 					compilerModel.watchMap, 
-					dependencies);
+					info.deps);
 				if (!diff.hasNew) {
 					return false;
 				}
 				this.watcher.onUpdate(diff.list, () => {
 					this.createSingleCompiler(
 						new CompilerModel(compilerModel)
-							.setSourcePattern(dependencies[0])
+							.setSourcePattern(info.source)
 							.setRelative(compilerModel.sourcePattern), 
 						true);
 				});
@@ -84,8 +85,8 @@ class PreCompilerPlugin {
 		if(!isWatch) return;
 
 		singleCompiler
-			.on('updateWatch', (dependencies) => {
-				const diff = this.getNewDeps(compilerModel.watchMap, dependencies);
+			.on('updateWatch', (info) => {
+				const diff = this.getNewDeps(compilerModel.watchMap, info.deps);
 				if (!diff.hasNew) {
 					return false;
 				}
@@ -105,6 +106,7 @@ class PreCompilerPlugin {
 				return true;
 			}
 		});
+
 		return {
 			hasNew: list.length != 0,
 			list

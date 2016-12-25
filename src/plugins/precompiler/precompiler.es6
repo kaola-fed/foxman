@@ -21,18 +21,16 @@ class PreCompiler extends EventEmitter {
 		}
 	}
 	pipe(...args) {
-		const _self = this;
+		const self = this;
 		this.source = this.source.pipe.apply(this.source, args);
-		args[0].on('returnDependencys', (imports) => {
-			_self.emit('updateWatch', imports);
+		args[0].on('returnDeps', (info) => {
+			self.emit('returnDeps', info);
 		});
 		return this;
 	}
 	
 	pipePulpDiff (workFlow) {
-		workFlow.splice(-1, 0, diff({
-			clear: true
-		}));
+		workFlow.splice(-1, 0, diff());
 		return workFlow;
 	}
 
