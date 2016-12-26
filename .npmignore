@@ -1,6 +1,11 @@
-src/
-npm-debug.log
+*node_modules*
+*.idea*
+**/npm-debug.log
+nei.route.js
 example/mock
 example/nei*
 example/src/main/webapp/backend/
-*/.DS_Store
+foxman.config.all.js
+**src**
+example/**/*.css
+hash.json

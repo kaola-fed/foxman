@@ -1,12 +1,9 @@
 *node_modules*
 *.idea*
 **/npm-debug.log
-dev.bat
-nei.route.js
 example/mock
 example/nei*
 example/src/main/webapp/backend/
-foxman.config.all.js
 **dist**
 src/**/*.js.map
 src/**/*.js
