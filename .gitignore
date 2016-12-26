@@ -11,3 +11,4 @@ foxman.config.all.js
 src/**/*.js.map
 src/**/*.js
 example/**/*.css
+hash.json
