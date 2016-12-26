@@ -42,12 +42,7 @@ class PreCompilerPlugin {
 				watchMap: {},
 				handler
 			});
-			const compileFn = (file, ev, stats) => {
-				if ((ev == 'add') 
-					&& 
-					(new Date().getTime() - new Date(stats.ctime).getTime() >= 1000)) {
-					return false;
-				}
+			const compileFn = (file) => {
 				this.createSingleCompiler(
 					new CompilerModel(compilerModel)
 						.setSourcePattern(file)

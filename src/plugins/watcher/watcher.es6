@@ -6,8 +6,11 @@ class Watcher {
 	constructor(...args) {
 		let root = args[0] || process.cwd();
 		let watcher = chokidar.watch(root, {
-			ignored: ['**/.git/**', '**/node_modules/**', '**/.gitignore'],
-			ignoreInitial: true
+			ignored: /(\.git)|(node_modules)|(\.gitignore)/,
+			ignoreInitial: true,
+			interval: 300,
+			binaryInterval: 300,
+			ignorePermissionErrors: true
 		});
 
 		this.watching = {
