@@ -9,3 +9,4 @@ src/**/*.js.map
 src/**/*.js
 example/**/*.css
 hash.json
+.DS_Store
