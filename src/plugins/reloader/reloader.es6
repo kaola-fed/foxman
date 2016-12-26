@@ -31,9 +31,6 @@ class Reloader extends EventEmitter {
 		});
 
 		watcher.onUpdate(reloadResources, (arg0) => {
-			if (~arg0.indexOf('__temp__')) {
-				return -1;
-			}
 			this.reload(path.basename(arg0));
 		});
 	}

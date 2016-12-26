@@ -1,4 +1,4 @@
-import { util} from '../../helper';
+import { util } from '../../helper';
 import httpProxy from 'http-proxy';
 import {ServerResponse} from 'http';
 import zlib from 'zlib';
@@ -13,15 +13,25 @@ class ProxyPlugin {
             this,
             options
         );
+		this.ifProxy = this.proxyServerConfig && this.proxyConfig;
+
+		if (!this.ifProxy) {
+			return this;
+		}
+
+		if (!this.proxyConfig.host) {
+			util.warn('proxy 部分需要设置 host');
+		}
 	}
 
 	init(serverPlugin) {
         /**
          * 命令行选项
          */
-		if (!this.proxyServerConfig || !this.proxyConfig) {
+		if (!this.ifProxy) {
 			return false;
 		}
+		
 
 		this.proxy = httpProxy.createProxyServer({});
 		this.proxy.on('proxyReq', (proxyReq) => {

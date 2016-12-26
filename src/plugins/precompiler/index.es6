@@ -14,13 +14,16 @@ import CompilerModel from './CompilerModel';
  */
 class PreCompilerPlugin {
 	constructor(options) {
-		this.options = options;
 		Object.assign(this, options);
+
+		if (!this.preCompilers) {
+			this.preCompilers = [];
+		}
 	}
 
 	init(watcherPlugin) {
 		this.watcher = watcherPlugin.watcher;
-		this.mapCompiler(this.options.preCompilers);
+		this.mapCompiler(this.preCompilers);
 	}
 
 	mapCompiler(preCompilers) {
@@ -62,7 +65,7 @@ class PreCompilerPlugin {
 			.run()
 			.on('returnDeps', (info) => {
 				const diff = this.getNewDeps(
-					compilerModel.watchMap, 
+					compilerModel.watchMap,
 					info.deps);
 				if (!diff.hasNew) {
 					return false;
@@ -71,7 +74,7 @@ class PreCompilerPlugin {
 					this.createSingleCompiler(
 						new CompilerModel(compilerModel)
 							.setSourcePattern(info.source)
-							.setRelative(compilerModel.sourcePattern), 
+							.setRelative(compilerModel.sourcePattern),
 						true);
 				});
 			});
@@ -82,7 +85,7 @@ class PreCompilerPlugin {
 	createSingleCompiler(compilerModel, isWatch) {
 		let singleCompiler = new SinglePreCompiler(compilerModel).runInstance(compilerModel.relative);
 
-		if(!isWatch) return;
+		if (!isWatch) return;
 
 		singleCompiler
 			.on('returnDeps', (info) => {

@@ -18,8 +18,9 @@ class RenderUtil {
 	}
 	parse(p1, data) {
 		return new Promise((resolve) => {
+			const _tempFile = '__temp__' + path.parse(p1).name + '.ftl';
 			const _dirPath = path.resolve(p1, '..');
-			const _tempPath = path.join(_dirPath, '__temp__.ftl');
+			const _tempPath = path.join(_dirPath, _tempFile);
 			const _tpl = Object.keys(data)
 				.filter(item => {
 					return !~item.indexOf('.');
