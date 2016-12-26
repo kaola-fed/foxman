@@ -48,9 +48,10 @@ class PreCompilerPlugin {
 					(new Date().getTime() - new Date(stats.ctime).getTime() >= 1000)) {
 					return false;
 				}
-				this.createCompiler(
+				this.createSingleCompiler(
 					new CompilerModel(compilerModel)
 						.setSourcePattern(file)
+						.setRelative(sourcePattern)
 				);
 			};
 			this.createCompiler(compilerModel);
@@ -58,9 +59,10 @@ class PreCompilerPlugin {
 			this.watcher.onUpdate(sourcePattern, compileFn);
 		});
 	}
-   
+	/**
+	 * @description 初次执行
+	 */
 	createCompiler(compilerModel) {
-		// {sourcePattern, ignore, watchMap, handler}
 		new PreCompiler(compilerModel)
 			.run()
 			.on('returnDeps', (info) => {
@@ -79,13 +81,16 @@ class PreCompilerPlugin {
 				});
 			});
 	}
+	/**
+	 * @description 文件修改执行
+	 */
 	createSingleCompiler(compilerModel, isWatch) {
 		let singleCompiler = new SinglePreCompiler(compilerModel).runInstance(compilerModel.relative);
 
 		if(!isWatch) return;
 
 		singleCompiler
-			.on('updateWatch', (info) => {
+			.on('returnDeps', (info) => {
 				const diff = this.getNewDeps(compilerModel.watchMap, info.deps);
 				if (!diff.hasNew) {
 					return false;
