@@ -30,7 +30,7 @@ class Server {
 			this.divideMethod = false;
 		}
 
-		this.setLogger();
+		// this.setLogger();
 		this.setRender();
 		this.setStaticHandler();
 	}
@@ -50,9 +50,9 @@ class Server {
 		this.middleware.push(middleware);
 	}
 
-	setLogger(){
-		this.app.use(logger());
-	}
+	// setLogger(){
+	// 	this.app.use(logger());
+	// }
 
 	setRender() {
 		if (this.tpl) {
