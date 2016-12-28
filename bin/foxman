@@ -21,7 +21,6 @@ var argv = require('yargs')
     .help('help')
     .alias('help', 'h')
     .version(function() {return 'v'+pkg.version;})
-    .alias('version', 'v')
     .epilog('copyright@June')
     .argv;
 
