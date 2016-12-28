@@ -1,32 +1,37 @@
 #!/usr/bin/env node
 'use strict';
 var path = require('path');
-var config ;
+var pkg = require('../package.json');
+var config;
 var argv = require('yargs')
     .option('config', {
-        alias: 'c', demand: false, default: 'foxman.config.js', describe: '输入配置文件相对路径'
-    })
+	alias: 'c', demand: false, default: 'foxman.config.js', describe: '输入配置文件相对路径'
+})
     .option('proxy', {
-        alias: 'p', demand: false, default: false, describe: '使用配置中的代理，填写代理名即可'
-    })
+	alias: 'p', demand: false, default: false, describe: '使用配置中的代理，填写代理名即可'
+})
     .option('update', {
-        alias: 'u', demand: false, default: false, describe: '是否远程nei中拉取接口信息'
-    })
+	alias: 'u', demand: false, default: false, describe: '是否远程nei中拉取接口信息'
+})
+    .option('version', {
+	alias: 'v', demand: false, default: false, describe: '查看版本'
+})
     .usage('Usage: foxman [options]')
     .example('foxman -c ./config.json -p local -u')
     .help('help')
     .alias('help', 'h')
+    .version(function() {return 'v'+pkg.version;})
+    .alias('version', 'v')
     .epilog('copyright@June')
     .argv;
-
 
 var configPath = path.join(process.cwd(), argv.config);
 
 try {
-    config = require(configPath);
+	config = require(configPath);
 } catch (err) {
-    console.log(`Error:\n ${err}`);
-    process.exit(1);
+	console.log(`Error:\n ${err}`);
+	process.exit(1);
 }
 
 Object.assign(config, { argv });
