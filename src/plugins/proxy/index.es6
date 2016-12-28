@@ -62,7 +62,8 @@ class ProxyPlugin {
 				return handler.call(ctx);
 			};
 		});
-		util.log('代理已生效');
+
+		util.log(`Proxying to remote server ${this.proxyServerConfig}`);
 
 		function handler() {
 			const target = url.parse(service(this.request.url.replace(/^(\/)/, '')));

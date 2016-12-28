@@ -4,24 +4,27 @@ var path = require('path');
 var pkg = require('../package.json');
 var config;
 var argv = require('yargs')
-    .option('config', {
-	alias: 'c', demand: false, default: 'foxman.config.js', describe: '输入配置文件相对路径'
-})
-    .option('proxy', {
-	alias: 'p', demand: false, default: false, describe: '使用配置中的代理，填写代理名即可'
-})
-    .option('update', {
-	alias: 'u', demand: false, default: false, describe: '是否远程nei中拉取接口信息'
-})
-    .option('version', {
-	alias: 'v', demand: false, default: false, describe: '查看版本'
-})
     .usage('Usage: foxman [options]')
+    .alias('c', 'config')
+    .describe('c', '配置文件路径')
+    .default('c', 'foxman.config.js')
+
+    .alias('p', 'proxy')
+    .describe('p', '使用配置中的代理，填写代理名即可')
+    .default('p', false)
+
+    .alias('u', 'update')
+    .describe('u', '是否远程nei中拉取接口信息')
+    .default('u', false)
+
+    .alias('v', 'version')
+    .describe('v', 'Show version')
+    .version(() => pkg.version)
+
+    .help('h')
+    .alias('h', 'help')
+
     .example('foxman -c ./config.json -p local -u')
-    .help('help')
-    .alias('help', 'h')
-    .version(function() {return 'v'+pkg.version;})
-    .epilog('copyright@June')
     .argv;
 
 var configPath = path.join(process.cwd(), argv.config);
