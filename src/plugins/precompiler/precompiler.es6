@@ -30,7 +30,9 @@ class PreCompiler extends EventEmitter {
 	}
 	
 	pipeDiff (workFlow) {
-		workFlow.splice(-1, 0, diff());
+		workFlow.splice(-1, 0, diff({
+			hash: this.taskName
+		}));
 		return workFlow;
 	}
 

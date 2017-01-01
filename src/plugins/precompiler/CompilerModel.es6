@@ -22,6 +22,10 @@ class CompilerModel {
 		this.relative = relative;
 		return this;
 	}
+	setTashName (name) {
+		this.taskName = name;
+		return this;
+	}
 }
 
 export default CompilerModel;

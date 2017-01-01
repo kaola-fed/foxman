@@ -6,6 +6,7 @@ import 'colors';
 import http from 'http';
 import https from 'https';
 import url from 'url';
+import crypto from 'crypto';
 
 export function debugLog(msg) {
 	if (process.env.NODE_ENV === 'development') {
@@ -216,6 +217,10 @@ export function removeByIndex (list, index) {
 	return index;
 }
 
+export function sha1(buf) {
+    return crypto.createHash('sha1').update(buf).digest('hex');
+}
+
 export default {
 	debugLog,
 	error,
@@ -236,5 +241,6 @@ export default {
 	debounce,
 	replaceCommet,
 	removeByItem,
-	removeByIndex
+	removeByIndex,
+	sha1
 };
