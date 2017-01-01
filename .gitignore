@@ -1,12 +1,24 @@
+# dependencies
 *node_modules*
+
+
+# ide
 *.idea*
+*.vscode*
+.DS_Store
+
+
+# log
 **/npm-debug.log
-example/mock
-example/nei*
-example/src/main/webapp/backend/
+
+# target
 **dist**
 src/**/*.js.map
 src/**/*.js
+
+# others
+example/mock
+example/nei*
+example/src/main/webapp/backend/
 example/**/*.css
 hash.json
-.DS_Store
