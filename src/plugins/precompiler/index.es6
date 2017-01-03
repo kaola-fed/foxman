@@ -1,7 +1,7 @@
 import PreCompiler from './precompiler';
 import { SinglePreCompiler } from './precompiler';
 import CompilerModel from './CompilerModel';
-
+import {util} from '../../helper';
 
 /**
  * 监听插件
@@ -38,12 +38,16 @@ class PreCompilerPlugin {
 		if (!Array.isArray(source)) {
 			source = [source];
 		}
+
+		const taskName = util.sha1(source.join("-"));
+		
 		source.forEach((sourcePattern) => {
 			const compilerModel = new CompilerModel({
 				sourcePattern,
 				ignore,
 				watchMap: {},
-				handler
+				handler,
+				taskName
 			});
 			const compileFn = (file) => {
 				this.createSingleCompiler(
