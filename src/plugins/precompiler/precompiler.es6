@@ -22,15 +22,23 @@ class PreCompiler extends EventEmitter {
 	}
 	pipe(...args) {
 		const self = this;
-		this.source = this.source.pipe.apply(this.source, args);
-		args[0].on('returnDeps', (info) => {
+		const returnDeps = (info) => {
 			self.emit('returnDeps', info);
+		};
+		this.source = this.source.pipe.apply(this.source, args);
+		
+		args[0].on('returnDeps', (info) => {
+			returnDeps(info);
+		}).on('returnDependencys', (info) => {
+			returnDeps(info);
 		});
 		return this;
 	}
 	
 	pipeDiff (workFlow) {
-		workFlow.splice(-1, 0, diff());
+		workFlow.splice(-1, 0, diff({
+			hash: this.taskName
+		}));
 		return workFlow;
 	}
 

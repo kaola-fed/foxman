@@ -1,8 +1,5 @@
 import EventEmitter from 'events';
 import path from 'path';
-import { debounce } from '../../helper/util';
-
-
 
 class Reloader extends EventEmitter {
 	constructor(options) {
@@ -10,9 +7,9 @@ class Reloader extends EventEmitter {
 		Object.assign(this, options);
 		this.bindChange();
 
-		this.reload = debounce((url) => {
+		this.reload = (url) => {
 			this.server.wss.broadcast(url);
-		}, 300, true);
+		};
 	}
 	bindChange() {
 		const [server, watcher] = [this.server, this.watcher];
