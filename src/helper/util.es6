@@ -70,7 +70,10 @@ export function removeHeadBreak(str) {
 	return str.replace(/^(\/|\\)/, '');
 }
 
-export function removeSuffix(str) {
+export function removeSuffix(str, test) {
+	if (test) {
+		return str.replace(new RegExp('\.' + test + '$', 'ig'), '');
+	}
 	return str.replace(/\.[^\.]*$/, '');
 }
 
@@ -133,12 +136,11 @@ export function request(options) {
 			reject();
 			console.log(`problem with request: ${e.message}`);
 		});
-
 		req.write(requestBody);
-
 		req.end();
 	});
 }
+
 export function typeOf(obj) {
 	return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
 }
@@ -167,7 +169,7 @@ export function replaceCommet(str) {
  * @param  {boolean}  immediate   设置为ture时，调用触发于开始边界而不是结束边界
  * @return {function}             返回客户调用函数
  */
-export function debounce (func, wait, immediate) {
+export function debounce(func, wait, immediate) {
 	var timeout, args, context, timestamp, result;
 
 	var later = function () {
@@ -203,22 +205,22 @@ export function debounce (func, wait, immediate) {
 	};
 }
 
-export function removeByItem (list, item) {
+export function removeByItem(list, item) {
 	const index = list.indexOf(item);
 	if (index === -1) return -1;
 	removeByIndex(list, index);
 	return index;
 }
 
-export function removeByIndex (list, index) {
-	list.splice(
+export function removeByIndex(list, index) {
+	const item = list.splice(
 		index,
 		1);
-	return index;
+	return item;
 }
 
 export function sha1(buf) {
-    return crypto.createHash('sha1').update(buf).digest('hex');
+	return crypto.createHash('sha1').update(buf).digest('hex');
 }
 
 export default {
@@ -226,6 +228,7 @@ export default {
 	error,
 	warnLog,
 	log,
+	typeOf,
 	createSystemId,
 	initialsLower,
 	initialsCapitals,

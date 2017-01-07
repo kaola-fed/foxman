@@ -48,16 +48,16 @@ class NeiPlugin {
 	downloadNeiData(key, basedir) {
 		return this.pending((resolve) => {
 			neiTools
-                .run({
-	key, basedir
-})
-                .then((config) => {
-	return this.getUpdate(config);
-})
-                .then(() => {
-	resolve();
-	return this.updateRoutes(this.routes);
-});
+				.run({
+					key, basedir
+				})
+				.then((config) => {
+					return this.getUpdate(config);
+				})
+				.then(() => {
+					resolve();
+					return this.updateRoutes(this.routes);
+				});
 		});
 	}
 
@@ -67,10 +67,10 @@ class NeiPlugin {
 	}
 
 	getUpdate(config) {
-        /**
-         * neiConfigRoot
-         * @type {string|*}
-         */
+    /**
+     * neiConfigRoot
+     * @type {string|*}
+     */
 		const neiConfigRoot = path.resolve(config.neiConfigRoot, 'server.config.js');
 		const neiConfig = require(neiConfigRoot);
 		const rules = neiConfig.routes;
@@ -89,7 +89,7 @@ class NeiPlugin {
 				let rule = rules[ruleName];
 				let [method, url] = ruleName.split(' ');
 
-                // nei url 默认都是不带 / ,检查是否有
+        // nei url 默认都是不带 / ,检查是否有
 				url = util.appendHeadBreak(url);
 
 				let sync = rule.hasOwnProperty('list');
@@ -119,14 +119,14 @@ class NeiPlugin {
 	updateLocalFiles(routes = []) {
 		const promises = routes.map((route) => {
 			return new Promise((resolve, reject) => {
-                /**
-                 * 本地路径（非nei）
-                 */
+        /**
+         * 本地路径（非nei）
+         */
 				let dataPath = this.genCommonPath(route);
 				fs.stat(dataPath, error => {
-                    /**
-                     * 文件不存在或者文件内容为空
-                     */
+          /**
+           * 文件不存在或者文件内容为空
+           */
 					if (error) {
 						util.log('make empty file: ' + dataPath);
 						fileUtil.writeUnExistsFile(dataPath, '').then(resolve, reject);
@@ -150,10 +150,10 @@ class NeiPlugin {
 		const genNeiApiUrl = this.genNeiApiUrl.bind(this);
 		const server = this.server;
 		server.use(function* (next) {
-            /**
-             * @TODO
-             * 判断是否使用本地文件的逻辑移动到此处
-             */
+      /**
+       * @TODO
+       * 判断是否使用本地文件的逻辑移动到此处
+       */
 			const dispatcher = this.dispatcher;
 
 			if (dispatcher.type == DispatherTypes.DIR ||
@@ -168,9 +168,9 @@ class NeiPlugin {
 
 			yield new Promise((resolve) => {
 				fs.stat(commonPath, (error, stat) => {
-                    /**
-                     * 文件不存在或者文件内容为空
-                     */
+          /**
+           * 文件不存在或者文件内容为空
+           */
 					if (error || !stat.size) {
 						dispatcher.dataPath = genNeiApiUrl(routeModel);
 					} else {
@@ -182,7 +182,7 @@ class NeiPlugin {
 
 			yield next;
 		});
-		server.routers = routes.concat(server.routers);
+		server.routers = server.routers.concat(routes);
 	}
 
 	genCommonPath(route) {

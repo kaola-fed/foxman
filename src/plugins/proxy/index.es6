@@ -31,7 +31,6 @@ class ProxyPlugin {
 		if (!this.ifProxy) {
 			return false;
 		}
-		
 
 		this.proxy = httpProxy.createProxyServer({});
 		this.proxy.on('proxyReq', (proxyReq) => {

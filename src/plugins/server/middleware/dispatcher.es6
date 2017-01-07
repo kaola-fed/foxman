@@ -1,5 +1,5 @@
 import path from 'path';
-import {  fileUtil, DispatherTypes } from '../../../helper';
+import { fileUtil, DispatherTypes } from '../../../helper';
 
 function apiHandler(dispatcher) {
 	if(dispatcher.handler) {
@@ -53,7 +53,7 @@ export function* dirDispatcher(dispatcher, config, next) {
 	const dirList = sortFiles(result.filter((item)=>{
 		return !item.isFile;
 	}));
-    
+
 	yield this.render('cataLog', {
 		title: '查看列表',
 		showList: dirList.concat(fileList)
@@ -83,10 +83,10 @@ export function* syncDispatcher(dispatcher, config, next) {
 		return yield next;
 	}
 	const result = yield config.tplRender.parse(filePath, res.json);
-    /**
-     * error
-     * content
-     */
+  /**
+   * error
+   * content
+   */
 	if (!result.error) {
 		this.type = 'text/html; charset=utf-8';
 		this.body = result.content || '数据未取到';
@@ -109,10 +109,10 @@ export function* syncDispatcher(dispatcher, config, next) {
  * @returns {*}
  */
 export function* asyncDispather(dispatcher, config, next) {
-    /**
-     * 异步接口处理
-     * @type {[type]}
-     */
+  /**
+   * 异步接口处理
+   * @type {[type]}
+   */
 	let res = yield apiHandler.call(this, dispatcher);
 	if (res && res.json) {
 		this.type = 'application/json; charset=utf-8';
@@ -130,10 +130,10 @@ export function* asyncDispather(dispatcher, config, next) {
 
 export default (config) => {
 	return function* (next) {
-        /**
-         * 分配给不同的处理器
-         * @type {Object}
-         */
+	  /**
+	   * 分配给不同的处理器
+	   * @type {Object}
+	   */
 		let args = [config, next];
 
 		let dispatcherMap = {

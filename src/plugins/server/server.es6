@@ -29,7 +29,6 @@ class Server {
 			this.divideMethod = false;
 		}
 
-		// this.setLogger();
 		this.setRender();
 		this.setStaticHandler();
 	}
@@ -48,10 +47,6 @@ class Server {
 	use(middleware) {
 		this.middleware.push(middleware);
 	}
-
-	// setLogger(){
-	// 	this.app.use(logger());
-	// }
 
 	setRender() {
 		if (this.tpl) {

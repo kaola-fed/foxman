@@ -18,8 +18,9 @@ class RenderUtil {
 	}
 	parse(p1, data) {
 		return new Promise((resolve) => {
-			const _tempFile = '__temp__' + path.parse(p1).name + '.ftl';
-			const _dirPath = path.resolve(p1, '..');
+			const pathInfo = path.parse(p1);
+			const _tempFile = '__temp__' + pathInfo.name + '.ftl';
+			const _dirPath = pathInfo.dir;
 			const _tempPath = path.join(_dirPath, _tempFile);
 			const _tpl = Object.keys(data)
 				.filter(item => {
@@ -28,7 +29,6 @@ class RenderUtil {
 					const _value = escapeSymbol(JSON.stringify(data[item]));
 					return `<#assign ${item} = ${_value}/>`;
 				});
-
 			fileUtil.readFile(p1)
 				.then(str => {
 					_tpl.push(str);
@@ -56,4 +56,5 @@ class RenderUtil {
 		});
 	}
 }
+
 export default RenderUtil;

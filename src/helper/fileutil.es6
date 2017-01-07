@@ -57,7 +57,7 @@ export function writeFile(filename, text) {
 			if (err) {
 				return reject(err);
 			}
-			resolve();
+			resolve(text);
 		});
 	});
 }
@@ -136,7 +136,7 @@ export function delDir(file) {
 			}
 			fs.rmdirSync(file);
 		}
-	}catch(err) {
+	} catch(err) {
 		return -1;
 	}
 }
