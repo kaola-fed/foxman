@@ -174,7 +174,7 @@ class NeiPlugin {
 					if (error || !stat.size) {
 						dispatcher.dataPath = genNeiApiUrl(routeModel);
 					} else {
-						dispatcher.dataPath = commonPath;
+						dispatcher.dataPath = [genNeiApiUrl(routeModel), commonPath];
 					}
 					resolve();
 				});

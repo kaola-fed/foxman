@@ -1,7 +1,9 @@
 import path from 'path';
 import { fileUtil, DispatherTypes } from '../../../helper';
 
-function apiHandler(dispatcher) {
+
+
+export function apiHandler(dispatcher) {
 	if(dispatcher.handler) {
 		return dispatcher.handler(this).then((data) => {
 			let json;
@@ -13,14 +15,27 @@ function apiHandler(dispatcher) {
 					data
 				};
 			}
-			return new Promise(resolve=>{
+			return new Promise(resolve => {
 				resolve({
-					json: json
+					json
 				});
 			});
 		});
 	}
-	return fileUtil.jsonResolver({ url: dispatcher.dataPath });
+
+	const dataPath = dispatcher.dataPath;
+	if (Array.isArray(dataPath)) {
+			return Promise.all(dataPath.map( url => {
+				return fileUtil.jsonResolver({ url })
+			})).then( resps => {
+				return resps.reduce((bef, aft) => {
+					return {
+						json: Object.assign(bef.json, aft.json)
+					};
+				});
+			});
+	}
+	return fileUtil.jsonResolver({ url: dataPath });
 }
 
 /**

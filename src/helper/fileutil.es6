@@ -110,7 +110,7 @@ export function jsonResolver(opt) {
 		}
 		readFile(url).then((data) => {
 			try {
-                /**去除注释 */
+        /**去除注释 */
 				json = JSON.parse(_.replaceCommet(data));
 			} catch (e) {
 				console.log(e);

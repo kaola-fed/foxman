@@ -1,12 +1,6 @@
 var assert = require("assert");
 var util = require('../../src/helper').util;
 
-describe('foxman', function() {
-    it('basePlugin', function() {
-
-    });
-});
-
 describe('util',function () {
   it('request', ()=>{
     var url = 'http://www.kaola.com';
