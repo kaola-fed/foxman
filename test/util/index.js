@@ -1,3 +1,4 @@
+require('babel-polyfill')
 var assert = require("assert");
 var util = require('../../src/helper').util;
 

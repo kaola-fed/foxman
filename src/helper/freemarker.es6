@@ -1,13 +1,5 @@
 import Freemarker from 'freemarker';
 import path from 'path';
-import fileUtil from './fileUtil';
-
-const escapeSymbol = (str) => {
-	return str.replace(/[#@$]/g, function (match) {
-		return escape(match);
-	});
-};
-
 
 class RenderUtil {
 	constructor({viewRoot}) {
@@ -18,39 +10,9 @@ class RenderUtil {
 	}
 	parse(p1, data) {
 		return new Promise((resolve) => {
-			const pathInfo = path.parse(p1);
-			const _tempFile = '__temp__' + pathInfo.name + '.ftl';
-			const _dirPath = pathInfo.dir;
-			const _tempPath = path.join(_dirPath, _tempFile);
-			const _tpl = Object.keys(data)
-				.filter(item => {
-					return !~item.indexOf('.');
-				}).map(item => {
-					const _value = escapeSymbol(JSON.stringify(data[item]));
-					return `<#assign ${item} = ${_value}/>`;
-				});
-			fileUtil.readFile(p1)
-				.then(str => {
-					_tpl.push(str);
-					return fileUtil.writeFile(_tempPath, _tpl.join('\n'));
-				})
-				.catch(error => {
-					return new Promise((res, rej)=>{
-						rej(error);
-					});
-				})
-				.then(() => {
-					this.freemarker.renderFile(_tempPath, {},  (error, content) => {
-						resolve({
-							error, content
-						});
-						fileUtil.delDir(_tempPath);
-					});
-				})
-				.catch(error => {
+				this.freemarker.renderFile(p1, data,  (error, content) => {
 					resolve({
-						error,
-						content: null
+						error, content
 					});
 				});
 		});
