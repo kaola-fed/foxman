@@ -57,7 +57,7 @@ export function writeFile(filename, text) {
 			if (err) {
 				return reject(err);
 			}
-			resolve();
+			resolve(text);
 		});
 	});
 }
@@ -92,22 +92,6 @@ export function jsonResolver(opt) {
 	return new Promise((resolve) => {
 		let url = (typeof opt == 'string') ? opt : opt.url;
 		let json;
-		if (/^http/g.test(url)) {
-			_.log(`请求转发:${url}`);
-			_.request(opt).then((res) => {
-				try {
-					json = JSON.parse(res.body.toString('utf-8'));
-				} catch (e) {
-					json = null;
-				}
-				res.json = json;
-				resolve(res);
-			}, (err) => {
-				console.log(err);
-				resolve(null);
-			});
-			return;
-		}
 		readFile(url).then((data) => {
 			try {
                 /**去除注释 */
@@ -136,7 +120,7 @@ export function delDir(file) {
 			}
 			fs.rmdirSync(file);
 		}
-	}catch(err) {
+	} catch(err) {
 		return -1;
 	}
 }

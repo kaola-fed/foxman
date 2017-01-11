@@ -5,7 +5,6 @@ const autoprefix = require('gulp-autoprefixer');
 const routers = require('./route');
 
 
-
 module.exports = {
     /**
      * 如有需要，填写nei 的kei 然后执行 foxman -u 初始化工程目录。
@@ -83,7 +82,11 @@ module.exports = {
         /**
          * 是否区分方法
          */
-        divideMethod: false,
+        divideMethod: !!0,
+        /**
+         * 是否启用 https
+         */
+        https: !0,
         /**
          * router type 为 sync 的filePath的ftl相对目录
          */

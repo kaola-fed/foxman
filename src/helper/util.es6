@@ -70,7 +70,10 @@ export function removeHeadBreak(str) {
 	return str.replace(/^(\/|\\)/, '');
 }
 
-export function removeSuffix(str) {
+export function removeSuffix(str, test) {
+	if (test) {
+		return str.replace(new RegExp('\.' + test + '$', 'ig'), '');
+	}
 	return str.replace(/\.[^\.]*$/, '');
 }
 
@@ -101,44 +104,8 @@ export function bufferConcat(...bufs) {
 	return Buffer.concat(bufs, total);
 }
 
-export function request(options) {
 
-	let urlInfo = url.parse(options.url);
-	delete options.url;
 
-	options = Object.assign({}, urlInfo, options);
-	return new Promise((resolve, reject) => {
-		const requestBody = options.requestBody;
-
-		delete options.requestBody;
-
-		let protocolMap = {
-			http: http,
-			https: https
-		};
-		let protocolHandler = protocolMap[urlInfo.protocol.slice(0, -1)];
-
-		let req = protocolHandler.request(options, (res) => {
-			res.body = Buffer.alloc(0);
-			res.setEncoding('utf8');
-			res.on('data', (chunk) => {
-				res.body = bufferConcat(res.body, Buffer.from(chunk));
-			});
-			res.on('end', () => {
-				resolve(res);
-			});
-		});
-
-		req.on('error', (e) => {
-			reject();
-			console.log(`problem with request: ${e.message}`);
-		});
-
-		req.write(requestBody);
-
-		req.end();
-	});
-}
 export function typeOf(obj) {
 	return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
 }
@@ -167,7 +134,7 @@ export function replaceCommet(str) {
  * @param  {boolean}  immediate   设置为ture时，调用触发于开始边界而不是结束边界
  * @return {function}             返回客户调用函数
  */
-export function debounce (func, wait, immediate) {
+export function debounce(func, wait, immediate) {
 	var timeout, args, context, timestamp, result;
 
 	var later = function () {
@@ -203,22 +170,22 @@ export function debounce (func, wait, immediate) {
 	};
 }
 
-export function removeByItem (list, item) {
+export function removeByItem(list, item) {
 	const index = list.indexOf(item);
 	if (index === -1) return -1;
 	removeByIndex(list, index);
 	return index;
 }
 
-export function removeByIndex (list, index) {
-	list.splice(
+export function removeByIndex(list, index) {
+	const item = list.splice(
 		index,
 		1);
-	return index;
+	return item;
 }
 
 export function sha1(buf) {
-    return crypto.createHash('sha1').update(buf).digest('hex');
+	return crypto.createHash('sha1').update(buf).digest('hex');
 }
 
 export default {
@@ -226,6 +193,7 @@ export default {
 	error,
 	warnLog,
 	log,
+	typeOf,
 	createSystemId,
 	initialsLower,
 	initialsCapitals,
@@ -236,7 +204,6 @@ export default {
 	removeSuffix,
 	appendHeadBreak,
 	bufferConcat,
-	request,
 	throttle,
 	debounce,
 	replaceCommet,

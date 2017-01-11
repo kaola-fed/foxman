@@ -12,8 +12,8 @@ export default class Application extends EventEmitter {
 	constructor() {
 		super();
 		this.uid = util.createSystemId();
-
 		this.middleware = [];
+		this.dI = dI;
 	}
 
 	setConfig(config) {
@@ -52,6 +52,7 @@ export default class Application extends EventEmitter {
 	}
 
 	run() {
+
 		const runSuccess = this.runSuccess;
 		const pipeline = this.execute().call(this);
 		let final = {};
@@ -63,13 +64,14 @@ export default class Application extends EventEmitter {
 				}
 				final.value.then( () => loop())
                     .catch((err) => {
-	console.log(err);
-});
+                        console.log(err);
+                    });
 			} else {
 				runSuccess();
 			}
 		};
 		loop();
+
 	}
 
 	runSuccess() {
