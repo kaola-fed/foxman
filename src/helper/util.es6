@@ -104,42 +104,7 @@ export function bufferConcat(...bufs) {
 	return Buffer.concat(bufs, total);
 }
 
-export function request(options) {
 
-	let urlInfo = url.parse(options.url);
-	delete options.url;
-
-	options = Object.assign({}, urlInfo, options);
-	return new Promise((resolve, reject) => {
-		const requestBody = options.requestBody;
-
-		delete options.requestBody;
-
-		let protocolMap = {
-			http: http,
-			https: https
-		};
-		let protocolHandler = protocolMap[urlInfo.protocol.slice(0, -1)];
-
-		let req = protocolHandler.request(options, (res) => {
-			res.body = Buffer.alloc(0);
-			res.setEncoding('utf8');
-			res.on('data', (chunk) => {
-				res.body = bufferConcat(res.body, Buffer.from(chunk));
-			});
-			res.on('end', () => {
-				resolve(res);
-			});
-		});
-
-		req.on('error', (e) => {
-			reject();
-			console.log(`problem with request: ${e.message}`);
-		});
-		req.write(requestBody);
-		req.end();
-	});
-}
 
 export function typeOf(obj) {
 	return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
@@ -239,7 +204,6 @@ export default {
 	removeSuffix,
 	appendHeadBreak,
 	bufferConcat,
-	request,
 	throttle,
 	debounce,
 	replaceCommet,

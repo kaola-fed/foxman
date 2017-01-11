@@ -1,4 +1,4 @@
-require('babel-polyfill');
+// require('babel-polyfill');
 var assert = require('assert');
 var path = require('path');
 var RenderUtil = require('../../src/helper').freemarker;

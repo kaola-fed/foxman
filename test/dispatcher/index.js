@@ -1,6 +1,6 @@
 var assert = require("assert");
 var path = require('path');
-require('babel-polyfill');
+// require('babel-polyfill');
 var dispatcher = require('../../src/plugins/server/middleware/dispatcher');
 
 describe('dispatcher', function() {

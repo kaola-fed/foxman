@@ -1,17 +1,8 @@
-require('babel-polyfill')
+// require('babel-polyfill')
 var assert = require("assert");
 var util = require('../../src/helper').util;
 
 describe('util',function () {
-  it('request', ()=>{
-    var url = 'http://www.kaola.com';
-    util.request({url}).then((html)=>{
-      assert.equal(1,(function(){
-        return !!html
-      }()));
-    });
-  });
-
   it('createSystemId', ()=>{
     var f = util.createSystemId();
     var num = parseInt(Math.random()*100);
