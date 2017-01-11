@@ -1,4 +1,6 @@
 import http from 'http';
+import fs from 'fs';
+import http2 from 'http2';
 import Koa from 'koa';
 import path from 'path';
 import serve from 'koa-serve';
@@ -101,9 +103,14 @@ class Server {
 
     createServer() {
         const port = this.port || 3000;
-
         this.delayInit();
-        this.serverApp = http.createServer(this.app.callback()).listen(port);
+
+        const httpOptions = {
+            key: fs.readFileSync(path.resolve(__dirname, 'crt', 'localhost.key')),
+            cert: fs.readFileSync(path.resolve(__dirname, 'crt', 'localhost.crt')),
+        };
+        const callback = this.app.callback();
+        this.serverApp = (this.https ? http2.createServer(httpOptions, callback): http.createServer(callback)).listen(port);
         this.wss = this.buildWebSocket(this.serverApp);
         util.log(`Running on ${port}`);
     }

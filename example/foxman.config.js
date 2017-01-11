@@ -82,7 +82,11 @@ module.exports = {
         /**
          * 是否区分方法
          */
-        divideMethod: false,
+        divideMethod: !!0,
+        /**
+         * 是否启用 https
+         */
+        https: !0,
         /**
          * router type 为 sync 的filePath的ftl相对目录
          */
