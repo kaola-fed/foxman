@@ -104,10 +104,10 @@ class Server {
     createServer() {
         const port = this.port || 3000;
         this.delayInit();
-
+        const root = path.resolve(__dirname, '..', '..', '..');
         const httpOptions = {
-            key: fs.readFileSync(path.resolve(__dirname, 'crt', 'localhost.key')),
-            cert: fs.readFileSync(path.resolve(__dirname, 'crt', 'localhost.crt')),
+            key: fs.readFileSync(path.resolve(root, 'config', 'crt', 'localhost.key')),
+            cert: fs.readFileSync(path.resolve(root, 'config','crt', 'localhost.crt')),
         };
         const callback = this.app.callback();
         this.serverApp = (this.https ? http2.createServer(httpOptions, callback): http.createServer(callback)).listen(port);
