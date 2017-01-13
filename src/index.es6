@@ -1,6 +1,6 @@
 import App from './application';
 import {
-    Nei, PreCompiler, Proxy,
+    PreCompiler, Proxy,
     Reloader, Server, Watcher, Debug
 } from './plugins';
 
@@ -34,6 +34,7 @@ class AppContext {
          * Nei Plugin
          */
         if (config.nei) {
+            import Nei from './plugins/nei';
             app.use(new Nei(config.nei));
         }
 

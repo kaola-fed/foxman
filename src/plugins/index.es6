@@ -1,4 +1,4 @@
-import Nei from './nei';
+// import Nei from './nei';
 import PreCompiler from './precompiler';
 import Proxy from './proxy';
 import Reloader from './reloader';
@@ -7,6 +7,6 @@ import Watcher from './watcher';
 import Debug from './debug';
 
 export {
-    Nei, PreCompiler, Proxy,
+    /**Nei,*/ PreCompiler, Proxy,
     Reloader, Server, Watcher, Debug
 };
