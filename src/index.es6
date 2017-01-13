@@ -34,8 +34,7 @@ class AppContext {
          * Nei Plugin
          */
         if (config.nei) {
-            import Nei from './plugins/nei';
-            app.use(new Nei(config.nei));
+            app.use(new require('./plugins/nei').default(config.nei));
         }
 
         /**

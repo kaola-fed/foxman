@@ -1,5 +1,5 @@
 'use strict';
-// require('babel-polyfill');
+require('colors');
 console.log([
     ' _____   _____  __    __      ___  ___       ___   __   _',
     '|  ___| /  _  \\ \\ \\  / /     /   |/   |     /   | |  \\ | | ',
@@ -8,4 +8,5 @@ console.log([
     '| |     | |_| |  / /\\ \\   / /       | |  / /  | | | | \\  |',
     '|_|     \\_____/ /_/  \\_\\ /_/        |_| /_/   |_| |_|  \\_|',
 ].join('\n'));
+console.log('[I]'.green + ' ' + 'Loading Plugins ...');
 module.exports = (process.env.NODE_ENV === 'development') ? require('./src/index.js') : require('./dist/index.js');

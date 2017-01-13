@@ -112,7 +112,7 @@ class Server {
         const callback = this.app.callback();
         this.serverApp = (this.https ? http2.createServer(httpOptions, callback): http.createServer(callback)).listen(port);
         this.wss = this.buildWebSocket(this.serverApp);
-        util.log(`Running on ${port}`);
+        util.log(`Server running on ${this.https?'https':'http'}://127.0.0.1:${port}/`);
     }
 
     buildWebSocket(serverApp) {
