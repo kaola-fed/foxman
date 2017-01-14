@@ -143,6 +143,10 @@ export function* asyncDispather(dispatcher, config, next) {
 
 export default (config) => {
     return function*(next) {
+        if( !this.dispatcher ) {
+            return void 0;
+        }
+
         /**
          * 分配给不同的处理器
          * @type {Object}
