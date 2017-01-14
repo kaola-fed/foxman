@@ -1,4 +1,4 @@
-import neiTools from './nei';
+// import neiTools from './nei';
 import path from 'path';
 import fs from 'fs';
 import os from 'os';
@@ -46,6 +46,7 @@ class NeiPlugin {
     }
 
     downloadNeiData(key, basedir) {
+        const neiTools = require('./nei').default;
         return this.pending((resolve) => {
             neiTools
                 .run({
