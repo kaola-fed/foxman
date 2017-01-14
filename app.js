@@ -1,4 +1,3 @@
-'use strict';
 require('colors');
 console.log([
     ' _____   _____  __    __      ___  ___       ___   __   _',

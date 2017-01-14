@@ -110,5 +110,6 @@ export default (config) => {
                 return yield next;
             }
         }
+        return yield next;
     };
 };

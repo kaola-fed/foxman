@@ -37,6 +37,7 @@ class Server {
 
     delayInit() {
         const app = this.app;
+
         app.use(routeMap(this));
         this.middleware.forEach((g) => {
             app.use(g);
@@ -47,7 +48,7 @@ class Server {
     }
 
     use(middleware) {
-        this.middleware.push(middleware);
+        this.middleware.push(middleware(this));
     }
 
     setRender() {

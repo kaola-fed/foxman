@@ -3,7 +3,7 @@ const path = require('path');
 const mcss = require('foxman-mcss');
 const autoprefix = require('gulp-autoprefixer');
 const routers = require('./route');
-
+const RouteDisplay = require('foxman-plugin-route-display');
 
 module.exports = {
     /**
@@ -17,7 +17,9 @@ module.exports = {
      * test -- String or Array<String> 需要进行转换的文件规则
      * handler -- Function 类型，需返回一个数组
      */
-
+    plugins: [
+        new RouteDisplay()
+    ],
     preCompilers: [
         {
             test: [path.join(__dirname, 'src', 'mcss', '**', '*.mcss')],
