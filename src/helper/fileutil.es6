@@ -94,8 +94,7 @@ export function jsonResolver(opt) {
 		let json;
 		readFile(url).then((data) => {
 			try {
-                /**去除注释 */
-				json = JSON.parse(_.replaceCommet(data));
+				json = _.JSONParse(data);
 			} catch (e) {
 				console.log(e);
 				json = {};
@@ -107,6 +106,8 @@ export function jsonResolver(opt) {
 		});
 	});
 }
+
+
 export function delDir(file) {
 	try {
 		if (fs.statSync(file).isFile()) {

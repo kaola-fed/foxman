@@ -33,7 +33,7 @@ export default class Application extends EventEmitter {
 		});
 
 		dI.register(util.initialsLower(plugin.name), plugin);
-		util.log(`plugin ${plugin.name || plugin.id} is installed`);
+		util.log(`plugin loaded: ${plugin.name || plugin.id}`);
 	}
 
 	execute() {

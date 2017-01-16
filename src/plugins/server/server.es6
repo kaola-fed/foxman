@@ -10,6 +10,7 @@ import dispatcher from './middleware/dispatcher';
 import routeMap from './middleware/routemap';
 import {util} from '../../helper';
 import {Server as WebSocketServer} from 'ws';
+import bodyParser from 'koa-bodyparser';
 
 class Server {
     constructor(config) {
@@ -37,6 +38,7 @@ class Server {
 
     delayInit() {
         const app = this.app;
+        app.use(bodyParser());
         app.use(routeMap(this));
         this.middleware.forEach((g) => {
             app.use(g);
@@ -47,7 +49,7 @@ class Server {
     }
 
     use(middleware) {
-        this.middleware.push(middleware);
+        this.middleware.push(middleware(this));
     }
 
     setRender() {
@@ -112,7 +114,7 @@ class Server {
         const callback = this.app.callback();
         this.serverApp = (this.https ? http2.createServer(httpOptions, callback): http.createServer(callback)).listen(port);
         this.wss = this.buildWebSocket(this.serverApp);
-        util.log(`Running on ${port}`);
+        util.log(`Server running on ${this.https?'https':'http'}://127.0.0.1:${port}/`);
     }
 
     buildWebSocket(serverApp) {

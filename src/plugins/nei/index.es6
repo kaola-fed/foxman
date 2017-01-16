@@ -1,4 +1,4 @@
-import neiTools from './nei';
+// import neiTools from './nei';
 import path from 'path';
 import fs from 'fs';
 import os from 'os';
@@ -46,6 +46,7 @@ class NeiPlugin {
     }
 
     downloadNeiData(key, basedir) {
+        const neiTools = require('./nei').default;
         return this.pending((resolve) => {
             neiTools
                 .run({
@@ -149,14 +150,14 @@ class NeiPlugin {
         const genCommonPath = this.genCommonPath.bind(this);
         const genNeiApiUrl = this.genNeiApiUrl.bind(this);
         const server = this.server;
-        server.use(function*(next) {
+        server.use(() => function * (next) {
             /**
              * @TODO
              * 判断是否使用本地文件的逻辑移动到此处
              */
             const dispatcher = this.dispatcher;
 
-            if (dispatcher.type == DispatherTypes.DIR || !dispatcher.isRouter) {
+            if (!dispatcher || dispatcher.type == DispatherTypes.DIR || !dispatcher.isRouter) {
                 return yield next;
             }
             const routeModel = {

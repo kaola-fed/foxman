@@ -2,7 +2,7 @@
  * Created by hzxujunyu on 2016/8/15.
  */
 import child_process from 'child_process';
-import 'colors';
+// import 'colors';
 import http from 'http';
 import https from 'https';
 import url from 'url';
@@ -104,7 +104,9 @@ export function bufferConcat(...bufs) {
 	return Buffer.concat(bufs, total);
 }
 
-
+export function JSONParse(jsonStr) {
+    return new Function(`return ${jsonStr}`);
+}
 
 export function typeOf(obj) {
 	return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
@@ -209,5 +211,6 @@ export default {
 	replaceCommet,
 	removeByItem,
 	removeByIndex,
-	sha1
+	sha1,
+	JSONParse
 };

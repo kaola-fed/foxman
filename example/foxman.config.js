@@ -3,7 +3,8 @@ const path = require('path');
 const mcss = require('foxman-mcss');
 const autoprefix = require('gulp-autoprefixer');
 const routers = require('./route');
-
+const RouteDisplay = require('foxman-plugin-route-display');
+const MockControl = require('foxman-plugin-mock-control');
 
 module.exports = {
     /**
@@ -17,7 +18,19 @@ module.exports = {
      * test -- String or Array<String> 需要进行转换的文件规则
      * handler -- Function 类型，需返回一个数组
      */
-
+    plugins: [
+        new RouteDisplay(),
+        new MockControl({
+            /**
+             * 在 mock json 的同目录下找，文件名一样 的 .js 文件
+             * @param dataPath
+             * @returns {string|*|XML|void}
+             */
+            mapJS: function (dataPath) {
+                return dataPath.replace(/\.json$/, '.js');
+            }
+        })
+    ],
     preCompilers: [
         {
             test: [path.join(__dirname, 'src', 'mcss', '**', '*.mcss')],
@@ -86,7 +99,7 @@ module.exports = {
         /**
          * 是否启用 https
          */
-        https: !0,
+        https: !!0,
         /**
          * router type 为 sync 的filePath的ftl相对目录
          */

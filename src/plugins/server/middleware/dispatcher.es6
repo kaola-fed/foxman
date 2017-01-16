@@ -1,17 +1,19 @@
 import path from 'path';
-import {fileUtil, DispatherTypes} from '../../../helper';
+import {fileUtil, util, DispatherTypes} from '../../../helper';
 
 export function apiHandler(dispatcher) {
     if (dispatcher.handler) {
         return dispatcher.handler(this).then((data) => {
-            let json;
-            try {
-                json = JSON.parse(data);
-            } catch (error) {
-                json = {
-                    error: error.toString(),
-                    data
-                };
+            let json = data;
+            if (typeof data === 'string') {
+                try {
+                    json = util.JSONParse(data);
+                } catch (error) {
+                    json = {
+                        error: error.toString(),
+                        data
+                    };
+                }
             }
             return new Promise(resolve => {
                 resolve({
@@ -143,6 +145,10 @@ export function* asyncDispather(dispatcher, config, next) {
 
 export default (config) => {
     return function*(next) {
+        if (!this.dispatcher) {
+            return void 0;
+        }
+
         /**
          * 分配给不同的处理器
          * @type {Object}
