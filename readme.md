@@ -24,8 +24,8 @@
 * **Living reload**
 * 集成 **nei**
 * 插件（可自由定制）
-    * 路由展示
-    * 加强版 MockControl
+    * [RouteDisplay](https://github.com/foxman-plugins/RouteDisplay)（展示当前路由列表）
+    * [MockControl](https://github.com/foxman-plugins/MockControl)（Mock功能增强）
 
 ![http://note.youdao.com/yws/public/resource/72c37299682b2a61c50c3a0513b22810/xmlnote/CB0DE48CD3184F9E9B258FD20904A8F1/7199](http://note.youdao.com/yws/public/resource/72c37299682b2a61c50c3a0513b22810/xmlnote/CB0DE48CD3184F9E9B258FD20904A8F1/7199)
 
@@ -49,7 +49,7 @@ proxy | 代理配置，用于代理到测试服务器
 ### nei
 字段名 | 作用 | 例子
 ---- | --- | ---
-key |  配置工程位于 nei 的 key，拉取数据时用 | xxxxxxxxxx
+key |  配置工程位于 [nei](https://github.com/NEYouFan/nei-toolkit) 的工程密钥，拉取数据时用 | xxxxxxxxxx
 
 需要从 **nei** 上拉 **mock** 数据则
 ```bash
@@ -60,6 +60,7 @@ foxman -u
 ### preCompilers 
 配置项是一个数组，数组每一项是独立的 **Compiler** (**Array<Compiler>**)  
 以下 preCompiler 的数据结构  
+
 字段名 | 作用 | 例子
 ---- | --- | ---
 test | Array<path> 符合该规则会进行该编译操作 | [path.resolve(paths.webapp, 'src/mcss/**/*.mcss')]
@@ -84,7 +85,7 @@ handler: function (dest) {
 ...略
 ```
 **注：**  
-1. 文件匹配部分使用 **glob** 的文件匹配标准
+1. 文件匹配部分使用 **glob** 的文件匹配标准  
 2. foxman-mcss 支持的配置项和 mcss.json 中配置一致,不支持 exclude，使用 **igonre** 替代
 
 ### proxy
@@ -98,7 +99,7 @@ service: {
     local: function (url) {
         return 'http://127.0.0.1:8080/' + url;
     },
-    hst_test10: function hst_test10(url) {
+    hst_test10: function (url) {
         return 'http://10.165.125.195/' + url;
     }
 }
