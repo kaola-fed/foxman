@@ -104,7 +104,9 @@ export function bufferConcat(...bufs) {
 	return Buffer.concat(bufs, total);
 }
 
-
+export function JSONParse(jsonStr) {
+    return new Function(`return ${jsonStr}`);
+}
 
 export function typeOf(obj) {
 	return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
@@ -209,5 +211,6 @@ export default {
 	replaceCommet,
 	removeByItem,
 	removeByIndex,
-	sha1
+	sha1,
+	JSONParse
 };

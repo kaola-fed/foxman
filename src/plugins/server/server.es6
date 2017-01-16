@@ -10,6 +10,7 @@ import dispatcher from './middleware/dispatcher';
 import routeMap from './middleware/routemap';
 import {util} from '../../helper';
 import {Server as WebSocketServer} from 'ws';
+import bodyParser from 'koa-bodyparser';
 
 class Server {
     constructor(config) {
@@ -37,7 +38,7 @@ class Server {
 
     delayInit() {
         const app = this.app;
-
+        app.use(bodyParser());
         app.use(routeMap(this));
         this.middleware.forEach((g) => {
             app.use(g);
