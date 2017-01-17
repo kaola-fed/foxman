@@ -16,12 +16,12 @@ class NeiPlugin {
 
     init(serverPlugin) {
         const key = this.options.key;
+        const doUpdate = this.options.update || false;
 
         const home = os.homedir();
         const basedir = path.resolve(home, 'localMock', key);
 
         this.server = serverPlugin.server;
-        const doUpdate = this.config.argv.update || false;
         this.neiRoute = path.resolve(basedir, 'nei.route.js');
 
         if (doUpdate) {

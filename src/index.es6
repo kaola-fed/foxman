@@ -35,7 +35,9 @@ class AppContext {
          */
         if (config.nei) {
             const Nei = require('./plugins/nei').default;
-            app.use(new Nei(config.nei));
+            app.use(new Nei(Object.assign(config.nei,{
+                update: config.argv.update
+            })));
         }
 
         /**

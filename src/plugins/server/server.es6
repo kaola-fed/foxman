@@ -38,7 +38,9 @@ class Server {
 
     delayInit() {
         const app = this.app;
-        app.use(bodyParser());
+        if (!this.ifProxy) {
+            app.use(bodyParser());
+        }
         app.use(routeMap(this));
         this.middleware.forEach((g) => {
             app.use(g);
@@ -109,12 +111,12 @@ class Server {
         const root = path.resolve(__dirname, '..', '..', '..');
         const httpOptions = {
             key: fs.readFileSync(path.resolve(root, 'config', 'crt', 'localhost.key')),
-            cert: fs.readFileSync(path.resolve(root, 'config','crt', 'localhost.crt')),
+            cert: fs.readFileSync(path.resolve(root, 'config', 'crt', 'localhost.crt')),
         };
         const callback = this.app.callback();
-        this.serverApp = (this.https ? http2.createServer(httpOptions, callback): http.createServer(callback)).listen(port);
+        this.serverApp = (this.https ? http2.createServer(httpOptions, callback) : http.createServer(callback)).listen(port);
         this.wss = this.buildWebSocket(this.serverApp);
-        util.log(`Server running on ${this.https?'https':'http'}://127.0.0.1:${port}/`);
+        util.log(`Server running on ${this.https ? 'https' : 'http'}://127.0.0.1:${port}/`);
     }
 
     buildWebSocket(serverApp) {

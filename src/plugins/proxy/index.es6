@@ -13,7 +13,7 @@ class ProxyPlugin {
             this,
             options
         );
-        this.ifProxy = this.proxyServerConfig && this.proxyConfig;
+        this.ifProxy = !!(this.proxyServerConfig && this.proxyConfig);
 
         if (!this.ifProxy) {
             return this;
