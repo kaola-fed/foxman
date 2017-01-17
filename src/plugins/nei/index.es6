@@ -160,25 +160,13 @@ class NeiPlugin {
             if (!dispatcher || dispatcher.type == DispatherTypes.DIR || !dispatcher.isRouter) {
                 return yield next;
             }
+
             const routeModel = {
                 sync: DispatherTypes.SYNC == dispatcher.type,
                 filePath: dispatcher.filePath,
             };
             const commonPath = genCommonPath(routeModel);
-
-            yield new Promise((resolve) => {
-                fs.stat(commonPath, (error, stat) => {
-                    /**
-                     * 文件不存在或者文件内容为空
-                     */
-                    if (error || !stat.size) {
-                        dispatcher.dataPath = genNeiApiUrl(routeModel);
-                    } else {
-                        dispatcher.dataPath = [genNeiApiUrl(routeModel), commonPath];
-                    }
-                    resolve();
-                });
-            });
+            dispatcher.dataPath = [genNeiApiUrl(routeModel), commonPath];
 
             yield next;
         });
