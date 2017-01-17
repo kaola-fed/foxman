@@ -135,22 +135,26 @@ filePath| 同步文件路径或mock数据路径 | 'pages/index.ftl'
 ```js
 'use strict';
 const path = require('path');
+const resolve = path.resolve;
+
 const mcss = require('foxman-mcss');
 const autoprefix = require('gulp-autoprefixer');
-const routers = [];
-const resolve = path.resolve;
-const paths = {};
 const RouteDisplay = require('foxman-plugin-route-display');
 const MockControl = require('foxman-plugin-mock-control');
 
-paths.webapp = resolve(__dirname, 'src', 'main', 'webapp');
-paths.viewRoot = resolve(paths.webapp, 'WEB-INF', 'template');
-paths.syncData = resolve(paths.webapp, 'mock', 'sync');
-paths.asyncData = resolve(paths.webapp, 'mock', 'async');
 
-paths.src = resolve(paths.webapp, 'src');
-paths.res = resolve(paths.webapp, 'res');
-paths.example = resolve(paths.webapp, 'example');
+const routers = [];
+const paths = Object.assign({
+    webapp: resolve(__dirname, 'src', 'main', 'webapp')
+}, {
+    viewRoot: resolve(paths.webapp, 'WEB-INF', 'template'),
+    syncData: resolve(paths.webapp, 'mock', 'sync'),
+    asyncData: resolve(paths.webapp, 'mock', 'async')
+}, {
+    src: resolve(paths.webapp, 'src'),
+    res: resolve(paths.webapp, 'res'),
+    example: resolve(paths.webapp, 'example')
+})
 
 const commonUrl = function (ip) {
     return function (url) {
