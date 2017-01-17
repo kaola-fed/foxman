@@ -105,7 +105,7 @@ export function bufferConcat(...bufs) {
 }
 
 export function JSONParse(jsonStr) {
-    return new Function(`return ${jsonStr}`);
+    return new Function(`return ${jsonStr}`)();
 }
 
 export function typeOf(obj) {

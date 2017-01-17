@@ -69,4 +69,9 @@ describe('util',function () {
     assert.equal(util.sha1(a), '23fcf96d70494b81c5084c0da6a6e8d84a9c5d20');
   });
 
+  it('JSONParse', ()=>{
+    "use strict";
+    assert.equal(util.JSONParse('{a:1}').a ===1 ,!0)
+  })
+
 });
