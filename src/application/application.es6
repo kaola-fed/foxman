@@ -29,11 +29,12 @@ export default class Application extends EventEmitter {
 			id: this.uid(),
 			name: plugin.constructor.name,
 			pending: (...args) => instance.pending.apply(plugin, args),
-
 		});
 
-		dI.register(util.initialsLower(plugin.name), plugin);
-		util.log(`plugin loaded: ${plugin.name || plugin.id}`);
+    const pluginName = plugin.name || plugin.id;
+    
+		dI.register(util.initialsLower(pluginName), plugin);
+		util.log(`plugin loaded: ${pluginName}`);
 	}
 
 	execute() {
