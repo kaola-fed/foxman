@@ -2,10 +2,6 @@
  * Created by hzxujunyu on 2016/8/15.
  */
 import child_process from 'child_process';
-// import 'colors';
-import http from 'http';
-import https from 'https';
-import url from 'url';
 import crypto from 'crypto';
 
 export function debugLog(msg) {
