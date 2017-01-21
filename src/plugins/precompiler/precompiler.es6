@@ -27,15 +27,7 @@ class PreCompiler extends EventEmitter {
             self.emit('returnDeps', info);
         };
         this.source = this.source.pipe.apply(this.source, args);
-
-        args[0].on('returnDeps', (info) => {
-            returnDeps(info);
-        }).on('returnDependencys', (info) => {
-            returnDeps({
-                source: info[0],
-                deps: info.slice(1)
-            });
-        });
+        args[0].on('returnDeps', (info) => returnDeps(info));
         return this;
     }
 
@@ -66,6 +58,7 @@ class PreCompiler extends EventEmitter {
         return [sourcePattern].concat(this.ignore);
     }
 }
+
 class SinglePreCompiler extends PreCompiler {
     destInstence(sourcePattern) {
         return (dest) => {
@@ -108,4 +101,3 @@ class SinglePreCompiler extends PreCompiler {
 export {SinglePreCompiler};
 
 export default PreCompiler;
-

@@ -4,6 +4,10 @@
 import child_process from 'child_process';
 import crypto from 'crypto';
 
+export function isPromise(obj) {
+	return  (obj && obj.value && obj.value.then);
+}
+
 export function debugLog(msg) {
 	if (process.env.NODE_ENV === 'development') {
 		console.log('[DEBUG]'.blue + ' ' + initialsCapitals(msg));
@@ -186,7 +190,10 @@ export function removeByIndex(list, index) {
 export function sha1(buf) {
 	return crypto.createHash('sha1').update(buf).digest('hex');
 }
-
+export function matchArgs(func) {
+	const argList = func.toString().match(/^.*?\s*[^\(]*\(\s*([^\)]*)\)/m);
+	return (argList && argList[1]) ? (argList[1].replace(/ /g, '').split(',')) : [];
+}
 export default {
 	debugLog,
 	error,
@@ -209,5 +216,7 @@ export default {
 	removeByItem,
 	removeByIndex,
 	sha1,
-	JSONParse
+	JSONParse,
+	isPromise,
+	matchArgs
 };

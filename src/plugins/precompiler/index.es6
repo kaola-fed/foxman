@@ -1,5 +1,4 @@
-import PreCompiler from './precompiler';
-import {SinglePreCompiler} from './precompiler';
+import PreCompiler, {SinglePreCompiler} from './precompiler';
 import CompilerModel from './CompilerModel';
 import {util} from '../../helper';
 
@@ -110,14 +109,14 @@ class PreCompilerPlugin {
         const file = deps[0];
         watchMap[file] = watchMap[file] || [];
         const list = deps.filter((dep) => {
-            if ((watchMap[file].indexOf(dep) == -1)) {
+            if ((watchMap[file].indexOf(dep) === -1)) {
                 watchMap[file].push(dep);
                 return true;
             }
         });
 
         return {
-            hasNew: list.length != 0,
+            hasNew: list.length !== 0,
             list
         };
     }

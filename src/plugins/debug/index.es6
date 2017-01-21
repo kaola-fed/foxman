@@ -1,24 +1,24 @@
 class DebugPlugin {
     constructor(options) {
-        this.options = options;
+        if (!options.debugTool
+            && (undefined !== options.debugTool)) {
+            this.enable = false;
+        }
     }
 
     init(serverPlugin) {
-        if (!this.options.debugTool
-            && (undefined !== this.options.debugTool)) {
-            return 0;
-        }
-        const server = serverPlugin.server;
-        const debugToolHtml = '<script src="/foxman_client/js/vconsole.min.js"></script>';
-        /**
-         * 增加debugTool 判断
-         */
-        server.appendHtml({
-            condition: (request) => {
-                return request.query.debug == 1;
-            },
-            html: debugToolHtml
+        serverPlugin.server.appendHtml({
+            condition: this.condition,
+            html: this.getHtml()
         });
+    }
+
+    condition (request) {
+        return request.query.debug == 1;
+    }
+
+    getHtml() {
+        return '<script src="/foxman_client/js/vconsole.min.js"></script>'
     }
 }
 export default DebugPlugin;

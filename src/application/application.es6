@@ -11,7 +11,6 @@ const dependency = dI.dependency;
 export default class Application extends EventEmitter {
 	constructor() {
 		super();
-		this.uid = util.createSystemId();
 		this.middleware = [];
 		this.dI = dI;
 	}
@@ -24,55 +23,41 @@ export default class Application extends EventEmitter {
 		if (!plugin) return false;
 		if (Array.isArray(plugin)) return plugin.forEach(this.use.bind(this));
 
-		Object.assign(plugin, {
-			config: this.config,
-			id: this.uid(),
-			name: plugin.constructor.name,
-			pending: (...args) => instance.pending.apply(plugin, args),
-		});
+    instance.init(plugin);
+		dI.register(util.initialsLower(plugin.name), plugin);
 
-    const pluginName = plugin.name || plugin.id;
-    
-		dI.register(util.initialsLower(pluginName), plugin);
-		util.log(`plugin loaded: ${pluginName}`);
+		util.log(`plugin loaded: ${plugin.name}`);
 	}
 
 	execute() {
-		return function* () {
+		return async function () {
 			const keys = Object.keys(dependency);
-			const plugins = keys.map((key) => dependency[key]);
-			for (let plugin of plugins) {
-				plugin.init && dI.resolve(plugin.init, plugin);
+			const plugins = keys.map(key => dependency[key]);
+
+      await Promise.all(plugins.map(async plugin => {
+        if (!plugin.init
+          || !plugin.enable) return 0;
+
+        dI.resolve(plugin.init, plugin);
+
 				if (plugin.pendings) {
-					util.log(`${plugin.name} needs pending`);
-					yield Promise.all(plugin.pendings);
-					util.log(`${plugin.name}'s pending is end`);
-				}
-			}
+          util.log(`${plugin.name} needs pending`);
+          await Promise.all(plugin.pendings);
+          util.log(`${plugin.name}'s pending is end`);
+        }
+        
+      }));
 		};
 	}
 
-	run() {
-
-		const runSuccess = this.runSuccess;
-		const pipeline = this.execute().call(this);
-		let final = {};
-		const loop = () => {
-			final = pipeline.next();
-			if (!final.done) {
-				if (!final.value.then) {
-					return loop();
-				}
-				final.value.then( () => loop())
-                    .catch((err) => {
-                        console.log(err);
-                    });
-			} else {
-				runSuccess();
-			}
-		};
-		loop();
-
+	async run() {
+		const pipeline = this.execute();
+    try {
+      await pipeline();
+    } catch (e) {
+      console.log(e);
+    }
+    this.runSuccess();
 	}
 
 	runSuccess() {

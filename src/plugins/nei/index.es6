@@ -47,17 +47,15 @@ class NeiPlugin {
 
     downloadNeiData(key, basedir) {
         const neiTools = require('./nei').default;
-        return this.pending((resolve) => {
+        return this.pending(resolve => {
             neiTools
                 .run({
                     key, basedir
                 })
-                .then((config) => {
-                    return this.getUpdate(config);
-                })
+                .then(config => this.getUpdate(config))
                 .then(() => {
                     resolve();
-                    return this.updateRoutes(this.routes);
+                    this.updateRoutes(this.routes);
                 });
         });
     }

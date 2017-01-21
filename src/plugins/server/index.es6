@@ -42,7 +42,7 @@ class ServerPlugin {
          * @type {Server}
          */
         this.server = new Server(Object.assign(this.options, {
-            ifProxy: proxyPlugin.ifProxy
+            ifProxy: proxyPlugin.enable
         }));
     }
 

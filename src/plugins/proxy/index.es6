@@ -13,13 +13,9 @@ class ProxyPlugin {
             this,
             options
         );
-        this.ifProxy = !!(this.proxyServerConfig && this.proxyConfig);
+        this.enable = !!(this.proxyServerConfig && this.proxyConfig);
 
-        if (!this.ifProxy) {
-            return this;
-        }
-
-        if (!this.proxyConfig.host) {
+        if (this.enable && !this.proxyConfig.host) {
             util.warn('proxy 部分需要设置 host');
         }
     }

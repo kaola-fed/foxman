@@ -4,8 +4,7 @@ import {
     Reloader, Server, Watcher, Debug
 } from './plugins';
 
-let appContext;
-class AppContext {
+class ApplicationContext {
     constructor(config) {
         const app = App();
         /**
@@ -69,9 +68,4 @@ class AppContext {
     }
 }
 
-module.exports = function (config) {
-    if (!appContext) {
-        appContext = new AppContext(config);
-    }
-    return appContext;
-};
+export default config => new ApplicationContext(config);
