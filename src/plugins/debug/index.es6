@@ -8,16 +8,16 @@ class DebugPlugin {
 
     init(serverPlugin) {
         serverPlugin.server.appendHtml({
-            condition: this.condition,
-            html: this.getHtml()
+            condition: DebugPlugin.condition,
+            html: DebugPlugin.getHtml()
         });
     }
 
-    condition (request) {
+    static condition(request) {
         return request.query.debug == 1;
     }
 
-    getHtml() {
+    static getHtml() {
         return '<script src="/foxman_client/js/vconsole.min.js"></script>'
     }
 }
