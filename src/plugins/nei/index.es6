@@ -149,13 +149,11 @@ class NeiPlugin {
         const genNeiApiUrl = this.genNeiApiUrl.bind(this);
         const server = this.server;
         server.use(() => function * (next) {
-            /**
-             * @TODO
-             * 判断是否使用本地文件的逻辑移动到此处
-             */
             const dispatcher = this.dispatcher;
 
-            if (!dispatcher || dispatcher.type == DispatherTypes.DIR || !dispatcher.isRouter) {
+            if (!dispatcher
+                || dispatcher.type == DispatherTypes.DIR
+                || !dispatcher.isRouter) {
                 return yield next;
             }
 
@@ -164,8 +162,8 @@ class NeiPlugin {
                 filePath: dispatcher.filePath,
             };
             const commonPath = genCommonPath(routeModel);
-            dispatcher.dataPath = [genNeiApiUrl(routeModel), commonPath];
 
+            dispatcher.dataPath = [genNeiApiUrl(routeModel), commonPath];
             yield next;
         });
         server.routers = server.routers.concat(routes);

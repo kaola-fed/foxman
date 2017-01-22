@@ -22,14 +22,14 @@ class PreCompilerPlugin {
 
     init(watcherPlugin) {
         this.watcher = watcherPlugin.watcher;
-        this.mapCompiler(this.preCompilers);
+        this.startCompilers(this.preCompilers);
     }
 
-    mapCompiler(preCompilers) {
-        preCompilers.forEach(this.prepare.bind(this));
+    startCompilers(preCompilers) {
+        preCompilers.forEach(this.startCompiler.bind(this));
     }
 
-    prepare(preCompiler) {
+    startCompiler(preCompiler) {
         const handler = preCompiler.handler;
         let source = preCompiler.test;
         let ignore = preCompiler.ignore;
@@ -40,34 +40,43 @@ class PreCompilerPlugin {
 
         const taskName = util.sha1(source.join("-"));
 
-        source.forEach((sourcePattern) => {
+        source.forEach(sourcePattern => {
+            const watchMap = {};
             const compilerModel = new CompilerModel({
                 sourcePattern,
                 ignore,
-                watchMap: {},
+                watchMap,
                 handler,
                 taskName
             });
-            const compileFn = (file) => {
+            const compileFn = file => {
                 this.createSingleCompiler(
                     new CompilerModel(compilerModel)
                         .setSourcePattern(file)
                         .setRelative(sourcePattern)
                 );
             };
-            this.createCompiler(compilerModel);
+
+            /**
+             * 监听变化
+             */
             this.watcher.onNew(sourcePattern, compileFn);
             this.watcher.onUpdate(sourcePattern, compileFn);
+
+            /**
+             * 初始化
+             */
+            this.initCompiler(compilerModel);
         });
     }
 
     /**
      * @description 初次执行
      */
-    createCompiler(compilerModel) {
+    initCompiler(compilerModel) {
         new PreCompiler(compilerModel)
             .run()
-            .on('returnDeps', (info) => {
+            .on('returnDeps', info => {
                 const diff = this.getNewDeps(
                     compilerModel.watchMap,
                     info.deps);
@@ -87,13 +96,13 @@ class PreCompilerPlugin {
     /**
      * @description 文件修改执行
      */
-    createSingleCompiler(compilerModel, isWatch) {
+    createSingleCompiler(compilerModel, isWatch = false) {
         let singleCompiler = new SinglePreCompiler(compilerModel).runInstance(compilerModel.relative);
 
         if (!isWatch) return;
 
         singleCompiler
-            .on('returnDeps', (info) => {
+            .on('returnDeps', info => {
                 const diff = this.getNewDeps(compilerModel.watchMap, info.deps);
                 if (!diff.hasNew) {
                     return false;
@@ -102,13 +111,12 @@ class PreCompilerPlugin {
                     this.createSingleCompiler(compilerModel, false);
                 });
             });
-        return singleCompiler;
     }
 
     getNewDeps(watchMap, deps) {
         const file = deps[0];
         watchMap[file] = watchMap[file] || [];
-        const list = deps.filter((dep) => {
+        const list = deps.filter(dep => {
             if ((watchMap[file].indexOf(dep) === -1)) {
                 watchMap[file].push(dep);
                 return true;
