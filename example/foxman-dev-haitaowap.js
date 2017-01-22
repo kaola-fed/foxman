@@ -1,8 +1,8 @@
 const config = require('/Users/june/Desktop/Projects/kaola/haitaowap/foxman.config');
 
 config.argv = {
-    proxy: 'hst_test10',
-    update: 0
+    proxy: !!0,
+    update: 1
 };
 require('../')(config);
 
