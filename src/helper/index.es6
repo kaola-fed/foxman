@@ -1,6 +1,6 @@
 import util from './util';
 import fileUtil from './fileutil';
-import freemarker from './freemarker';
+import RenderUtil from './render';
 
 const DispatherTypes = {
     DIR: 'dir',
@@ -8,5 +8,5 @@ const DispatherTypes = {
     ASYNC: 'async'
 };
 export {
-    util, fileUtil, DispatherTypes, freemarker
+    util, fileUtil, DispatherTypes, RenderUtil
 };

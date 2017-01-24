@@ -4,7 +4,7 @@ import http2 from 'http2';
 import Koa from 'koa';
 import path from 'path';
 import serve from 'koa-serve';
-import RenderUtil from '../../helper/freemarker';
+import {RenderUtil} from '../../helper';
 import render from 'koa-ejs';
 import dispatcher from './middleware/dispatcher';
 import routeMap from './middleware/routemap';
