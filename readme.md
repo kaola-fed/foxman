@@ -132,78 +132,111 @@ sync | 是否同步接口 | true
 filePath| 同步文件路径或mock数据路径 | 'pages/index.ftl'
 
 ## 举个栗子
-```js
+```javascript
 'use strict';
+/****************** IMPORT START ******************/
 const path = require('path');
 const resolve = path.resolve;
-
-const mcss = require('foxman-mcss');
-const autoprefix = require('gulp-autoprefixer');
-const RouteDisplay = require('foxman-plugin-route-display');
-const MockControl = require('foxman-plugin-mock-control');
+/****************** IMPORT END ******************/
 
 
-const routers = [];
-const paths = Object.assign({
-    webapp: resolve(__dirname, 'src', 'main', 'webapp')
-}, {
-    viewRoot: resolve(paths.webapp, 'WEB-INF', 'template'),
-    syncData: resolve(paths.webapp, 'mock', 'sync'),
-    asyncData: resolve(paths.webapp, 'mock', 'async')
-}, {
-    src: resolve(paths.webapp, 'src'),
-    res: resolve(paths.webapp, 'res'),
-    example: resolve(paths.webapp, 'example')
-})
-
-const commonUrl = function (ip) {
-    return function (url) {
-        return [
-            'http://',
-            ip,
-            '/',
-            url
-        ].join('')
-    }
+/****************** ROUTERS START ******************/
+/**
+ * @Router
+ *  @Property method: 'POST',
+ *  @Property url: '/foo',
+ *  @Property sync: false,
+ *  @Property filePath 'foo/bar'
+ *  @type {Object}
+ */
+const Router = {
+    method: 'POST',
+    url: '/foo.html',
+    sync: false,
+    filepath: 'foo.json'
 };
+/**
+ * @Routers
+ * @type {Array<Router>}
+ */
+const Routers = [
+    /** Router **/
+];
+/****************** ROUTERS END ******************/
+
+
+/****************** PATHS START ******************/
+const paths = (function () {
+    const paths = {};
+
+    Object.assign(paths, {
+        webapp: resolve(__dirname, 'src', 'main', 'webapp')
+    });
+
+    Object.assign(paths, {
+        viewRoot: resolve(paths.webapp, 'WEB-INF', 'tpl'),
+        syncData: resolve(paths.webapp, 'mock', 'sync'),
+        asyncData: resolve(paths.webapp, 'mock', 'async')
+    });
+
+    Object.assign(paths, {
+        src: resolve(paths.webapp, 'source'),
+        res: resolve(paths.webapp, 'res')
+    });
+
+    Object.assign(paths, {
+        mcssSrc: resolve(paths.src, 'mcss/**/[^_]*.mcss'),
+        components: resolve(paths.src, 'javascript/components'),
+        mcssTarget: resolve(paths.src, 'css/')
+    });
+
+    return paths;
+}());
+/****************** PATHS END ******************/
+
+
+/****************** COMMONURL START ******************/
+const commonUrl = function (ip) {
+    const address = [ 'http://', ip, '/'].join('');
+    return (url) => (address + url);
+};
+/****************** COMMONURL END ******************/
+
 
 module.exports = {
-    plugins: [
-        /**
-        * 路由展示插件
-        * /RouteDisplay 会展示当前所有路由
-        */
-        new RouteDisplay(),
-        new MockControl({
-            /**
-             * 在 mock json 的同目录下找，文件名一样 的 .js 文件
-             * @param dataPath
-             * @returns {string|*|XML|void}
-             */
-            mapJS: function (dataPath) {
-                return dataPath.replace(/\.json$/, '.js');
-            }
-        })
-    ],
     nei: {
-        key: 'xxxxxxxxxxxxxxxx'
+        key: 'xxxxxxxx'
     },
+    plugins: [
+        new (require('foxman-plugin-mock-control'))({
+            mapJS: function (dataPath) {
+                return (function (jsMockPath) {
+                    /**
+                     * If you can't find out ${jsMockPath}. You could open this comment.
+                     * cosnole.log(jsMockPath);
+                     */
+                    return jsMockPath;
+                }(dataPath.replace(/\.json/g, '.js')));
+            }
+        }),
+        new (require('foxman-plugin-route-display'))()
+    ],
     preCompilers: [
         {
-            test: [resolve(paths.webapp, 'src/mcss/**/*.mcss')],
-            ignore: [resolve(paths.webapp, '**/_*.mcss')],
+            test: [paths.mcssSrc],
             handler: function (dest) {
                 return [
-                    mcss({
-                        "include": [resolve(paths.webapp, 'src/javascript/components')],
+                    require('foxman-mcss')({
+                        "include": [paths.components],
                         "format": 1
                     }),
-                    autoprefix({
+                    require('gulp-autoprefixer')({
                         browsers: ['Android >= 2.3'],
-                        cascade: false
+                        cascade: false,
+                        remove: false
                     }),
-                    dest(resolve(paths.webapp, 'src/css/'))
-                ]
+                    dest(paths.mcssTarget)
+                ];
             }
         }
     ],
@@ -211,40 +244,34 @@ module.exports = {
         root: paths.webapp
     },
     proxy: {
-        host: 'your.domain.here',
+        host: 'm.kaola.com',
         /**
-         * 代理url转换器
+         * Proxy Controller
          * @param url
          * @returns {string}
-         * 新增代理，则在 service 下新增一个 function, 启动时用 function name 启动
-         * 例子： foxman -p hst_test10
+         * If You Want To add Proxy Service，Please Add A Function At service, And Run as ```foxman -p ${proxy_name}```
+         * Example： foxman -p hst_test10
          */
         service: {
-            test: function (url) {
-                return commonUrl('127.0.0.1:8080')(url);
-            },
-            hst_test10: function hst_test10(url) {
-                return commonUrl('171.12.22.12')(url);
+            test (url) {
+                return commonUrl('m.kaola.com')(url);
             }
         }
     },
     server: {
-        routers: routers,
+        routers: Routers,
         port: 9999,
-        divideMethod: false,
-        debugTool: true,
+        divideMethod: !!0,
+        debugTool: !0,
         viewRoot: paths.viewRoot,
         syncData: paths.syncData,
         asyncData: paths.asyncData,
         static: [
             paths.src,
             paths.res,
-            paths.example
         ]
     }
 };
-
-
 ```
 
 [npm-url]: https://www.npmjs.com/package/foxman
