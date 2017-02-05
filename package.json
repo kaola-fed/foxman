@@ -1,7 +1,7 @@
 {
   "name": "foxman",
-  "version": "0.7.0",
-  "description": "不只是 Mock Server",
+  "version": "0.8.0-alpha",
+  "description": "Not Only Mock Server",
   "main": "app.js",
   "bin": {
     "foxman": "bin/foxman"
@@ -61,6 +61,7 @@
     "vinyl-fs": "^0.3.14",
     "vinyl-fs-diff": "^1.0.0",
     "ws": "^1.1.1",
-    "yargs": "^4.8.1"
+    "yargs": "^4.8.1",
+    "fast-ftl": "latest"
   }
 }

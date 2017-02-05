@@ -105,8 +105,12 @@ export function bufferConcat(...bufs) {
 }
 
 export function JSONParse(jsonStr) {
-    const result = new Function(`return ${jsonStr}`)();
-    return (typeOf(result) === 'object') ? result : {};
+    try {
+        const result = new Function(`return ${jsonStr}`)();
+        return (typeOf(result) === 'object') ? result : {};
+    } catch (err) {
+        return {};
+    }
 }
 
 export function typeOf(obj) {
