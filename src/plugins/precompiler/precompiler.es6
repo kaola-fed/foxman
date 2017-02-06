@@ -27,7 +27,14 @@ class PreCompiler extends EventEmitter {
             self.emit('returnDeps', info);
         };
         this.source = this.source.pipe.apply(this.source, args);
-        args[0].on('returnDeps', (info) => returnDeps(info));
+        args[0].on('returnDeps', (info) => {
+            returnDeps(info);
+        }).on('returnDependencys', (info) => {
+            returnDeps({
+                source: info[0],
+                deps: info.slice(1)
+            });
+        });
         return this;
     }
 
