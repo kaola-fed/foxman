@@ -20,7 +20,9 @@ export function error(msg) {
 }
 
 export function log(msg) {
-    console.log('[I]'.green + ' ' + initialsCapitals(msg));
+    msg = '[I]'.green + ' ' + initialsCapitals(msg);
+    process.stdout.write( '\x1bc' );
+    console.log(msg);
 }
 
 export function warnLog(msg) {
