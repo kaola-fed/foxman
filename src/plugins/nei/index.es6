@@ -79,35 +79,18 @@ class NeiPlugin {
     }
 
     formatRoutes(rules) {
-        let routes = [];
         let neiRoute = this.neiRoute;
+        const routes = Object.keys(rules).map(ruleName => {
+            let rule = rules[ruleName];
+            let sync = rule.hasOwnProperty('list');
+            let routeInfo = sync ? {filePath: rule.list[0].path, id: rule.list[0].id}: {filePath: rule.path, id: rule.id};
+            return Object.assign({
+                method: ruleName.split(' '),
+                url: util.appendHeadBreak(url),
+                sync: sync,
+            }, routeInfo);
+        });
 
-        for (let ruleName in rules) {
-            if (rules.hasOwnProperty(ruleName)) {
-                let filePath, id;
-                let rule = rules[ruleName];
-                let [method, url] = ruleName.split(' ');
-
-                // nei url 默认都是不带 / ,检查是否有
-                url = util.appendHeadBreak(url);
-
-                let sync = rule.hasOwnProperty('list');
-
-                if (sync) {
-                    [filePath, id] = [rule.list[0].path, rule.list[0].id];
-                } else {
-                    [filePath, id] = [rule.path, rule.id];
-                }
-
-                routes.push({
-                    method,
-                    url,
-                    sync,
-                    filePath,
-                    id
-                });
-            }
-        }
         fileUtil.writeFile(neiRoute, `module.exports = ${_.inspect(routes, {maxArrayLength: null})}`, () => {
         }, (e) => {
             util.error(e);
