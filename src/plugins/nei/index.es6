@@ -81,13 +81,14 @@ class NeiPlugin {
     formatRoutes(rules) {
         let neiRoute = this.neiRoute;
         const routes = Object.keys(rules).map(ruleName => {
-            let rule = rules[ruleName];
-            let sync = rule.hasOwnProperty('list');
-            let routeInfo = sync ? {filePath: rule.list[0].path, id: rule.list[0].id}: {filePath: rule.path, id: rule.id};
+            const rule = rules[ruleName];
+            const sync = rule.hasOwnProperty('list');
+            const routeInfo = sync ? {filePath: rule.list[0].path, id: rule.list[0].id}: {filePath: rule.path, id: rule.id};
+            const [method, url] = ruleName.split(' ');
             return Object.assign({
-                method: ruleName.split(' '),
+                method,
                 url: util.appendHeadBreak(url),
-                sync: sync,
+                sync,
             }, routeInfo);
         });
 
