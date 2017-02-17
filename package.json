@@ -1,6 +1,6 @@
 {
   "name": "foxman",
-  "version": "0.8.0-alpha.1",
+  "version": "0.8.0-alpha.3",
   "description": "Not Only Mock Server",
   "main": "app.js",
   "bin": {

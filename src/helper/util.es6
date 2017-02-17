@@ -21,7 +21,6 @@ export function error(msg) {
 
 export function log(msg) {
     msg = '[I]'.green + ' ' + initialsCapitals(msg);
-    process.stdout.write( '\x1bc' );
     console.log(msg);
 }
 
