@@ -24,7 +24,7 @@ class ProxyPlugin {
         /**
          * 命令行选项
          */
-        if (!this.ifProxy) {
+        if (!this.enable) {
             return false;
         }
 

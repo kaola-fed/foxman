@@ -1,6 +1,6 @@
 {
   "name": "foxman",
-  "version": "0.8.0-alpha.3",
+  "version": "0.8.0-alpha.5",
   "description": "Not Only Mock Server",
   "main": "app.js",
   "bin": {
@@ -16,7 +16,7 @@
     }
   },
   "scripts": {
-    "build": "babel src -d dist -s -x .es6",
+    "build": "babel src -d dist -x .es6",
     "dev": "babel src -w -d src -s -x .es6",
     "test": "babel src -d src -s -x .es6 &&  mocha ./test",
     "release": "npm run build && npm publish"

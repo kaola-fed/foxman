@@ -8,7 +8,9 @@ class Reloader extends EventEmitter {
         this.bindChange();
 
         this.reload = (url) => {
-            this.server.wss.broadcast(url);
+            if (this.server && this.server.wss) {
+                this.server.wss.broadcast(url);
+            }
         };
     }
 
