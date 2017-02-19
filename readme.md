@@ -14,7 +14,7 @@ Foxman 是面向**前端开发**的**集成工具**，对开发阶段的 Mock �
 ```javascript
 npm install --global foxman
 ```
-建议：安装最新版的 Node.js，促成社区共同进步
+**建议：安装最新版的 Node.js，促成社区共同进步**
 
 ## 文档
 快速入门、配置、插件开发以及原理等文档 [docs/index.md](docs/index.md)
