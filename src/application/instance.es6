@@ -11,7 +11,7 @@ export default {
             id: pid(),
             name: plugin.constructor.name,
             pending: (fn) => this.pending(fn, plugin),
-            enable: true
+            enable: (typeof plugin.enable === 'undefined'? true: plugin.enable)
         });
     },
 

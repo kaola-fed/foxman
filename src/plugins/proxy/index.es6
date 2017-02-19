@@ -21,13 +21,6 @@ class ProxyPlugin {
     }
 
     init(serverPlugin) {
-        /**
-         * 命令行选项
-         */
-        if (!this.ifProxy) {
-            return false;
-        }
-
         this.proxy = httpProxy.createProxyServer({});
         this.proxy.on('proxyReq', (proxyReq) => {
             proxyReq.setHeader('X-Special-Proxy-Header', 'foxman');

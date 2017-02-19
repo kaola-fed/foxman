@@ -53,7 +53,7 @@ class PreCompilerPlugin {
                 this.createSingleCompiler(
                     new CompilerModel(compilerModel)
                         .setSourcePattern(file)
-                        .setRelative(sourcePattern)
+                        .setRelative(sourcePattern), true
                 );
             };
 

@@ -2,7 +2,6 @@ import {resolve, relative, sep} from 'path';
 import vinylFs from 'vinyl-fs';
 import EventEmitter from 'events';
 import {util} from '../../helper';
-import diff from 'vinyl-fs-diff';
 
 class PreCompiler extends EventEmitter {
     constructor(options) {
@@ -38,20 +37,12 @@ class PreCompiler extends EventEmitter {
         return this;
     }
 
-    pipeDiff(workFlow) {
-        workFlow.splice(-1, 0, diff({
-            hash: this.taskName
-        }));
-        return workFlow;
-    }
-
     run() {
         let workFlow = this.handler(vinylFs.dest.bind(this));
         this.source = vinylFs.src(this.addExludeReg(this.sourcePattern));
-        this.pipeDiff(workFlow)
-            .forEach((item) => {
-                this.pipe(item);
-            });
+        workFlow.forEach((item) => {
+            this.pipe(item);
+        });
         return this;
     }
 
@@ -94,10 +85,9 @@ class SinglePreCompiler extends PreCompiler {
         try {
             this.source = vinylFs.src(this.addExludeReg(this.sourcePattern));
             const workFlow = this.handler(this.destInstence.call(this, sourcePattern));
-            this.pipeDiff(workFlow)
-                .forEach((item) => {
-                    this.pipe(item);
-                });
+            workFlow.forEach((item) => {
+                this.pipe(item);
+            });
         } catch (err) {
             console.log(err);
         }
