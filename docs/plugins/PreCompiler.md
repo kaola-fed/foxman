@@ -1,31 +1,42 @@
-## PreCompiler
-> PreCompiler 是指 Foxman 中的预处理器，如 css 预处理器  
+## 如何配置现有的 Foxman PreCompiler
+> PreCompiler 是指 Foxman 中的预处理器，如 css 预处理器；  
 
-> PreCompiler 调用的是 Gulp Plugin ，所以所有的 Gulp Plugin 都能够改写成 Foxman 的 PreCompiler
+config.preCompilers 接受一个数组，数组中每一项是一个 PreCompiler 模型
 
+PreCompiler 模型：
+### test@Array<String>(必须)
+> 匹配该规则的文件会进行 handler 描述的编译操作
 
-配置项是一个数组，数组每一项是独立的 **Compiler** (**Array<Compiler>**)  
-以下 preCompiler 的数据结构  
+### ignore@Array<String>(可选)
+> 匹配该规则的文件会被忽略
 
-字段名 | 作用 | 例子
----- | --- | ---
-test | Array<path> 符合该规则会进行该编译操作 | [path.resolve(paths.webapp, 'src/mcss/**/*.mcss')]
-ignore | Array<path> 符合该规则的会被忽略 | [path.resolve(paths.webapp, '**/_*.mcss')]
-handler | function 类型，需要 return 一个数组，用以表示编译流| 如下
+**注意：test 与 ignore 规则都基于 glob 的文件匹配标准**
 
+### handler@function
+> 基于 Gulp 的 pipe 操作，该预处理器，会经过 Foxman-Mcss 处理后输出
 ```
-...略
 handler: function (dest) {
     return [
-        mcss({
-            "include": [resolve(paths.webapp, 'src/javascript/components')],
-            "format": 1
-        }),
-        dest(resolve(paths.webapp, 'src/css/'))
+        mcss({}),
+        dest(resolve(__dirname, 'src/css/'))
     ]
 }
-...略
 ```
-**注：**  
-1. 文件匹配部分使用 **glob** 的文件匹配标准  
-2. foxman-mcss 支持的配置项和 mcss.json 中配置一致,不支持 exclude，使用 **igonre** 替代
+
+## 如何编写一个 Foxman PreCompiler
+> 由于文件处理的模块使用的是 [vinyl-fs](https://github.com/gulpjs/vinyl-fs) ，故所有的 Gulp Plugin 都能够改写成 Foxman 的 PreCompiler
+
+你需要阅读，[如何编写一个gulp插件](http://www.cnblogs.com/giggle/archive/2017/02/06/6344789.html)。
+
+或者你可以找到已有的 Gulp Plugin，如 gulp-mcss | gulp-sass | gulp-less 进行改写。
+
+改写 Foxman PreCompiler 的方法是：在实际的预处理器处理之后，emit 一个 "returnDeps" 的事件，传递出特定的对象
+
+```javascript
+program.emit('returnDeps', {
+    source: '/path/to/css.mcss', // 当前文件绝对路径
+    deps: [] // 该文件的依赖
+});
+```
+
+具体细节参考 [Foxman-Mcss](https://github.com/foxman-plugins/Mcss/blob/master/index.js#L50)

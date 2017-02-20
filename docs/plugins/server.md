@@ -31,5 +31,10 @@
 ### debugTool@Boolean (可选)
 > 移动端调试模式：是否启用 [vConsole](https://github.com/vConsole)
 
+### extension@String (可选) 
+> 模板文件扩展名，默认'ftl'，更改渲染引擎时换成你需要的扩展名
+
 ### RenderUtil@Render (可选)
 RenderUtil是一个类，需要实现 [Render](./TemplateRender.md) 接口的 `parse` 方法
+
+**注： 如需更换渲染引擎，需要同时修改 server.extension 与 server.RenderUtil**
