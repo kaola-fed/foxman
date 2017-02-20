@@ -27,15 +27,6 @@ $ cd /path/to/my-project
 $ foxman
 ```
 
-### 配置 NEI 之后，本地端与远程端数据同步，查看 [如何配置 NEI](docs/NEI.md)
-```bash
-$ foxman -u #update
-```
-### 连接到后端主机|测试服务器，查看 [如何配置 Proxy](docs/Proxy.md)
-```bash
-$ foxman -p test #"test" 为在 config 中配置的远程服务器项
-```
-
 [npm-url]: https://www.npmjs.com/package/foxman
 [npm-image]: https://img.shields.io/npm/v/foxman.svg
 [downloads-image]: https://img.shields.io/npm/dm/foxman.svg
