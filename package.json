@@ -58,7 +58,6 @@
     "path-to-regexp": "^1.5.3",
     "validate": "^3.0.1",
     "vinyl-fs": "^0.3.14",
-    "vinyl-fs-diff": "^1.0.0",
     "ws": "^1.1.1",
     "yargs": "^4.8.1",
     "fast-ftl": "latest"
