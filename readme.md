@@ -31,7 +31,7 @@ foxman
 ```bash
 foxman -u #update
 ```
-### 连接到后端主机|测试服务器，查看 [如何配置 Remote Debugging](docs/remoteDebugging.md)
+### 连接到后端主机|测试服务器，查看 [如何配置 Proxy](docs/Proxy.md)
 ```bash
 foxman -p test #"test" 为在 config 中配置的远程服务器项
 ```
