@@ -26,6 +26,8 @@ $ npm install --global foxman
 $ cd /path/to/my-project
 $ foxman
 ```
+## LICENSE
+[![license][license-image]][license-url]
 
 [npm-url]: https://www.npmjs.com/package/foxman
 [npm-image]: https://img.shields.io/npm/v/foxman.svg
@@ -33,3 +35,5 @@ $ foxman
 [downloads-url]: https://www.npmjs.com/package/foxman
 [nodei-image]: https://nodei.co/npm/foxman.png?downloads=true&downloadRank=true&stars=true
 [nodei-url]: https://www.npmjs.com/package/foxman
+[license-url]: https://github.com/ImHype/Fast-FTL/blob/master/LICENSE
+[license-image]: https://img.shields.io/github/license/imhype/Fast-FTL.svg
