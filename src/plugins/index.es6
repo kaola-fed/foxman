@@ -1,5 +1,4 @@
-// import Nei from './nei';
-import PreCompiler from './precompiler';
+import PreCompiler from './PreCompiler';
 import Proxy from './proxy';
 import Reloader from './reloader';
 import Server from './server';

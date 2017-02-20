@@ -1,130 +1,109 @@
-import PreCompiler, {SinglePreCompiler} from './precompiler';
+import PreCompiler from './PreCompiler';
+import FileUpdater from './FileUpdater';
 import CompilerModel from './CompilerModel';
-import {util} from '../../helper';
+import { util } from '../../helper';
 
-/**
- * 监听插件
- test: Array<String> or String
- ignore: Array<String> or String
- handler: (dest) => [
- Gulp插件,
- dest(String)
- ]
- */
 class PreCompilerPlugin {
     constructor(options) {
         Object.assign(this, options);
-
-        if (!this.preCompilers) {
-            this.preCompilers = [];
-        }
     }
-
+    /**
+     * @param  {} watcherPlugin
+     */
     init(watcherPlugin) {
         this.watcher = watcherPlugin.watcher;
-        this.startCompilers(this.preCompilers);
+        (this.preCompilers || []).forEach((item) => this.start(item));
     }
-
-    startCompilers(preCompilers) {
-        preCompilers.forEach(this.startCompiler.bind(this));
-    }
-
-    startCompiler(preCompiler) {
-        const handler = preCompiler.handler;
-        let source = preCompiler.test;
-        let ignore = preCompiler.ignore;
-
-        if (!Array.isArray(source)) {
-            source = [source];
-        }
-
+    /**
+     * @param  {} {handler
+     * @param  {} test
+     * @param  {} ignore}
+     */
+    start({handler, test, ignore}) {
+        const source = (Array.isArray(test))? test: [test]
         const taskName = util.sha1(source.join("-"));
 
         source.forEach(sourcePattern => {
-            const watchMap = {};
             const compilerModel = new CompilerModel({
-                sourcePattern,
-                ignore,
-                watchMap,
-                handler,
-                taskName
+                sourcePattern, ignore, taskName,
+                watchMap: {}, handler
             });
             const compileFn = file => {
-                this.createSingleCompiler(
+                this.fileUpdate(
                     new CompilerModel(compilerModel)
                         .setSourcePattern(file)
                         .setRelative(sourcePattern), true
                 );
             };
 
-            /**
-             * 监听变化
-             */
             this.watcher.onNew(sourcePattern, compileFn);
             this.watcher.onUpdate(sourcePattern, compileFn);
-
-            /**
-             * 初始化
-             */
             this.initCompiler(compilerModel);
         });
     }
 
     /**
-     * @description 初次执行
+     * @param  {} compilerModel
      */
     initCompiler(compilerModel) {
-        new PreCompiler(compilerModel)
-            .run()
-            .on('returnDeps', info => {
-                const diff = this.getNewDeps(
-                    compilerModel.watchMap,
-                    info.deps);
-                if (!diff.hasNew) {
-                    return false;
-                }
-                this.watcher.onUpdate(diff.list, () => {
-                    this.createSingleCompiler(
-                        new CompilerModel(compilerModel)
-                            .setSourcePattern(info.source)
-                            .setRelative(compilerModel.sourcePattern),
-                        true);
-                });
+        const preCompiler = new PreCompiler(compilerModel).run();
+        PreCompilerPlugin.getDiff(preCompiler, compilerModel.watchMap).then(({source, hasNew, list}) => {
+            if (!hasNew) return false;
+            this.watcher.onUpdate(list, () => {
+                this.fileUpdate(
+                    new CompilerModel(compilerModel)
+                        .setSourcePattern(source)
+                        .setRelative(compilerModel.sourcePattern),
+                    true);
             });
+        });
     }
-
+    
     /**
-     * @description 文件修改执行
+     * @param  {} compilerModel
+     * @param  {} isWatch=false
      */
-    createSingleCompiler(compilerModel, isWatch = false) {
-        let singleCompiler = new SinglePreCompiler(compilerModel).runInstance(compilerModel.relative);
-
+    fileUpdate(compilerModel, isWatch = false) {
+        let fileUpdater = new FileUpdater(compilerModel).runInstance(compilerModel.relative);
         if (!isWatch) return;
 
-        singleCompiler
-            .on('returnDeps', info => {
-                const diff = this.getNewDeps(compilerModel.watchMap, info.deps);
-                if (!diff.hasNew) {
-                    return false;
-                }
-                this.watcher.onUpdate(diff.list, () => {
-                    this.createSingleCompiler(compilerModel, false);
-                });
+        PreCompilerPlugin.getDiff(fileUpdater, compilerModel.watchMap).then(({hasNew, list}) => {
+            if (!hasNew) return;
+            this.watcher.onUpdate(list, () => {
+                this.fileUpdate(compilerModel, false);
             });
-    }
-
-    getNewDeps(watchMap, deps) {
-        const file = deps[0];
-        watchMap[file] = watchMap[file] || [];
-        const list = deps.filter(dep => {
-            if ((watchMap[file].indexOf(dep) === -1)) {
-                watchMap[file].push(dep);
-                return true;
-            }
         });
-
+    }
+    /**
+     * @param  {} compiler
+     * @param  {} watchMap
+     */
+    static getDiff(compiler, watchMap) {
+        return new Promise((resolve, reject) => {
+            compiler.once('returnDeps', info => {
+                resolve(PreCompilerPlugin.getNewDeps(watchMap, info))
+            });
+        })
+    }
+    /**
+     * @param  {} watchMap={}
+     * @param  {} {source=''
+     * @param  {} deps=[]}
+     */
+    static getNewDeps(watchMap = {}, {source = '', deps = []}) {
+        if (!watchMap[source]) {
+            watchMap[source] = [];
+        }
+        const list = deps.filter(dep => {
+            const notWatched = (watchMap[source].indexOf(dep) === -1);
+            if (notWatched) {
+                watchMap[source].push(dep);
+            }
+            return notWatched;
+        });
         return {
             hasNew: list.length !== 0,
+            source,
             list
         };
     }

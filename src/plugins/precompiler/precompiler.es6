@@ -1,34 +1,26 @@
-import {resolve, relative, sep} from 'path';
 import vinylFs from 'vinyl-fs';
 import EventEmitter from 'events';
-import {util} from '../../helper';
+import { util } from '../../helper';
 
 class PreCompiler extends EventEmitter {
+    /**
+     * @param  {} options
+     */
     constructor(options) {
         super();
         Object.assign(this, options);
-        /**
-         * Vinyl-fs Ignore File Standard
-         */
-        if (options.ignore) {
-            if (!Array.isArray(options.ignore)) {
-                options.ignore = [options];
-            }
-            this.ignore = options.ignore.map((item) => {
-                return '!' + item;
-            });
-        }
     }
-
-    pipe(...args) {
-        const self = this;
-        const returnDeps = (info) => {
-            self.emit('returnDeps', info);
+    /**
+     * @param  {} job
+     */
+    pipe(job) {
+        const returnDeps = info => {
+            this.emit('returnDeps', info);
         };
-        this.source = this.source.pipe.apply(this.source, args);
-        args[0].on('returnDeps', (info) => {
+        this.source = this.source.pipe(job);
+        job.on('returnDeps', info => {
             returnDeps(info);
-        }).on('returnDependencys', (info) => {
+        }).on('returnDependencys', info => {
             returnDeps({
                 source: info[0],
                 deps: info.slice(1)
@@ -38,63 +30,14 @@ class PreCompiler extends EventEmitter {
     }
 
     run() {
+        this.source = vinylFs.src(this.sourcePattern);
         let workFlow = this.handler(vinylFs.dest.bind(this));
-        this.source = vinylFs.src(this.addExludeReg(this.sourcePattern));
-        workFlow.forEach((item) => {
-            this.pipe(item);
+
+        workFlow.forEach((job) => {
+            this.pipe(job);
         });
         return this;
     }
-
-    addExludeReg(sourcePattern) {
-        if (!this.ignore) {
-            return sourcePattern;
-        }
-        if (Array.isArray(sourcePattern)) {
-            return sourcePattern.concat(this.ignore);
-        }
-        return [sourcePattern].concat(this.ignore);
-    }
 }
-
-class SinglePreCompiler extends PreCompiler {
-    destInstence(sourcePattern) {
-        return (dest) => {
-            /**
-             * @TODO Replace With Glob Standard
-             */
-            /**
-             * 获取输入文件的相对根目录
-             * @type {XML|string|void|*}
-             */
-            let sourceRoot = sourcePattern.replace(/\*+.*$/, '');
-            /**
-             * 得到输出文件的完整文件名
-             */
-            let output = resolve(dest, relative(sourceRoot, this.sourcePattern));
-            /**
-             * 输出文件
-             */
-            let target = sourceRoot.endsWith(sep) ? resolve(output, '..') : output;
-            util.log(`${this.sourcePattern} -> ${target}`);
-            return vinylFs.dest(target);
-        };
-    }
-
-    runInstance(sourcePattern) {
-        try {
-            this.source = vinylFs.src(this.addExludeReg(this.sourcePattern));
-            const workFlow = this.handler(this.destInstence.call(this, sourcePattern));
-            workFlow.forEach((item) => {
-                this.pipe(item);
-            });
-        } catch (err) {
-            console.log(err);
-        }
-        return this;
-    }
-}
-
-export {SinglePreCompiler};
 
 export default PreCompiler;

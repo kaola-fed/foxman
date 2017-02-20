@@ -33,8 +33,7 @@ module.exports = {
     ],
     preCompilers: [
         {
-            test: [path.join(__dirname, 'src', 'mcss', '**', '*.mcss')],
-            ignore: [path.join(__dirname, '**', '_*.mcss')],
+            test: [path.join(__dirname, 'src', 'mcss', '**', '[^_]*.mcss')],
             handler: (dest) => {
                 return [
                     mcss({
