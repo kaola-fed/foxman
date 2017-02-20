@@ -15,9 +15,10 @@ service: {
     }
 }
 ```
+
 ## 启动
 ```bash
-foxman -p test #"test" 为在 config 中配置的远程服务器项
+$ foxman -p test #"test" 为在 config 中配置的远程服务器项
 ```
 
 ## Proxy 实现原理

@@ -16,7 +16,7 @@
 ### 安装 Foxman
 
 ```bash
-npm install -g foxman
+$ npm install -g foxman
 ```
 
 - `-g` 安装到全局目录，必须使用全局安装，当全局安装后才能在命令行（cmd或者终端）找到 `Foxman` 命令
@@ -36,10 +36,10 @@ $ foxman -v
 ### 升级 Foxman
 
 ```bash
-npm update -g foxman
+$ npm update -g foxman
 ```
 或重装
 
 ```bash
-npm install -g foxman
+$ npm install -g foxman
 ```

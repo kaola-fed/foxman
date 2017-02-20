@@ -11,8 +11,8 @@ Foxman 是面向**前端开发**的**集成工具**，对开发阶段的 Mock �
 > "Fox" -- 致力于打造一套让开发者难辨真伪的 Mock 支持；  
 > "Man" -- 犹如绅士，优雅，希望给开发者带来更好的开发体验"。
 
-```javascript
-npm install --global foxman
+```bash
+$ npm install --global foxman
 ```
 **建议：安装最新版的 Node.js，促成社区共同进步**
 
@@ -22,18 +22,18 @@ npm install --global foxman
 ## 快速开始
 1. [如何编写贴合工程开发情况的 Foxman 配置文件？](docs/foxman.md)
 2. 启动 Foxman
-```javascript
-cd /path/to/my-project
-foxman
+```bash
+$ cd /path/to/my-project
+$ foxman
 ```
 
 ### 配置 NEI 之后，本地端与远程端数据同步，查看 [如何配置 NEI](docs/NEI.md)
 ```bash
-foxman -u #update
+$ foxman -u #update
 ```
 ### 连接到后端主机|测试服务器，查看 [如何配置 Proxy](docs/Proxy.md)
 ```bash
-foxman -p test #"test" 为在 config 中配置的远程服务器项
+$ foxman -p test #"test" 为在 config 中配置的远程服务器项
 ```
 
 [npm-url]: https://www.npmjs.com/package/foxman
