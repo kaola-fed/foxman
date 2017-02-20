@@ -18,6 +18,8 @@ class ProxyPlugin {
         if (this.enable && !this.proxyConfig.host) {
             util.warn('proxy 部分需要设置 host');
         }
+
+        this.ifProxy = this.enable; // 兼容 mockControl
     }
 
     init(serverPlugin) {
