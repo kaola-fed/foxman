@@ -27,11 +27,11 @@ cd /path/to/my-project
 foxman
 ```
 
-3. 配置 NEI 之后，本地端与远程端数据同步，查看 [如何配置 NEI](docs/NEI.md)
+### 配置 NEI 之后，本地端与远程端数据同步，查看 [如何配置 NEI](docs/NEI.md)
 ```bash
 foxman -u #update
 ```
-4. 连接到后端主机|测试服务器，查看 [如何配置 Remote Debugging](docs/remoteDebugging.md)
+### 连接到后端主机|测试服务器，查看 [如何配置 Remote Debugging](docs/remoteDebugging.md)
 ```bash
 foxman -p test #"test" 为在 config 中配置的远程服务器项
 ```
