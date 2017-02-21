@@ -37,7 +37,7 @@ try {
     const errStr = err.toString();
     if (err.code === 'MODULE_NOT_FOUND') {
         if (~errStr.indexOf(configPath)) {
-            util.error(`Config File Is Not Found!`);
+            util.error(`config file nott found!`);
         } else {
             util.error(`${errStr.replace(/Error: /i, '')}\n${'[T]'.blue} Try Npm Install Or Check The ${argv.config}！`);
         }

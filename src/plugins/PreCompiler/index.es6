@@ -19,13 +19,13 @@ class PreCompilerPlugin {
      * @param  {} test
      * @param  {} ignore
      */
-    start({handler, test, ignore}) {
+    start({handler, test}) {
         const source = (Array.isArray(test))? test: [test];
         const taskName = util.sha1(source.join("-"));
 
         source.forEach(sourcePattern => {
             const compilerModel = new CompilerModel({
-                sourcePattern, ignore, taskName,
+                sourcePattern, taskName,
                 watchMap: {}, handler
             });
             const compileFn = file => {
@@ -47,7 +47,10 @@ class PreCompilerPlugin {
      */
     initCompiler(compilerModel) {
         const preCompiler = new PreCompiler(compilerModel).run();
-        PreCompilerPlugin.getDiff(preCompiler, compilerModel.watchMap).then(({source, hasNew, list}) => {
+        const watchMap = compilerModel.watchMap;
+        
+        preCompiler.on('returnDeps', info => {
+            const {source, hasNew, list} = PreCompilerPlugin.getNewDeps(watchMap, info);
             if (!hasNew) return false;
             this.watcher.onUpdate(list, () => {
                 this.fileUpdate(
@@ -77,6 +80,7 @@ class PreCompilerPlugin {
     /**
      * @param  {} compiler
      * @param  {} watchMap
+     * @param  Boolean isKeep
      */
     static getDiff(compiler, watchMap) {
         return new Promise((resolve, reject) => {

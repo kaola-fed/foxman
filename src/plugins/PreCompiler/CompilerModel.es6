@@ -24,13 +24,6 @@ class CompilerModel {
         return this;
     }
     /**
-     * @param  {} ignore
-     */
-    setIgnore(ignore) {
-        this.ignore = ignore;
-        return this;
-    }
-    /**
      * @param  {} relative
      */
     setRelative(relative) {
