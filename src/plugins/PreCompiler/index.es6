@@ -15,12 +15,12 @@ class PreCompilerPlugin {
         (this.preCompilers || []).forEach((item) => this.start(item));
     }
     /**
-     * @param  {} {handler
+     * @param  {} handler
      * @param  {} test
-     * @param  {} ignore}
+     * @param  {} ignore
      */
     start({handler, test, ignore}) {
-        const source = (Array.isArray(test))? test: [test]
+        const source = (Array.isArray(test))? test: [test];
         const taskName = util.sha1(source.join("-"));
 
         source.forEach(sourcePattern => {
@@ -87,7 +87,7 @@ class PreCompilerPlugin {
     }
     /**
      * @param  {} watchMap={}
-     * @param  {} {source=''
+     * @param  {} source=
      * @param  {} deps=[]}
      */
     static getNewDeps(watchMap = {}, {source = '', deps = []}) {
