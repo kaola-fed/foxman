@@ -1,5 +1,4 @@
 import Freemarker from 'freemarker';
-import path from 'path';
 
 class RenderUtil {
     constructor({viewRoot}) {
@@ -8,10 +7,9 @@ class RenderUtil {
         });
         this.viewRoot = viewRoot;
     }
-
     parse(p1, data) {
-        return new Promise(resolve => {
-            this.freemarker.renderFile(p1, data, (error, content) => {
+        return new Promise((resolve) => {
+            this.freemarker.renderFile(p1, data,  (error, content) => {
                 resolve({
                     error, content
                 });

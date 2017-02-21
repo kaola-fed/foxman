@@ -1,6 +1,6 @@
 {
   "name": "foxman",
-  "version": "0.8.0-alpha.8",
+  "version": "0.8.0-alpha.10",
   "description": "Not Only Mock Server",
   "main": "app.js",
   "bin": {
@@ -60,6 +60,7 @@
     "vinyl-fs": "^0.3.14",
     "ws": "^1.1.1",
     "yargs": "^4.8.1",
+    "freemarker": "latest",
     "fast-ftl": "latest"
   }
 }

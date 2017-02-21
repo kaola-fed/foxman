@@ -21,7 +21,7 @@ var argv = require('yargs')
 
     .alias('v', 'version')
     .describe('v', 'Show version')
-    .version(() => pkg.version)
+    .version(() => `v${pkg.version}`)
 
     .help('h')
     .alias('h', 'help')
