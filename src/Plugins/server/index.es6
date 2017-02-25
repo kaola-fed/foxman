@@ -46,7 +46,7 @@ class ServerPlugin {
         }));
     }
 
-    start() {
+    runOnSuccess() {
         this.server.createServer();
     }
 }

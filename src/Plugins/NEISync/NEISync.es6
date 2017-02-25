@@ -3,6 +3,7 @@ import util from 'nei/lib/util/util';
 import subMain from './submain';
 import Application from 'nei/lib/util/args';
 import {fileUtil} from '../../helper';
+
 util.checkNodeVersion();
 
 const options = {
@@ -55,6 +56,7 @@ let nei = new Application(options),
             } catch (e) {
                 // console.log('初始化nei目录');
             }
+
             this.build(opt);
 
             return new Promise(resolve => {

@@ -8,6 +8,10 @@ export function isPromise(obj) {
     return (obj && obj.value && obj.value.then);
 }
 
+export function isGeneratorDone(obj) {
+    return obj && obj.done;
+}
+
 export function debugLog(msg) {
     if (process.env.NODE_ENV === 'development') {
         console.log('[DEBUG]'.blue + ' ' + initialsCapitals(msg));
@@ -199,6 +203,12 @@ export function matchArgs(func) {
     const argList = func.toString().match(/^.*?\s*[^\(]*\(\s*([^\)]*)\)/m);
     return (argList && argList[1]) ? (argList[1].replace(/ /g, '').split(',')) : [];
 }
+export function* entries(obj) {
+    for (let key of Object.keys(obj)) {
+        yield [key, obj[key]];
+    }
+}
+
 export default {
     debugLog,
     error,
@@ -223,5 +233,7 @@ export default {
     sha1,
     JSONParse,
     isPromise,
-    matchArgs
+    isGeneratorDone,
+    matchArgs,
+    entries
 };
