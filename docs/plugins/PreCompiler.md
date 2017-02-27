@@ -7,10 +7,7 @@ PreCompiler 模型：
 ### test@Array<String>(必须)
 > 匹配该规则的文件会进行 handler 描述的编译操作
 
-### ignore@Array<String>(可选)
-> 匹配该规则的文件会被忽略
-
-**注意：test 与 ignore 规则都基于 glob 的文件匹配标准**
+**注意：test 文件匹配规则符合 glob 的文件匹配标准**
 
 ### handler@function
 > 基于 Gulp 的 pipe 操作，该预处理器，会经过 Foxman-Mcss 处理后输出

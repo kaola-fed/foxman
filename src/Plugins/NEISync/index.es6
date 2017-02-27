@@ -20,7 +20,7 @@ function writeNEIConfig({NEIRoute}, formatR) {
 
 function updateLocalFiles(routes = [], genCommonPath) {
     return Promise.all(routes.map((route) =>
-        new Promise(resolve => {
+        new Promise((resolve, reject) => {
             /**
              * 本地路径（非nei）
              */
@@ -31,7 +31,7 @@ function updateLocalFiles(routes = [], genCommonPath) {
                  */
                 if (error) {
                     util.log('make empty file: ' + dataPath);
-                    fileUtil.writeUnExistsFile(dataPath, '').then(resolve, reject);
+                    fileUtil.writeUnExistsFile(dataPath, '').then(resolve, resolve);
                     return 0;
                 }
                 resolve();
