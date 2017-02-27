@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 'use strict';
+require('colors');
+var util = require('../dist/helper/util').default;
 var path = require('path');
 var pkg = require('../package.json');
 var config;
@@ -19,7 +21,7 @@ var argv = require('yargs')
 
     .alias('v', 'version')
     .describe('v', 'Show version')
-    .version(() => pkg.version)
+    .version(() => `v${pkg.version}`)
 
     .help('h')
     .alias('h', 'help')
@@ -30,11 +32,18 @@ var argv = require('yargs')
 var configPath = path.join(process.cwd(), argv.config);
 
 try {
-	config = require(configPath);
+    config = require(configPath);
 } catch (err) {
-	console.log(`Error:\n ${err}`);
-	process.exit(1);
+    const errStr = err.toString();
+    if (err.code === 'MODULE_NOT_FOUND') {
+        if (~errStr.indexOf(configPath)) {
+            util.error(`config file nott found!`);
+        } else {
+            util.error(`${errStr.replace(/Error: /i, '')}\n${'[T]'.blue} Try Npm Install Or Check The ${argv.config}！`);
+        }
+    } else {
+        util.error(errStr);
+    }
 }
 
-Object.assign(config, { argv });
-require('../app.js')(config);
+require('../app.js')(Object.assign({}, config, {argv}));

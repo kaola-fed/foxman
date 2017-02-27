@@ -3,14 +3,14 @@ const path = require('path');
 const mcss = require('foxman-mcss');
 const autoprefix = require('gulp-autoprefixer');
 const routers = require('./route');
-const RouteDisplay = require('foxman-plugin-route-display');
-const MockControl = require('foxman-plugin-mock-control');
+// const RouteDisplay = require('foxman-plugin-route-display');
+// const MockControl = require('foxman-plugin-mock-control');
 
 module.exports = {
     /**
      * 如有需要，填写nei 的kei 然后执行 foxman -u 初始化工程目录。
      **/
-    // nei: { 
+    // nei: {
     //     key: 'xxxsxsxs'
     // },
     /**
@@ -19,22 +19,21 @@ module.exports = {
      * handler -- Function 类型，需返回一个数组
      */
     plugins: [
-        new RouteDisplay(),
-        new MockControl({
-            /**
-             * 在 mock json 的同目录下找，文件名一样 的 .js 文件
-             * @param dataPath
-             * @returns {string|*|XML|void}
-             */
-            mapJS: function (dataPath) {
-                return dataPath.replace(/\.json$/, '.js');
-            }
-        })
+        // new RouteDisplay(),
+        // new MockControl({
+        //     /**
+        //      * 在 mock json 的同目录下找，文件名一样 的 .js 文件
+        //      * @param dataPath
+        //      * @returns {string|*|XML|void}
+        //      */
+        //     mapJS: function (dataPath) {
+        //         return dataPath.replace(/\.json$/, '.js');
+        //     }
+        // })
     ],
     preCompilers: [
         {
-            test: [path.join(__dirname, 'src', 'mcss', '**', '*.mcss')],
-            ignore: [path.join(__dirname, '**', '_*.mcss')],
+            test: [path.join(__dirname, 'src', 'mcss', '**', '[^_]*.mcss')],
             handler: (dest) => {
                 return [
                     mcss({

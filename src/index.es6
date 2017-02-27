@@ -1,32 +1,25 @@
-import App from './application';
+import {use, run} from './Application';
 import {
     PreCompiler, Proxy,
     Reloader, Server, Watcher, Debug
-} from './plugins';
+} from './Plugins';
 
-let appContext;
-class AppContext {
+class ApplicationContext {
     constructor(config) {
-        const app = App();
-        /**
-         * Configs
-         */
-        app.setConfig(config);
-
         /**
          * Watcher Plugin
          */
-        app.use(new Watcher(config.watch));
+        use(new Watcher(config.watch));
 
         /**
          * Server Plugin
          */
-        app.use(new Server(config.server));
+        use(new Server(config.server));
 
         /**
          * PreCompiler Plugin
          */
-        app.use(new PreCompiler({
+        use(new PreCompiler({
             preCompilers: config.preCompilers
         }));
 
@@ -34,8 +27,8 @@ class AppContext {
          * Nei Plugin
          */
         if (config.nei) {
-            const Nei = require('./plugins/nei').default;
-            app.use(new Nei(Object.assign(config.nei,{
+            const Nei = require('./Plugins/NEISync').default;
+            use(new Nei(Object.assign(config.nei,{
                 update: config.argv.update
             })));
         }
@@ -43,35 +36,30 @@ class AppContext {
         /**
          * Outer Plugin
          */
-        app.use(config.plugins);
+        use(config.plugins);
 
         /**
          * Inner Plugin
          */
-        app.use(new Reloader({}));
+        use(new Reloader({}));
 
         /**
          * Inner Plugin
          */
-        app.use(new Debug({
+        use(new Debug({
             debugTool: config.server.debugTool
         }));
 
         /**
          * Proxy Plugin
          */
-        app.use(new Proxy({
+        use(new Proxy({
             proxyConfig: config.proxy,
             proxyServerConfig: config.argv.proxy
         }));
 
-        app.run();
+        run();
     }
 }
 
-module.exports = function (config) {
-    if (!appContext) {
-        appContext = new AppContext(config);
-    }
-    return appContext;
-};
+export default config => new ApplicationContext(config);
