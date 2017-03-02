@@ -5,15 +5,6 @@ var fileUtil = require('../../src/helper').fileUtil;
 
 describe('fileUtil', function() {
   
-    it('getDirInfo', function(done) {
-      fileUtil.getDirInfo(path.resolve(__dirname, 'foo')).then(function (info) {
-        assert.equal(info.length, 0);
-        done();
-      }, function (err) {
-        done(err);
-      });
-    });
-
     it('writeUnExistsFile', function(done) {
       fileUtil.writeUnExistsFile(path.resolve(__dirname, 'foo/bar.txt'),'Foo Bar').then(function (info) {
         assert.equal(!!~info.indexOf('Foo Bar'), 1);
@@ -21,6 +12,15 @@ describe('fileUtil', function() {
       }, function (err) {
         done(err);
       });
+    });
+
+    it('getDirInfo', function(done) {
+        fileUtil.getDirInfo(path.resolve(__dirname, 'foo')).then(function (info) {
+            assert.equal(info.length, 0);
+            done();
+        }, function (err) {
+            done(err);
+        });
     });
 
     it('getFileStat', function(done) {
