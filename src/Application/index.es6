@@ -73,7 +73,12 @@ function run() {
         })
 }
 
+function get(pluginName) {
+    return dependencys[pluginName]
+}
+
 export {
     use,
-    run
+    run,
+    get
 }
