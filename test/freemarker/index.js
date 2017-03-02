@@ -1,7 +1,7 @@
 // require('babel-polyfill');
 var assert = require('assert');
 var path = require('path');
-var RenderUtil = require('../../src/helper').freemarker;
+var RenderUtil = require('../../src/helper').RenderUtil;
 
 var viewDir = './view/';
 var viewRoot = path.resolve(__dirname, viewDir);
