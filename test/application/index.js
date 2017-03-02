@@ -1,7 +1,7 @@
 require('colors')
 var assert = require("assert");
 var path = require("path");
-var Application = require('../../src/application');
+var Application = require('../../src/Application');
 var Nei = require('../../src/Plugins/NEISync').default;
 var Reloader = require('../../src/Plugins/reloader').default;
 var WatchPlugin = require('../../src/Plugins/watcher').default;
