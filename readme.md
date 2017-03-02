@@ -3,6 +3,7 @@
 [][nodei-url]
 [![NPM version][npm-image]][npm-url]
 [![download][downloads-image]][downloads-url]  
+[![build][travis-image]][travis-url]  
 
 ## Foxman 是什么？
 Foxman 是面向**前端开发**的**集成工具**，对开发阶段的 Mock 环境、Css 预处理器、Living Reload、Remote Debugging、开发规范 等基本需要做了集成。
@@ -36,5 +37,7 @@ $ foxman
 [downloads-url]: https://www.npmjs.com/package/foxman
 [nodei-image]: https://nodei.co/npm/foxman.png?downloads=true&downloadRank=true&stars=true
 [nodei-url]: https://www.npmjs.com/package/foxman
-[license-url]: https://github.com/ImHype/Fast-FTL/blob/master/LICENSE
-[license-image]: https://img.shields.io/github/license/imhype/Fast-FTL.svg
+[license-url]: https://github.com/ImHype/foxman/blob/master/LICENSE
+[license-image]: https://img.shields.io/github/license/imhype/foxman.svg
+[travis-image]: https://travis-ci.org/kaola-fed/foxman.svg?branch=master
+[travis-url]: https://travis-ci.org/kaola-fed/foxman
