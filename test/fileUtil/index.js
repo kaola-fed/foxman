@@ -16,7 +16,7 @@ describe('fileUtil', function() {
 
     it('getDirInfo', function(done) {
         fileUtil.getDirInfo(path.resolve(__dirname, 'foo')).then(function (info) {
-            assert.equal(info.length, 0);
+            assert.equal(info.length, 1);
             done();
         }, function (err) {
             done(err);
