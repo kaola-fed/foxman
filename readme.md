@@ -2,7 +2,7 @@
 
 [][nodei-url]
 [![NPM version][npm-image]][npm-url]
-[![download][downloads-image]][downloads-url]  
+[![download][downloads-image]][downloads-url]
 [![build][travis-image]][travis-url]  
 
 ## Foxman 是什么？
