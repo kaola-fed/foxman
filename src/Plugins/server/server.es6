@@ -124,17 +124,17 @@ class Server {
             server: serverApp
         });
 
-        wss.on('connection', (ws) => {
-            ws.on('message', (message) => {
+        wss.on('connection', ws => {
+            ws.on('message', message => {
                 console.log('received: %s', message);
             });
         });
 
-        wss.broadcast = (data) => {
-            wss.clients.forEach(function each(client) {
-                client.send(data, function (error) {
+        wss.broadcast = data => {
+            wss.clients.forEach( client => {
+                client.send(data, error => {
                     if (error) {
-                        console.log(error);
+                        util.debugLog(error);
                     }
                 });
             });
