@@ -37,7 +37,7 @@ $ foxman
 [downloads-url]: https://www.npmjs.com/package/foxman
 [nodei-image]: https://nodei.co/npm/foxman.png?downloads=true&downloadRank=true&stars=true
 [nodei-url]: https://www.npmjs.com/package/foxman
-[license-url]: https://github.com/ImHype/foxman/blob/master/LICENSE
-[license-image]: https://img.shields.io/github/license/imhype/foxman.svg
+[license-url]: https://github.com/kaola-fed/foxman/blob/master/LICENSE
+[license-image]: https://img.shields.io/github/license/kaola-fed/foxman.svg
 [travis-image]: https://travis-ci.org/kaola-fed/foxman.svg?branch=master
 [travis-url]: https://travis-ci.org/kaola-fed/foxman
