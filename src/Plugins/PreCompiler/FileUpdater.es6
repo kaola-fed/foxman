@@ -5,7 +5,7 @@ import { resolve, relative, sep } from 'path';
 
 class FileUpdater extends PreCompiler {
     /**
-     * @param  {} sourcePattern
+     * @param  {string} sourcePattern
      */
     destInstence(sourcePattern) {
         return (dest) => {
@@ -30,7 +30,7 @@ class FileUpdater extends PreCompiler {
         };
     }
     /**
-     * @param  {} sourcePattern
+     * @param  {string} sourcePattern
      */
     runInstance(sourcePattern) {
         try {

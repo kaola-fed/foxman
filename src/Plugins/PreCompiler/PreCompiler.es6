@@ -4,14 +4,14 @@ import { util } from '../../helper';
 
 class PreCompiler extends EventEmitter {
     /**
-     * @param  {} options
+     * @param  {object} options
      */
     constructor(options) {
         super();
         Object.assign(this, options);
     }
     /**
-     * @param  {} job
+     * @param  {Gulp Plugin Instance} job
      */
     pipe(job) {
         const returnDeps = info => {

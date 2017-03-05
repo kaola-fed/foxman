@@ -6,7 +6,7 @@ import path from 'path';
 
 class RenderUtil {
     /**
-     * @param  {} {viewRoot}
+     * @property {string} viewRoot
      */
     constructor({viewRoot}) {
         this.freemarker = FastFtl({
@@ -14,10 +14,11 @@ class RenderUtil {
         });
         this.viewRoot = viewRoot;
     }
+
     /**
-     * @param  {} p1
-     * @param  {} data
-     * @returns Promise
+     * @param {string} p1
+     * @param {object} data
+     * @returns {*|!Array}
      */
     parse(p1, data) {
         const tpl = path.relative(this.viewRoot, p1);

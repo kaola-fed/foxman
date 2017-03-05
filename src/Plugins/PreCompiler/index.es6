@@ -8,16 +8,15 @@ class PreCompilerPlugin {
         Object.assign(this, options);
     }
     /**
-     * @param  {} watcherPlugin
+     * @param  {Plugin} watcherPlugin
      */
     init(watcherPlugin) {
         this.watcher = watcherPlugin.watcher;
         (this.preCompilers || []).forEach((item) => this.start(item));
     }
     /**
-     * @param  {} handler
-     * @param  {} test
-     * @param  {} ignore
+     * @property {function} handler
+     * @property  {string} test
      */
     start({handler, test}) {
         const source = (Array.isArray(test))? test: [test];
@@ -43,7 +42,7 @@ class PreCompilerPlugin {
     }
 
     /**
-     * @param  {} compilerModel
+     * @param  {CompilerModel} compilerModel
      */
     initCompiler(compilerModel) {
         const preCompiler = new PreCompiler(compilerModel).run();
@@ -63,8 +62,8 @@ class PreCompilerPlugin {
     }
     
     /**
-     * @param  {} compilerModel
-     * @param  {} isWatch=false
+     * @param  {CompilerModel} compilerModel
+     * @param  {boolean} isWatch=false
      */
     fileUpdate(compilerModel, isWatch = false) {
         let fileUpdater = new FileUpdater(compilerModel).runInstance(compilerModel.relative);
@@ -78,9 +77,8 @@ class PreCompilerPlugin {
         });
     }
     /**
-     * @param  {} compiler
-     * @param  {} watchMap
-     * @param  Boolean isKeep
+     * @param  {CompilerModel} compiler
+     * @param  {object} watchMap
      */
     static getDiff(compiler, watchMap) {
         return new Promise((resolve, reject) => {
@@ -90,9 +88,8 @@ class PreCompilerPlugin {
         })
     }
     /**
-     * @param  {} watchMap={}
-     * @param  {} source=
-     * @param  {} deps=[]}
+     * @param  {object} watchMap={}
+     * @param  {object} options
      */
     static getNewDeps(watchMap = {}, {source = '', deps = []}) {
         if (!watchMap[source]) {

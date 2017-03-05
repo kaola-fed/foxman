@@ -3,35 +3,35 @@ class CompilerModel {
         Object.assign(this, options);
     }
     /**
-     * @param  {} watchMap
+     * @param  {string} watchMap
      */
     setWatchMap(watchMap) {
         this.watchMap = watchMap;
         return this;
     }
     /**
-     * @param  {} handler
+     * @param  {function} handler
      */
     setHandler(handler) {
         this.handler = handler;
         return this;
     }
     /**
-     * @param  {} sourcePattern
+     * @param  {string} sourcePattern
      */
     setSourcePattern(sourcePattern) {
         this.sourcePattern = sourcePattern;
         return this;
     }
     /**
-     * @param  {} relative
+     * @param  {string} relative
      */
     setRelative(relative) {
         this.relative = relative;
         return this;
     }
     /**
-     * @param  {} name
+     * @param  {string} name
      */
     setTaskName(name) {
         this.taskName = name;
