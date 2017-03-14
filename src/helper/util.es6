@@ -209,6 +209,15 @@ export function* entries(obj) {
     }
 }
 
+export function compressHtml (htmlstr) {
+    if (typeof htmlstr !== "string") {
+        return htmlstr;
+    }
+    return htmlstr.replace(/[\r\n]|\s+(?=[<{])/g, '').replace(/[}>]\s+/g, function (value) {
+        return value.substr(0, 1);
+    })
+}
+
 export default {
     debugLog,
     error,
@@ -235,5 +244,6 @@ export default {
     isPromise,
     isGeneratorDone,
     matchArgs,
-    entries
+    entries,
+    compressHtml
 };

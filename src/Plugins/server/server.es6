@@ -3,7 +3,8 @@ import fs from 'fs';
 import http2 from 'http2';
 import Koa from 'koa';
 import path from 'path';
-import serve from 'koa-serve';
+// import serve from 'koa-serve';
+import resource from 'koa-resourcer';
 import {RenderUtil} from '../../helper';
 import render from 'koa-ejs';
 import dispatcher from './middleware/dispatcher';
@@ -73,17 +74,14 @@ class Server {
     }
 
     setStaticHandler() {
-        let rootdir;
-        let dir;
-        if (this.static && !Array.isArray(this.static)) this.static = [this.static];
-
-        this.static.forEach((item) => {
-            dir = /[^(\\\/)]*$/.exec(item);
-            if (!dir || !dir[0]) return;
-            rootdir = item.replace(/[^(\\\/)]*$/, '');
-            this.app.use(serve(dir[0], rootdir));
+        if (this.static && !Array.isArray(this.static)) {
+            this.static = [this.static];
+        }
+        const {app} = this;
+        this.static.forEach(item => {
+            resource(app, path.resolve(process.cwd(), item));
         });
-        this.app.use(serve('foxman_client', path.resolve(__dirname, '../../../')));
+        resource(app, path.resolve(__dirname, '../../../foxman_client'));
     }
 
     appendHtml(condition) {
@@ -131,12 +129,8 @@ class Server {
         });
 
         wss.broadcast = data => {
-            wss.clients.forEach( client => {
-                client.send(data, error => {
-                    if (error) {
-                        util.debugLog(error);
-                    }
-                });
+            wss.clients.forEach(client => {
+                client.send(data, error => {});
             });
         };
         return wss;
