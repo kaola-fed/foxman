@@ -60,7 +60,7 @@ try {
             log(e,`You can try 'npm install' or check the foxman.config.js`);
         }
     } else {
-        log(e, `Maybe it's a problem with foxman, contact us(http://github.com/kaola-fed/foxman/issues)`);
+        log(e, `Maybe it's a problem with foxman.config.js, check it or contact us(http://github.com/kaola-fed/foxman/issues)`);
         log(err)
     }
     return false;
