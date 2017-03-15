@@ -3,8 +3,6 @@ import fs from 'fs';
 import http2 from 'http2';
 import Koa from 'koa';
 import path from 'path';
-// import serve from 'koa-serve';
-import resource from 'koa-resourcer';
 import {RenderUtil} from '../../helper';
 import render from 'koa-ejs';
 import dispatcher from './middleware/dispatcher';
@@ -12,6 +10,7 @@ import routeMap from './middleware/routemap';
 import {util} from '../../helper';
 import {Server as WebSocketServer} from 'ws';
 import bodyParser from 'koa-bodyparser';
+import staticCache from 'koa-static-cache';
 
 class Server {
     constructor(config) {
@@ -74,14 +73,47 @@ class Server {
     }
 
     setStaticHandler() {
-        if (this.static && !Array.isArray(this.static)) {
-            this.static = [this.static];
-        }
         const {app} = this;
-        this.static.forEach(item => {
-            resource(app, path.resolve(process.cwd(), item));
+        let statics = this.static;
+        if (!statics) {
+            return false;
+        }
+
+        if (!Array.isArray(statics)) {
+            statics = [statics];
+        }
+
+        const getStaticOption = (options) => {
+            const {
+                dir,
+                prefix,
+                gzip = true,
+                preload = true,
+                filter = file => file.indexOf('node_modules') === -1
+            } = options;
+
+            return {
+                dir,
+                prefix: prefix ? prefix : ('/' + path.parse(dir).base),
+                gzip,
+                preload,
+                filter
+            }
+        };
+
+        statics.forEach(item => {
+            const dir = path.resolve(process.cwd(), item);
+            app.use(staticCache(
+                getStaticOption({dir})
+            ));
         });
-        resource(app, path.resolve(__dirname, '../../../foxman_client'));
+
+        app.use(staticCache(
+            getStaticOption({
+                dir: path.resolve(__dirname, '../../../client'),
+                prefix: '/foxman_client'
+            })
+        ))
     }
 
     appendHtml(condition) {
@@ -130,7 +162,8 @@ class Server {
 
         wss.broadcast = data => {
             wss.clients.forEach(client => {
-                client.send(data, error => {});
+                client.send(data, error => {
+                });
             });
         };
         return wss;
