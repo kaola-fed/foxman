@@ -1,3 +1,5 @@
+example/foxman.dev.haitaowap.js
+
 # dependencies
 *node_modules*
 
@@ -23,3 +25,5 @@ example/nei*
 example/src/main/webapp/backend/
 example/**/*.css
 hash.json
+example/src/css/
+test/fileUtil/foo/

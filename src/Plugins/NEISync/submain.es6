@@ -7,7 +7,7 @@ import path from 'path';
 import _util from 'nei/lib/util/util';
 import {logger} from 'nei//lib/util/logger';
 
-logger.setLevel('OFF');
+logger.setLevel('ERROR');
 
 let subMain = main;
 Object.assign(subMain, EventEmitter.prototype);

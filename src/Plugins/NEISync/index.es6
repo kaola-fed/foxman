@@ -128,8 +128,8 @@ class NEISyncPlugin {
     syncNEIData() {
         const {key, basedir} = this.NEIInfo;
 
-        return this.pending(end =>
-            require('./NEISync')
+        return this.pending(end => {
+            return require('./NEISync')
                 .default
                 .run({key, basedir})
                 .then(config => this.getUpdate(config))
@@ -140,7 +140,7 @@ class NEISyncPlugin {
                 .catch(e => {
                     console.error(e);
                 })
-        );
+        });
     }
 
     getUpdate(config) {
