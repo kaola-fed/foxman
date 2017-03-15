@@ -18,13 +18,13 @@ function writeNEIConfig({NEIRoute}, formatR) {
     });
 }
 
-function updateLocalFiles(routes = [], genCommonPath) {
+function updateLocalFiles(routes = [], getFilePath) {
     return Promise.all(routes.map((route) =>
         new Promise((resolve, reject) => {
             /**
              * 本地路径（非nei）
              */
-            let dataPath = genCommonPath(route);
+            let dataPath = getFilePath(route);
             fs.stat(dataPath, error => {
                 /**
                  * 文件不存在或者文件内容为空
@@ -128,31 +128,32 @@ class NEISyncPlugin {
     syncNEIData() {
         const {key, basedir} = this.NEIInfo;
 
-        return this.pending(end => require('./NEISync').default
-            .run({key, basedir})
-            .then((config) => this.getUpdate(config))
-            .then((routes) => {
-                this.updateRoutes(routes);
-                end();
-            })
-            .catch(e => {
-                console.error(e);
-            })
+        return this.pending(end =>
+            require('./NEISync')
+                .default
+                .run({key, basedir})
+                .then(config => this.getUpdate(config))
+                .then(routes => {
+                    this.updateRoutes(routes);
+                    end();
+                })
+                .catch(e => {
+                    console.error(e);
+                })
         );
     }
 
     getUpdate(config) {
-
         const {routes, mockApi, mockTpl} = getMockConfig(config);
         const formatR = formatRoutes(routes);
+        const getFilePath = this.genCommonPath.bind(this);
 
         this.setMock({mockApi, mockTpl});
-
         writeNEIConfig(this.NEIInfo, formatR);
 
-        updateLocalFiles(formatR, this.genCommonPath.bind(this));
-
-        return formatR;
+        return updateLocalFiles(formatR, getFilePath).then(() => {
+            return formatR;
+        });
     }
 
 
