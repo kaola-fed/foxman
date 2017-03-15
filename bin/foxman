@@ -7,26 +7,31 @@ var pkg = require('../package.json');
 var config;
 var argv = require('yargs')
     .usage('Usage: foxman [options]')
-    .alias('c', 'config')
-    .describe('c', '配置文件路径')
-    .default('c', 'foxman.config.js')
+    .alias('C', 'config')
+    .alias('C', 'c')
+    .describe('C', '配置文件路径')
+    .default('C', 'foxman.config.js')
 
-    .alias('p', 'proxy')
-    .describe('p', '使用配置中的代理，填写代理名即可')
-    .default('p', false)
+    .alias('P', 'proxy')
+    .alias('P', 'p')
+    .describe('P', '使用配置中的代理，填写代理名即可')
+    .default('P', false)
 
-    .alias('u', 'update')
-    .describe('u', '是否远程nei中拉取接口信息')
-    .default('u', false)
+    .alias('U', 'update')
+    .alias('U', 'u')
+    .describe('U', '是否远程nei中拉取接口信息')
+    .default('U', false)
 
-    .alias('v', 'version')
-    .describe('v', 'Show version')
+    .alias('V', 'version')
+    .alias('V', 'v')
+    .describe('V', 'Show version')
     .version(() => `v${pkg.version}`)
 
-    .help('h')
-    .alias('h', 'help')
+    .help('H')
+    .alias('H', 'help')
+    .alias('H', 'h')
 
-    .example('foxman -c ./config.json -p local -u')
+    .example('foxman -C ./config.json -P local -U')
     .argv;
 
 var configPath = path.join(process.cwd(), argv.config);
@@ -34,15 +39,14 @@ var configPath = path.join(process.cwd(), argv.config);
 try {
     config = require(configPath);
 } catch (err) {
-    const errStr = err.toString();
     if (err.code === 'MODULE_NOT_FOUND') {
-        if (~errStr.indexOf(configPath)) {
-            util.error(`config file nott found!`);
+        if (~err.toString().indexOf(configPath)) {
+            util.error(`config file not found!`);
         } else {
-            util.error(`${errStr.replace(/Error: /i, '')}\n${'[T]'.blue} Try Npm Install Or Check The ${argv.config}！`);
+            util.error(`${err.replace(/Error: /i, '')}\n${'[T]'.blue} Try npm install or check The ${argv.config}！`);
         }
     } else {
-        util.error(errStr);
+        util.error(err);
     }
 }
 
