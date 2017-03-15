@@ -26,7 +26,7 @@ export function apiHandler(dispatcher) {
     const dataPath = dispatcher.dataPath;
     if (Array.isArray(dataPath)) {
         return Promise.all(dataPath.map(url => {
-            return fileUtil.jsonResolver({url})
+            return util.jsonResolver({url})
         })).then(resps => {
             return resps.reduce((bef, aft) => {
                 return {
@@ -35,7 +35,7 @@ export function apiHandler(dispatcher) {
             });
         });
     }
-    return fileUtil.jsonResolver({url: dataPath});
+    return util.jsonResolver({url: dataPath});
 }
 
 /**

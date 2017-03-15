@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 'use strict';
 require('colors');
-var util = require('../dist/helper/util').default;
-var path = require('path');
-var pkg = require('../package.json');
-var config;
-var argv = require('yargs')
+const path = require('path');
+const pkg = require('../package.json');
+const argv = require('yargs')
     .usage('Usage: foxman [options]')
     .alias('C', 'config')
     .alias('C', 'c')
@@ -34,20 +32,35 @@ var argv = require('yargs')
     .example('foxman -C ./config.json -P local -U')
     .argv;
 
-var configPath = path.join(process.cwd(), argv.config);
+let config;
+const configPath = path.join(process.cwd(), argv.config);
+const log = console.log;
 
 try {
     config = require(configPath);
 } catch (err) {
+    const e = 'error'.red;
     if (err.code === 'MODULE_NOT_FOUND') {
         if (~err.toString().indexOf(configPath)) {
-            util.error(`config file not found!`);
+            log(e, `Please add foxman.config.js in current directory.`);
+            log(e, `Also you can appoint your special name,`);
+            log(e, `use command 'foxman --config yourfoxman.config.js'.`);
+            log(e, `See more in command 'foxman --help'`);
+
         } else {
-            util.error(`${err.replace(/Error: /i, '')}\n${'[T]'.blue} Try npm install or check The ${argv.config}！`);
+            log(e, `Make sure you have the latest version of node.js and foxman.`);
+            log(e, `If you do, this is most likely a problem with the plugins used in ${path.join(process.cwd(), 'foxman.config.js')},`);
+            log(e, `not with foxman itself`);
+            log('\n');
+            log(err.stack);
+            log('\n');
+            log(e,`You can try 'npm install' or check the foxman.config.js`);
         }
     } else {
-        util.error(err);
+        log(e, `Maybe it's a problem with foxman, contact us(http://github.com/kaola-fed/foxman/issues)`);
+        log(err)
     }
+    return false;
 }
 
 require('../app.js')(Object.assign({}, config, {argv}));

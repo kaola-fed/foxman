@@ -74,7 +74,7 @@ function run() {
 }
 
 function get(pluginName) {
-    return dependencys[pluginName]
+    return dependencys[initialsLower(pluginName)]
 }
 
 export {

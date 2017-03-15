@@ -12,7 +12,6 @@
 
 import fs from 'fs';
 import path from 'path';
-import _ from './util';
 
 export function getFileByStream(path) {
     return fs.ReadStream(path);
@@ -62,6 +61,10 @@ export function writeFile(filename, text) {
     });
 }
 
+export function writeFileSync(filename, text) {
+    fs.writeFileSync(filename, text);
+}
+
 export function writeUnExistsFile(file, text) {
     let needCreateStack = [file];
 
@@ -88,26 +91,6 @@ export function writeUnExistsFile(file, text) {
     });
 }
 
-export function jsonResolver(opt) {
-    return new Promise((resolve) => {
-        let url = (typeof opt == 'string') ? opt : opt.url;
-        let json;
-        readFile(url).then((data) => {
-            try {
-                json = _.JSONParse(data);
-            } catch (e) {
-                console.log(e);
-                json = {};
-            }
-            resolve({json});
-        }, () => {
-            _.warnLog(`localFile ${url} is not found, so output {}`);
-            resolve({json: {}});
-        });
-    });
-}
-
-
 export function delDir(file) {
     try {
         if (fs.statSync(file).isFile()) {
@@ -132,7 +115,7 @@ export default {
     getFileStat,
     readFile,
     writeFile,
+    writeFileSync,
     writeUnExistsFile,
-    jsonResolver,
     delDir
 };

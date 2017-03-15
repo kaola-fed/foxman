@@ -1,6 +1,7 @@
 // require('babel-polyfill')
 var assert = require("assert");
 var util = require('../../src/helper').util;
+var bufferConcat = require('../../src/helper/bufferConcat').default;
 
 describe('util',function () {
   it('createSystemId', ()=>{
@@ -43,25 +44,11 @@ describe('util',function () {
   });
 
   it('bufferConcat', ()=>{
-      assert.equal(util.bufferConcat(new Buffer('a'),new Buffer('b')).toString('utf-8'), 'ab')
+      assert.equal(bufferConcat(new Buffer('a'),new Buffer('b')).toString('utf-8'), 'ab')
   });
 
   it('typeof', ()=>{
       assert.equal(util.typeOf({}),'object');
-  });
-
-  it('replaceCommet',()=>{
-    assert.equal(util.replaceCommet(`/**aaa**/nihao`),'nihao');
-  });
-
-  it('removeByItem',()=>{
-    var a = 'nihao';
-    assert.equal(util.removeByItem(['a','b',a], a), 2);
-  });
-
-  it('removeByIndex',()=>{
-    var a = 'nihao';
-    assert.equal(util.removeByIndex(['a','b', a], 2), a);
   });
 
   it('sha1',()=>{
