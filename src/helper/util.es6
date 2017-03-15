@@ -34,7 +34,7 @@ export function error(msg) {
 
     const tips = [
         `Make sure you have the latest version of node.js and foxman.`,
-        `If you do, this is most likely a problem with the foxman`,
+        `If you do, this is most likely a problem with the foxman.`,
         `You could contact us(http://github.com/kaola-fed/foxman/issues)`,
     ];
     tips.forEach(errorLog);

@@ -6,7 +6,7 @@ class ServerPlugin {
     constructor(options) {
         ((msg) => {
             if (msg.length > 0) {
-                util.error(msg[0].toString());
+                util.error(msg[0]);
             }
         })(schema({
             port: {
