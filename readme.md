@@ -9,8 +9,8 @@
 > Foxman 是面向**前端开发**的**集成工具**，对开发阶段的 Mock 环境、CSS 预处理器、Living Reload、Remote Debugging、开发规范 等基本需要做了集成。 
 
 而他的设计初衷体现在构成他的两个词根上:  
-* "Fox"，一只会说谎的狐狸，打造一个让人难辨真伪的 Mock 环境
-* "Man"，他也是一名绅士，期望给开发者带来友善的开发体验
+* Fox 狐狸会说谎，有 Mock 之意
+* Man 优雅知性
 
 ## 文档
 快速入门、配置、插件开发以及原理等文档 [docs/index.md](docs/index.md)

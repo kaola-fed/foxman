@@ -13,11 +13,11 @@ nei: {
 
 ## 如何同步远程端的 Mock Data
 ```bash
-$ foxman -u
+$ foxman -U
 ```
 
 ## 运行细节
-1. 首次 `foxman -u` 会在 ~/localMock 下创建一个名字为 nei key 的文件夹;
+1. 首次 `foxman -U` 会在 ~/localMock 下创建一个名字为 nei key 的文件夹;
 2. Mock Server 响应时，会先读取该目录下的数据作为 Mock Data，再将工程内的 Mock Data 覆盖上来   
 ```javascript
 Mock = Object.assign(localMock, projectMock)

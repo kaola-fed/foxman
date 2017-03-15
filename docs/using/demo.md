@@ -116,7 +116,7 @@ module.exports = {
          * @param url
          * @returns {string}
          * If You Want To add Proxy Service，Please Add A Function At service, And Run as ```foxman -p ${proxy_name}```
-         * Example： foxman -p hst_test10
+         * Example： foxman -P hst_test10
          */
         service: {
             test (url) {

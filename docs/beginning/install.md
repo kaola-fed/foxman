@@ -19,26 +19,18 @@
 $ npm install -g foxman
 ```
 
-- `-g` 安装到全局目录，必须使用全局安装，当全局安装后才能在命令行（cmd或者终端）找到 `Foxman` 命令
-- 安装过程中遇到问题具体请参考 [fis#565](https://github.com/fex-team/fis/issues/565) 解决
+- `-g` 安装到全局目录，必须使用全局安装，当全局安装后才能在命令行（cmd或者终端）找到 `foxman` 命令
 - 如果 npm 长时间运行无响应，推荐使用 [cnpm](http://npm.taobao.org/) 来安装
 
 安装完成后执行 `foxman -v` 判断是否安装成功，如果安装成功，则显示类似如下信息：
 
-```
+```bash
 $ foxman -v
 
-0.8.0
+v0.8.0
 ```
 
-如果提示找不到 `foxman` 命令并且 **npm** 安装成功退出，请参考文档 [fis#565](https://github.com/fex-team/fis/issues/565) 解决
-如果windows下提示 `basedir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")` 则找到 C:\Users\win-7\AppData\Roaming\npm下面的fis脚本删除，留下fis.cmd就好了（没有识别系统是不是Windows）
 ### 升级 Foxman
-
-```bash
-$ npm update -g foxman
-```
-或重装
 
 ```bash
 $ npm install -g foxman
