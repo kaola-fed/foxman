@@ -22,7 +22,7 @@ $ npm install --global foxman
 ```
 **建议：安装最新版的 Node.js，促成社区共同进步**
 
-#### 2. [编写一份贴合工程情况的 Foxman 配置](docs/foxman.md)
+#### 2. [编写一份贴合工程情况的 Foxman 配置](docs/configs.md)
 #### 3. 启动 Foxman
 ```bash
 $ cd /path/to/my-project
