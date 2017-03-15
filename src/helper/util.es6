@@ -19,7 +19,7 @@ export function debugLog(msg) {
 }
 
 export function error(msg) {
-    console.log('[E]'.red + ' ' + initialsCapitals(msg));
+    console.log('[E]'.red + ' ' + msg);
     process.exit(1);
 }
 
