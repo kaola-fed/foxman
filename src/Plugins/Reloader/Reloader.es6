@@ -7,12 +7,12 @@ class Reloader extends EventEmitter {
         super();
         Object.assign(this, options);
         this.bindChange();
+    }
 
-        this.reload = (url) => {
-            if (this.server && this.server.wss) {
-                this.server.wss.broadcast(url);
-            }
-        };
+    reload(url) {
+        if (this.server && this.server.wss) {
+            this.server.wss.broadcast(url);
+        }
     }
 
     bindChange() {
@@ -33,7 +33,7 @@ class Reloader extends EventEmitter {
             ...statics
         ];
 
-        watcher.onUpdate(reloadResources, (arg0) => {
+        watcher.onUpdate(reloadResources, arg0 => {
             this.reload(path.basename(arg0));
         });
     }
