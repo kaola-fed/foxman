@@ -157,7 +157,7 @@ export function jsonResolver(opt) {
             }
             resolve({json});
         }).catch(() => {
-            warnLog(`Local data ${url} is empty`);
+            warnLog(`Empty mock data: ${url}`);
             resolve({json: {}});
         });
     });
@@ -168,6 +168,11 @@ export function initialsLower(str) {
         return $1.toLowerCase() + $2;
     });
 }
+
+export function values(map) {
+    return Object.keys(map).map(k => map[k]);
+}
+
 export default {
     debugLog,
     error,
@@ -189,5 +194,6 @@ export default {
     matchArgs,
     entries,
     compressHtml,
-    jsonResolver
+    jsonResolver,
+    values
 };

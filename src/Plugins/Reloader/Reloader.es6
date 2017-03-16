@@ -1,5 +1,6 @@
 import EventEmitter from 'events';
 import path from 'path';
+import {values} from '../../helper/util';
 
 class Reloader extends EventEmitter {
     constructor(options) {
@@ -16,19 +17,21 @@ class Reloader extends EventEmitter {
 
     bindChange() {
         const [server, watcher] = [this.server, this.watcher];
-        let reloadResources;
-        reloadResources = [
-            path.resolve(server.viewRoot, '**', '*.' + server.extension),
-            path.resolve(server.syncData, '**', '*.json')
-        ];
-
-        server.static.forEach(item => {
-            reloadResources = [...reloadResources,
-                path.resolve(item, '**', '*.css'),
-                path.resolve(item, '**', '*.js'),
-                path.resolve(item, '**', '*.html')
+        const templatePathes = values(server.templatePaths).map(template => path.join(template, '**', '*.' + server.extension));
+        const syncDataRoot = path.join(server.syncData, '**', '*.json');
+        const statics = server.static.reduce((prev, item) => {
+            return [
+                ...prev,
+                ...['*.css', '*.js', '*.html'].map(ext => path.join(item, '**', ext))
             ];
-        });
+        }, []);
+
+        const reloadResources = [
+            ...templatePathes,
+            server.viewRoot,
+            syncDataRoot,
+            ...statics
+        ];
 
         watcher.onUpdate(reloadResources, (arg0) => {
             this.reload(path.basename(arg0));

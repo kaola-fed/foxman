@@ -1,7 +1,7 @@
 ## 如何编写一个贴合工程开发情况的 Foxman 配置文件？
 
 ### **Foxman** 目前具备以下主要功能
-- [Server](./plugins/server.md)
+- [Server](./plugins/Server.md)
     - 静态资源
     - Mock
     - [渲染引擎](./plugins/TemplateRender.md)

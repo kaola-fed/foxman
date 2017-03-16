@@ -3,14 +3,18 @@
  */
 import FastFtl from 'fast-ftl';
 import path from 'path';
+import {values} from './util';
 
 class RenderUtil {
     /**
      * @property {string} viewRoot
      */
-    constructor({viewRoot}) {
+    constructor({
+        viewRoot,
+        templatePaths = {}
+    }) {
         this.freemarker = FastFtl({
-            root: viewRoot
+            root: [ ...values(templatePaths),  viewRoot ] //common 权重高
         });
         this.viewRoot = viewRoot;
     }

@@ -3,6 +3,9 @@
 ### viewRoot@String (必需) 
 > 模板根路径 (绝对路径)
 
+### templatePaths@Object (可选) 
+> 支持 include 或 import 的 路径，取决于具体的 Render
+
 ### syncData@String (必需) 
 > 同步 Mock 数据根路径 (绝对路径)
 

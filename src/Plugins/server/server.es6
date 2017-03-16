@@ -61,7 +61,10 @@ class Server {
         let Render = this.RenderUtil || RenderUtil;
         this.extension = this.extension || 'ftl';
 
-        this.tplRender = new Render({viewRoot: this.viewRoot});
+        this.tplRender = new Render({
+            templatePaths: this.templatePaths,
+            viewRoot: this.viewRoot
+        });
 
         render(this.app, {
             root: path.resolve(__dirname, '../../../views'),
@@ -111,7 +114,7 @@ class Server {
         app.use(staticCache(
             getStaticOption({
                 dir: path.resolve(__dirname, '../../../client'),
-                prefix: '/foxman_client'
+                prefix: '/__FOXMAN__CLIENT__'
             })
         ))
     }
