@@ -169,7 +169,7 @@ export function initialsLower(str) {
     });
 }
 
-export function values(map) {
+export function values(map = {}) {
     return Object.keys(map).map(k => map[k]);
 }
 
