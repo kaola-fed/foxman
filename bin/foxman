@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 'use strict';
 require('colors');
+const validate = require('./validate');
+const {log, error, wrong} = require('./log');
+
 const path = require('path');
 const pkg = require('../package.json');
 const argv = require('yargs')
@@ -37,7 +40,6 @@ const argv = require('yargs')
 
 let config;
 const configPath = path.join(process.cwd(), argv.config);
-const log = console.log;
 
 try {
     config = require(configPath);
@@ -45,22 +47,22 @@ try {
     const e = 'error'.red;
     if (err.code === 'MODULE_NOT_FOUND') {
         if (~err.toString().indexOf(configPath)) {
-            log(e, `Please add foxman.config.js in current directory.`);
-            log(e, `Also you can appoint your special name,`);
-            log(e, `use command 'foxman --config yourfoxman.config.js'.`);
-            log(e, `See more in command 'foxman --help'`);
+            error(`Please add foxman.config.js in current directory.`);
+            error(`Also you can appoint your special name,`);
+            error(`use command 'foxman --config yourfoxman.config.js'.`);
+            error(`See more in command 'foxman --help'`);
 
         } else {
-            log(e, `Make sure you have the latest version of node.js and foxman.`);
-            log(e, `If you do, this is most likely a problem with the plugins used in ${path.join(process.cwd(), 'foxman.config.js')},`);
-            log(e, `not with foxman itself`);
+            error(`Make sure you have the latest version of node.js and foxman.`);
+            error(`If you do, this is most likely a problem with the plugins used in ${path.join(process.cwd(), 'foxman.config.js')},`);
+            error(`not with foxman itself`);
             log('\n');
             log(err.stack);
             log('\n');
-            log(e,`You can try 'npm install' or check the foxman.config.js`);
+            error(`You can try 'npm install' or check the foxman.config.js`);
         }
     } else {
-        log(e, `Maybe it's a problem with foxman.config.js, check it or contact us(http://github.com/kaola-fed/foxman/issues)`);
+        error(`Maybe it's a problem with foxman.config.js, check it or contact us(http://github.com/kaola-fed/foxman/issues)`);
         log(err)
     }
     return false;
@@ -68,6 +70,11 @@ try {
 
 if (argv.port) {
     config.server.port = parseInt(argv.port);
+}
+
+let res = validate(config);
+if (res !== true) {
+    wrong(res);
 }
 
 require('../app')(Object.assign({}, config, {argv}));
