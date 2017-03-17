@@ -1,4 +1,4 @@
-import {initialsLower, log, entries, error, isPromise, isGeneratorDone} from '../helper/util';
+import {initialsLower, log, notify, entries, error, isPromise, isGeneratorDone} from '../helper/util';
 import {init} from './Instance';
 import {register, resolve, dependencys} from './DI';
 
@@ -9,9 +9,17 @@ function* execute() {
             resolve(plugin.init, plugin);
 
             if (plugin.pendings) {
-                log(`Plugin Pends: ${plugin.name}`);
+                notify({
+                    title: `Plugin start pending`,
+                    msg: `${plugin.name} start pending`
+                });
+
                 yield Promise.all(plugin.pendings);
-                log(`Plugin Done: ${plugin.name}`);
+
+                notify({
+                    title: `Plugin end pending`,
+                    msg: `${plugin.name} end pending`
+                });
             }
         }
     }

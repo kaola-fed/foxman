@@ -1,22 +1,20 @@
 /**
  * Created by june on 2017/3/16.
  */
-const log = console.log;
+const Logger = require('chalklog');
+const clog = new Logger('foxman');
 
 const error = (msg) => {
-    const e = 'error'.red;
-    msg = msg.stack || msg;
-    log(e, msg);
+    clog.red( msg);
 };
 
 const wrong = (msg) => {
-    const e = 'error'.red;
     msg = msg.stack || msg;
-    log(e, msg);
+    clog.red( msg);
     process.exit(1);
 };
 
-exports.log = log;
+exports.log = console.log;
 
 exports.error = error;
 

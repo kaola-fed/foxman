@@ -53,7 +53,10 @@ class ProxyPlugin {
             };
         });
 
-        util.log(`Proxying to remote server ${this.proxyServerConfig}`);
+        util.notify({
+            title: 'Proxy successfully',
+            msg: `Proxying to remote server ${this.proxyServerConfig}`
+        });
 
         function handler() {
             const target = url.parse(service(this.request.url.replace(/^(\/)/, '')));

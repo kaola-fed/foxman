@@ -30,7 +30,7 @@ function updateLocalFiles(routes = [], getFilePath) {
                  * 文件不存在或者文件内容为空
                  */
                 if (error) {
-                    util.log('make empty file: ' + dataPath);
+                    util.log('touch file: ' + dataPath);
                     fileUtil.writeUnExistsFile(dataPath, '').then(resolve, resolve);
                     return 0;
                 }

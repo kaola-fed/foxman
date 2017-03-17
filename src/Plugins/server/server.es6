@@ -156,7 +156,7 @@ class Server {
         util.log(tips);
 
         notify({
-            title: 'Build Success',
+            title: 'Run successfully',
             msg: tips
         })
     }

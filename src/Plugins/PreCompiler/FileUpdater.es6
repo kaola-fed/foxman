@@ -25,7 +25,10 @@ class FileUpdater extends PreCompiler {
              * 输出文件
              */
             let target = sourceRoot.endsWith(sep) ? resolve(output, '..') : output;
-            util.log(`${this.sourcePattern} -> ${target}`);
+            util.notify({
+                'title': '文件预处理操作',
+                'msg': `${this.sourcePattern} -> ${target}`
+            });
             return vinylFs.dest(target);
         };
     }
@@ -40,7 +43,7 @@ class FileUpdater extends PreCompiler {
                 this.pipe(item);
             });
         } catch (err) {
-            console.log(err);
+            util.warnLog(err);
         }
         return this;
     }

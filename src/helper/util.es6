@@ -63,7 +63,7 @@ export function log(msg) {
 }
 
 export function warnLog(msg) {
-    clog.yellow(w, initialsCapitals(msg));
+    clog.yellow(initialsCapitals(msg));
 }
 
 export function createSystemId() { // uid
