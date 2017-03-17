@@ -8,6 +8,7 @@ import render from 'koa-ejs';
 import dispatcher from './middleware/dispatcher';
 import routeMap from './middleware/routemap';
 import {util} from '../../helper';
+import WebSocket from 'ws';
 import {Server as WebSocketServer} from 'ws';
 import bodyParser from 'koa-bodyparser';
 import staticCache from 'koa-static-cache';
@@ -18,7 +19,9 @@ class Server {
     constructor(config) {
         this.middleware = [];
         this.ifAppendHtmls = [];
-        this.app = Koa();
+        this.app = Koa({
+            outputErrors: false
+        });
 
         Object.assign(this, config);
 
@@ -174,8 +177,9 @@ class Server {
 
         wss.broadcast = data => {
             wss.clients.forEach(client => {
-                client.send(data, error => {
-                });
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(data);
+                }
             });
         };
         return wss;
