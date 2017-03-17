@@ -161,6 +161,8 @@ class NEISyncPlugin {
         const genCommonPath = this.genCommonPath.bind(this);
         const genNeiApiUrl = this.genNeiApiUrl.bind(this);
         const server = this.server;
+        server.routers = server.routers.concat(routes);
+
         server.use(() => function *(next) {
             const dispatcher = this.dispatcher;
 
@@ -179,7 +181,6 @@ class NEISyncPlugin {
             dispatcher.dataPath = [genNeiApiUrl(routeModel), commonPath];
             yield next;
         });
-        server.routers = server.routers.concat(routes);
     }
 
     genCommonPath(route) {

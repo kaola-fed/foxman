@@ -12,6 +12,8 @@ import {Server as WebSocketServer} from 'ws';
 import bodyParser from 'koa-bodyparser';
 import staticCache from 'koa-static-cache';
 
+const {notify} = util;
+
 class Server {
     constructor(config) {
         this.middleware = [];
@@ -147,13 +149,20 @@ class Server {
             cert: fs.readFileSync(path.resolve(root, 'config', 'crt', 'localhost.crt')),
         };
         const callback = this.app.callback();
+        const tips = `Server running on ${this.https ? 'https' : 'http'}://127.0.0.1:${port}/`;
+
         this.serverApp = (this.https ? http2.createServer(httpOptions, callback) : http.createServer(callback)).listen(port);
         this.wss = this.buildWebSocket(this.serverApp);
-        util.log(`Server running on ${this.https ? 'https' : 'http'}://127.0.0.1:${port}/`);
+        util.log(tips);
+
+        notify({
+            title: 'Build Success',
+            msg: tips
+        })
     }
 
     buildWebSocket(serverApp) {
-        var wss = new WebSocketServer({
+        const wss = new WebSocketServer({
             server: serverApp
         });
 

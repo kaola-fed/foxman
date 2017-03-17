@@ -102,9 +102,9 @@ module.exports = {
         /**
          * 引入的 templatePaths，默认 {}
          */
-        templatePaths: {
-            viewRoot1: paths.viewRoot1
-        },
+        // templatePaths: {
+        //     viewRoot1: path.join(__dirname, 'template1')
+        // },
         /**
          * router type 为 sync 的filePath的ftl相对目录
          */

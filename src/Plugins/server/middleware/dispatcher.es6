@@ -92,28 +92,27 @@ export function* syncDispatcher(dispatcher, config, next) {
         yield this.render('e', {
             title: '出错了', e: {
                 code: 500,
-                msg: '数据处理异常'
+                msg: '模拟数据处理'
             }
         });
         return yield next;
     }
-    const result = yield config.tplRender.parse(filePath, res.json);
-    /**
-     * error
-     * content
-     */
-    if (!result.error) {
+
+    try {
+        let result = yield config.tplRender.parse(filePath, res.json);
+
         this.type = 'text/html; charset=utf-8';
-        this.body = result.content || '数据未取到';
+        this.body = result || '数据未取到';
         return yield next;
+
+    } catch (error) {
+        yield this.render('e', {
+            title: '出错了', e: {
+                code: 500,
+                msg: error
+            }
+        });
     }
-    yield this.render('e', {
-        title: '出错了', e: {
-            code: 500,
-            msg: result.error
-        }
-    });
-    return yield next;
 }
 
 /**

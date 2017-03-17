@@ -4,8 +4,22 @@
 import child_process from 'child_process';
 import crypto from 'crypto';
 import {readFile, writeFileSync} from './fileutil';
+import Logger from 'chalklog';
+import notifier from 'node-notifier';
 
-const clog = console.log;
+const clog = new Logger('foxman');
+
+export function notify({
+    title,
+    msg
+}) {
+    notifier.notify({
+        'title': title,
+        'message': msg,
+        'sound': true, // Only Notification Center or Windows Toasters
+        'wait': true // Wait with callback, until user action is taken against notification
+    });
+}
 
 export function isPromise(obj) {
     return (obj && obj.value && obj.value.then);
@@ -17,13 +31,12 @@ export function isGeneratorDone(obj) {
 
 export function debugLog(msg) {
     if (process.env.NODE_ENV === 'development') {
-        console.log('DEBUG'.blue + ' ' + initialsCapitals(msg));
+        clog.blue(initialsCapitals(msg))
     }
 }
 
 export function errorLog(msg) {
-    const e = 'error'.red;
-    clog(e, msg);
+    clog.red(msg);
 }
 
 export function error(msg) {
@@ -46,13 +59,11 @@ export function error(msg) {
 }
 
 export function log(msg) {
-    const i = 'info'.green;
-    clog(i, initialsCapitals(msg));
+    clog.green(initialsCapitals(msg));
 }
 
 export function warnLog(msg) {
-    const w = 'warning'.yellow;
-    clog(w, initialsCapitals(msg));
+    clog.yellow(w, initialsCapitals(msg));
 }
 
 export function createSystemId() { // uid
@@ -195,5 +206,6 @@ export default {
     entries,
     compressHtml,
     jsonResolver,
-    values
+    values,
+    notify
 };

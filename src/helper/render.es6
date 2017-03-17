@@ -1,8 +1,7 @@
 /**
  * Created by june on 2017/2/21.
  */
-import FastFtl from 'fast-ftl';
-import path from 'path';
+import Render from 'fast-ftl';
 import {values} from './util';
 
 class RenderUtil {
@@ -13,10 +12,10 @@ class RenderUtil {
         viewRoot,
         templatePaths = {}
     }) {
-        this.freemarker = FastFtl({
-            root: [ ...values(templatePaths),  viewRoot ] //common 权重高
+        this.freemarker = Render({
+            root: viewRoot,
+            paths: values(templatePaths) //common 权重高
         });
-        this.viewRoot = viewRoot;
     }
 
     /**
@@ -25,8 +24,7 @@ class RenderUtil {
      * @returns {*|!Array}
      */
     parse(p1, data) {
-        const tpl = path.relative(this.viewRoot, p1);
-        return this.freemarker.parse(tpl, data);
+        return this.freemarker.parse(p1, data);
     }
 }
 
