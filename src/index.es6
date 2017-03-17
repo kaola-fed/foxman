@@ -62,4 +62,6 @@ class ApplicationContext {
     }
 }
 
-export default config => new ApplicationContext(config);
+export default config => {
+    return new ApplicationContext(config);
+};

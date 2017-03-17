@@ -6,6 +6,7 @@ const {log, error, wrong} = require('./log');
 
 const path = require('path');
 const pkg = require('../package.json');
+
 const argv = require('yargs')
     .usage('Usage: foxman [options]')
     .alias('C', 'config')
@@ -25,6 +26,26 @@ const argv = require('yargs')
     .alias('U', 'u')
     .describe('U', '是否远程nei中拉取接口信息')
     .default('U', false)
+
+    .command('tpl', 'code generate', function (yargs) {
+        return yargs.option('T', {
+            alias: 'type',
+            default: 'FoxmanConfig'
+        }).option('W', {
+            alias: 'where',
+            default: 'foxman.config.js'
+        })
+    })
+
+    .command('lint', 'eslint for foxman', function (yargs) {
+        return yargs.option('T', {
+            alias: 'type',
+            default: 'FoxmanConfig'
+        }).option('W', {
+            alias: 'where',
+            default: 'foxman.config.js'
+        })
+    })
 
     .alias('V', 'version')
     .alias('V', 'v')
