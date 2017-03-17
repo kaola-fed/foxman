@@ -102,10 +102,12 @@ export function* syncDispatcher(dispatcher, config, next) {
         let result = yield config.tplRender.parse(filePath, res.json);
 
         this.type = 'text/html; charset=utf-8';
-        this.body = result || '数据未取到';
-        return yield next;
-
+        this.body = result;
     } catch (error) {
+        util.notify({
+            title: '模板解析失败',
+            msg: error
+        });
         yield this.render('e', {
             title: '出错了', e: {
                 code: 500,
@@ -113,6 +115,7 @@ export function* syncDispatcher(dispatcher, config, next) {
             }
         });
     }
+    return yield next;
 }
 
 /**
