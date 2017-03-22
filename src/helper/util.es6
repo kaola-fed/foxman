@@ -168,7 +168,6 @@ export function jsonResolver(opt) {
             }
             resolve({json});
         }).catch(() => {
-            warnLog(`Empty mock data: ${url}`);
             resolve({json: {}});
         });
     });
