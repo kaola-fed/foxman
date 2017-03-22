@@ -16,8 +16,8 @@ export function notify({
     notifier.notify({
         'title': title,
         'message': msg,
-        'sound': true, // Only Notification Center or Windows Toasters
-        'wait': true // Wait with callback, until user action is taken against notification
+        'sound': true, 
+        'wait': true
     });
 }
 
