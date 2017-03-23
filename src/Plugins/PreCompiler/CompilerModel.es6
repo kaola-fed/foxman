@@ -37,6 +37,13 @@ class CompilerModel {
         this.taskName = name;
         return this;
     }
+        /**
+     * @param  {boolean} watch
+     */
+    setWatch(watch) {
+        this.watch = watch;
+        return this;
+    }
 }
 
 export default CompilerModel;

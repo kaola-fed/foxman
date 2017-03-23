@@ -18,13 +18,13 @@ class PreCompilerPlugin {
      * @property {function} handler
      * @property  {string} test
      */
-    start({handler, test}) {
+    start({handler, test, watch = true}) {
         const source = (Array.isArray(test))? test: [test];
         const taskName = util.sha1(source.join("-"));
 
         source.forEach(sourcePattern => {
             const compilerModel = new CompilerModel({
-                sourcePattern, taskName,
+                sourcePattern, taskName, watch,
                 watchMap: {}, handler
             });
             const compileFn = file => {
@@ -35,9 +35,11 @@ class PreCompilerPlugin {
                 );
             };
 
-            this.watcher.onNew(sourcePattern, compileFn);
-            this.watcher.onUpdate(sourcePattern, compileFn);
             this.initCompiler(compilerModel);
+            if (watch) {
+                this.watcher.onNew(sourcePattern, compileFn);
+                this.watcher.onUpdate(sourcePattern, compileFn);
+            }
         });
     }
 
@@ -51,6 +53,8 @@ class PreCompilerPlugin {
         preCompiler.on('returnDeps', info => {
             const {source, hasNew, list} = PreCompilerPlugin.getNewDeps(watchMap, info);
             if (!hasNew) return false;
+            if (!compilerModel.watch) return false;
+            
             this.watcher.onUpdate(list, () => {
                 this.fileUpdate(
                     new CompilerModel(compilerModel)
