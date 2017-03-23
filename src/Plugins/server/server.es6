@@ -91,20 +91,21 @@ class Server {
             statics = [statics];
         }
 
-        const getStaticOption = (options) => {
-            const {
+        const getStaticOption = ({
                 dir,
                 prefix,
                 gzip = true,
                 preload = true,
+                dynamic = true,
                 filter = file => file.indexOf('node_modules') === -1
-            } = options;
+            } = {}) => {
 
             return {
                 dir,
                 prefix: prefix ? prefix : ('/' + path.parse(dir).base),
                 gzip,
                 preload,
+                dynamic,
                 filter
             }
         };
@@ -119,7 +120,8 @@ class Server {
         app.use(staticCache(
             getStaticOption({
                 dir: path.resolve(__dirname, '../../../client'),
-                prefix: '/__FOXMAN__CLIENT__'
+                prefix: '/__FOXMAN__CLIENT__',
+                dynamic: false
             })
         ))
     }
