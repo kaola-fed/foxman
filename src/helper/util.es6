@@ -6,6 +6,7 @@ import crypto from 'crypto';
 import {readFile, writeFileSync} from './fileutil';
 import Logger from 'chalklog';
 import notifier from 'node-notifier';
+import path from 'path';
 
 const clog = new Logger('foxman');
 
@@ -183,6 +184,14 @@ export function values(map = {}) {
     return Object.keys(map).map(k => map[k]);
 }
 
+export function addDataExt(dataRoot, tplName) {
+    const filePath = path.join(dataRoot, tplName);
+    if (~tplName.indexOf('.json')) {
+        return filePath
+    }
+    return filePath + '.json';
+}
+
 export default {
     debugLog,
     error,
@@ -206,5 +215,6 @@ export default {
     compressHtml,
     jsonResolver,
     values,
-    notify
+    notify,
+    addDataExt
 };

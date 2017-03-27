@@ -15,11 +15,7 @@ export function apiHandler(dispatcher) {
                     };
                 }
             }
-            return new Promise(resolve => {
-                resolve({
-                    json
-                });
-            });
+            return Promise.resolve({json});
         });
     }
 

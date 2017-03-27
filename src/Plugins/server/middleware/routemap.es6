@@ -68,14 +68,14 @@ export default (config) => {
                 if (router.sync) {
                     const tplName = util.removeSuffix(router.filePath, config.extension);
                     let pagePath = path.join(config.viewRoot, `${tplName}.${config.extension}`);
-                    let dataPath = path.join(config.syncData, `${tplName}.json`);
+                    let dataPath = util.addDataExt(config.syncData, tplName);
                     this.dispatcher = {
                         type: 'sync',
                         pagePath,
                         dataPath
                     };
                 } else {
-                    let dataPath = path.join(config.asyncData, `${router.filePath}.json`);
+                    let dataPath = util.addDataExt(config.asyncData, router.filePath);
                     this.dispatcher = {
                         type: 'async',
                         dataPath
