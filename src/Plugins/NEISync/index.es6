@@ -192,7 +192,7 @@ class NEISyncPlugin {
         }
 
         if (!server.divideMethod) {
-            const methodReg = /(GET)|(DELETE)|(HEAD)|(PATCH)|(POST)|(PUT)\//i;
+            const methodReg = /(GET|DELETE|HEAD|PATCH|POST|PUT)\//i;
             filePath = filePath.replace(methodReg, '');
         }
 
