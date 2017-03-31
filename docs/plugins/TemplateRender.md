@@ -21,7 +21,7 @@ class RenderUtil {
 export default RenderUtil;
 ```
 
-按这个接口实现的 Render 就能被 Foxman 成功调用。
+按这个接口实现的 Render 就能被 Foxman 成功调用，参考 [render.es6](https://github.com/kaola-fed/foxman/blob/master/src/helper/render.es6)。
 
 ### constructor
 在程序运行时，会被传入：
