@@ -102,4 +102,4 @@ if (res !== true) {
     wrong(res);
 }
 
-require('../app')(Object.assign({}, config, {argv}));
+require('../app')(Object.assign({}, config, {argv}, {configPath}));

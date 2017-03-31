@@ -6,26 +6,18 @@ import {
 
 class ApplicationContext {
     constructor(config) {
-        /**
-         * Watcher Plugin
-         */
+        // Watcher Plugin
         use(new Watcher(config.watch));
 
-        /**
-         * Server Plugin
-         */
+        // Server Plugin
         use(new Server(config.server));
 
-        /**
-         * PreCompiler Plugin
-         */
+        // PreCompiler Plugin
         use(new PreCompiler({
             preCompilers: config.preCompilers
         }));
 
-        /**
-         * Nei Plugin
-         */
+        // Nei Plugin
         if (config.nei) {
             const Nei = require('./Plugins/NEISync').default;
             use(new Nei(Object.assign(config.nei,{
@@ -33,26 +25,18 @@ class ApplicationContext {
             })));
         }
 
-        /**
-         * Outer Plugin
-         */
+        // Outer Plugin
         use(config.plugins);
 
-        /**
-         * Inner Plugin
-         */
+        // Reloader Plugin
         use(new Reloader({}));
 
-        /**
-         * Inner Plugin
-         */
+        // Debug Plugin
         use(new Debug({
             debugTool: config.server.debugTool
         }));
 
-        /**
-         * Proxy Plugin
-         */
+        // Proxy Plugin
         use(new Proxy({
             proxyConfig: config.proxy,
             proxyServerConfig: config.argv.proxy

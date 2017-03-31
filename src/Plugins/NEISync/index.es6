@@ -1,85 +1,6 @@
-// import neiTools from './nei';
 import path from 'path';
-import fs from 'fs';
-import os from 'os';
-import {util, fileUtil, DispatherTypes} from '../../helper';
-import _ from 'util';
-import globule from 'globule';
-
-function getMockConfig(config) {
-    const neiConfigRoot = path.resolve(config.neiConfigRoot, 'server.config.js');
-    return require(neiConfigRoot);
-}
-
-function writeNEIConfig({NEIRoute}, formatR) {
-    fileUtil.writeFile(NEIRoute, `module.exports = ${_.inspect(formatR, {maxArrayLength: null})}`, () => {
-    }, (e) => {
-        util.error(e);
-    });
-}
-
-function updateLocalFiles(routes = [], getFilePath) {
-    return Promise.all(routes.map((route) =>
-        new Promise((resolve, reject) => {
-            /**
-             * 本地路径（非nei）
-             */
-            let dataPath = getFilePath(route);
-            fs.stat(dataPath, error => {
-                /**
-                 * 文件不存在或者文件内容为空
-                 */
-                if (error) {
-                    util.log('touch file: ' + dataPath);
-                    fileUtil.writeUnExistsFile(dataPath, '').then(resolve, resolve);
-                    return 0;
-                }
-                resolve();
-            });
-        })));
-}
-
-function formatRoutes(rules) {
-    function isSync(rule) {
-        return rule.hasOwnProperty('list');
-    }
-
-    function getRouteFileInfo(rule) {
-        return isSync(rule) ? {
-            filePath: rule.list[0].path,
-            id: rule.list[0].id
-        } : {
-            filePath: rule.path,
-            id: rule.id
-        };
-    }
-
-    function getRouteURLInfo(ruleName, rule) {
-        const [method, url] = ruleName.split(' ');
-
-        return {
-            method,
-            url: util.appendHeadBreak(url),
-            sync: isSync(rule),
-        }
-    }
-
-    return Object.keys(rules).map(ruleName => {
-        const rule = rules[ruleName];
-        return Object.assign(
-            getRouteURLInfo(ruleName, rule),
-            getRouteFileInfo(rule));
-    });
-}
-
-
-function initData({key, update = false}) {
-    const basedir = path.resolve(os.homedir(), 'localMock', key);
-    const NEIRoute = path.resolve(basedir, 'nei.route.js');
-    const [serverConfigFile] = globule.find(path.resolve(basedir, 'nei**/server.config.js'));
-
-    return {key, update, basedir, NEIRoute, serverConfigFile};
-}
+import {util, DispatherTypes} from '../../helper';
+import {getMockConfig, writeNEIConfig, updateLocalFiles, formatRoutes, initData} from './functions'
 
 /**
  * Nei 插件
@@ -125,6 +46,12 @@ class NEISyncPlugin {
         return this.NEIInfo.mock;
     }
 
+    getNeiRoutes() {
+        const {NEIRoute} = this.NEIInfo;
+        delete require.cache[NEIRoute];
+        return require(NEIRoute);
+    }
+
     syncNEIData() {
         const {key, basedir} = this.NEIInfo;
 
@@ -156,7 +83,6 @@ class NEISyncPlugin {
         });
     }
 
-
     updateRoutes(routes) {
         const genCommonPath = this.genCommonPath.bind(this);
         const genNeiApiUrl = this.genNeiApiUrl.bind(this);
@@ -164,7 +90,7 @@ class NEISyncPlugin {
         server.routers = server.routers.concat(routes);
 
         server.use(() => function *(next) {
-            const dispatcher = this.dispatcher;
+            const {dispatcher} = this;
 
             if (!dispatcher
                 || dispatcher.type == DispatherTypes.DIR

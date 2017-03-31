@@ -44,7 +44,7 @@ export function error(msg) {
     msg = msg.stack || msg;
 
     errorLog(msg);
-    clog(`\n`);
+    console.log(`\n`);
 
     const tips = [
         `Make sure you have the latest version of node.js and foxman.`,
@@ -83,7 +83,7 @@ export function initialsCapitals(str) {
 export function jsSpawn(args) {
     let jsSpawn = child_process.spawn('node', args);
     jsSpawn.stderr.on('data', (data) => {
-        clog(`err: ${data}`);
+        clog.red(`err: ${data}`);
     });
     return {
         stdout: jsSpawn.stdout,

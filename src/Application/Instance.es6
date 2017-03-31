@@ -8,7 +8,8 @@ const pid = _.createSystemId();
 function init(plugin) {
     Object.assign(plugin, {
         id: pid(),
-        name: plugin.constructor.name,
+        name: plugin.constructor.name
+    }, {
         pending: (fn) => pending(fn, plugin),
         enable: (typeof plugin.enable === 'undefined' ? true : plugin.enable)
     });

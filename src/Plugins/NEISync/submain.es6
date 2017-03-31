@@ -5,7 +5,7 @@ import _fs from 'nei/lib/util/file';
 import fs from 'fs';
 import path from 'path';
 import _util from 'nei/lib/util/util';
-import {logger} from 'nei//lib/util/logger';
+import {logger} from 'nei/lib/util/logger';
 
 logger.setLevel('ERROR');
 

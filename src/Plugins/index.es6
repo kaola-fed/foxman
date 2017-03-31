@@ -1,9 +1,9 @@
 import PreCompiler from './PreCompiler';
-import Proxy from './proxy';
+import Proxy from './Proxy';
 import Reloader from './Reloader';
-import Server from './server';
-import Watcher from './watcher';
-import Debug from './debug';
+import Server from './Server';
+import Watcher from './Watcher';
+import Debug from './Debug';
 
 export {
     PreCompiler, Proxy,

@@ -4,9 +4,9 @@ var path = require("path");
 var Application = require('../../src/Application');
 var Nei = require('../../src/Plugins/NEISync').default;
 var Reloader = require('../../src/Plugins/Reloader').default;
-var WatchPlugin = require('../../src/Plugins/watcher').default;
-var ProxyPlugin = require('../../src/Plugins/proxy').default;
-var ServerPlugin = require('../../src/Plugins/server').default;
+var WatchPlugin = require('../../src/Plugins/Watcher').default;
+var ProxyPlugin = require('../../src/Plugins/Proxy').default;
+var ServerPlugin = require('../../src/Plugins/Server').default;
 
 var app = Application;
 

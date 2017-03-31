@@ -60,7 +60,7 @@ function runPlugins() {
     }
 }
 
-function use(plugin) {
+export function use(plugin) {
     if (!plugin) {
         return false;
     }
@@ -73,7 +73,7 @@ function use(plugin) {
     log(`plugin loaded: ${plugin.name}`);
 }
 
-function run() {
+export function run() {
     runGenerators(execute())
         .then(runPlugins)
         .catch((e) => {
@@ -81,12 +81,6 @@ function run() {
         })
 }
 
-function get(pluginName) {
+export function get(pluginName) {
     return dependencys[initialsLower(pluginName)]
-}
-
-export {
-    use,
-    run,
-    get
 }
