@@ -3,7 +3,7 @@ const path = require('path');
 const routers = require('./route');
 const webpackConfig = require('./webpack.config');
 
-// const mcss = require('foxman-mcss');
+const Mcss = require('./mcss');
 // const autoprefix = require('gulp-autoprefixer');
 const RouteDisplay = require('foxman-plugin-route-display');
 const MockControl = require('foxman-plugin-mock-control');
@@ -74,28 +74,22 @@ module.exports = {
     ],
 
     /**
-     * task集合(基于gulp文件处理，故所有gulp插件都可用)
-     * test -- String or Array<String> 需要进行转换的文件规则
-     * handler -- Function 类型，需返回一个数组
+     * Runtime Processor
      */
-    // preCompilers: [
-    //     {
-    //         test: [path.join(__dirname, 'src', 'mcss', '**', '[^_]*.mcss')],
-    //         handler: (dest) => {
-    //             return [
-    //                 mcss({
-    //                     "include": [],
-    //                     "format": 1
-    //                 }),
-    //                 autoprefix({
-    //                     browsers: ['Android >= 2.3'],
-    //                     cascade: false
-    //                 }),
-    //                 dest(path.join(__dirname, 'src', 'css'))
-    //             ]
-    //         }
-    //     }
-    // ],
+    processors: [
+        {
+            base: __dirname,
+            publicPath: '/src/css/:css.css',
+            pipeline: [
+                new Mcss({
+                    paths: []
+                })
+            ],
+            toSource: raw => {
+                return raw.replace(/css/g, 'mcss');
+            }
+        }
+    ],
 
     /**
      * 需要watch的根目录，缺省值为 foxman.config.js 所在目录的所有文件
@@ -154,6 +148,8 @@ module.exports = {
         /**
          * 静态资源目录
          */
-        static: [ paths.src ]
+        static: [ 
+            // paths.src 
+        ]
     }
 };
