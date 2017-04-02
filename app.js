@@ -1,5 +1,3 @@
-require('colors');
-
 process.stdout.write('\x1Bc');
 
 console.log('\n');

@@ -1,4 +1,5 @@
 import Server from './Server';
+import path from 'path';
 import {RenderUtil} from '../../helper';
 
 class ServerPlugin {
@@ -18,6 +19,13 @@ class ServerPlugin {
         if (undefined === options.routers) {
             options.routers = [];
         }
+
+        options.runtimeRouters = {
+            routers: options.routers
+        };
+
+        delete options.routers
+        
 
         if (undefined === options.syncDataMatch) {
             options.syncDataMatch = url => path.join(options.syncData, url);

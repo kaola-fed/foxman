@@ -28,7 +28,7 @@ class Server {
         const {statics, Render, templatePaths, viewRoot} = options;
         const app = this.app;
 
-        setRender({
+        this.tplRender = setRender({
             Render, templatePaths, viewRoot
         });
 
@@ -51,8 +51,8 @@ class Server {
     }
     
     delayInit() {
-        const {app, ifAppendHtmls} = this;
-        const {ifProxy, tplRender} = this.serverOptions;
+        const {app, ifAppendHtmls, tplRender} = this;
+        const {ifProxy} = this.serverOptions;
         
         if (!ifProxy) {
             app.use(bodyParser());
@@ -79,7 +79,7 @@ class Server {
     }
 
     createServer() {
-        const port = this.port || 3000;
+        const port = this.serverOptions.port || 3000;
         this.delayInit();
         const root = path.resolve(__dirname, '..', '..', '..');
         const httpOptions = {

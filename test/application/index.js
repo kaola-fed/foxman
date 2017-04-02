@@ -1,4 +1,3 @@
-require('colors')
 var assert = require("assert");
 var path = require("path");
 var Application = require('../../dist/Application');
@@ -42,7 +41,18 @@ describe('Use Plugins', function () {
         assert.equal(!!app.get('reloaderPlugin'), 1);
     });
     it('Use ProxyPlugin', function () {
-        app.use(new ProxyPlugin({}));
+        app.use(new ProxyPlugin({
+            proxyServerConfig: {
+                service: {
+                    'test': function (){
+
+                    }
+                }
+            },
+            proxyConfig:{
+                host: 'test'
+            }
+        }));
         assert.equal(!!app.get('proxyPlugin'), 1);
     });
 
@@ -57,12 +67,12 @@ describe('Application Run', function () {
 
 describe('Server Plugin Function', function () {
     it('server.syncDataMatch', function () {
-        var url = app.get('serverPlugin').server.syncDataMatch('foo.json')
+        var url = app.get('serverPlugin').server.serverOptions.syncDataMatch('foo.json')
         assert.equal(url, path.join(syncPath, 'foo.json'));
     });
 
     it('server.asyncDataMatch', function () {
-        var url = app.get('serverPlugin').server.syncDataMatch('foo.json')
+        var url = app.get('serverPlugin').server.serverOptions.syncDataMatch('foo.json')
         assert.equal(url, path.join(syncPath, 'foo.json'));
     });
 });

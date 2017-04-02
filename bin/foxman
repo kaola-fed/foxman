@@ -92,7 +92,6 @@ try {
 if (argv.port) {
     config.server.port = parseInt(argv.port);
 }
-
 if (!config.server.templatePaths)  {
     config.server.templatePaths = {};
 }

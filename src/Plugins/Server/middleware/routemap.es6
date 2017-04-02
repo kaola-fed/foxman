@@ -51,7 +51,7 @@ export default ({
          */
         const {method, query} = this.request;
         const routers = values(runtimeRouters).reduce((prev, item) => prev.concat(item), []);
-
+        
         if (Number(query.mode) !== 1) {
             /**
              * 遍历路由表,并给请求对象处理,生成 this.dispatcher

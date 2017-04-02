@@ -1,7 +1,7 @@
 import PreCompiler from './PreCompiler';
 import FileUpdater from './FileUpdater';
 import CompilerModel from './CompilerModel';
-import { util } from '../../helper';
+import {util} from '../../helper';
 
 class PreCompilerPlugin {
     constructor(options) {

@@ -6,7 +6,7 @@ import {util} from '../../helper';
 
 export default function handler({
     proxy,
-    targetHost
+    service
 }) {
     const target = url.parse(service(this.request.url.replace(/^(\/)/, '')));
     const res = new ServerResponse(Object.assign({}, this.req, {url: target.path}));

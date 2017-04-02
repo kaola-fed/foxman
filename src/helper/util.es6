@@ -43,15 +43,15 @@ export function errorLog(msg) {
 export function error(msg) {
     msg = msg.stack || msg;
 
-    errorLog(msg);
-    console.log(`\n`);
-
     const tips = [
         `Make sure you have the latest version of node.js and foxman.`,
         `If you do, this is most likely a problem with the foxman.`,
         `You could contact us(http://github.com/kaola-fed/foxman/issues)`,
     ];
     tips.forEach(errorLog);
+
+    console.log(`\n`);
+    errorLog(msg);
 
     tips.unshift('\n');
     tips.unshift(msg);
