@@ -41,13 +41,17 @@ class Server {
         })
     }
 
-    registerRouterNamespace(name, value = {}) {
+    registerRouterNamespace(name, value = []) {
         return this.serverOptions.runtimeRouters[name] = value;
     }
 
-    updateRuntimeRouters(fn) {
+    getRuntimeRouters() {
         const runtimeRouters = this.serverOptions.runtimeRouters;
-        return fn(values(runtimeRouters).reduce((prev, item) => prev.concat(item), []))
+        return values(runtimeRouters).reduce((prev, item) => prev.concat(item), []);
+    }
+
+    updateRuntimeRouters(fn) {
+        return fn(this.getRuntimeRouters());
     }
     
     delayInit() {
