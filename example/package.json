@@ -3,11 +3,16 @@
   "version": "0.0.1",
   "description": "foxman`s test",
   "main": "index.js",
-  "dependencies": {
-    "foxman-mcss": "^0.0.8",
-    "gulp-autoprefixer": "^3.1.1"
+  "dependencies": {},
+  "devDependencies": {
+    "foxman-mcss": "latest",
+    "foxman-plugin-automount": "latest",
+    "foxman-plugin-mock-control": "latest",
+    "foxman-plugin-route-display": "latest",
+    "foxman-plugin-webpack-dev-server": "^0.1.0",
+    "gulp-autoprefixer": "latest",
+    "webpack": "^2.3.2"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
