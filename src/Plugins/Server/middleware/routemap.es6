@@ -21,12 +21,12 @@ import pathToRegexp from 'path-to-regexp';
  * @return {[type]}        [description]
  */
 
-const getDispatcherMap = (config) => {
+const getDispatcherMap = ({extension}) => {
     const dispatcherMap = new Map();
     dispatcherMap.set('/', {
         type: DispatherTypes.DIR
     });
-    dispatcherMap.set(`.${config.extension}`, {
+    dispatcherMap.set(`.${extension}`, {
         type: DispatherTypes.SYNC
     });
     dispatcherMap.set('.json', {
@@ -35,27 +35,30 @@ const getDispatcherMap = (config) => {
     return dispatcherMap;
 };
 
-export default (config) => {
-    const dispatcherMap = getDispatcherMap(config);
+const {values, removeSuffix, addDataExt, jsonPathResolve} = util;
+
+export default ({
+    runtimeRouters, // structor
+    extension, divideMethod, // string
+    viewRoot, syncData, asyncData, // paths
+    syncDataMatch, asyncDataMatch // fns
+}) => {
+    const dispatcherMap = getDispatcherMap({extension});
     return function*(next) {
         /**
          * ① 拦截 router
          * @type {[type]}
          */
-        const [routers, method] = [config.routers || [], this.request.method];
-
-        /**
-         * 入口时，自动转换
-         */
-        let requestPath = (this.request.path == '/') ? '/index.html' : this.request.path;
-
-        if (this.request.query.mode != 1) {
+        const {method, query} = this.request;
+        const routers = values(runtimeRouters).reduce((prev, item) => prev.concat(item), []);
+        
+        if (Number(query.mode) !== 1) {
             /**
              * 遍历路由表,并给请求对象处理,生成 this.dispatcher
              */
             for (let router of routers) {
 
-                if (config.divideMethod && router.method.toUpperCase() !== method.toUpperCase()) {
+                if (divideMethod && router.method.toUpperCase() !== method.toUpperCase()) {
                     continue;
                 }
 
@@ -66,16 +69,16 @@ export default (config) => {
                 let filePath = router.filePath;
 
                 if (router.sync) {
-                    const tplName = util.removeSuffix(router.filePath, config.extension);
-                    let pagePath = path.join(config.viewRoot, `${tplName}.${config.extension}`);
-                    let dataPath = util.addDataExt(config.syncData, tplName);
+                    const tplName = removeSuffix(router.filePath, extension);
+                    let pagePath = path.join(viewRoot, `${tplName}.${extension}`);
+                    let dataPath = addDataExt(syncData, tplName);
                     this.dispatcher = {
                         type: 'sync',
                         pagePath,
                         dataPath
                     };
                 } else {
-                    let dataPath = util.addDataExt(config.asyncData, router.filePath);
+                    let dataPath = addDataExt(asyncData, router.filePath);
                     this.dispatcher = {
                         type: 'async',
                         dataPath
@@ -91,20 +94,21 @@ export default (config) => {
         }
 
         /**
-         * ② 未拦截到 router
+         * ② 未拦截到 router 入口时，自动转换
          */
-        let jsonPath = util.jsonPathResolve(requestPath);
+        let requestPath = (this.request.path === '/') ? '/index.html' : this.request.path;
+        let jsonPath = jsonPathResolve(requestPath);
         for (let [type, route] of dispatcherMap) {
             if (this.request.path.endsWith(type)) {
                 this.dispatcher = {
                     type: route.type,
                     isRouter: false,
                     filePath: requestPath,
-                    pagePath: path.join(config.viewRoot, this.request.path),
+                    pagePath: path.join(viewRoot, this.request.path),
                     dataPath: {
                         [DispatherTypes.DIR]: null,
-                        [DispatherTypes.SYNC]: config.syncDataMatch(jsonPath),
-                        [DispatherTypes.ASYNC]: config.asyncDataMatch(jsonPath)
+                        [DispatherTypes.SYNC]: syncDataMatch(jsonPath),
+                        [DispatherTypes.ASYNC]: asyncDataMatch(jsonPath)
                     }[route.type]
                 };
                 return yield next;

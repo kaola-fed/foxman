@@ -1,106 +1,66 @@
 import {util} from '../../helper';
 import httpProxy from 'http-proxy';
-import {ServerResponse} from 'http';
-import zlib from 'zlib';
-import url from 'url';
 
 /**
  * 全局代理插件
  */
 class ProxyPlugin {
-    constructor(options) {
-        Object.assign(
-            this,
-            options
-        );
-        this.enable = !!(this.proxyServerConfig && this.proxyConfig);
+    constructor({
+        proxyServerName = '', proxyConfig = {}
+    }) {
+        this.enable = (proxyServerName && proxyConfig);
+        const {service = {}} = proxyConfig;
 
-        if (this.enable && !this.proxyConfig.host) {
-            util.warn('proxy 部分需要设置 host');
+        if (this.enable) {
+            if (!proxyConfig.host) {
+                util.error('To configure config proxy.host');
+            }
+
+            if (Object.keys(service).indexOf(proxyServerName) === -1) {
+                util.error('To check config, and input correct proxyServer name');
+            }
         }
-
-        this.ifProxy = this.enable; // 兼容 mockControl
+        Object.assign(this, {proxyServerName, proxyConfig});
     }
 
     init(serverPlugin) {
-        this.proxy = httpProxy.createProxyServer({});
-        this.proxy.on('proxyReq', (proxyReq) => {
+        const {proxyConfig, proxyServerName} = this;
+        this.server = serverPlugin.server;
+        this.initProxy();
+        this.registerProxy();
+    }
+
+    initProxy() {
+        const {proxyConfig, proxyServerName} = this;
+        const proxy = this.proxy = httpProxy.createProxyServer({});
+        proxy.on('proxyReq', proxyReq => {
             proxyReq.setHeader('X-Special-Proxy-Header', 'foxman');
             proxyReq.setHeader('Host', this.proxyConfig.host);
         });
-        this.proxy.on('end', (req, res, proxyRes) => {
+        proxy.on('end', (req, res, proxyRes) => {
             res.emit('proxyEnd', req, res, proxyRes);
         });
-
-        this.server = serverPlugin.server;
-        const proxyConfig = this.proxyConfig;
-
-        proxyConfig.service = proxyConfig.service || {};
-
-        if (Object.keys(proxyConfig.service).indexOf(this.proxyServerConfig) == -1) {
-            util.error('请核对配置文件，并设置正确的代理服务别名');
-        }
-
-        this.updateRoutes(proxyConfig.service[this.proxyServerConfig]);
     }
 
-    updateRoutes(service) {
-        const routes = this.server.routers;
-        const proxy = this.proxy;
-        routes.forEach((router) => {
-            router.handler = (ctx) => {
-                return handler.call(ctx);
-            };
-        });
+    registerProxy() {
+        const {proxy, proxyConfig, proxyServerName} = this;
+        const service = proxyConfig.service[proxyServerName];
+        
+        this.server.updateRuntimeRouters(routes => 
+            routes.map(router => 
+                Object.assign(router, {
+                    handler: ctx => {
+                        handler.call(ctx, {
+                            targetHost: proxyConfig.host,
+                            proxy,service
+                        });
+                    }
+                })));
 
         util.notify({
             title: 'Proxy successfully',
-            msg: `Proxying to remote server ${this.proxyServerConfig}`
+            msg: `Proxying to remote server ${proxyServerName}`
         });
-
-        function handler() {
-            const target = url.parse(service(this.request.url.replace(/^(\/)/, '')));
-            const req = this.req;
-            req.url = target.path;
-
-            const res = new ServerResponse(req);
-            const data = [];
-            res.write = function (chunk) {
-                data.push(chunk);
-                return true;
-            };
-
-            proxy.web(this.req, res, {
-                target: target.protocol + '//' + (target.host || this.proxyConfig.host)
-            });
-
-            return new Promise(resolve => {
-                res.once('proxyEnd', (req, res) => {
-                    for (var name in res._headers) {
-                        if (!~[
-                                'transfer-encoding',
-                                'content-encoding'
-                            ].indexOf(name)) {
-                            this.set(name, res._headers[name]);
-                        }
-                    }
-
-                    const buffer = Buffer.concat(data);
-                    const encoding = res._headers['content-encoding'];
-                    if (encoding == 'gzip') {
-                        zlib.gunzip(buffer, function (err, decoded) {
-                            resolve(decoded.toString());
-                        });
-                    } else if (encoding == 'deflate') {
-                        zlib.inflate(buffer, function (err, decoded) {
-                            resolve(decoded.toString());
-                        });
-                    } else {
-                        resolve(buffer.toString());
-                    }
-                });
-            });
-        }
     }
 }
 

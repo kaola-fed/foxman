@@ -1,7 +1,7 @@
 var assert = require('assert');
 var path = require('path');
-var util = require('../../src/helper').util;
-var fileUtil = require('../../src/helper').fileUtil;
+var util = require('../../dist/helper').util;
+var fileUtil = require('../../dist/helper').fileUtil;
 
 describe('fileUtil', function() {
   

@@ -16,13 +16,23 @@ class Reloader extends EventEmitter {
     }
 
     bindChange() {
-        const reduceTemplateDir = (templateDir) => {
-            return path.join(templateDir, '**', '*.' + server.extension)
+        const {server, watcher} = this;
+        const {
+            extension, 
+            viewRoot, templatePaths, syncData, statics} = server.serverOptions;
+
+        const reduceTemplateDir = ({templatePath, extension}) => {
+            return path.join(templatePath, '**', '*.' + extension)
         };
-        const [server, watcher] = [this.server, this.watcher];
-        const templatePathes = [...values(server.templatePaths), server.viewRoot].map(reduceTemplateDir);
-        const syncDataRoot = path.join(server.syncData, '**', '*.json');
-        const statics = server.static.reduce((prev, item) => {
+
+        const templatePathes = [...values(templatePaths), viewRoot]
+            .map(templatePath => 
+                reduceTemplateDir({
+                    templatePath, extension
+                }));
+
+        const syncDataRoot = path.join(syncData, '**', '*.json');
+        const resources = statics.reduce((prev, item) => {
             return [
                 ...prev,
                 ...['*.css', '*.js', '*.html'].map(ext => path.join(item, '**', ext))
@@ -32,7 +42,7 @@ class Reloader extends EventEmitter {
         const reloadResources = [
             ...templatePathes,
             syncDataRoot,
-            ...statics
+            ...resources
         ];
 
         watcher.onUpdate(reloadResources, arg0 => {

@@ -17,8 +17,9 @@
   },
   "scripts": {
     "build": "babel src -d dist -x .es6",
+    "builddev": "babel src -w -d dist -x .es6",
     "dev": "babel src -w -d src -s -x .es6",
-    "test": "babel src -d src -s -x .es6 &&  mocha ./test",
+    "test": "babel src -d dist -s -x .es6 &&  mocha ./test",
     "release": "npm run build && npm publish"
   },
   "repository": {
@@ -47,7 +48,6 @@
     "babel-runtime": "^6.20.0",
     "chalklog": "^1.1.2",
     "chokidar": "^1.6.0",
-    "colors": "^1.1.2",
     "fast-ftl": "latest",
     "globule": "^1.0.0",
     "http-proxy": "^1.15.2",

@@ -1,11 +1,10 @@
+<#include '/inCommonTpl.ftl'>
 <html>
     <head></head>
     <body>
         <h1>Index</h1>
         <section>
-            <ul>
-                ${code}
-            </ul>
+            Hello, ${name}
         </section>
     </body>
 </html>

@@ -1,172 +1,119 @@
 import http from 'http';
 import fs from 'fs';
 import http2 from 'http2';
-import Koa from 'koa';
 import path from 'path';
-import {RenderUtil} from '../../helper';
-import render from 'koa-ejs';
+
+import Koa from 'koa';
+import WebSocket, {Server as WebSocketServer} from 'ws';
+import bodyParser from 'koa-bodyparser';
+
+import {util} from '../../helper';
+
 import dispatcher from './middleware/dispatcher';
 import routeMap from './middleware/routemap';
-import {util} from '../../helper';
-import WebSocket from 'ws';
-import {Server as WebSocketServer} from 'ws';
-import bodyParser from 'koa-bodyparser';
-import staticCache from 'koa-static-cache';
+import setStaticHandler from './setStaticHandler';
+import {setRender, setView} from './setRender';
+import setHtmlAppender from './setHtmlAppender';
 
-const {notify} = util;
+const {notify, values} = util;
 
 class Server {
-    constructor(config) {
+    constructor(options) {
+        this.serverOptions = options;
         this.middleware = [];
         this.ifAppendHtmls = [];
         this.app = Koa({
             outputErrors: false
         });
 
-        Object.assign(this, config);
+        const {statics, Render, templatePaths, viewRoot} = options;
+        const app = this.app;
 
-        if (!this.syncDataMatch) {
-            this.syncDataMatch = (url) => path.join(this.syncData, url);
-        }
+        this.tplRender = setRender({
+            Render, templatePaths, viewRoot
+        });
 
-        if (!this.asyncDataMatch) {
-            this.asyncDataMatch = (url) => path.join(this.asyncData, url);
-        }
+        setView({
+            app
+        });
 
-        if (undefined == this.divideMethod) {
-            this.divideMethod = false;
-        }
-
-        this.setRender();
-        this.setStaticHandler();
+        setStaticHandler({
+            statics, app
+        })
     }
 
+    registerRouterNamespace(name, value = []) {
+        return this.serverOptions.runtimeRouters[name] = value;
+    }
+
+    getRuntimeRouters() {
+        const runtimeRouters = this.serverOptions.runtimeRouters;
+        return values(runtimeRouters).reduce((prev, item) => prev.concat(item), []);
+    }
+
+    updateRuntimeRouters(fn) {
+        return fn(this.getRuntimeRouters());
+    }
+    
     delayInit() {
-        const app = this.app;
-        if (!this.ifProxy) {
+        const {app, ifAppendHtmls, tplRender} = this;
+        const {ifProxy} = this.serverOptions;
+        
+        if (!ifProxy) {
             app.use(bodyParser());
         }
-        app.use(routeMap(this));
+
+        // {extension, runtimeRouters, divideMethod, viewRoot, syncData, asyncData, syncDataMatch, asyncDataMatch}
+        app.use(routeMap(this.serverOptions));
+
         this.middleware.forEach((g) => {
             app.use(g);
         });
-        app.use(dispatcher(this));
+        
+        app.use(dispatcher({tplRender}));
 
-        this.htmlAppender();
+        setHtmlAppender({app, ifAppendHtmls})
     }
 
     use(middleware) {
         this.middleware.push(middleware(this));
     }
 
-    setRender() {
-        if (this.tpl) {
-            Object.assign(this, this.tpl);
-        }
-        let Render = this.RenderUtil || RenderUtil;
-        this.extension = this.extension || 'ftl';
-
-        this.tplRender = new Render({
-            templatePaths: this.templatePaths,
-            viewRoot: this.viewRoot
-        });
-
-        render(this.app, {
-            root: path.resolve(__dirname, '../../../views'),
-            layout: 'template',
-            viewExt: 'html',
-            cache: process.env.NODE_ENV !== 'development',
-            debug: true
-        });
-    }
-
-    setStaticHandler() {
-        const {app} = this;
-        let statics = this.static;
-        if (!statics) {
-            return false;
-        }
-
-        if (!Array.isArray(statics)) {
-            statics = [statics];
-        }
-
-        const getStaticOption = ({
-                dir,
-                prefix,
-                gzip = true,
-                preload = true,
-                dynamic = true,
-                filter = file => file.indexOf('node_modules') === -1
-            } = {}) => {
-
-            return {
-                dir,
-                prefix: prefix ? prefix : ('/' + path.parse(dir).base),
-                gzip,
-                preload,
-                dynamic,
-                filter
-            }
-        };
-
-        statics.forEach(item => {
-            const dir = path.resolve(process.cwd(), item);
-            app.use(staticCache(
-                getStaticOption({dir})
-            ));
-        });
-
-        app.use(staticCache(
-            getStaticOption({
-                dir: path.resolve(__dirname, '../../../client'),
-                prefix: '/__FOXMAN__CLIENT__',
-                dynamic: false
-            })
-        ))
-    }
-
     appendHtml(condition) {
         this.ifAppendHtmls.push(condition);
     }
 
-    htmlAppender() {
-        const ifAppendHtmls = this.ifAppendHtmls;
-        let html;
-
-        this.app.use(function*(next) {
-            if (/text\/html/ig.test(this.type)) {
-                html = ifAppendHtmls.map((item) => {
-                    return item.condition(this.request) ? item.html : '';
-                }).join('');
-                this.body = this.body + html;
-            }
-            yield next;
-        });
-    }
-
     createServer() {
-        const port = this.port || 3000;
         this.delayInit();
-        const root = path.resolve(__dirname, '..', '..', '..');
+
+        const {port = 3000} = this.serverOptions;
+        const home = path.resolve(__dirname, '..', '..', '..');
         const httpOptions = {
-            key: fs.readFileSync(path.resolve(root, 'config', 'crt', 'localhost.key')),
-            cert: fs.readFileSync(path.resolve(root, 'config', 'crt', 'localhost.crt')),
+            key: fs.readFileSync(path.resolve(home, 'config', 'crt', 'localhost.key')),
+            cert: fs.readFileSync(path.resolve(home, 'config', 'crt', 'localhost.crt')),
         };
         const callback = this.app.callback();
-        const tips = `Server running on ${this.https ? 'https' : 'http'}://127.0.0.1:${port}/`;
+        const tips = `Server build successfully on ${this.https ? 'https' : 'http'}://127.0.0.1:${port}/`;
 
-        this.serverApp = (this.https ? http2.createServer(httpOptions, callback) : http.createServer(callback)).listen(port);
-        this.wss = this.buildWebSocket(this.serverApp);
+        if (this.https) {
+            this.serverApp = http2.createServer(httpOptions, callback);
+        } else {
+            this.serverApp = http.createServer(callback);
+        }
+
+        this.serverApp.listen(port);
+        this.wss = this.buildWebSocket({
+            serverApp: this.serverApp
+        });
+
         util.log(tips);
-
         notify({
             title: 'Run successfully',
             msg: tips
         })
     }
 
-    buildWebSocket(serverApp) {
+    buildWebSocket({serverApp}) {
         const wss = new WebSocketServer({
             server: serverApp
         });
