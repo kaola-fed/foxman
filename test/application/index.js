@@ -1,12 +1,12 @@
 require('colors')
 var assert = require("assert");
 var path = require("path");
-var Application = require('../../src/Application');
-var Nei = require('../../src/Plugins/NEISync').default;
-var Reloader = require('../../src/Plugins/Reloader').default;
-var WatchPlugin = require('../../src/Plugins/Watcher').default;
-var ProxyPlugin = require('../../src/Plugins/Proxy').default;
-var ServerPlugin = require('../../src/Plugins/Server').default;
+var Application = require('../../dist/Application');
+var Nei = require('../../dist/Plugins/NEISync').default;
+var Reloader = require('../../dist/Plugins/Reloader').default;
+var WatchPlugin = require('../../dist/Plugins/Watcher').default;
+var ProxyPlugin = require('../../dist/Plugins/Proxy').default;
+var ServerPlugin = require('../../dist/Plugins/Server').default;
 
 var app = Application;
 
@@ -30,7 +30,7 @@ describe('Use Plugins', function () {
             syncData: syncPath,
             asyncData: asyncPath,
             static: [
-                path.join(__dirname, 'src')
+                path.join(__dirname, 'dist')
             ]
         }));
         assert.equal(!!app.get('serverPlugin'), 1);

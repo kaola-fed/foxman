@@ -1,7 +1,7 @@
 // require('babel-polyfill')
 var assert = require("assert");
-var util = require('../../src/helper').util;
-var bufferConcat = require('../../src/helper/bufferConcat').default;
+var util = require('../../dist/helper').util;
+var bufferConcat = require('../../dist/helper/bufferConcat').default;
 
 describe('util',function () {
   it('createSystemId', ()=>{
