@@ -1,18 +1,19 @@
 import http from 'http';
 import fs from 'fs';
 import http2 from 'http2';
-import Koa from 'koa';
 import path from 'path';
+
+import Koa from 'koa';
+import WebSocket, {Server as WebSocketServer} from 'ws';
+import bodyParser from 'koa-bodyparser';
+
+import {util} from '../../helper';
+
 import dispatcher from './middleware/dispatcher';
 import routeMap from './middleware/routemap';
 import setStaticHandler from './setStaticHandler';
 import {setRender, setView} from './setRender';
 import setHtmlAppender from './setHtmlAppender';
-
-import {util} from '../../helper';
-import WebSocket from 'ws';
-import {Server as WebSocketServer} from 'ws';
-import bodyParser from 'koa-bodyparser';
 
 const {notify, values} = util;
 
@@ -83,27 +84,36 @@ class Server {
     }
 
     createServer() {
-        const port = this.serverOptions.port || 3000;
         this.delayInit();
-        const root = path.resolve(__dirname, '..', '..', '..');
+
+        const {port = 3000} = this.serverOptions;
+        const home = path.resolve(__dirname, '..', '..', '..');
         const httpOptions = {
-            key: fs.readFileSync(path.resolve(root, 'config', 'crt', 'localhost.key')),
-            cert: fs.readFileSync(path.resolve(root, 'config', 'crt', 'localhost.crt')),
+            key: fs.readFileSync(path.resolve(home, 'config', 'crt', 'localhost.key')),
+            cert: fs.readFileSync(path.resolve(home, 'config', 'crt', 'localhost.crt')),
         };
         const callback = this.app.callback();
-        const tips = `Server running on ${this.https ? 'https' : 'http'}://127.0.0.1:${port}/`;
+        const tips = `Server build successfully on ${this.https ? 'https' : 'http'}://127.0.0.1:${port}/`;
 
-        this.serverApp = (this.https ? http2.createServer(httpOptions, callback) : http.createServer(callback)).listen(port);
-        this.wss = this.buildWebSocket(this.serverApp);
+        if (this.https) {
+            this.serverApp = http2.createServer(httpOptions, callback);
+        } else {
+            this.serverApp = http.createServer(callback);
+        }
+
+        this.serverApp.listen(port);
+        this.wss = this.buildWebSocket({
+            serverApp: this.serverApp
+        });
+
         util.log(tips);
-
         notify({
             title: 'Run successfully',
             msg: tips
         })
     }
 
-    buildWebSocket(serverApp) {
+    buildWebSocket({serverApp}) {
         const wss = new WebSocketServer({
             server: serverApp
         });
