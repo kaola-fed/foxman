@@ -41,7 +41,7 @@ export function apiHandler(dispatcher) {
  * @param  {[type]} next [description]
  * @return {[type]}         [description]
  */
-export function* dirDispatcher(dispatcher, config, next) {
+export function* dirDispatcher(dispatcher, {tplRender}, next) {
     const sortFiles = (list) => {
         return list.sort((a, b) => {
             return a.name.charAt(0).localeCompare(b.name.charAt(0));
@@ -79,7 +79,7 @@ export function* dirDispatcher(dispatcher, config, next) {
  * @param next
  * @returns {*}
  */
-export function* syncDispatcher(dispatcher, config, next) {
+export function* syncDispatcher(dispatcher, {tplRender}, next) {
     const filePath = dispatcher.pagePath;
     let res = yield apiHandler.call(this, dispatcher);
 
@@ -95,7 +95,7 @@ export function* syncDispatcher(dispatcher, config, next) {
     }
 
     try {
-        let result = yield config.tplRender.parse(filePath, res.json);
+        let result = yield tplRender.parse(filePath, res.json);
 
         this.type = 'text/html; charset=utf-8';
         this.body = result;
@@ -121,7 +121,7 @@ export function* syncDispatcher(dispatcher, config, next) {
  * @param next
  * @returns {*}
  */
-export function* asyncDispather(dispatcher, config, next) {
+export function* asyncDispather(dispatcher, {tplRender}, next) {
     /**
      * 异步接口处理
      * @type {[type]}
@@ -141,7 +141,7 @@ export function* asyncDispather(dispatcher, config, next) {
     yield next;
 }
 
-export default (config) => {
+export default ({tplRender}) => {
     return function*(next) {
         if (!this.dispatcher) {
             return void 0;
@@ -151,7 +151,7 @@ export default (config) => {
          * 分配给不同的处理器
          * @type {Object}
          */
-        let args = [config, next];
+        let args = [{tplRender}, next];
 
         let dispatcherMap = {
             [DispatherTypes.DIR]: dirDispatcher,

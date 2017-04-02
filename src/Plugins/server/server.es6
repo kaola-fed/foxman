@@ -3,146 +3,79 @@ import fs from 'fs';
 import http2 from 'http2';
 import Koa from 'koa';
 import path from 'path';
-import {RenderUtil} from '../../helper';
-import render from 'koa-ejs';
 import dispatcher from './middleware/dispatcher';
 import routeMap from './middleware/routemap';
+import setStaticHandler from './setStaticHandler';
+import {setRender, setView} from './setRender';
+import setHtmlAppender from './setHtmlAppender';
+
 import {util} from '../../helper';
 import WebSocket from 'ws';
 import {Server as WebSocketServer} from 'ws';
 import bodyParser from 'koa-bodyparser';
-import staticCache from 'koa-static-cache';
 
-const {notify} = util;
+const {notify, values} = util;
 
 class Server {
-    constructor(config) {
+    constructor(options) {
+        this.serverOptions = options;
         this.middleware = [];
         this.ifAppendHtmls = [];
         this.app = Koa({
             outputErrors: false
         });
 
-        Object.assign(this, config);
+        const {statics, Render, templatePaths, viewRoot} = options;
+        const app = this.app;
 
-        if (!this.syncDataMatch) {
-            this.syncDataMatch = (url) => path.join(this.syncData, url);
-        }
+        setRender({
+            Render, templatePaths, viewRoot
+        });
 
-        if (!this.asyncDataMatch) {
-            this.asyncDataMatch = (url) => path.join(this.asyncData, url);
-        }
+        setView({
+            app
+        });
 
-        if (undefined == this.divideMethod) {
-            this.divideMethod = false;
-        }
-
-        this.setRender();
-        this.setStaticHandler();
+        setStaticHandler({
+            statics, app
+        })
     }
 
+    registerRouterNamespace(name, value = {}) {
+        return this.serverOptions.runtimeRouters[name] = value;
+    }
+
+    updateRuntimeRouters(fn) {
+        const runtimeRouters = this.serverOptions.runtimeRouters;
+        return fn(values(runtimeRouters).reduce((prev, item) => prev.concat(item), []))
+    }
+    
     delayInit() {
-        const app = this.app;
-        if (!this.ifProxy) {
+        const {app, ifAppendHtmls} = this;
+        const {ifProxy, tplRender} = this.serverOptions;
+        
+        if (!ifProxy) {
             app.use(bodyParser());
         }
-        app.use(routeMap(this));
+
+        // {extension, runtimeRouters, divideMethod, viewRoot, syncData, asyncData, syncDataMatch, asyncDataMatch}
+        app.use(routeMap(this.serverOptions));
+
         this.middleware.forEach((g) => {
             app.use(g);
         });
-        app.use(dispatcher(this));
+        
+        app.use(dispatcher({tplRender}));
 
-        this.htmlAppender();
+        setHtmlAppender({app, ifAppendHtmls})
     }
 
     use(middleware) {
         this.middleware.push(middleware(this));
     }
 
-    setRender() {
-        if (this.tpl) {
-            Object.assign(this, this.tpl);
-        }
-        let Render = this.RenderUtil || RenderUtil;
-        this.extension = this.extension || 'ftl';
-
-        this.tplRender = new Render({
-            templatePaths: this.templatePaths,
-            viewRoot: this.viewRoot
-        });
-
-        render(this.app, {
-            root: path.resolve(__dirname, '../../../views'),
-            layout: 'template',
-            viewExt: 'html',
-            cache: process.env.NODE_ENV !== 'development',
-            debug: true
-        });
-    }
-
-    setStaticHandler() {
-        const {app} = this;
-        let statics = this.static;
-        if (!statics) {
-            return false;
-        }
-
-        if (!Array.isArray(statics)) {
-            statics = [statics];
-        }
-
-        const getStaticOption = ({
-                dir,
-                prefix,
-                gzip = true,
-                preload = true,
-                dynamic = true,
-                filter = file => file.indexOf('node_modules') === -1
-            } = {}) => {
-
-            return {
-                dir,
-                prefix: prefix ? prefix : ('/' + path.parse(dir).base),
-                gzip,
-                preload,
-                dynamic,
-                filter
-            }
-        };
-
-        statics.forEach(item => {
-            const dir = path.resolve(process.cwd(), item);
-            app.use(staticCache(
-                getStaticOption({dir})
-            ));
-        });
-
-        app.use(staticCache(
-            getStaticOption({
-                dir: path.resolve(__dirname, '../../../client'),
-                prefix: '/__FOXMAN__CLIENT__',
-                dynamic: false
-            })
-        ))
-    }
-
     appendHtml(condition) {
         this.ifAppendHtmls.push(condition);
-    }
-
-    htmlAppender() {
-        const ifAppendHtmls = this.ifAppendHtmls;
-        let html;
-
-        this.app.use(function*(next) {
-            if (/text\/html/ig.test(this.type)) {
-                html = ifAppendHtmls.map((item) => {
-                    return item.condition(this.request) ? item.html : '';
-                }).join('');
-                this.body = this.body + html;
-            }
-            yield next;
-        });
     }
 
     createServer() {

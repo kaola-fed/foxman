@@ -87,7 +87,8 @@ class NEISyncPlugin {
         const genCommonPath = this.genCommonPath.bind(this);
         const genNeiApiUrl = this.genNeiApiUrl.bind(this);
         const server = this.server;
-        server.routers = server.routers.concat(routes);
+
+        server.registerRouterNamespace('nei', routes);
 
         server.use(() => function *(next) {
             const {dispatcher} = this;
@@ -110,19 +111,19 @@ class NEISyncPlugin {
     }
 
     genCommonPath(route) {
-        const server = this.server;
         let filePath = route.filePath;
-
+        const {divideMethod, syncDataMatch, asyncDataMatch} = this.server.serverOptions;
+        
         if (route.sync) {
-            return server.syncDataMatch(util.jsonPathResolve(route.filePath));
+            return syncDataMatch(util.jsonPathResolve(route.filePath));
         }
 
-        if (!server.divideMethod) {
+        if (!divideMethod) {
             const methodReg = /(GET|DELETE|HEAD|PATCH|POST|PUT)\//i;
             filePath = filePath.replace(methodReg, '');
         }
 
-        return server.asyncDataMatch(util.jsonPathResolve(filePath.replace(/\/data/g, '')));
+        return asyncDataMatch(util.jsonPathResolve(filePath.replace(/\/data/g, '')));
     }
 
     genNeiApiUrl(route) {

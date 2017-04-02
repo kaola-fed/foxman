@@ -1,10 +1,35 @@
 'use strict';
 const path = require('path');
-const mcss = require('foxman-mcss');
-const autoprefix = require('gulp-autoprefixer');
 const routers = require('./route');
+
+// const mcss = require('foxman-mcss');
+// const autoprefix = require('gulp-autoprefixer');
 // const RouteDisplay = require('foxman-plugin-route-display');
 // const MockControl = require('foxman-plugin-mock-control');
+
+function urlTransformer (ip) {
+    return function (reqPath) {
+        return `http://${ip}/${reqPath}`;
+    }
+}
+
+const paths = {
+    webapp: __dirname
+}
+
+Object.assign(paths, {
+    viewRoot: path.join(paths.webapp, 'template'),
+    syncData: path.join(paths.webapp, 'mock', 'sync'),
+    asyncData: path.join(paths.webapp, 'mock', 'async')
+});
+
+Object.assign(paths,{
+    commonTpl: path.join(paths.webapp, 'commonTpl')
+})
+
+Object.assign(paths,{
+    src: path.join(__dirname, 'src')
+})
 
 module.exports = {
     /**
@@ -31,56 +56,43 @@ module.exports = {
         //     }
         // })
     ],
-    preCompilers: [
-        {
-            test: [path.join(__dirname, 'src', 'mcss', '**', '[^_]*.mcss')],
-            handler: (dest) => {
-                return [
-                    mcss({
-                        "include": [],
-                        "format": 1
-                    }),
-                    autoprefix({
-                        browsers: ['Android >= 2.3'],
-                        cascade: false
-                    }),
-                    dest(path.join(__dirname, 'src', 'css'))
-                ]
-            }
-        }
-    ],
+    // preCompilers: [
+    //     {
+    //         test: [path.join(__dirname, 'src', 'mcss', '**', '[^_]*.mcss')],
+    //         handler: (dest) => {
+    //             return [
+    //                 mcss({
+    //                     "include": [],
+    //                     "format": 1
+    //                 }),
+    //                 autoprefix({
+    //                     browsers: ['Android >= 2.3'],
+    //                     cascade: false
+    //                 }),
+    //                 dest(path.join(__dirname, 'src', 'css'))
+    //             ]
+    //         }
+    //     }
+    // ],
+
     /**
      * 需要watch的根目录，缺省值为 foxman.config.js 所在目录的所有文件
      */
-    // watch: {
-    //     root: alias.r
-    // },
-    /**
-     * 代理配置
-     * host -- request headers 上携带过去的 Host信息
-     * service -- url处理器 foxman -p test 选中 test
-     */
+    watch: {
+        root: paths.webapp
+    },
+
     proxy: {
         host: 'm.kaola.com',
         service: {
-            /**
-             *
-             * @param url -- request.url （http://m.kaola.com/(index.html?hello=world)）
-             * @returns 完整的请求路径
-             */
-            test(url) {
-                let devMark = 'isDev=1000';
-                let result = (-1 === url.indexOf('?') ? `?${devMark}` : `&${devMark}`);
-                /**
-                 * hot_hotfix3
-                 */
-                return 'http://106.2.44.36/' + url.replace(/^\//, '') + result;
-                // return 'http://m.kaola.com/' + url.replace(/^\//, '') + result;
+            test(reqPath) {
+                return urlTransformer('106.2.44.36')(reqPath);
             }
         }
     },
+
     /**
-     * mock服务器配置
+     * 服务配置
      */
     server: {
         /**
@@ -100,28 +112,26 @@ module.exports = {
          */
         https: !!0,
         /**
-         * 引入的 templatePaths，默认 {}
+         * 引入的 templatePaths，根据具体的 View Render 配置
          */
-        // templatePaths: {
-        //     viewRoot1: path.join(__dirname, 'template1')
-        // },
+        templatePaths: {
+            commonTpl: paths.commonTpl
+        },
         /**
          * router type 为 sync 的filePath的ftl相对目录
          */
-        viewRoot: path.join(__dirname, 'template'),
+        viewRoot: paths.viewRoot,
         /**
          * router type 为 sync 的filePath的data相对目录
          */
-        syncData: path.join(__dirname, 'mock', 'sync'),
+        syncData: paths.syncData,
         /**
          * router type 为 async 的filepath的data相对目录
          */
-        asyncData: path.join(__dirname, 'mock', 'async'),
+        asyncData: paths.asyncData,
         /**
          * 静态资源目录
          */
-        static: [
-            path.join(__dirname, 'src')
-        ]
+        static: [ paths.src ]
     }
 };
