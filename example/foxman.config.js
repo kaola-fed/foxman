@@ -4,7 +4,7 @@ const routers = require('./route');
 const webpackConfig = require('./webpack.config');
 
 const Mcss = require('./mcss');
-// const autoprefix = require('gulp-autoprefixer');
+const AutoPrefixer = require('./autoprefixer');
 const RouteDisplay = require('foxman-plugin-route-display');
 const MockControl = require('foxman-plugin-mock-control');
 const Automount = require('foxman-plugin-automount');
@@ -83,9 +83,13 @@ module.exports = {
             pipeline: [
                 new Mcss({
                     paths: []
+                }),
+                new AutoPrefixer({
+
                 })
             ],
             toSource: raw => {
+                console.log(raw)
                 return raw.replace(/css/g, 'mcss');
             }
         }

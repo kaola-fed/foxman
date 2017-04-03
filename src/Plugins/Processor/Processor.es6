@@ -1,11 +1,11 @@
 import path from 'path';
 import pathToRegexp from 'path-to-regexp';
-// import send from 'koa-send';
 import {fileUtil, util} from '../../helper';
  
 const {getFileStat, readFile} = fileUtil;
 const {warnLog} = util;
 
+function noop(p) { return p;}
 export function dispatcher ({processors}) {
     return function (ctx) {
         return function*(next) {
@@ -19,21 +19,18 @@ export function dispatcher ({processors}) {
             }
 
             const rawPath = reqUrl2FilePath(this.request.path);
-            const {pipeline = []} = processor;
-            const semiFinished = pipeline.reverse().reduce(function(prev, {toSource}) {
-                if (!toSource) {
-                    return prev;
-                }
-
-                return toSource(prev);
-            }, rawPath);
-
-            const relativePath = processor.toSource(rawPath);
-            const sourceFile = combineBase({
+            const targetFile = combineBase({
                 base: processor.base,
-                relativePath
+                rawPath: rawPath 
             });
-
+            const {pipeline = []} = processor;
+            const semiFinishedStack = getSemiFinished({
+                pipeline: [
+                    ...pipeline, processor // 从右往左
+                ], 
+                targetFile
+            });
+            const sourceFile = stackTop(semiFinishedStack);
             let raw;
             try {
                 const stats = yield getFileStat(sourceFile);
@@ -43,26 +40,50 @@ export function dispatcher ({processors}) {
                 return yield next;
             }
 
-            let rawed = raw, handler;
-            for (let {handler} of pipeline) {
-                try {
-                    rawed = yield new Promise((resolve, reject) => {
-                        handler(rawed, resolve);
-                    });
-                } catch (e) {
-                    warnLog(e); 
-                }
-            }
-
-            this.body = rawed;
+            this.body = yield workflow({raw, pipeline, semiFinishedStack})
         };
     }
 }
 
-function combineBase({base, relativePath}) {
-    return path.join(base, relativePath);
+function * workflow ({
+    raw, pipeline, semiFinishedStack
+}) {
+    let processed = raw;
+    for (let item of pipeline) {
+        const {handler} = item;
+        try {
+            processed = yield new Promise((resolve, reject) => {
+                handler.call(item, {
+                    raw: processed, resolve, reject,
+                    filename: semiFinishedStack.pop()
+                });
+            });
+        } catch (e) {
+            warnLog(e); 
+        }
+    }
+    return processed;
+}
+
+function combineBase({base, rawPath}) {
+    return path.join(base, rawPath);
 }
 
 function reqUrl2FilePath(url) {
     return path.join(... url.split('/'));
+}
+
+function getSemiFinished({
+    pipeline,
+    targetFile
+}) {
+    return pipeline.reduceRight(function(prev, item) {
+        const {toSource = noop} = item;
+        const raw = stackTop(prev);
+        return [...prev, toSource.call(item, raw)];
+    }, [targetFile]);
+}
+
+function stackTop(stack) {
+    return stack.slice(-1)[0];
 }

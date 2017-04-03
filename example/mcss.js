@@ -1,20 +1,33 @@
 const mcss = require('mcss');
 
 class Mcss {
-    constructor() {
-
-    }
-
-    toSource (raw) {
-        return raw.replace(/mcss$/g, 'css');
-    }
-
-    handler (raw, resolve) {
-        var instance = mcss({
-            // filename: '/absolute/path/to/xx.file'
+    constructor({
+        pathes = [],
+        format = 1,
+        sourcemap = false,
+        indent = '    '
+    }) {
+        this.instance = mcss({
+            pathes, format, sourcemap, indent
         });
+        this.raw;
+    }
+        
+    // this.raw = raw;
+    toSource (raw) {
+        return raw.replace(/\.css$/g, '\.mcss');
+    }
 
-        instance.translate(raw).done(resolve);
+    handler ({
+        raw, filename,
+        resolve, reject
+    }) {
+        console.log('filename', filename)
+        const instance = this.instance;
+        instance.set('filename', filename);
+        instance.translate(raw)
+            .done(resolve)
+            .failed(reject);
     }
 }
 
