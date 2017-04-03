@@ -26,7 +26,7 @@ class Server {
             outputErrors: false
         });
 
-        const {statics, Render, templatePaths, viewRoot} = options;
+        const {Render, templatePaths, viewRoot} = options;
         const app = this.app;
 
         this.tplRender = setRender({
@@ -36,10 +36,6 @@ class Server {
         setView({
             app
         });
-
-        setStaticHandler({
-            statics, app
-        })
     }
 
     registerRouterNamespace(name, value = []) {
@@ -57,7 +53,7 @@ class Server {
     
     delayInit() {
         const {app, ifAppendHtmls, tplRender} = this;
-        const {ifProxy} = this.serverOptions;
+        const {ifProxy, statics} = this.serverOptions;
         
         if (!ifProxy) {
             app.use(bodyParser());
@@ -72,7 +68,11 @@ class Server {
         
         app.use(dispatcher({tplRender}));
 
-        setHtmlAppender({app, ifAppendHtmls})
+        setHtmlAppender({app, ifAppendHtmls});
+        
+        setStaticHandler({
+            statics, app
+        });
     }
 
     use(middleware) {
