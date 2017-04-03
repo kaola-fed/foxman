@@ -1,4 +1,5 @@
 import {dispatcher} from './Processor';
+import ReloaderService from './ReloaderService';
 
 class ProcessorPlugin {
     constructor({processors}) {
@@ -8,10 +9,19 @@ class ProcessorPlugin {
         }
     }
 
-    init(serverPlugin) {
+    init(serverPlugin, watcherPlugin, reloaderPlugin) {
         const {processors} = this;
         const {server} = serverPlugin;
-        server.use(dispatcher({processors}));
+        const {watcher} = watcherPlugin;
+        const {reloader} = reloaderPlugin;
+        
+        ReloaderService({
+            watcher, reloader
+        });
+
+        server.use(dispatcher({
+            processors
+        }));
     }
 }
 

@@ -1,6 +1,6 @@
-// @import './_demoinclude.mcss';
+@import './_demoinclude.mcss';
 
-.a {
-    color: #123456;
+body {
+    background: #111;
     display: flex;
 }

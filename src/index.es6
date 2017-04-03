@@ -12,10 +12,10 @@ class ApplicationContext {
         // Server Plugin
         use(new Server(config.server));
 
-        // PreCompiler Plugin
-        // use(new PreCompiler({
-        //     preCompilers: config.preCompilers
-        // }));
+        // Reloader Plugin
+        use(new Reloader({}));
+
+        // Processor Plugin
         use(new Processor({
             processors: config.processors
         }));
@@ -30,9 +30,6 @@ class ApplicationContext {
 
         // Outer Plugin
         use(config.plugins);
-
-        // Reloader Plugin
-        use(new Reloader({}));
 
         // Debug Plugin
         use(new Debug({

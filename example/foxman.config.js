@@ -3,8 +3,8 @@ const path = require('path');
 const routers = require('./route');
 const webpackConfig = require('./webpack.config');
 
-const Mcss = require('./mcss');
-const AutoPrefixer = require('./autoprefixer');
+const Mcss = require('foxman-processor-mcss');
+const AutoPrefixer = require('foxman-processor-autoprefixer');
 const RouteDisplay = require('foxman-plugin-route-display');
 const MockControl = require('foxman-plugin-mock-control');
 const Automount = require('foxman-plugin-automount');
@@ -36,10 +36,10 @@ Object.assign(paths,{
 
 module.exports = {
     /**
-     * 如有需要，填写nei 的kei 然后执行 foxman -u 初始化工程目录。
+     * nei 的 kei 然后执行 foxman -u 初始化工程目录。
      **/
     // nei: {
-        // key: 'xxxsxsxs'
+        // key: 'xxx'
     // },
 
     plugins: [
@@ -85,11 +85,11 @@ module.exports = {
                     paths: []
                 }),
                 new AutoPrefixer({
-
+                    cascade: false,
+                    browsers: '> 5%'
                 })
             ],
             toSource: raw => {
-                console.log(raw)
                 return raw.replace(/css/g, 'mcss');
             }
         }
@@ -117,8 +117,17 @@ module.exports = {
     server: {
         /**
          * 路由表 格式参见 @routers
+         * routers 字段是偏底层的接口，不建议使用。使用 NEI 或者 Automount 插件的配置代替
          */
-        routers,
+        routers: [
+            {
+                method: 'GET', url: '/ajax/index.html', 
+                sync: false, filePath: 'foo.bar'
+            }, {
+                method: 'GET', url: '/fooBar.html', 
+                sync: true, filePath: 'foo.bar'
+            }
+        ],
         /**
          * 端口
          */

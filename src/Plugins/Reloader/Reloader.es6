@@ -1,6 +1,6 @@
 import EventEmitter from 'events';
 import path from 'path';
-import {values} from '../../helper/util';
+import {values, log} from '../../helper/util';
 
 class Reloader extends EventEmitter {
     constructor(options) {
@@ -11,6 +11,7 @@ class Reloader extends EventEmitter {
 
     reload(url) {
         if (this.server && this.server.wss) {
+            log('Living Reload: '+ url);
             this.server.wss.broadcast(url);
         }
     }

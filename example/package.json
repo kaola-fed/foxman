@@ -3,17 +3,15 @@
   "version": "0.0.1",
   "description": "foxman`s test",
   "main": "index.js",
-  "dependencies": {
-    "autoprefixer": "^6.7.7",
-    "postcss": "^5.2.16"
-  },
   "devDependencies": {
-    "foxman-mcss": "latest",
     "foxman-plugin-automount": "latest",
     "foxman-plugin-mock-control": "latest",
     "foxman-plugin-route-display": "latest",
-    "foxman-plugin-webpack-dev-server": "^0.1.0",
-    "gulp-autoprefixer": "latest",
+    "foxman-plugin-webpack-dev-server": "latest",
+
+    "foxman-processor-mcss": "latest",
+    "foxman-processor-autoprefixer": "latest",
+    
     "webpack": "^2.3.2"
   },
   "scripts": {

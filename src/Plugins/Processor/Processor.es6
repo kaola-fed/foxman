@@ -1,12 +1,17 @@
 import path from 'path';
 import pathToRegexp from 'path-to-regexp';
 import {fileUtil, util} from '../../helper';
- 
+import ReloaderService from './ReloaderService';
+
 const {getFileStat, readFile} = fileUtil;
 const {warnLog} = util;
+let reloaderService;
 
 function noop(p) { return p;}
+
 export function dispatcher ({processors}) {
+    reloaderService = ReloaderService();
+
     return function (ctx) {
         return function*(next) {
             const request = this.request;
@@ -17,7 +22,7 @@ export function dispatcher ({processors}) {
             if (!processor) {
                 return yield next;
             }
-
+            const reqPath = this.request.path;
             const rawPath = reqUrl2FilePath(this.request.path);
             const targetFile = combineBase({
                 base: processor.base,
@@ -40,29 +45,55 @@ export function dispatcher ({processors}) {
                 return yield next;
             }
 
-            this.body = yield workflow({raw, pipeline, semiFinishedStack})
+            this.body = yield workflow({
+                raw, semiFinishedStack, reqPath,
+                pipeline
+            })
         };
     }
 }
 
 function * workflow ({
-    raw, pipeline, semiFinishedStack
+    raw, semiFinishedStack, reqPath,
+    pipeline
 }) {
     let processed = raw;
+    
     for (let item of pipeline) {
         const {handler} = item;
+        const filename = semiFinishedStack.pop();
         try {
             processed = yield new Promise((resolve, reject) => {
                 handler.call(item, {
-                    raw: processed, resolve, reject,
-                    filename: semiFinishedStack.pop()
+                    raw: processed, filename,
+                    resolve: resolveWrapper({
+                        resolve, 
+                        filename, reqPath
+                    }), reject
                 });
             });
         } catch (e) {
             warnLog(e); 
         }
     }
+
     return processed;
+}
+
+function resolveWrapper({
+    resolve,
+    filename, reqPath
+}) {
+    return function ({
+        processed, dependencies = []
+    }) {
+        const map = {
+            reqPath: reqPath,
+            dependencies: [...dependencies, filename]
+        };
+        reloaderService.register(map);
+        resolve(processed);
+    }
 }
 
 function combineBase({base, rawPath}) {
