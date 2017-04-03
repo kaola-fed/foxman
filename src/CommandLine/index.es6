@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 'use strict';
-const validate = require('./validate');
-const {log, error, wrong} = require('./log');
+import yargs from 'yargs';
+import path from 'path';
 
-const path = require('path');
-const pkg = require('../package.json');
+import App from '../app';
+import validate from './utils/validate';
+import {log, error as wrong, warnLog as error} from '../helper/util';
+import pkg from '../../package.json';
 
-const argv = require('yargs')
+const argv = yargs
     .usage('Usage: foxman [options]')
     .alias('C', 'config')
     .alias('C', 'c')
@@ -85,7 +87,8 @@ try {
         error(`Maybe it's a problem with foxman.config.js, check it or contact us(http://github.com/kaola-fed/foxman/issues)`);
         log(err)
     }
-    return false;
+
+    process.exit(1);
 }
 
 if (argv.port) {
@@ -100,4 +103,4 @@ if (res !== true) {
     wrong(res);
 }
 
-require('../app')(Object.assign({}, config, {argv}, {configPath}));
+App(Object.assign({}, config, {argv}, {configPath}));

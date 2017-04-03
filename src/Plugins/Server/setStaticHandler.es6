@@ -30,7 +30,7 @@ export default ({app, statics}) => {
 
     app.use(staticCache(
         getStaticOption({
-            dir: path.resolve(__dirname, '../../../client'),
+            dir: path.resolve(__dirname, 'client'),
             prefix: '/__FOXMAN__CLIENT__',
             dynamic: false
         })

@@ -11,7 +11,7 @@ const typeOf = (obj, type) => {
 };
 
 
-module.exports = function (config) {
+export default function (config) {
     if (!typeOf(config.server.port, 'number')) {
         return `config.server.port must be number`;
     }

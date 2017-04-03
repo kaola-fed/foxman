@@ -8,6 +8,9 @@ gulp.task('clean', function () {
 });
 
 gulp.task('default', ['clean'], function () {
-    return gulp.src('src/**/crt/**')
+    return gulp.src([
+        'src/**/crt/**',
+        'src/**/client/**',
+    ])
         .pipe(gulp.dest('dist'));
 });

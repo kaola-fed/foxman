@@ -1,10 +1,10 @@
 {
   "name": "foxman",
   "version": "0.8.0-beta.12",
-  "description": "Not Only Mock Server",
+  "description": "可扩展的 Mock Server",
   "main": "app.js",
   "bin": {
-    "foxman": "bin/foxman"
+    "foxman": "dist/CommandLine/index.js"
   },
   "directories": {
     "test": "test"
@@ -18,8 +18,8 @@
   "scripts": {
     "build": "gulp && babel src -d dist -x .es6",
     "builddev": "gulp && babel src -w -d dist -x .es6",
-    "dev": "babel src -w -d src -s -x .es6",
-    "test": "babel src -d dist -s -x .es6 &&  mocha ./test",
+    "dev": "gulp && babel src -w -d src -s -x .es6",
+    "test": "gulp && babel src -d dist -s -x .es6 &&  mocha ./test",
     "release": "npm run build && npm publish"
   },
   "repository": {
