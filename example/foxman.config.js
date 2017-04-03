@@ -1,6 +1,5 @@
 'use strict';
 const path = require('path');
-const routers = require('./route');
 const webpackConfig = require('./webpack.config');
 
 const Mcss = require('foxman-processor-mcss');
