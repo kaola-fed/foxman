@@ -3,8 +3,8 @@ const path = require('path');
 const routers = require('./route');
 const webpackConfig = require('./webpack.config');
 
-// const mcss = require('foxman-mcss');
-// const autoprefix = require('gulp-autoprefixer');
+const Mcss = require('foxman-processor-mcss');
+const AutoPrefixer = require('foxman-processor-autoprefixer');
 const RouteDisplay = require('foxman-plugin-route-display');
 const MockControl = require('foxman-plugin-mock-control');
 const Automount = require('foxman-plugin-automount');
@@ -36,10 +36,10 @@ Object.assign(paths,{
 
 module.exports = {
     /**
-     * 如有需要，填写nei 的kei 然后执行 foxman -u 初始化工程目录。
+     * nei 的 kei 然后执行 foxman -u 初始化工程目录。
      **/
     // nei: {
-        // key: 'xxxsxsxs'
+        // key: 'xxx'
     // },
 
     plugins: [
@@ -74,28 +74,26 @@ module.exports = {
     ],
 
     /**
-     * task集合(基于gulp文件处理，故所有gulp插件都可用)
-     * test -- String or Array<String> 需要进行转换的文件规则
-     * handler -- Function 类型，需返回一个数组
+     * Runtime Processor
      */
-    // preCompilers: [
-    //     {
-    //         test: [path.join(__dirname, 'src', 'mcss', '**', '[^_]*.mcss')],
-    //         handler: (dest) => {
-    //             return [
-    //                 mcss({
-    //                     "include": [],
-    //                     "format": 1
-    //                 }),
-    //                 autoprefix({
-    //                     browsers: ['Android >= 2.3'],
-    //                     cascade: false
-    //                 }),
-    //                 dest(path.join(__dirname, 'src', 'css'))
-    //             ]
-    //         }
-    //     }
-    // ],
+    processors: [
+        {
+            base: __dirname,
+            publicPath: '/src/css/:css.css',
+            pipeline: [
+                new Mcss({
+                    paths: []
+                }),
+                new AutoPrefixer({
+                    cascade: false,
+                    browsers: '> 5%'
+                })
+            ],
+            toSource: raw => {
+                return raw.replace(/css/g, 'mcss');
+            }
+        }
+    ],
 
     /**
      * 需要watch的根目录，缺省值为 foxman.config.js 所在目录的所有文件
@@ -119,8 +117,17 @@ module.exports = {
     server: {
         /**
          * 路由表 格式参见 @routers
+         * routers 字段是偏底层的接口，不建议使用。使用 NEI 或者 Automount 插件的配置代替
          */
-        routers,
+        routers: [
+            {
+                method: 'GET', url: '/ajax/index.html', 
+                sync: false, filePath: 'foo.bar'
+            }, {
+                method: 'GET', url: '/fooBar.html', 
+                sync: true, filePath: 'foo.bar'
+            }
+        ],
         /**
          * 端口
          */
@@ -154,6 +161,8 @@ module.exports = {
         /**
          * 静态资源目录
          */
-        static: [ paths.src ]
+        static: [ 
+            // paths.src 
+        ]
     }
 };

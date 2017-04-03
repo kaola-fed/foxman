@@ -1,6 +1,6 @@
 import {use, run} from './Application';
 import {
-    PreCompiler, Proxy,
+    PreCompiler, Proxy, Processor,
     Reloader, Server, Watcher, Debug
 } from './Plugins';
 
@@ -12,9 +12,12 @@ class ApplicationContext {
         // Server Plugin
         use(new Server(config.server));
 
-        // PreCompiler Plugin
-        use(new PreCompiler({
-            preCompilers: config.preCompilers
+        // Reloader Plugin
+        use(new Reloader({}));
+
+        // Processor Plugin
+        use(new Processor({
+            processors: config.processors
         }));
 
         // Nei Plugin
@@ -27,9 +30,6 @@ class ApplicationContext {
 
         // Outer Plugin
         use(config.plugins);
-
-        // Reloader Plugin
-        use(new Reloader({}));
 
         // Debug Plugin
         use(new Debug({

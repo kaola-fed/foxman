@@ -4,8 +4,9 @@ import Reloader from './Reloader';
 import Server from './Server';
 import Watcher from './Watcher';
 import Debug from './Debug';
+import Processor from './Processor';
 
 export {
-    PreCompiler, Proxy,
+    PreCompiler, Proxy, Processor,
     Reloader, Server, Watcher, Debug
 };

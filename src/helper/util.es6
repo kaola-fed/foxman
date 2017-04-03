@@ -64,6 +64,7 @@ export function log(msg) {
 }
 
 export function warnLog(msg) {
+    msg = msg.stack || msg;
     clog.yellow(initialsCapitals(msg));
 }
 

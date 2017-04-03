@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 'use strict';
-require('colors');
 const validate = require('./validate');
 const {log, error, wrong} = require('./log');
 

@@ -1,6 +1,9 @@
 <#include '/inCommonTpl.ftl'>
 <html>
-    <head></head>
+    <head>
+        
+        <link rel="stylesheet" type="text/css" href="/src/css/demo.css">
+    </head>
     <body>
         <h1>Index</h1>
         <section>

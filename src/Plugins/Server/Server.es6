@@ -66,7 +66,7 @@ class Server {
         // {extension, runtimeRouters, divideMethod, viewRoot, syncData, asyncData, syncDataMatch, asyncDataMatch}
         app.use(routeMap(this.serverOptions));
 
-        this.middleware.forEach((g) => {
+        this.middleware.forEach(g => {
             app.use(g);
         });
         
