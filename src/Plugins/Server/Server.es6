@@ -87,10 +87,9 @@ class Server {
         this.delayInit();
 
         const {port = 3000} = this.serverOptions;
-        const home = path.resolve(__dirname, '..', '..', '..');
         const httpOptions = {
-            key: fs.readFileSync(path.resolve(home, 'config', 'crt', 'localhost.key')),
-            cert: fs.readFileSync(path.resolve(home, 'config', 'crt', 'localhost.crt')),
+            key: fs.readFileSync(path.resolve(__dirname, 'crt', 'localhost.key')),
+            cert: fs.readFileSync(path.resolve(__dirname, 'crt', 'localhost.crt')),
         };
         const callback = this.app.callback();
         const tips = `Server build successfully on ${this.https ? 'https' : 'http'}://127.0.0.1:${port}/`;
