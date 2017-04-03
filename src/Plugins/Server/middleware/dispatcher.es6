@@ -144,7 +144,7 @@ export function* asyncDispather(dispatcher, {tplRender}, next) {
 export default ({tplRender}) => {
     return function*(next) {
         if (!this.dispatcher) {
-            return void 0;
+            return yield next;
         }
 
         /**
@@ -161,7 +161,9 @@ export default ({tplRender}) => {
 
         let dispatcher = dispatcherMap[this.dispatcher.type];
         if (dispatcher) {
-            yield dispatcher.call(this, this.dispatcher, ...args);
+            return yield dispatcher.call(this, this.dispatcher, ...args);
         }
+        
+        yield next;
     };
 };
