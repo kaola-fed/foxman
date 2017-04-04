@@ -14,16 +14,17 @@ export function dispatcher ({processors}) {
 
     return function (ctx) {
         return function*(next) {
-            const request = this.request;
+            const reqPath = this.request.path;
+            
             const [processor] = processors.filter(processor => {
-                return (pathToRegexp(processor.publicPath).test(this.request.path));
+                return (pathToRegexp(processor.publicPath).test(reqPath));
             });
 
             if (!processor) {
                 return yield next;
             }
-            const reqPath = this.request.path;
-            const rawPath = reqUrl2FilePath(this.request.path);
+            
+            const rawPath = reqUrl2FilePath(reqPath);
             const targetFile = combineBase({
                 base: processor.base,
                 rawPath: rawPath 
@@ -90,7 +91,7 @@ function updateDependencies({
 }) {
     return function (dependencies) {
         reloaderService.register({
-            reqPath: reqPath,
+            reqPath,
             dependencies: [...dependencies, filename]
         });
     }
