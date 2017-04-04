@@ -78,14 +78,14 @@ try {
             error(`Make sure you have the latest version of node.js and foxman.`);
             error(`If you do, this is most likely a problem with the plugins used in ${path.join(process.cwd(), 'foxman.config.js')},`);
             error(`not with foxman itself`);
-            log('\n');
-            log(err.stack);
-            log('\n');
+            console.log('\n');
+            console.log(err.stack);
+            console.log('\n');
             error(`You can try 'npm install' or check the foxman.config.js`);
         }
     } else {
         error(`Maybe it's a problem with foxman.config.js, check it or contact us(http://github.com/kaola-fed/foxman/issues)`);
-        log(err)
+        console.log(err);
     }
 
     process.exit(1);
