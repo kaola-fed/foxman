@@ -1,6 +1,8 @@
 @import './_demoinclude.mcss';
-
 body {
-    background: #111;
+    background: #fff;
     display: flex;
+    flex-direction: column;
+    font-size: 40px; font-weight: 700;
+    font-family: "微软雅黑";
 }
