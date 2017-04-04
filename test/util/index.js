@@ -1,7 +1,6 @@
 // require('babel-polyfill')
 var assert = require("assert");
 var util = require('../../dist/helper').util;
-var bufferConcat = require('../../dist/helper/bufferConcat').default;
 
 describe('util',function () {
   it('createSystemId', ()=>{
@@ -41,10 +40,6 @@ describe('util',function () {
 
   it('appendHeadBreak', ()=>{
     assert.equal(util.appendHeadBreak('buisagsa'),'/buisagsa');
-  });
-
-  it('bufferConcat', ()=>{
-      assert.equal(bufferConcat(new Buffer('a'),new Buffer('b')).toString('utf-8'), 'ab')
   });
 
   it('typeof', ()=>{

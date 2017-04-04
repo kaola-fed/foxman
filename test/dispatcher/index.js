@@ -1,11 +1,11 @@
 var assert = require("assert");
 var path = require('path');
 // require('babel-polyfill');
-var dispatcher = require('../../dist/Plugins/Server/middleware/dispatcher');
+var apiHandler = require('../../dist/helper/apiHandler').default;
 
 describe('dispatcher', function() {
     it('apiHandler', function(done) {
-      var combine = dispatcher.apiHandler({
+      var combine = apiHandler({
         dataPath: [
           path.resolve(__dirname, 'foo/foo.json'),
           path.resolve(__dirname, 'foo/bar.json')
