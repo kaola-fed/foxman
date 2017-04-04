@@ -4,7 +4,7 @@ import {fileUtil, util} from '../../helper';
 import ReloaderService from './ReloaderService';
 
 const {getFileStat, readFile} = fileUtil;
-const {warnLog} = util;
+const {warnLog, notify} = util;
 let reloaderService;
 
 function noop(p) { return p;}
@@ -44,11 +44,14 @@ export function dispatcher ({processors}) {
                 warnLog(e);
                 return yield next;
             }
-
-            this.body = yield workflow({
-                raw, semiFinishedStack, reqPath,
-                pipeline
-            })
+            try {
+                this.body = yield workflow({
+                    raw, semiFinishedStack, reqPath,
+                    pipeline
+                })
+            } catch (e) {
+                yield next;
+            }
         };
     }
 }
@@ -58,7 +61,6 @@ function * workflow ({
     pipeline
 }) {
     let processed = raw;
-    
     for (let item of pipeline) {
         const {handler} = item;
         const filename = semiFinishedStack.pop();
@@ -66,33 +68,31 @@ function * workflow ({
             processed = yield new Promise((resolve, reject) => {
                 handler.call(item, {
                     raw: processed, filename,
-                    resolve: resolveWrapper({
-                        resolve, 
-                        filename, reqPath
-                    }), reject
+                    resolve, reject, 
+                    updateDependencies: updateDependencies({filename, reqPath})
                 });
             });
         } catch (e) {
-            warnLog(e); 
+            warnLog(e);
+            notify({
+                title: `Error caused by Processor`,
+                msg: e.stack || e
+            });
+            throw e;
         }
     }
 
     return processed;
 }
 
-function resolveWrapper({
-    resolve,
+function updateDependencies({
     filename, reqPath
 }) {
-    return function ({
-        processed, dependencies = []
-    }) {
-        const map = {
+    return function (dependencies) {
+        reloaderService.register({
             reqPath: reqPath,
             dependencies: [...dependencies, filename]
-        };
-        reloaderService.register(map);
-        resolve(processed);
+        });
     }
 }
 
