@@ -1,3 +1,5 @@
+import {log} from '../../helper/util';
+
 class ReloaderService{
     constructor({
         watcher, reloader
@@ -23,6 +25,7 @@ class ReloaderService{
 
         this.watcher.onUpdate(diff, () => {
             this.reloader.reload(reqPath);
+            log('Reloaded by Processor: '+ reqPath);
         })
         this.map[reqPath] = [...oldThings, ...diff];
     }

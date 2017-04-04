@@ -11,7 +11,6 @@ class Reloader extends EventEmitter {
 
     reload(url) {
         if (this.server && this.server.wss) {
-            log('Living Reload: '+ url);
             this.server.wss.broadcast(url);
         }
     }
