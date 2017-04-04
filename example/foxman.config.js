@@ -37,9 +37,9 @@ module.exports = {
     /**
      * nei 的 kei 然后执行 foxman -u 初始化工程目录。
      **/
-    // nei: {
-        // key: 'xxx'
-    // },
+    nei: {
+        key: '9903a510a54f9310ee55f9658b8d4129'
+    },
 
     plugins: [
         new RouteDisplay(),
