@@ -9,6 +9,7 @@ gulp.task('default', ['clean'], function () {
     return gulp.src([
         'src/**/crt/**',
         'src/**/client/**',
+        'src/**/views/**',
     ])
         .pipe(gulp.dest('dist'));
 });
