@@ -10,11 +10,11 @@ export default function handler({
 }) {
     const target = url.parse(service(this.request.url.replace(/^(\/)/, '')));
     const res = new ServerResponse(Object.assign({}, this.req, {url: target.path}));
-    const data = [];
+    const body = [];
     const write = res.write;
     
     res.write = function (chunk) {
-        data.push(chunk);
+        body.push(chunk);
         return write(chunk);
     };
 
@@ -24,35 +24,47 @@ export default function handler({
 
     return new Promise(resolve => {
         res.once('proxyEnd', (req, res) => {
-            resolveRes({resHeaders: res._headers,res});
+            resolveRes({
+                body, resolve, res
+            });
         });
     });
 }
 
 function resolveRes({
-    resHeaders, resolve
+    res, body,
+    resolve
 }) {
-    for (var name in resHeaders) {
+    const headers = res._headers;
+    const buffer = Buffer.concat(body);
+    const resolveRes = wrapperResolve({res, resolve});
+
+    for (var name in headers) {
         if ('transfer-encoding' !== name 
             && 'content-encoding'!== name) {
-            this.set(name, resHeaders[name]);
+            this.set(name, headers[name]);
         }
     }
 
-    const buffer = Buffer.concat(data);
-    const encoding = resHeaders['content-encoding'];
-    
-    if (encoding === 'gzip') {
-        return zlib.gunzip(buffer, function (err, decoded) {
-            resolve(decoded.toString());
-        });
-    }
-    
-    if (encoding === 'deflate') {
-        return zlib.inflate(buffer, function (err, decoded) {
-            resolve(decoded.toString());
-        });
-    }
 
-    resolve(buffer.toString());
+    switch (headers['content-encoding']) {
+        case 'gzip':
+            return zlib.gunzip(buffer, function (err, decoded) {
+                resolveRes(decoded);
+            });
+        case 'deflate':
+            return zlib.inflate(buffer, function (err, decoded) {
+                resolveRes(decoded);
+            });
+        default:
+            resolveRes(buffer);
+    }
+}
+
+function wrapperResolve ({
+    res, resolve
+}) {
+    return function (body) {
+        resolve (Object.assign({body: body.toString()}));
+    }
 }

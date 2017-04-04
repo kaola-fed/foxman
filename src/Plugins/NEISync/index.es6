@@ -2,6 +2,7 @@ import path from 'path';
 import {util, DispatherTypes} from '../../helper';
 import {getMockConfig, writeNEIConfig, updateLocalFiles, formatRoutes, initData} from './functions'
 
+const FROM = 'NEI';
 /**
  * Nei 插件
  */
@@ -13,12 +14,49 @@ class NEISyncPlugin {
     init(serverPlugin) {
         this.server = serverPlugin.server;
         const {update} = this.NEIInfo;
+        
+        this.updateNEIDataProxy({update});
+        this.registerMiddleware();
+    }
 
+    updateNEIDataProxy({update}) {
         if (update) {
             this.syncNEIData();
         } else {
             this.useLocalData();
         }
+    }
+
+    registerMiddleware() {
+        const server = this.server;
+
+        // update function
+        server.use(() => function *(next) {
+            const requestPath = this.request.path;
+            if (~requestPath.indexOf('__UPDATELOCALNEI__')) {
+                return this.useLocalData();
+            }
+
+            yield next;
+        });
+
+        server.use(() => function *(next) {
+            const {dispatcher = {}} = this;
+            const {router = false, type, filePath} = dispatcher;
+            const {from} = router;
+
+            if (type === DispatherTypes.DIR || (!router) || (from !== FROM)) {
+                return yield next;
+            }
+
+            const routeModel = {
+                sync: DispatherTypes.SYNC == type,
+                filePath: filePath,
+            };
+
+            dispatcher.dataPath = [genNeiApiUrl(routeModel), genCommonPath(routeModel)];
+            yield next;
+        });
     }
 
     useLocalData() {
@@ -32,14 +70,12 @@ class NEISyncPlugin {
     }
 
     setMock({mockApi, mockTpl}) {
-        Object.assign(this.NEIInfo,
-            {
-                mock: {
-                    api: mockApi,
-                    tpl: mockTpl
-                }
+        Object.assign(this.NEIInfo,{
+            mock: {
+                api: mockApi,
+                tpl: mockTpl
             }
-        );
+        });
     }
 
     getMock() {
@@ -83,52 +119,39 @@ class NEISyncPlugin {
         });
     }
 
-    updateRoutes(routes) {
+    updateRoutes(routers) {
         const genCommonPath = this.genCommonPath.bind(this);
         const genNeiApiUrl = this.genNeiApiUrl.bind(this);
         const server = this.server;
 
-        server.registerRouterNamespace('nei', routes);
+        const addNEIMark = routers => {
+            return routers.map(router => {
+                return Object.assign({
+                    from: FROM
+                }, router);
+            })
+        }
 
-        server.use(() => function *(next) {
-            const {dispatcher} = this;
-
-            if (!dispatcher
-                || dispatcher.type == DispatherTypes.DIR
-                || !dispatcher.isRouter) {
-                return yield next;
-            }
-
-            const routeModel = {
-                sync: DispatherTypes.SYNC == dispatcher.type,
-                filePath: dispatcher.filePath,
-            };
-            const commonPath = genCommonPath(routeModel);
-
-            dispatcher.dataPath = [genNeiApiUrl(routeModel), commonPath];
-            yield next;
-        });
+        server.registerRouterNamespace('nei', addNEIMark(routers));
     }
 
-    genCommonPath(route) {
-        let filePath = route.filePath;
+    genCommonPath({sync, filePath}) {
         const {divideMethod, syncDataMatch, asyncDataMatch} = this.server.serverOptions;
         
-        if (route.sync) {
-            return syncDataMatch(util.jsonPathResolve(route.filePath));
+        if (sync) {
+            return syncDataMatch(util.jsonPathResolve(filePath));
         }
 
         if (!divideMethod) {
-            const methodReg = /(GET|DELETE|HEAD|PATCH|POST|PUT)\//i;
-            filePath = filePath.replace(methodReg, '');
+            filePath = filePath.replace(/(GET|DELETE|HEAD|PATCH|POST|PUT)\//i, '');
         }
 
         return asyncDataMatch(util.jsonPathResolve(filePath.replace(/\/data/g, '')));
     }
 
-    genNeiApiUrl(route) {
+    genNeiApiUrl({sync, filePath}) {
         const {api, tpl} = this.getMock();
-        return path.resolve(route.sync ? tpl : api, route.filePath + '.json');
+        return path.resolve(sync ? tpl : api, filePath + '.json');
     }
 }
 

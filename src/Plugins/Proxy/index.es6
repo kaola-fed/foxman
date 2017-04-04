@@ -46,8 +46,8 @@ class ProxyPlugin {
         const {proxy, proxyConfig, proxyServerName} = this;
         const service = proxyConfig.service[proxyServerName];
         
-        this.server.updateRuntimeRouters(routes => 
-            routes.map(router => 
+        this.server.updateRuntimeRouters(routers => 
+            routers.map(router => 
                 Object.assign(router, {
                     handler: ctx => {
                         handler.call(ctx, {

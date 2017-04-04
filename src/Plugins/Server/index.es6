@@ -24,9 +24,8 @@ class ServerPlugin {
             routers: options.routers
         };
 
-        delete options.routers
+        delete options.routers;
         
-
         if (undefined === options.syncDataMatch) {
             options.syncDataMatch = url => path.join(options.syncData, url);
         }

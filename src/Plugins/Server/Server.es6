@@ -8,9 +8,8 @@ import WebSocket, {Server as WebSocketServer} from 'ws';
 import bodyParser from 'koa-bodyparser';
 
 import {util} from '../../helper';
-
 import dispatcher from './middleware/dispatcher';
-import routeMap from './middleware/routemap';
+import routerMap from './middleware/routermap';
 import setStaticHandler from './setStaticHandler';
 import {setRender, setView} from './setRender';
 import setHtmlAppender from './setHtmlAppender';
@@ -60,7 +59,7 @@ class Server {
         }
 
         // {extension, runtimeRouters, divideMethod, viewRoot, syncData, asyncData, syncDataMatch, asyncDataMatch}
-        app.use(routeMap(this.serverOptions));
+        app.use(routerMap(this.serverOptions));
 
         this.middleware.forEach(g => {
             app.use(g);

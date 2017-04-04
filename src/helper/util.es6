@@ -185,13 +185,14 @@ export function values(map = {}) {
     return Object.keys(map).map(k => map[k]);
 }
 
-export function addDataExt(dataRoot, tplName) {
-    const filePath = path.join(dataRoot, tplName);
-    if (~tplName.indexOf('.json')) {
-        return filePath
+export function addDataExt(filePath) {
+    if (~filePath.indexOf('.json')) {
+        return filePath;
     }
     return filePath + '.json';
 }
+
+
 
 export default {
     debugLog,

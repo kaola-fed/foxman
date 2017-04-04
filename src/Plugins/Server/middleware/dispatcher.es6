@@ -1,38 +1,6 @@
 import path from 'path';
 import {fileUtil, util, DispatherTypes} from '../../../helper';
-
-export function apiHandler(dispatcher) {
-    if (dispatcher.handler) {
-        return dispatcher.handler(this).then((data) => {
-            let json = data;
-            if (typeof data === 'string') {
-                try {
-                    json = util.JSONParse(data);
-                } catch (error) {
-                    json = {
-                        error: error.toString(),
-                        data
-                    };
-                }
-            }
-            return Promise.resolve({json});
-        });
-    }
-
-    const dataPath = dispatcher.dataPath;
-    if (Array.isArray(dataPath)) {
-        return Promise.all(dataPath.map(url => {
-            return util.jsonResolver({url})
-        })).then(resps => {
-            return resps.reduce((bef, aft) => {
-                return {
-                    json: Object.assign(bef.json, aft.json)
-                };
-            });
-        });
-    }
-    return util.jsonResolver({url: dataPath});
-}
+import apiHandler from '../../../helper/apiHandler';
 
 /**
  * default dispatcher
@@ -41,7 +9,9 @@ export function apiHandler(dispatcher) {
  * @param  {[type]} next [description]
  * @return {[type]}         [description]
  */
-export function* dirDispatcher(dispatcher, {tplRender}, next) {
+export function* dirDispatcher({
+    dispatcher, next
+}) {
     const sortFiles = (list) => {
         return list.sort((a, b) => {
             return a.name.charAt(0).localeCompare(b.name.charAt(0));
@@ -79,38 +49,45 @@ export function* dirDispatcher(dispatcher, {tplRender}, next) {
  * @param next
  * @returns {*}
  */
-export function* syncDispatcher(dispatcher, {tplRender}, next) {
+export function* syncDispatcher({
+    dispatcher, tplRender, next
+}) {
     const filePath = dispatcher.pagePath;
-    let res = yield apiHandler.call(this, dispatcher);
+    let json;
 
-    if (!res || !res.json) {
+    try {
+        json = (yield apiHandler.call(this, dispatcher)).json;
+    } catch (msg) {
         this.type = 500;
+
         yield this.render('e', {
             title: '出错了', e: {
                 code: 500,
-                msg: '模拟数据处理'
+                msg: msg.stack || msg
             }
         });
+        
         return yield next;
     }
 
-    try {
-        let result = yield tplRender.parse(filePath, res.json);
 
+    try {
+        let result = yield tplRender.parse(filePath, json);
         this.type = 'text/html; charset=utf-8';
         this.body = result;
-    } catch (error) {
+    } catch (msg) {
         util.notify({
             title: '模板解析失败',
-            msg: error
+            msg: msg.stack || msg
         });
         yield this.render('e', {
             title: '出错了', e: {
                 code: 500,
-                msg: error
+                msg: msg.stack || msg
             }
         });
     }
+
     return yield next;
 }
 
@@ -121,29 +98,39 @@ export function* syncDispatcher(dispatcher, {tplRender}, next) {
  * @param next
  * @returns {*}
  */
-export function* asyncDispather(dispatcher, {tplRender}, next) {
+export function* asyncDispather({
+    dispatcher, tplRender, next
+}) {
     /**
      * 异步接口处理
      * @type {[type]}
      */
-    let res = yield apiHandler.call(this, dispatcher);
-    if (res && res.json) {
-        this.type = 'application/json; charset=utf-8';
-        this.body = res.json;
+    let json;
+
+    try {
+        json = (yield apiHandler.call(this, dispatcher)).json;
+    } catch (msg) {
+        this.type = 500;
+
+        yield this.render('e', {
+            title: '出错了', e: {
+                code: 500,
+                msg: msg.stack || msg
+            }
+        });
         return yield next;
     }
-    yield this.render('e', {
-        title: '出错了', e: {
-            code: 500,
-            msg: '请求代理服务器异常'
-        }
-    });
-    yield next;
+
+    this.type = 'application/json; charset=utf-8';
+    this.body = json;
+    return yield next;
 }
 
 export default ({tplRender}) => {
     return function*(next) {
-        if (!this.dispatcher) {
+        const {dispatcher = false} = this;
+
+        if (!dispatcher) {
             return yield next;
         }
 
@@ -151,7 +138,7 @@ export default ({tplRender}) => {
          * 分配给不同的处理器
          * @type {Object}
          */
-        let args = [{tplRender}, next];
+        let args = {tplRender, next};
 
         let dispatcherMap = {
             [DispatherTypes.DIR]: dirDispatcher,
@@ -159,9 +146,10 @@ export default ({tplRender}) => {
             [DispatherTypes.ASYNC]: asyncDispather
         };
 
-        let dispatcher = dispatcherMap[this.dispatcher.type];
-        if (dispatcher) {
-            return yield dispatcher.call(this, this.dispatcher, ...args);
+        let handler = dispatcherMap[dispatcher.type];
+
+        if (handler) {
+            return yield handler.call(this, Object.assign({dispatcher}, args));
         }
         
         yield next;
