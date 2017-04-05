@@ -39,7 +39,7 @@ class ApplicationContext {
         // Proxy Plugin
         use(new Proxy({
             proxyConfig: config.proxy,
-            proxyServerConfig: config.argv.proxy
+            proxyServerName: config.argv.proxy
         }));
 
         run();

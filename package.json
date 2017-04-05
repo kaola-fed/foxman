@@ -1,10 +1,10 @@
 {
   "name": "foxman",
-  "version": "0.8.0-beta.12",
+  "version": "0.8.0-beta.14",
   "description": "可扩展的 Mock Server",
   "main": "app.js",
   "bin": {
-    "foxman": "dist/CommandLine/index.js"
+    "foxman": "./dist/CommandLine/index.js"
   },
   "directories": {
     "test": "test"

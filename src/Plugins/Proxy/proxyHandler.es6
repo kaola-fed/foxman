@@ -11,13 +11,13 @@ export default function handler({
     const target = url.parse(service(this.request.url.replace(/^(\/)/, '')));
     const res = new ServerResponse(Object.assign({}, this.req, {url: target.path}));
     const body = [];
-    const write = res.write;
+    // const write = res.write.bind(res);
     
     res.write = function (chunk) {
         body.push(chunk);
-        return write(chunk);
+        return true;
     };
-
+    
     proxy.web(this.req, res, {
         target: target.protocol + '//' + target.host
     });
@@ -25,6 +25,7 @@ export default function handler({
     return new Promise(resolve => {
         res.once('proxyEnd', (req, res) => {
             resolveRes({
+                ctx: this,
                 body, resolve, res
             });
         });
@@ -32,6 +33,7 @@ export default function handler({
 }
 
 function resolveRes({
+    ctx,
     res, body,
     resolve
 }) {
@@ -42,10 +44,9 @@ function resolveRes({
     for (var name in headers) {
         if ('transfer-encoding' !== name 
             && 'content-encoding'!== name) {
-            this.set(name, headers[name]);
+            ctx.set(name, headers[name]);
         }
     }
-
 
     switch (headers['content-encoding']) {
         case 'gzip':

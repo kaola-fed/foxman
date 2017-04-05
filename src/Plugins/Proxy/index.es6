@@ -1,6 +1,6 @@
 import {util} from '../../helper';
 import httpProxy from 'http-proxy';
-
+import proxyHandler from './proxyHandler';
 /**
  * 全局代理插件
  */
@@ -25,36 +25,41 @@ class ProxyPlugin {
 
     init(serverPlugin) {
         const {proxyConfig, proxyServerName} = this;
-        this.server = serverPlugin.server;
-        this.initProxy();
-        this.registerProxy();
+        const {server} = serverPlugin;
+
+        const proxy = this.initProxy();
+        this.registerProxy({
+            proxyConfig, proxyServerName,
+            server, proxy
+        });
     }
 
     initProxy() {
         const {proxyConfig, proxyServerName} = this;
-        const proxy = this.proxy = httpProxy.createProxyServer({});
+        const proxy = httpProxy.createProxyServer({});
+
         proxy.on('proxyReq', proxyReq => {
             proxyReq.setHeader('X-Special-Proxy-Header', 'foxman');
-            proxyReq.setHeader('Host', this.proxyConfig.host);
+            proxyReq.setHeader('Host', proxyConfig.host);
         });
+
         proxy.on('end', (req, res, proxyRes) => {
             res.emit('proxyEnd', req, res, proxyRes);
         });
+
+        return proxy;
     }
 
-    registerProxy() {
-        const {proxy, proxyConfig, proxyServerName} = this;
+    registerProxy({
+        server, proxy, proxyConfig, proxyServerName
+    }) {
         const service = proxyConfig.service[proxyServerName];
-        
-        this.server.updateRuntimeRouters(routers => 
+        server.updateRuntimeRouters(routers =>
             routers.map(router => 
                 Object.assign(router, {
-                    handler: ctx => {
-                        handler.call(ctx, {
-                            targetHost: proxyConfig.host,
-                            proxy,service
-                        });
-                    }
+                    handler: ctx => proxyHandler.call(ctx, {
+                        proxy, service
+                    })
                 })));
 
         util.notify({
