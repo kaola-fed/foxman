@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-'use strict';
-import yargs from 'yargs';
-import path from 'path';
-
-import App from '../app';
-import validate from './utils/validate';
-import {log, error as wrong, warnLog as error} from '../helper/util';
-import pkg from '../../package.json';
+const yargs = require('yargs');
+const path = require('path');
+const App = require('../dist/app').default;
+const validate = require('../dist/CommandLine/utils/validate').default;
+let {log, error , warnLog} = require('../dist/helper/util');
+let pkg = require('../package.json');
+let wrong = log;
+error = warnLog;
 
 const argv = yargs
     .usage('Usage: foxman [options]')

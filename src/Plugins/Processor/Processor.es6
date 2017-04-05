@@ -1,7 +1,6 @@
 import path, {extname} from 'path';
 import pathToRegexp from 'path-to-regexp';
 import {fileUtil, util} from '../../helper';
-import runGenerators from '../../helper/runGenerators';
 import ResourcesManager from './ResourcesManager';
 import TaskLock from '../../helper/TaskLock';
 import co from 'co';
@@ -27,7 +26,6 @@ export function dispatcher ({
             }
 
             if (resourcesManager.has(reqPath)) {
-                log(`Served by resourcesManager - ${reqPath}`);
                 this.body = resourcesManager.get(reqPath);
                 this.type = extname(reqPath);
                 return false;

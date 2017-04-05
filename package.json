@@ -4,7 +4,7 @@
   "description": "可扩展的 Mock Server",
   "main": "app.js",
   "bin": {
-    "foxman": "./dist/CommandLine/index.js"
+    "foxman": "./bin/foxman"
   },
   "directories": {
     "test": "test"

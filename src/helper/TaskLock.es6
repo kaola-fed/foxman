@@ -7,7 +7,7 @@ const msg = new Events();
 class TaskLock {
     constructor({
         limit = 1
-    }) {
+    } = {}) {
         this.queue = [];
         this.limit = limit;
     }
