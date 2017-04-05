@@ -5,16 +5,19 @@ const idNext = createSystemId();
 const msg = new Events();
 
 class TaskLock {
-    constructor() {
+    constructor({
+        limit = 1
+    }) {
         this.queue = [];
+        this.limit = limit;
     }
 
     push({run}) {
         const id = idNext();
-        const isEmpty = this.isEmpty()
+        const canNext = this.canNext()
         this.queue.push({run, id});
         
-        if (isEmpty) {
+        if (canNext) {
             this.next();
         }
 
@@ -28,13 +31,13 @@ class TaskLock {
         });
     }
 
-    isEmpty() {
-        return this.queue.length === 0;
+    canNext() {
+        return this.queue.length < this.limit;
     }
 
     shift() {
         this.queue.shift();
-        if (!this.isEmpty()) {
+        if (!this.canNext()) {
             this.next();
         }
     }
