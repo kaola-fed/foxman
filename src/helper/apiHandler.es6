@@ -9,9 +9,9 @@ function apiHandler({
             let {body = res} = res;
             if (typeof body === 'string') {
                 try {
-                    body = JSONParse(data);
+                    body = JSONParse(body);
                 } catch (error) {
-                    return Promise.reject(`${error.stack || error} \n 源数据：\n ${data}`);
+                    return Promise.reject(`${error.stack || error} \n 源数据：\n ${body}`);
                 }
             }
             return {json: body};

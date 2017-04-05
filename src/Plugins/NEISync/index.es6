@@ -29,7 +29,9 @@ class NEISyncPlugin {
 
     registerMiddleware() {
         const server = this.server;
-
+        const genCommonPath = this.genCommonPath.bind(this);
+        const genNeiApiUrl = this.genNeiApiUrl.bind(this);
+        
         // update function
         server.use(() => function *(next) {
             const requestPath = this.request.path;
@@ -120,8 +122,6 @@ class NEISyncPlugin {
     }
 
     updateRoutes(routers) {
-        const genCommonPath = this.genCommonPath.bind(this);
-        const genNeiApiUrl = this.genNeiApiUrl.bind(this);
         const server = this.server;
 
         const addNEIMark = routers => {
