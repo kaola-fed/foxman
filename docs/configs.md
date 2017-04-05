@@ -5,7 +5,7 @@
     - 静态资源
     - Mock
     - [渲染引擎](./plugins/TemplateRender.md)
-- [预处理器](./plugins/PreCompiler.md)
+- [处理器](./plugins/Processor.md)
 - [文件自动刷新](./plugins/LivingReload.md)
 - [Proxy](./plugins/Proxy.md)
 - [NEI](./plugins/NEI.md)
