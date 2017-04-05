@@ -1,4 +1,4 @@
-import {util} from '../../helper';
+import {util, DispatherTypes} from '../../helper';
 import httpProxy from 'http-proxy';
 import proxyHandler from './proxyHandler';
 /**
@@ -54,13 +54,21 @@ class ProxyPlugin {
         server, proxy, proxyConfig, proxyServerName
     }) {
         const service = proxyConfig.service[proxyServerName];
-        server.updateRuntimeRouters(routers =>
-            routers.map(router => 
-                Object.assign(router, {
-                    handler: ctx => proxyHandler.call(ctx, {
-                        proxy, service
-                    })
-                })));
+
+        server.use(() => function *(next) {
+            const {dispatcher = {}} = this;
+            const {router = false, type} = dispatcher;
+
+            if (type === DispatherTypes.DIR || (!router)) {
+                return yield next;
+            }
+
+            dispatcher.handler = ctx => proxyHandler.call(ctx, {
+                proxy, service
+            });
+
+            yield next;
+        });
 
         util.notify({
             title: 'Proxy successfully',
