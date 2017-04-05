@@ -15,12 +15,12 @@ class ProcessorPlugin {
         const {watcher} = watcherPlugin;
         const {reloader} = reloaderPlugin;
         
-        ReloaderService({
+        const reloaderService = ReloaderService({
             watcher, reloader
         });
 
         server.use(dispatcher({
-            processors
+            processors, reloaderService
         }));
     }
 }

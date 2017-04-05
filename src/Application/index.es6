@@ -1,5 +1,5 @@
 import {initialsLower, log, notify, entries, error, isPromise, isGeneratorDone} from '../helper/util';
-import runGenerators from '../helper/runGenerators';
+import co from 'co';
 import {init} from './Instance';
 import {register, resolve, dependencys} from './DI';
 
@@ -48,7 +48,7 @@ export function use(plugin) {
 }
 
 export function run() {
-    runGenerators(execute())
+    co(execute())
         .then(runPlugins)
         .catch((e) => {
             console.error(e)

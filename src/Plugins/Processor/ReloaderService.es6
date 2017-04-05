@@ -1,6 +1,6 @@
 import {log} from '../../helper/util';
 
-class ReloaderService{
+class ReloaderService {
     constructor({
         watcher, reloader
     }) {
@@ -10,10 +10,9 @@ class ReloaderService{
     }
 
     register({
-        reqPath, dependencies
+        reqPath, dependencies, resourcesManager
     }) {
         const oldThings = this.map[reqPath] || [];
-
         let diff = findNew({
             oldThings: oldThings, 
             newThings: dependencies
@@ -23,19 +22,13 @@ class ReloaderService{
             return;
         }
 
-        this.watcher.onUpdate(diff, () => {
+        this.watcher.onUpdate(diff, (...args) => {
+            resourcesManager.clear(reqPath);
             this.reloader.reload(reqPath);
-            log('Reloaded by Processor: '+ reqPath);
-        })
+        });
+
         this.map[reqPath] = [...oldThings, ...diff];
     }
-}
-
-function deDuplication(list = []) {
-    return Object.keys(list.reduce(function (prev, item) {
-        prev[item] = null;
-        return prev;
-    }, {}));
 }
 
 function findNew({
@@ -46,9 +39,16 @@ function findNew({
         return prev;
     }, {});
 
-    return newThings.filter(item => {
+    return deDuplication(newThings.filter(item => {
         return oldThingMap[item] === undefined;
-    });
+    }));
+}
+
+function deDuplication(list = []) {
+    return Object.keys(list.reduce(function (prev, item) {
+        prev[item] = null;
+        return prev;
+    }, {}));
 }
 
 let instance;
