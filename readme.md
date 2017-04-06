@@ -5,12 +5,29 @@
 [![download][downloads-image]][downloads-url]
 [![build][travis-image]][travis-url]  
 
-## Foxman 是什么？
-Foxman 是面向**前端开发**的**集成工具**，对开发阶段的 Mock 环境、CSS 预处理器、Living Reload、Remote Debugging、开发规范 等基本需要做了集成。 
+## Foxman 有什么？
+* Mock Server， 支持自定义模板引擎；
+* Living Reload， 更灵活的 reload 机制；
+* Remote Debugging， 远程调试，取本地的模板与远程端的数据，方便联调；
+* Runtime Compiler， 运行时的及时编译，任何实现 Foxman-Processor 接口的处理器都能被装载进来；
+* Debuger，集成 vconsole，方便移动端调试；
+* NEI supported，集成网易接口维护利器 NEI，接口定义规范化；
+* Extensible， 强力的扩展功能，方便自行定制所需要的功能。
 
-而他的设计初衷体现在构成他的两个词根上:  
-* Fox 狐狸会说谎，有 Mock 之意
-* Man 优雅知性
+最后一点个人认为很重要，每个工程都会有一些特殊性。而 Foxman 更像一个容器，提供必要的支持，又能方便开发者进行自己的特殊定制。
+
+## Foxman 是什么？
+曾经想过很多这个问题的描述，比如：
+* Foxman 是 Mock Server，却又不只是 Mock Server（观众表示云里雾里）；
+* Foxman 是前端开发的集成工具（经常会觉得这个描述很 low）；
+* 一个小而美的前端开发环境（这个描述还不错）。
+
+如今，我相信有了一个更好的描述：
+* Foxman 本质上讲是一个以 Mock Server 为核心的容器，开发者可以基于内置的模块方便的添加一些需要定制的模块。所以，允许我称他为可扩展的 Mock Server。
+
+而设计他的初衷体现在 Foxman 的两个词根上：
+* **Fox** 狐狸会说谎，有 Mock 之意；
+* **Man** 优雅知性。
 
 ## 文档
 快速入门、配置、插件开发以及原理等文档 [docs/index.md](docs/index.md)
