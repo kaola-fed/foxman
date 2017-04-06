@@ -9,23 +9,23 @@
 * Mock Server， 支持自定义模板引擎；
 * Living Reload， 更灵活的 reload 机制；
 * Remote Debugging， 远程调试，取本地的模板与远程端的数据，方便联调；
-* Runtime Compiler， 运行时的及时编译，任何实现 Foxman-Processor 接口的处理器都能被装载进来；
+* Runtime Compiler， 运行时的即时编译，任何实现 Foxman-Processor 接口的处理器都能被装载进来；
 * Debuger，集成 vconsole，方便移动端调试；
 * NEI supported，集成网易接口维护利器 NEI，接口定义规范化；
-* Extensible， 强力的扩展功能，方便自行定制所需要的功能。
+* Extensible，强大的扩展方式，方便开发者自行定制所需功能。
 
-最后一点个人认为很重要，每个工程都会有一些特殊性。而 Foxman 更像一个容器，提供必要的支持，又能方便开发者进行自己的特殊定制。
+最后一点个人认为很重要，每个工程都会有一些特殊性。而 Foxman 更像一个容器，提供必要的支持，又能方便开发者进行实际工程的特殊定制。
 
 ## Foxman 是什么？
-曾经想过很多这个问题的描述，比如：
+曾经想过很多这个问题的回答，比如：
 * Foxman 是 Mock Server，却又不只是 Mock Server（观众表示云里雾里）；
 * Foxman 是前端开发的集成工具（经常会觉得这个描述很 low）；
 * 一个小而美的前端开发环境（这个描述还不错）。
 
-如今，我相信有了一个更好的描述：
-* Foxman 本质上讲是一个以 Mock Server 为核心的容器，开发者可以基于内置的模块方便的添加一些需要定制的模块。所以，允许我称他为可扩展的 Mock Server。
+如今，我相信有了一个更好的：
+* Foxman 本质上讲是一个以 Mock Server 为核心的容器，开发者可以基于内置的模块方便的添加扩展模块。所以，允许我称他为 Extensible Mock Server。
 
-而设计他的初衷体现在 Foxman 的两个词根上：
+而设计 Foxman 的初衷体现在两个词根：
 * **Fox** 狐狸会说谎，有 Mock 之意；
 * **Man** 优雅知性。
 
