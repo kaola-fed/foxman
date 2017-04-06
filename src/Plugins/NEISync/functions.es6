@@ -60,7 +60,7 @@ export function formatRoutes(rules) {
             method,
             url: util.appendHeadBreak(url),
             sync: isSync(rule),
-        }
+        };
     }
 
     return Object.keys(rules).map(ruleName => {

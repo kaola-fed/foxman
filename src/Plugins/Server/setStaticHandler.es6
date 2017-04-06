@@ -18,7 +18,7 @@ export default ({app, statics}) => {
             preload,
             dynamic,
             filter
-        }
+        };
     };
 
     statics.forEach(item => {
@@ -34,5 +34,5 @@ export default ({app, statics}) => {
             prefix: '/__FOXMAN__CLIENT__',
             dynamic: false
         })
-    ))
+    ));
 };

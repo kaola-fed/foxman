@@ -15,5 +15,5 @@ export default function(...args) {
 	].join('\n'));
 
 	console.log('\n');
-	Index(...args)
-};
+	Index(...args);
+}

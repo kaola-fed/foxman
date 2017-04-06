@@ -67,5 +67,5 @@ function wrapperResolve ({
 }) {
     return function (body) {
         resolve (Object.assign({body: body.toString()}));
-    }
+    };
 }

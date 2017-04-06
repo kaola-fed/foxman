@@ -1,6 +1,6 @@
 import path from 'path';
 import {util, DispatherTypes} from '../../helper';
-import {getMockConfig, writeNEIConfig, updateLocalFiles, formatRoutes, initData} from './functions'
+import {getMockConfig, writeNEIConfig, updateLocalFiles, formatRoutes, initData} from './functions';
 
 const FROM = 'NEI';
 /**
@@ -104,7 +104,7 @@ class NEISyncPlugin {
                 })
                 .catch(e => {
                     console.error(e);
-                })
+                });
         });
     }
 
@@ -129,8 +129,8 @@ class NEISyncPlugin {
                 return Object.assign({
                     from: FROM
                 }, router);
-            })
-        }
+            });
+        };
 
         server.registerRouterNamespace('nei', addNEIMark(routers));
     }

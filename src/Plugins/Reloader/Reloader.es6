@@ -22,7 +22,7 @@ class Reloader extends EventEmitter {
             viewRoot, templatePaths, syncData, statics} = server.serverOptions;
 
         const reduceTemplateDir = ({templatePath, extension}) => {
-            return path.join(templatePath, '**', '*.' + extension)
+            return path.join(templatePath, '**', '*.' + extension);
         };
 
         const templatePathes = [...values(templatePaths), viewRoot]

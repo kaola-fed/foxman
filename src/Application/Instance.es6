@@ -25,7 +25,7 @@ function pending(fn, plugin) {
         process.nextTick(() => {
             returnPromise(fn(resolve)).catch(e => {
                 console.error(e);
-            })
+            });
         });
     });
     plugin.pendings = (plugin.pendings) ? [...plugin.pendings, pending] : [pending];

@@ -20,7 +20,7 @@ function apiHandler({
 
     if (Array.isArray(dataPath)) {
         return Promise.all(dataPath.map(url => {
-            return jsonResolver({url})
+            return jsonResolver({url});
         })).then(resps => {
             return resps.reduce((bef, aft) => {
                 return {
@@ -33,4 +33,4 @@ function apiHandler({
     return jsonResolver({url: dataPath});
 }
 
-export default apiHandler
+export default apiHandler;

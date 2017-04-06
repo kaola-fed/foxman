@@ -18,7 +18,7 @@ class DebugPlugin {
     }
 
     static getHtml() {
-        return '<script src="/__FOXMAN__CLIENT__/js/vconsole.min.js"></script>'
+        return '<script src="/__FOXMAN__CLIENT__/js/vconsole.min.js"></script>';
     }
 }
 export default DebugPlugin;

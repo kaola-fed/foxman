@@ -1,5 +1,5 @@
-var assert = require("assert");
-var path = require("path");
+var assert = require('assert');
+var path = require('path');
 var Application = require('../../dist/Application');
 var Nei = require('../../dist/Plugins/NEISync').default;
 var Reloader = require('../../dist/Plugins/Reloader').default;
@@ -67,12 +67,12 @@ describe('Application Run', function () {
 
 describe('Server Plugin Function', function () {
     it('server.syncDataMatch', function () {
-        var url = app.get('serverPlugin').server.serverOptions.syncDataMatch('foo.json')
+        var url = app.get('serverPlugin').server.serverOptions.syncDataMatch('foo.json');
         assert.equal(url, path.join(syncPath, 'foo.json'));
     });
 
     it('server.asyncDataMatch', function () {
-        var url = app.get('serverPlugin').server.serverOptions.syncDataMatch('foo.json')
+        var url = app.get('serverPlugin').server.serverOptions.syncDataMatch('foo.json');
         assert.equal(url, path.join(syncPath, 'foo.json'));
     });
 });

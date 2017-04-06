@@ -11,14 +11,14 @@ function* execute() {
 
             if (plugin.pendings) {
                 notify({
-                    title: `Plugin start pending`,
+                    title: 'Plugin start pending',
                     msg: `${plugin.name} start pending`
                 });
 
                 yield Promise.all(plugin.pendings);
 
                 notify({
-                    title: `Plugin end pending`,
+                    title: 'Plugin end pending',
                     msg: `${plugin.name} end pending`
                 });
             }
@@ -51,10 +51,10 @@ export function run() {
     co(execute())
         .then(runPlugins)
         .catch((e) => {
-            console.error(e)
-        })
+            console.error(e);
+        });
 }
 
 export function get(pluginName) {
-    return dependencys[initialsLower(pluginName)]
+    return dependencys[initialsLower(pluginName)];
 }

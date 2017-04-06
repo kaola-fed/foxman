@@ -18,7 +18,7 @@ export function dispatcher ({
     return function (ctx) {
         return function* (next) {
             const reqPath = this.request.path;
-            const processor = matchProcessor({processors, reqPath})
+            const processor = matchProcessor({processors, reqPath});
             const self = this;
 
             if (!processor) {
@@ -54,7 +54,7 @@ export function dispatcher ({
                     raw, processdFilenameStack, reqPath,
                     pipeline, 
                     resourcesManager, reloaderService
-                })
+                });
 
                 let processed;
                 if (lockTask) {
@@ -76,7 +76,7 @@ export function dispatcher ({
                 return yield next;                
             }
         };
-    }
+    };
 }
 
 function * workflow ({
@@ -102,7 +102,7 @@ function * workflow ({
         } catch (e) {
             warnLog(e);
             notify({
-                title: `Error caused by Processor`,
+                title: 'Error caused by Processor',
                 msg: e.stack || e
             });
             throw e;
@@ -131,7 +131,7 @@ function updateDependencies({
             dependencies,
             resourcesManager
         });
-    }
+    };
 }
 
 function combineBase({base, rawPath}) {

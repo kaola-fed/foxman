@@ -32,7 +32,7 @@ export function isGeneratorDone(obj) {
 
 export function debugLog(msg) {
     if (process.env.NODE_ENV === 'development') {
-        clog.blue(initialsCapitals(msg))
+        clog.blue(initialsCapitals(msg));
     }
 }
 
@@ -44,13 +44,13 @@ export function error(msg) {
     msg = msg.stack || msg;
 
     const tips = [
-        `Make sure you have the latest version of node.js and foxman.`,
-        `If you do, this is most likely a problem with the foxman.`,
-        `You could contact us(http://github.com/kaola-fed/foxman/issues)`,
+        'Make sure you have the latest version of node.js and foxman.',
+        'If you do, this is most likely a problem with the foxman.',
+        'You could contact us(http://github.com/kaola-fed/foxman/issues)',
     ];
     tips.forEach(errorLog);
 
-    console.log(`\n`);
+    console.log('\n');
     errorLog(msg);
 
     tips.unshift('\n');
@@ -148,12 +148,12 @@ export function* entries(obj) {
 }
 
 export function compressHtml(htmlstr) {
-    if (typeof htmlstr !== "string") {
+    if (typeof htmlstr !== 'string') {
         return htmlstr;
     }
     return htmlstr.replace(/[\r\n]|\s+(?=[<{])/g, '').replace(/[}>]\s+/g, function (value) {
         return value.substr(0, 1);
-    })
+    });
 }
 
 export function jsonResolver(opt) {
@@ -164,7 +164,7 @@ export function jsonResolver(opt) {
             try {
                 json = JSONParse(data);
             } catch (e) {
-                warnLog(`Parsed failed:`);
+                warnLog('Parsed failed:');
                 warnLog(e);
                 json = {};
             }

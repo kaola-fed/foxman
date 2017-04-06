@@ -6,7 +6,7 @@ export function setRender ({Render, templatePaths, viewRoot}) {
         templatePaths: templatePaths,
         viewRoot: viewRoot
     });
-};
+}
 
 export function setView ({app}) {
     render(app, {

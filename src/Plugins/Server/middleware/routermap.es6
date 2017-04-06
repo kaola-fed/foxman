@@ -53,7 +53,7 @@ function getRouterDispatcher({
 
         dispatcher = {
             router, filePath, handler
-        }
+        };
 
         if (sync) {
             const tplName = removeSuffix(filePath, extension);

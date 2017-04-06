@@ -12,12 +12,12 @@ const WebpackDevServer = require('foxman-plugin-webpack-dev-server');
 function urlTransformer (ip) {
     return function (reqPath) {
         return `http://${ip}/${reqPath}`;
-    }
+    };
 }
 
 const paths = {
     webapp: __dirname
-}
+};
 
 Object.assign(paths, {
     viewRoot: path.join(paths.webapp, 'template'),

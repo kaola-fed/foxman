@@ -11,11 +11,11 @@ class ResourcesManager {
     }
 
     has(reqPath) {
-        return !!this.map[reqPath]
+        return !!this.map[reqPath];
     }
 
     get(reqPath) {
-        return this.map[reqPath]
+        return this.map[reqPath];
     }
 
     clear(reqPath) {

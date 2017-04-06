@@ -14,7 +14,7 @@ class TaskLock {
 
     push({run}) {
         const id = idNext();
-        const canNext = this.canNext()
+        const canNext = this.canNext();
         this.queue.push({run, id});
         
         if (canNext) {

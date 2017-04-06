@@ -15,7 +15,7 @@ describe('freemarker', function () {
             done();
         }, function (err) {
             done(err);
-        })
+        });
     });
 
     it('parse2', function (done) {
@@ -24,21 +24,21 @@ describe('freemarker', function () {
             done();
         }, function (err) {
             done(err);
-        })
+        });
     });
 
     it('stringify', function (done) {
         var json = {
             foo: {
-                foo: "bar"
+                foo: 'bar'
             }
         };
-        var jsonText = JSON.stringify({foo: "bar"});
+        var jsonText = JSON.stringify({foo: 'bar'});
         renderUtil.parse(path.join(viewRoot, 'stringify.ftl'), json).then((info) => {
             assert.equal(JSON.stringify(JSON.parse(info)), jsonText);
             done();
         }, function (err) {
             done(err);
-        })
+        });
     });
 });

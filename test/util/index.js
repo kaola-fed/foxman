@@ -1,5 +1,5 @@
 // require('babel-polyfill')
-var assert = require("assert");
+var assert = require('assert');
 var util = require('../../dist/helper').util;
 
 describe('util',function () {
@@ -52,8 +52,8 @@ describe('util',function () {
   });
 
   it('JSONParse', ()=>{
-    "use strict";
-    assert.equal(util.JSONParse('{a:1}').a ===1 ,!0)
-  })
+    'use strict';
+    assert.equal(util.JSONParse('{a:1}').a ===1 ,!0);
+  });
 
 });

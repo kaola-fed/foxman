@@ -108,7 +108,7 @@ class Server {
         notify({
             title: 'Run successfully',
             msg: tips
-        })
+        });
     }
 
     buildWebSocket({serverApp}) {

@@ -10,4 +10,4 @@ exports = module.exports = {
         filename: '[name].js',
         publicPath: '/dist/javascript/'
     }
-}
+};
