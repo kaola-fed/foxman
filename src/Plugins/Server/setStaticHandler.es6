@@ -9,6 +9,7 @@ export default ({app, statics}) => {
 
     app.use(staticCache(formatStaticOptions({
         dir: path.resolve(__dirname, 'client'),
-        prefix: '/__FOXMAN__CLIENT__'
+        prefix: '/__FOXMAN__CLIENT__',
+        maxAge: 31536000
     })));
 };
