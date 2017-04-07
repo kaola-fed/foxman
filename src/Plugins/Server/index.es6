@@ -4,7 +4,9 @@ import {RenderUtil} from '../../helper';
 import formatStaticOptions from './utils/formatStaticOptions';
 
 class ServerPlugin {
-    constructor(options) {
+    constructor(opts) {
+        let options = Object.assign({}, opts);
+        
         let statics = options.static;
         
         if (undefined === statics) {
