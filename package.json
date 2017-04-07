@@ -1,6 +1,6 @@
 {
   "name": "foxman",
-  "version": "0.8.0-beta.15",
+  "version": "0.8.0",
   "description": "可扩展的 Mock Server",
   "main": "app.js",
   "bin": {
@@ -61,6 +61,7 @@
     "nei": "^3.0.3",
     "node-notifier": "^5.1.2",
     "path-to-regexp": "^1.5.3",
+    "update-notifier": "^2.1.0",
     "vinyl-fs": "^0.3.14",
     "ws": "^1.1.1",
     "yargs": "^4.8.1"

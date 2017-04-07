@@ -1,8 +1,10 @@
 import Index from './index';
+import updateNotifier from 'update-notifier';
+import pkg from '../package';
+
+updateNotifier({ pkg }).notify();
 
 export default function(...args) {
-	process.stdout.write('\x1Bc');
-
 	console.log('\n');
 
 	console.log([
