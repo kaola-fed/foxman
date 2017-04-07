@@ -4,6 +4,7 @@ const path = require('path');
 const App = require('../dist/app').default;
 const validate = require('../dist/CommandLine/utils/validate').default;
 let {log, error , warnLog} = require('../dist/helper/util');
+let {checkVersion} = require('../dist/helper/checkVersion');
 let pkg = require('../package.json');
 let wrong = log;
 error = warnLog;
@@ -102,5 +103,15 @@ let res = validate(config);
 if (res !== true) {
     wrong(res);
 }
+
+if ((config.upgrade !== undefined) 
+    && (config.upgrade.version !== undefined)) {
+    checkVersion({
+        version: pkg.version,
+        versionLimit: config.upgrade.version,
+        notify: config.upgrade.notify
+    });
+}
+
 
 App(Object.assign({}, config, {argv}, {configPath}));
