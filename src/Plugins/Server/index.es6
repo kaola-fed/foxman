@@ -1,6 +1,7 @@
 import Server from './Server';
 import path from 'path';
 import {RenderUtil} from '../../helper';
+import formatStaticOptions from './utils/formatStaticOptions';
 
 class ServerPlugin {
     constructor(options) {
@@ -14,7 +15,7 @@ class ServerPlugin {
             statics = [statics];
         }
 
-        options.statics = statics.filter(item => !!item);
+        options.statics = statics.filter(item => !!item).map(formatStaticOptions);
 
         if (undefined === options.routers) {
             options.routers = [];
@@ -63,4 +64,5 @@ class ServerPlugin {
         this.server.createServer();
     }
 }
+
 export default ServerPlugin;

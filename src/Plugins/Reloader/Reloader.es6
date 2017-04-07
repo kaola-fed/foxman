@@ -35,7 +35,7 @@ class Reloader extends EventEmitter {
         const resources = statics.reduce((prev, item) => {
             return [
                 ...prev,
-                ...['*.css', '*.js', '*.html'].map(ext => path.join(item, '**', ext))
+                ...['*.css', '*.js', '*.html'].map(ext => path.join(item.dir, '**', ext))
             ];
         }, []);
 
