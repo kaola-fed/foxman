@@ -34,6 +34,9 @@ Object.assign(paths,{
 });
 
 module.exports = {
+    upgrade: {
+        version: '0.8.1'
+    },
     /**
      * nei 的 kei 然后执行 foxman -u 初始化工程目录。
      **/
