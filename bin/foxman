@@ -3,9 +3,10 @@ const yargs = require('yargs');
 const path = require('path');
 const App = require('../dist/app').default;
 const validate = require('../dist/CommandLine/utils/validate').default;
-let {checkVersion} = require('../dist/helper/checkVersion');
-let {log, warnLog} = require('../dist/helper/util');
-let pkg = require('../package.json');
+const {checkVersion} = require('../dist/helper/checkVersion');
+const {log, warnLog} = require('../dist/helper/util');
+const pkg = require('../package.json');
+const updateNotifier = require('update-notifier');
 
 // Checking node version is the first time to be done
 const nodeVersionLimit = '6.4.0';
@@ -17,6 +18,8 @@ checkVersion({
         'Please install latest version\'s Node.js.'
     ]
 });
+
+updateNotifier({ pkg }).notify();
 
 const argv = yargs
     .usage('Usage: foxman [options]')
@@ -93,7 +96,7 @@ try {
             warnLog('You can try \'npm install\' or check the foxman.config.js');
         }
     } else {
-        warnLog('Maybe \'s a problem with foxman.config.js, check it or contact us(http://github.com/kaola-fed/foxman/issues)');
+        warnLog('Maybe be a problem with foxman.config.js, check it or contact us(http://github.com/kaola-fed/foxman/issues)');
         console.log(err);
     }
 
