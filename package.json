@@ -15,6 +15,9 @@
   "directories": {
     "test": "test"
   },
+  "engines": {
+    "node": ">=6.4.0"
+  },
   "scripts": {
     "build": "gulp && babel src -d dist -x .es6",
     "builddev": "gulp && babel src -w -d dist -x .es6",
