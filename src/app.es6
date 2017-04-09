@@ -1,6 +1,11 @@
 import Index from './index';
 
 export default function(...args) {
+	welcome();
+	Index(...args);
+}
+
+function welcome() {
 	console.log('\n');
 
 	console.log([
@@ -13,5 +18,4 @@ export default function(...args) {
 	].join('\n'));
 
 	console.log('\n');
-	Index(...args);
 }
