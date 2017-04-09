@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 const yargs = require('yargs');
 const path = require('path');
-const App = require('../dist/app').default;
-const validate = require('../dist/CommandLine/utils/validate').default;
+const App = require('../dist/app');
+const validate = require('../dist/CommandLine/utils/validate');
 const {checkVersion} = require('../dist/helper/checkVersion');
 const {log, warnLog} = require('../dist/helper/util');
 const pkg = require('../package.json');

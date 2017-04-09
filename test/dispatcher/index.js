@@ -1,7 +1,7 @@
 var assert = require('assert');
 var path = require('path');
 // require('babel-polyfill');
-var apiHandler = require('../../dist/helper/apiHandler').default;
+var apiHandler = require('../../dist/helper/apiHandler');
 
 describe('dispatcher', function() {
     it('apiHandler', function(done) {
