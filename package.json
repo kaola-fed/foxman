@@ -2,9 +2,15 @@
   "name": "foxman",
   "version": "0.8.0",
   "description": "Extensible Mock Server",
+  "preferGlobal": true,
   "bin": {
     "foxman": "./bin/foxman"
   },
+  "files": [
+    "lib",
+    "dist",
+    "bin"
+  ],
   "directories": {
     "test": "test"
   },
