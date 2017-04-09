@@ -8,7 +8,7 @@
         <#include '/inCommonTpl.ftl'>
 
         <section>
-            Hello, ${name!'defaultName'}
+            Hello, ${name!''}
         </section>
     </body>
 </html>

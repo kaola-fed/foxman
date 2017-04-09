@@ -116,3 +116,8 @@ body,html{height:100%;-webkit-tap-highlight-color:transparent}body{overflow-x:hi
   min-height: calc(100vh - 52px );
   padding: initial;
 }
+
+.err_box pre {
+  white-space: pre-line;
+  font-size: 16px;
+}
