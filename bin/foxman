@@ -3,10 +3,8 @@ const yargs = require('yargs');
 const path = require('path');
 const App = require('../dist/app').default;
 const validate = require('../dist/CommandLine/utils/validate').default;
-let {log, error , warnLog} = require('../dist/helper/util');
+let {log, warnLog} = require('../dist/helper/util');
 let pkg = require('../package.json');
-let wrong = log;
-error = warnLog;
 
 const argv = yargs
     .usage('Usage: foxman [options]')
@@ -66,25 +64,24 @@ const configPath = path.join(process.cwd(), argv.config);
 try {
     config = require(configPath);
 } catch (err) {
-    const e = 'error'.red;
     if (err.code === 'MODULE_NOT_FOUND') {
         if (~err.toString().indexOf(configPath)) {
-            error(`Please add foxman.config.js in current directory.`);
-            error(`Also you can appoint your special name,`);
-            error(`use command 'foxman --config yourfoxman.config.js'.`);
-            error(`See more in command 'foxman --help'`);
+            warnLog('Please add foxman.config.js in current directory.');
+            warnLog('Also you can appoint your special name,');
+            warnLog('use command \'foxman --config yourfoxman.config.js\'.');
+            warnLog('See more in command \'foxman --help\'');
 
         } else {
-            error(`Make sure you have the latest version of node.js and foxman.`);
-            error(`If you do, this is most likely a problem with the plugins used in ${path.join(process.cwd(), 'foxman.config.js')},`);
-            error(`not with foxman itself`);
+            warnLog('Make sure you have the latest version of node.js and foxman.');
+            warnLog(`If you do, this is most likely a problem with the plugins used in ${path.join(process.cwd(), 'foxman.config.js')},`);
+            warnLog('not with foxman itself');
             console.log('\n');
             console.log(err.stack);
             console.log('\n');
-            error(`You can try 'npm install' or check the foxman.config.js`);
+            warnLog('You can try \'npm install\' or check the foxman.config.js');
         }
     } else {
-        error(`Maybe it's a problem with foxman.config.js, check it or contact us(http://github.com/kaola-fed/foxman/issues)`);
+        warnLog('Maybe \'s a problem with foxman.config.js, check it or contact us(http://github.com/kaola-fed/foxman/issues)');
         console.log(err);
     }
 
@@ -100,7 +97,7 @@ if (!config.server.templatePaths)  {
 
 let res = validate(config);
 if (res !== true) {
-    wrong(res);
+    log(res);
 }
 
 App(Object.assign({}, config, {argv}, {configPath}));
