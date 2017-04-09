@@ -72,6 +72,14 @@ $ npm install --global foxman
 $ cd /path/to/my-project
 $ foxman
 ```
+
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+| [<img src="https://avatars3.githubusercontent.com/u/10825163?v=3" width="80px;"/><br /><sub>君羽</sub>](http://imhype.github.io)<br />[💻](https://github.com/kaola-fed/foxman/commits?author=ImHype) 🔌 🚇 [📖](https://github.com/kaola-fed/foxman/commits?author=ImHype) [⚠️](https://github.com/kaola-fed/foxman/commits?author=ImHype) [🐛](https://github.com/kaola-fed/foxman/issues?q=author%3AImHype) 💡 | [<img src="https://avatars3.githubusercontent.com/u/9125255?v=3" width="80px;"/><br /><sub>MO</sub>](https://fengzilong.github.io)<br />[💻](https://github.com/kaola-fed/foxman/commits?author=fengzilong) [📖](https://github.com/kaola-fed/foxman/commits?author=fengzilong) |
+| :---: | :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
 ## LICENSE
 
 MIT

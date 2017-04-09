@@ -24,7 +24,10 @@
     "dev": "gulp && babel src -w -d src -s -x .es6",
     "lint": "eslint src bin",
     "test": "gulp && babel src -d dist -s -x .es6 &&  mocha ./test",
-    "release": "npm run build && npm publish"
+    "release": "npm run build && npm publish",
+    "init-contributors": "all-contributors init",
+    "add-contributor": "all-contributors add",
+    "generate-contributors": "all-contributors generate"
   },
   "repository": {
     "type": "git",
@@ -46,6 +49,7 @@
   },
   "homepage": "https://github.com/kaola-fed/foxman#readme",
   "devDependencies": {
+    "all-contributors-cli": "^4.1.0",
     "babel-cli": "^6.11.4",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
