@@ -5,7 +5,9 @@ gulp.task('clean', function () {
     return gulp.src([
         'dist',
         'src/**.js',
+        'src/**/**.js',
         'src/**.map',
+        'src/**/**.map',
         '!src/**/client/**',
     ]).pipe(clean());
 });
