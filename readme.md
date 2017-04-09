@@ -1,9 +1,10 @@
 # Foxman
 
-[][nodei-url]
+[![build][travis-image]][travis-url]
 [![NPM version][npm-image]][npm-url]
 [![download][downloads-image]][downloads-url]
-[![build][travis-image]][travis-url]  
+[![Code of Conduct][coc-badge]][coc]
+[![license][license-image]][license-url]
 
 ## Foxman 有什么？
 * Mock Server， 支持自定义模板引擎；
@@ -49,7 +50,7 @@ $ foxman
 ```
 ## LICENSE
 
-[![license][license-image]][license-url]
+MIT
 
 [npm-url]: https://www.npmjs.com/package/foxman
 [npm-image]: https://img.shields.io/npm/v/foxman.svg?style=flat-square
@@ -61,3 +62,5 @@ $ foxman
 [license-image]: https://img.shields.io/github/license/kaola-fed/foxman.svg?style=flat-square
 [travis-image]: https://img.shields.io/travis/kaola-fed/foxman.svg?style=flat-square
 [travis-url]: https://travis-ci.org/kaola-fed/foxman
+[coc-badge]: https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square
+[coc]: https://github.com/kaola-fed/foxman/blob/master/CODE_OF_CONDUCT.md
