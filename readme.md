@@ -1,8 +1,9 @@
 # Foxman
 
-[![build][travis-image]][travis-url]
 [![NPM version][npm-image]][npm-url]
+[![build][travis-image]][travis-url]
 [![download][downloads-image]][downloads-url]
+[![node][node]][node-url]
 [![Code of Conduct][coc-badge]][coc]
 [![license][license-image]][license-url]
 
@@ -57,6 +58,8 @@ $ foxman
 
 MIT
 
+[node]: https://img.shields.io/node/v/foxman.svg?style=flat-square
+[node-url]: https://nodejs.org
 [npm-url]: https://www.npmjs.com/package/foxman
 [npm-image]: https://img.shields.io/npm/v/foxman.svg?style=flat-square
 [downloads-image]: https://img.shields.io/npm/dm/foxman.svg?style=flat-square
