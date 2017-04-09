@@ -4,50 +4,32 @@ import {RenderUtil} from '../../helper';
 import formatStaticOptions from './utils/formatStaticOptions';
 
 class ServerPlugin {
-    constructor(opts) {
-        let options = Object.assign({}, opts);
-        
-        let statics = options.static;
-        
-        if (undefined === statics) {
-            statics = [];
-        }
-        
-        if (!Array.isArray(statics)) {
-            statics = [statics];
-        }
+    constructor(opts = {}) {
+        // TODO: 需要deepClone
+        const options = Object.assign({}, opts);
+        const statics = options.static ? ensureArray(options.static) : [];
 
-        options.statics = statics.filter(item => !!item).map(formatStaticOptions);
+        options.statics = statics
+            .filter(item => !!item)
+            .map(formatStaticOptions);
 
-        if (undefined === options.routers) {
-            options.routers = [];
-        }
-
-        options.runtimeRouters = {
-            routers: options.routers
-        };
+        options.runtimeRouters = { routers: options.routers || [] };
 
         delete options.routers;
-        
-        if (undefined === options.syncDataMatch) {
-            options.syncDataMatch = url => path.join(options.syncData, url);
-        }
 
-        if (undefined === options.asyncDataMatch) {
-            options.asyncDataMatch = url => path.join(options.asyncData, url);
-        }
+        options.syncDataMatch = options.syncDataMatch ||
+            (url => path.join(options.syncData, url));
 
-        if (undefined === options.divideMethod) {
-            options.divideMethod = false;
-        }
+        options.asyncDataMatch = options.asyncDataMatch ||
+            (url => path.join(options.asyncData, url));
 
-        if (undefined === options.extension) {
-            options.extension = 'ftl';
-        }
-        
-        if (undefined === options.Render) {
-            options.Render = RenderUtil;
-        }
+        options.divideMethod = Boolean( options.divideMethod );
+
+        options.extension = options.extension
+            ? String(options.extension)
+            : 'ftl';
+
+        options.Render = options.Render || RenderUtil;
 
         this.options = options;
     }
@@ -65,6 +47,14 @@ class ServerPlugin {
     runOnSuccess() {
         this.server.createServer();
     }
+}
+
+function ensureArray( target ) {
+    if ( Array.isArray( target ) ) {
+        return target;
+    }
+
+    return [ target ];
 }
 
 export default ServerPlugin;

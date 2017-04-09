@@ -21,9 +21,7 @@ class Server {
         this.serverOptions = options;
         this.middleware = [];
         this.ifAppendHtmls = [];
-        this.app = Koa({
-            outputErrors: false
-        });
+        this.app = Koa({outputErrors: false});
 
         const {Render, templatePaths, viewRoot} = options;
         const app = this.app;
@@ -32,9 +30,7 @@ class Server {
             Render, templatePaths, viewRoot
         });
 
-        setView({
-            app
-        });
+        setView({app});
     }
 
     registerRouterNamespace(name, value = []) {
@@ -49,11 +45,11 @@ class Server {
     updateRuntimeRouters(fn) {
         return fn(this.getRuntimeRouters());
     }
-    
+
     delayInit() {
         const {app, ifAppendHtmls, tplRender} = this;
         const {ifProxy, statics} = this.serverOptions;
-        
+
         if (!ifProxy) {
             app.use(bodyParser());
         }
@@ -61,17 +57,13 @@ class Server {
         // {extension, runtimeRouters, divideMethod, viewRoot, syncData, asyncData, syncDataMatch, asyncDataMatch}
         app.use(routerMap(this.serverOptions));
 
-        this.middleware.forEach(g => {
-            app.use(g);
-        });
-        
+        this.middleware.forEach(m => app.use(m));
+
         app.use(dispatcher({tplRender}));
 
         setHtmlAppender({app, ifAppendHtmls});
-        
-        setStaticHandler({
-            statics, app
-        });
+
+        setStaticHandler({statics, app});
     }
 
     use(middleware) {
