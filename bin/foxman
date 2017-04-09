@@ -9,6 +9,17 @@ let pkg = require('../package.json');
 let wrong = log;
 error = warnLog;
 
+// Checking node version is the first time to be done
+const nodeVersionLimit = '6.4.0';
+checkVersion({
+    version: process.version,
+    versionLimit: nodeVersionLimit,
+    notify: [
+        `Expect Node.js version to be higher than v${nodeVersionLimit}!`,
+        'Please install latest version\'s Node.js.'
+    ]
+});
+
 const argv = yargs
     .usage('Usage: foxman [options]')
     .alias('C', 'config')
@@ -104,14 +115,27 @@ if (res !== true) {
     wrong(res);
 }
 
-if ((config.upgrade !== undefined) 
-    && (config.upgrade.version !== undefined)) {
+const upgrade = config.upgrade;
+if ((upgrade !== undefined) 
+    && (upgrade.version !== undefined)) {
+    let notify = [`Expect foxman version higher than v${upgrade.version} in current project!`];
+
+    if (upgrade.notify 
+        && upgrade.notify.length > 0) {
+        notify = upgrade.notify;
+    }
+        
     checkVersion({
         version: pkg.version,
-        versionLimit: config.upgrade.version,
-        notify: config.upgrade.notify
+        versionLimit: upgrade.version,
+        notify: [
+            ...notify, 
+            'Please install latest version:', 
+            '$ npm i -g foxman', 
+            'And re-install all dependencies in current working directory',
+            'For more release info, head to https://github.com/kaola-fed/foxman/releases ;-)'
+        ]
     });
 }
-
 
 App(Object.assign({}, config, {argv}, {configPath}));

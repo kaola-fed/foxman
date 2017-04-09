@@ -8,10 +8,8 @@
     "foxman-plugin-mock-control": "latest",
     "foxman-plugin-route-display": "latest",
     "foxman-plugin-webpack-dev-server": "latest",
-
     "foxman-processor-mcss": "latest",
     "foxman-processor-autoprefixer": "latest",
-    
     "webpack": "^2.3.2"
   },
   "scripts": {
