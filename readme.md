@@ -6,13 +6,13 @@
 [![build][travis-image]][travis-url]  
 
 ## Foxman 有什么？
-* Mock Server， 支持自定义模板引擎 👀
-* Living Reload， 更灵活的 reload 机制 🤘
-* Remote Debugging， 远程调试，取本地的模板与远程端的数据，方便联调 📡
-* Runtime Compiler， 运行时的即时编译，任何实现 Foxman-Processor 接口的处理器都能被装载进来 🚀
-* Debuger，集成 vconsole，方便移动端调试 🐞
-* NEI supported，集成网易接口维护利器 NEI，接口定义规范化 💯
-* Extensible，强大的扩展方式，方便开发者自行定制所需功能 🤔
+* 👀 Mock Server， 支持自定义模板引擎
+* 🤘 Living Reload， 更灵活的 reload 机制
+* 📡 Remote Debugging， 远程调试，取本地的模板与远程端的数据，方便联调
+* 🚀 Runtime Compiler， 运行时的即时编译，任何实现 Foxman-Processor 接口的处理器都能被装载进来
+* 🐞 Debuger，集成 vconsole，方便移动端调试
+* 💯 NEI supported，集成网易接口维护利器 NEI，接口定义规范化
+* 🤔 Extensible，强大的扩展方式，方便开发者自行定制所需功能
 
 最后一点个人认为很重要，每个工程都会有一些特殊性。而 Foxman 更像一个容器，提供必要的支持，又能方便开发者进行实际工程的特殊定制。
 
