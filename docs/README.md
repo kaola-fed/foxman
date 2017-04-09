@@ -1,5 +1,5 @@
-- [如何开始](./get-started.md)
-- [如何配置](./configuration.md)
+- [介绍与安装](./get-started.md)
+- [关于配置项](./configuration.md)
 - [工作原理](./workflow.md)
 - [举个栗子](../example/)
 - [插件](./plugins.md)
