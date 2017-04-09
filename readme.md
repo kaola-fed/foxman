@@ -30,7 +30,7 @@
 * **Man** 优雅知性。
 
 ## 文档
-快速入门、配置、插件开发以及原理等文档 [文档](https://foxman.js.org/#/get-started)
+快速入门、配置、插件开发以及原理等[文档](https://foxman.js.org/#/get-started)
 
 ## 快速开始
 #### 1. 安装到全局
