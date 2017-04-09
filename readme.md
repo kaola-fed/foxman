@@ -48,15 +48,16 @@ $ cd /path/to/my-project
 $ foxman
 ```
 ## LICENSE
+
 [![license][license-image]][license-url]
 
 [npm-url]: https://www.npmjs.com/package/foxman
-[npm-image]: https://img.shields.io/npm/v/foxman.svg
-[downloads-image]: https://img.shields.io/npm/dm/foxman.svg
+[npm-image]: https://img.shields.io/npm/v/foxman.svg?style=flat-square
+[downloads-image]: https://img.shields.io/npm/dm/foxman.svg?style=flat-square
 [downloads-url]: https://www.npmjs.com/package/foxman
 [nodei-image]: https://nodei.co/npm/foxman.png?downloads=true&downloadRank=true&stars=true
 [nodei-url]: https://www.npmjs.com/package/foxman
 [license-url]: https://github.com/kaola-fed/foxman/blob/master/LICENSE
-[license-image]: https://img.shields.io/github/license/kaola-fed/foxman.svg
-[travis-image]: https://travis-ci.org/kaola-fed/foxman.svg?branch=master
+[license-image]: https://img.shields.io/github/license/kaola-fed/foxman.svg?style=flat-square
+[travis-image]: https://img.shields.io/travis/kaola-fed/foxman.svg?style=flat-square
 [travis-url]: https://travis-ci.org/kaola-fed/foxman
