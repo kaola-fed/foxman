@@ -1,19 +1,12 @@
 {
   "name": "foxman",
   "version": "0.8.0",
-  "description": "可扩展的 Mock Server",
-  "main": "app.js",
+  "description": "Extensible Mock Server",
   "bin": {
     "foxman": "./bin/foxman"
   },
   "directories": {
     "test": "test"
-  },
-  "eslintConfig": {
-    "env": {
-      "browser": true,
-      "node": true
-    }
   },
   "scripts": {
     "build": "gulp && babel src -d dist -x .es6",
@@ -24,25 +17,30 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/foxman-tools/foxman.git"
+    "url": "git+https://github.com/kaola-fed/foxman.git"
   },
   "keywords": [
-    "nodejs",
+    "extensible",
+    "node",
     "mock",
-    "proxy"
+    "proxy",
+    "server",
+    "kaola",
+    "nei"
   ],
   "author": "junyu",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/foxman-tools/foxman/issues"
+    "url": "https://github.com/kaola-fed/foxman/issues"
   },
-  "homepage": "https://github.com/foxman-tools/foxman#readme",
+  "homepage": "https://github.com/kaola-fed/foxman#readme",
   "devDependencies": {
     "babel-cli": "^6.11.4",
     "babel-plugin-transform-runtime": "^6.15.0",
     "babel-preset-es2015": "^6.13.2",
     "gulp": "^3.9.1",
-    "gulp-clean": "^0.3.2"
+    "gulp-clean": "^0.3.2",
+    "mocha": "^3.2.0"
   },
   "dependencies": {
     "anymatch": "^1.3.0",
