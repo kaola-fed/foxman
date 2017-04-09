@@ -1,6 +1,0 @@
-- [介绍](./beginning/intro.md)
-- [安装](./beginning/install.md)
-- [配置](./configs.md)
-- [工作原理](./workflow.md)
-- [举个栗子](../example/)
-- [常用的插件列表](./using/common-plugin.md)

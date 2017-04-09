@@ -1,15 +1,16 @@
 {
-    "env": {
-        "es6": true,
-        "node": true
-    },
     "extends": "eslint:recommended",
     "parserOptions": {
         "sourceType": "module"
     },
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
     "rules": {
         "no-console": "off",
-        "no-unused-vars": "off",
+        "no-unused-vars": "error",
         "linebreak-style": [
             "error",
             "unix"
