@@ -1,8 +1,4 @@
 import Index from './index';
-import updateNotifier from 'update-notifier';
-import pkg from '../package';
-
-updateNotifier({ pkg }).notify();
 
 export default function(...args) {
 	console.log('\n');

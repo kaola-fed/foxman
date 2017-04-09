@@ -3,8 +3,11 @@ const yargs = require('yargs');
 const path = require('path');
 const App = require('../dist/app').default;
 const validate = require('../dist/CommandLine/utils/validate').default;
-let {log, warnLog} = require('../dist/helper/util');
-let pkg = require('../package.json');
+const updateNotifier = require('update-notifier');
+const {log, warnLog} = require('../dist/helper/util');
+const pkg = require('../package.json');
+
+updateNotifier({ pkg }).notify();
 
 const argv = yargs
     .usage('Usage: foxman [options]')
