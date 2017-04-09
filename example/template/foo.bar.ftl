@@ -6,9 +6,9 @@
         <h2>Foxman Example FTL</h2>
 
         <#include '/inCommonTpl.ftl'>
-        
+
         <section>
-            Hello, ${name}
+            Hello, ${name!'defaultName'}
         </section>
     </body>
 </html>

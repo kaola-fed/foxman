@@ -1,23 +1,15 @@
 #!/usr/bin/env node
 const yargs = require('yargs');
 const path = require('path');
-const App = require('../dist/app');
-const validate = require('../dist/CommandLine/utils/validate');
-const {checkVersion} = require('../dist/helper/checkVersion');
-const {log, warnLog} = require('../dist/helper/util');
-const pkg = require('../package.json');
 const updateNotifier = require('update-notifier');
+const foxman = require('../dist');
+const validate = require('../dist/CommandLine/utils/validate');
+const {log, warnLog} = require('../dist/helper/util');
+const checkNodeVersion = require('./check-node-version');
+const checkFoxmanVersion = require('./check-foxman-version');
+const pkg = require('../package.json');
 
-// Checking node version is the first time to be done
-const MIN_SUPPORT_NODE_VERSION = '6.4.0';
-checkVersion({
-    version: process.version,
-    versionLimit: MIN_SUPPORT_NODE_VERSION,
-    notify: [
-        `Expect Node.js version to be higher than v${MIN_SUPPORT_NODE_VERSION}!`,
-        'Please install latest version\'s Node.js.'
-    ]
-});
+checkNodeVersion();
 
 updateNotifier({ pkg }).notify();
 
@@ -40,26 +32,6 @@ const argv = yargs
     .alias('U', 'u')
     .describe('U', '是否远程nei中拉取接口信息')
     .default('U', false)
-
-    // .command('tpl', 'code generate', function (yargs) {
-    //     return yargs.option('T', {
-    //         alias: 'type',
-    //         default: 'FoxmanConfig'
-    //     }).option('W', {
-    //         alias: 'where',
-    //         default: 'foxman.config.js'
-    //     })
-    // })
-
-    // .command('lint', 'eslint for foxman', function (yargs) {
-    //     return yargs.option('T', {
-    //         alias: 'type',
-    //         default: 'FoxmanConfig'
-    //     }).option('W', {
-    //         alias: 'where',
-    //         default: 'foxman.config.js'
-    //     })
-    // })
 
     .alias('V', 'version')
     .alias('V', 'v')
@@ -110,32 +82,15 @@ if (!config.server.templatePaths)  {
     config.server.templatePaths = {};
 }
 
-let res = validate(config);
+const res = validate(config);
 if (res !== true) {
     log(res);
 }
 
-const upgrade = config.upgrade;
-if ((upgrade !== undefined)
-    && (upgrade.version !== undefined)) {
-    let notify = [`Expect foxman version to be higher than v${upgrade.version} in current project!`];
+checkFoxmanVersion(config.upgrade || {});
 
-    if (upgrade.notify
-        && upgrade.notify.length > 0) {
-        notify = upgrade.notify;
-    }
-
-    checkVersion({
-        version: pkg.version,
-        versionLimit: upgrade.version,
-        notify: [
-            ...notify,
-            'Please install latest version:',
-            '$ npm i -g foxman',
-            'And re-install all dependencies in current working directory',
-            'For more release information, head to https://github.com/kaola-fed/foxman/releases ;-)'
-        ]
-    });
-}
-
-App(Object.assign({}, config, {argv, configPath}));
+foxman(Object.assign(
+    {},
+    config,
+    {argv, configPath}
+));
