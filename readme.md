@@ -30,7 +30,7 @@
 * **Man** 优雅知性。
 
 ## 文档
-快速入门、配置、插件开发以及原理等文档 [docs/index.md](docs/index.md)
+快速入门、配置、插件开发以及原理等文档 [文档](https://foxman.js.org/#/get-started)
 
 ## 快速开始
 #### 1. 安装到全局
@@ -39,7 +39,7 @@ $ npm install --global foxman
 ```
 **建议：安装最新版的 Node.js，促成社区共同进步**
 
-#### 2. [编写一份贴合工程情况的 Foxman 配置](docs/configs.md)
+#### 2. [编写一份贴合工程情况的 Foxman 配置](https://foxman.js.org/#/configuration)
 #### 3. 启动 Foxman
 ```bash
 $ cd /path/to/my-project
