@@ -1,11 +1,11 @@
 import {initialsLower, log, notify, entries, error, isPromise, isGeneratorDone} from '../helper/util';
 import co from 'co';
 import {init} from './Instance';
-import {register, resolve, dependencys} from './DI';
+import {register, resolve, dependencies} from './DI';
 
 
 function* execute() {
-    for (let [, plugin] of entries(dependencys)) {
+    for (let [, plugin] of entries(dependencies)) {
         if (plugin.init && plugin.enable) {
             resolve(plugin.init, plugin);
 
@@ -27,7 +27,7 @@ function* execute() {
 }
 
 function runPlugins() {
-    for (let [, plugin] of entries(dependencys)) {
+    for (let [, plugin] of entries(dependencies)) {
         if (plugin.runOnSuccess) {
             plugin.runOnSuccess();
         }
@@ -56,5 +56,5 @@ export function run() {
 }
 
 export function get(pluginName) {
-    return dependencys[initialsLower(pluginName)];
+    return dependencies[initialsLower(pluginName)];
 }

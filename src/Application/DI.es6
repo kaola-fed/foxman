@@ -2,7 +2,7 @@ import {
     util
 } from '../helper';
 
-const dependencys = {};
+const dependencies = {};
 
 /**
  * 服务注册
@@ -11,7 +11,7 @@ const dependencys = {};
  */
 
 function register(key, value) {
-    dependencys[key] = value;
+    dependencies[key] = value;
 }
 
 /**
@@ -32,15 +32,15 @@ function find(arg) {
     if (!hasInjected(arg)) {
         util.error(`Plugin ${arg} is not loaded!`);
     }
-    return dependencys[arg];
+    return dependencies[arg];
 }
 
 function hasInjected(dependency) {
-    return dependencys.hasOwnProperty(dependency);
+    return dependencies.hasOwnProperty(dependency);
 }
 
 export {
     register,
     resolve,
-    dependencys
+    dependencies
 };
