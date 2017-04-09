@@ -81,7 +81,7 @@ try {
             warnLog('You can try \'npm install\' or check the foxman.config.js');
         }
     } else {
-        warnLog('Maybe \'s a problem with foxman.config.js, check it or contact us(http://github.com/kaola-fed/foxman/issues)');
+        warnLog('Maybe be a problem with foxman.config.js, check it or contact us(http://github.com/kaola-fed/foxman/issues)');
         console.log(err);
     }
 
