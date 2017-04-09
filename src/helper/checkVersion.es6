@@ -1,12 +1,12 @@
 import {errorLog} from './util';
-import compareVersions from 'compare-versions';
+import {lt} from 'semver';
 
 export function checkVersion({
     version,
     versionLimit,
     notify = []
 }) {
-    if (compareVersions(version, versionLimit) === -1) {
+    if (lt(version, versionLimit)) {
         notify.forEach(errorLog);
         process.exit(1);
     }
