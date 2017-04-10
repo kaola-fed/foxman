@@ -14,8 +14,8 @@ export default function formatStaticOptions(opts = {}) {
         prefix = ('/' + path.parse(options.dir).base),
         maxAge = 0,
         gzip = true,
-        preload = true,
-        dynamic = false,
+        preload = false,
+        dynamic = true,
         filter = file => file.indexOf('node_modules') === -1
     } = options;
 
