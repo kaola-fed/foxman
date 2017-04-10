@@ -67,8 +67,8 @@
     "globule": "^1.0.0",
     "http-proxy": "^1.15.2",
     "http2": "^3.3.6",
-    "koa": "^1.2.1",
-    "koa-bodyparser": "^2.3.0",
+    "koa": "^1.4.0",
+    "koa-bodyparser": "^2.5.0",
     "koa-ejs": "^3.0.0",
     "koa-static-cache": "^4.0.0",
     "nei": "^3.0.3",
@@ -76,7 +76,7 @@
     "path-to-regexp": "^1.5.3",
     "semver": "^5.3.0",
     "update-notifier": "^2.1.0",
-    "ws": "^1.1.1",
-    "yargs": "^4.8.1"
+    "ws": "^2.2.3",
+    "yargs": "^7.0.2"
   }
 }
