@@ -1,10 +1,9 @@
 var assert = require('assert');
 var path = require('path');
-var util = require('../../dist/helper').util;
-var fileUtil = require('../../dist/helper').fileUtil;
+var fileUtil = require('../../lib/helper').fileUtil;
 
 describe('fileUtil', function() {
-  
+
     it('writeUnExistsFile', function(done) {
       fileUtil.writeUnExistsFile(path.resolve(__dirname, 'foo/bar.txt'),'Foo Bar').then(function (info) {
         assert.equal(!!~info.indexOf('Foo Bar'), 1);

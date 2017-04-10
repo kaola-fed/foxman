@@ -4,6 +4,7 @@
   "scripts": {
     "boot": "lerna bootstrap",
     "lint": "eslint packages",
+    "test": "lerna run test",
     "init-contributors": "all-contributors init",
     "add-contributor": "all-contributors add",
     "generate-contributors": "all-contributors generate"

@@ -1,6 +1,6 @@
 var assert = require('assert');
 var path = require('path');
-var RenderUtil = require('../../dist/helper').RenderUtil;
+var RenderUtil = require('../../lib/helper').RenderUtil;
 
 var viewDir = './view/';
 var viewRoot = path.resolve(__dirname, viewDir);

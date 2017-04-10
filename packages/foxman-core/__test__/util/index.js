@@ -1,6 +1,6 @@
 // require('babel-polyfill')
 var assert = require('assert');
-var util = require('../../dist/helper').util;
+var util = require('../../lib/helper').util;
 
 describe('util',function () {
   it('createSystemId', ()=>{

@@ -1,11 +1,11 @@
 var assert = require('assert');
 var path = require('path');
-var Application = require('../../dist/Application');
-var Nei = require('../../dist/Plugins/NEISync');
-var Reloader = require('../../dist/Plugins/Reloader');
-var WatchPlugin = require('../../dist/Plugins/Watcher');
-var ProxyPlugin = require('../../dist/Plugins/Proxy');
-var ServerPlugin = require('../../dist/Plugins/Server');
+var Application = require('../../lib/application');
+var Nei = require('../../lib/plugins/NEISync');
+var Reloader = require('../../lib/plugins/Reloader');
+var WatchPlugin = require('../../lib/plugins/Watcher');
+var ProxyPlugin = require('../../lib/plugins/Proxy');
+var ServerPlugin = require('../../lib/plugins/Server');
 
 var app = Application;
 
