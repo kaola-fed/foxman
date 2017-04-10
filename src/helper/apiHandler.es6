@@ -6,15 +6,14 @@ function apiHandler({
 }) {
     if (handler) {
         return handler(this).then(res => {
-            let {body = res} = res;
-            if (typeof body === 'string') {
+            if (typeof res === 'string') {
                 try {
-                    body = JSONParse(body);
+                    res = JSONParse(res);
                 } catch (error) {
-                    return Promise.reject(`${error.stack || error} \n 源数据：\n ${body}`);
+                    return Promise.reject(`${error.stack || error} \n 源数据：\n ${res}`);
                 }
             }
-            return {json: body};
+            return {json: res};
         });
     }
 
