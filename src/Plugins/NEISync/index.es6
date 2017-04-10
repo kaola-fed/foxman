@@ -1,6 +1,6 @@
 import path from 'path';
 import {util, DispatherTypes} from '../../helper';
-import {getMockConfig, writeNEIConfig, updateLocalFiles, formatRoutes, initData} from './functions';
+import {getMockConfig, writeNEIConfig, updateLocalFiles, formatRoutes, init} from './functions';
 
 const FROM = 'NEI';
 /**
@@ -8,13 +8,13 @@ const FROM = 'NEI';
  */
 class NEISyncPlugin {
     constructor(options) {
-        this.NEIInfo = initData(options);
+        this.NEIInfo = init(options);
     }
 
     init(serverPlugin) {
         this.server = serverPlugin.server;
         const {update} = this.NEIInfo;
-        
+
         this.updateNEIDataProxy({update});
         this.registerMiddleware();
     }
@@ -31,7 +31,7 @@ class NEISyncPlugin {
         const server = this.server;
         const genCommonPath = this.genCommonPath.bind(this);
         const genNeiApiUrl = this.genNeiApiUrl.bind(this);
-        
+
         // update function
         server.use(() => function *(next) {
             const requestPath = this.request.path;
@@ -137,7 +137,7 @@ class NEISyncPlugin {
 
     genCommonPath({sync, filePath}) {
         const {divideMethod, syncDataMatch, asyncDataMatch} = this.server.serverOptions;
-        
+
         if (sync) {
             return syncDataMatch(util.jsonPathResolve(filePath));
         }

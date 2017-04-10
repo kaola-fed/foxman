@@ -4,8 +4,6 @@ import subMain from './submain';
 import Application from 'nei/lib/util/args';
 import {fileUtil} from '../../helper';
 
-util.checkNodeVersion();
-
 const options = {
     package: require('nei/package.json'),
     message: require('nei/bin/config.js'),
@@ -20,9 +18,6 @@ const options = {
             this.show(action);
         } else {
             subMain.build(this, action, config);
-            /**
-             * 往外传递
-             */
             subMain.on('buildSuccess', (arg0) => {
                 this.emit('buildSuccess', arg0);
             });
@@ -33,17 +28,14 @@ const options = {
         var config = event.options || {};
         config = this.format(action, config);
         subMain.update(this, action, config);
-        /**
-         * 往外传递
-         */
         subMain.on('buildSuccess', (arg0) => {
             this.emit('buildSuccess', arg0);
         });
     }
 };
 
-let nei = new Application(options),
-    neiTools = {
+const nei = new Application(options);
+const neiTools = {
         build(opt) {
             nei.exec(['build -key', opt.key, '-basedir', opt.basedir]);
         },
@@ -53,16 +45,12 @@ let nei = new Application(options),
         run(opt) {
             try {
                 fileUtil.delDir(opt.basedir);
-            } catch (e) {
-                // console.log('初始化nei目录');
-            }
+            } catch (e) {}
 
             this.build(opt);
 
             return new Promise(resolve => {
-                nei.on('buildSuccess', (arg0) => {
-                    resolve(arg0);
-                });
+                nei.on('buildSuccess', v => resolve(v));
             });
         }
     };

@@ -1,4 +1,4 @@
-import {util, fileUtil, DispatherTypes} from '../../helper';
+import {util, fileUtil} from '../../helper';
 import path from 'path';
 import fs from 'fs';
 import os from 'os';
@@ -19,7 +19,7 @@ export function writeNEIConfig({NEIRoute}, formatR) {
 
 export function updateLocalFiles(routes = [], getFilePath) {
     return Promise.all(routes.map((route) =>
-        new Promise((resolve, reject) => {
+        new Promise((resolve) => {
             /**
              * 本地路径（非nei）
              */
@@ -72,7 +72,7 @@ export function formatRoutes(rules) {
 }
 
 
-export function initData({key, update = false}) {
+export function init({key, update = false}) {
     const basedir = path.resolve(os.homedir(), 'localMock', key);
     const NEIRoute = path.resolve(basedir, 'nei.route.js');
     const [serverConfigFile] = globule.find(path.resolve(basedir, 'nei**/server.config.js'));
