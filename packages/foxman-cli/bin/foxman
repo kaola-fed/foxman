@@ -1,0 +1,96 @@
+#!/usr/bin/env node
+const yargs = require('yargs');
+const path = require('path');
+const updateNotifier = require('update-notifier');
+const foxman = require('@foxman/core');
+const validate = require('./validate');
+const {log, warnLog} = require('@foxman/core/lib/helper/util');
+const checkNodeVersion = require('./check-node-version');
+const checkFoxmanVersion = require('./check-foxman-version');
+const pkg = require('../package.json');
+
+checkNodeVersion();
+
+updateNotifier({ pkg }).notify();
+
+const argv = yargs
+    .usage('Usage: foxman [options]')
+    .alias('C', 'config')
+    .alias('C', 'c')
+    .describe('C', '配置文件路径')
+    .default('C', 'foxman.config.js')
+
+    .alias('P', 'proxy')
+    .describe('P', '使用配置中的代理，填写代理名即可')
+    .default('P', false)
+
+    .alias('p', 'port')
+    .describe('p', '指定临时端口')
+    .default('p', false)
+
+    .alias('U', 'update')
+    .alias('U', 'u')
+    .describe('U', '是否远程nei中拉取接口信息')
+    .default('U', false)
+
+    .alias('V', 'version')
+    .alias('V', 'v')
+    .describe('V', 'Show version')
+    .version(() => `v${pkg.version}`)
+
+    .help('H')
+    .alias('H', 'help')
+    .alias('H', 'h')
+
+    .example('foxman -C ./config.json -P local -U')
+    .argv;
+
+let config;
+const configPath = path.join(process.cwd(), argv.config);
+
+try {
+    config = require(configPath);
+} catch (err) {
+    if (err.code === 'MODULE_NOT_FOUND') {
+        if (~err.toString().indexOf(configPath)) {
+            warnLog('Please add foxman.config.js in current directory.');
+            warnLog('Also you can appoint your special name,');
+            warnLog('use command \'foxman --config yourfoxman.config.js\'.');
+            warnLog('See more in command \'foxman --help\'');
+
+        } else {
+            warnLog('Make sure you have the latest version of node.js and foxman.');
+            warnLog(`If you do, this is most likely a problem with the plugins used in ${path.join(process.cwd(), 'foxman.config.js')},`);
+            warnLog('not with foxman itself');
+            console.log('\n');
+            console.log(err.stack);
+            console.log('\n');
+            warnLog('You can try \'npm install\' or check the foxman.config.js');
+        }
+    } else {
+        warnLog('Maybe be a problem with foxman.config.js, check it or contact us(http://github.com/kaola-fed/foxman/issues)');
+        console.log(err);
+    }
+
+    process.exit(1);
+}
+
+if (argv.port) {
+    config.server.port = parseInt(argv.port);
+}
+if (!config.server.templatePaths)  {
+    config.server.templatePaths = {};
+}
+
+const res = validate(config);
+if (res !== true) {
+    log(res);
+}
+
+checkFoxmanVersion(config.upgrade || {});
+
+foxman(Object.assign(
+    {},
+    config,
+    {argv, configPath}
+));
