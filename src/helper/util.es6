@@ -175,7 +175,7 @@ export function jsonResolver(opt) {
     });
 }
 
-export function initialsLower(str) {
+export function lowerCaseFirstLetter(str) {
     return str.replace(/^\b(\w)(\w*)/, function ($0, $1, $2) {
         return $1.toLowerCase() + $2;
     });
@@ -202,7 +202,7 @@ export default {
     typeOf,
     createSystemId,
     initialsCapitals,
-    initialsLower,
+    lowerCaseFirstLetter,
     jsSpawn,
     jsonPathResolve,
     removeHeadBreak,

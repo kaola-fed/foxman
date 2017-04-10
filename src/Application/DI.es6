@@ -1,8 +1,9 @@
-import {
-    util
-} from '../helper';
+import {lowerCaseFirstLetter} from '../helper/util';
+import { util } from '../helper';
 
 const dependencies = {};
+
+export { register, resolve, dependencies, get };
 
 /**
  * 服务注册
@@ -39,8 +40,6 @@ function hasInjected(dependency) {
     return dependencies.hasOwnProperty(dependency);
 }
 
-export {
-    register,
-    resolve,
-    dependencies
-};
+function get(pluginName) {
+    return dependencies[lowerCaseFirstLetter(pluginName)];
+}

@@ -1,10 +1,31 @@
-import {initialsLower, log, notify, entries, error, isPromise, isGeneratorDone} from '../helper/util';
 import co from 'co';
+import {lowerCaseFirstLetter, log, notify, entries, error, isPromise, isGeneratorDone} from '../helper/util';
 import {init} from './Instance';
-import {register, resolve, dependencies} from './DI';
+import {register, resolve, dependencies, get} from './DI';
 
+export { use, run, get };
 
-function* execute() {
+function use(plugin) {
+    if (!plugin) {
+        return false;
+    }
+
+    if (Array.isArray(plugin)) return plugin.forEach(use);
+
+    init(plugin);
+
+    register(lowerCaseFirstLetter(plugin.name), plugin);
+
+    log(`plugin loaded: ${plugin.name}`);
+}
+
+function run() {
+    co(execute(dependencies))
+        .then(runPlugins(dependencies))
+        .catch(e => console.error(e));
+}
+
+function* execute(dependencies) {
     for (let [, plugin] of entries(dependencies)) {
         if (plugin.init && plugin.enable) {
             resolve(plugin.init, plugin);
@@ -26,35 +47,12 @@ function* execute() {
     }
 }
 
-function runPlugins() {
-    for (let [, plugin] of entries(dependencies)) {
-        if (plugin.runOnSuccess) {
-            plugin.runOnSuccess();
+function runPlugins(dependencies) {
+    return function () {
+        for (let [, plugin] of entries(dependencies)) {
+            if (plugin.runOnSuccess) {
+                plugin.runOnSuccess();
+            }
         }
-    }
-}
-
-export function use(plugin) {
-    if (!plugin) {
-        return false;
-    }
-    if (Array.isArray(plugin)) return plugin.forEach(use);
-
-    init(plugin);
-
-    register(initialsLower(plugin.name), plugin);
-
-    log(`plugin loaded: ${plugin.name}`);
-}
-
-export function run() {
-    co(execute())
-        .then(runPlugins)
-        .catch((e) => {
-            console.error(e);
-        });
-}
-
-export function get(pluginName) {
-    return dependencies[initialsLower(pluginName)];
+    };
 }
