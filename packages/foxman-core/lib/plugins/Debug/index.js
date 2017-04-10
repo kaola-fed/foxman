@@ -1,7 +1,6 @@
 class DebugPlugin {
     constructor(options) {
-        if (!options.debugTool
-            && (undefined !== options.debugTool)) {
+        if (!options.debugTool && undefined !== options.debugTool) {
             this.enable = false;
         }
     }

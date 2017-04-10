@@ -1,5 +1,5 @@
-const {createSystemId} = require( './util' );
-const Events = require( 'events' );
+const { createSystemId } = require('./util');
+const Events = require('events');
 
 const idNext = createSystemId();
 const msg = new Events();
@@ -10,17 +10,17 @@ class TaskLock {
         this.limit = limit;
     }
 
-    push({run}) {
+    push({ run }) {
         const id = idNext();
         const canNext = this.canNext();
-        this.queue.push({run, id});
+        this.queue.push({ run, id });
 
         if (canNext) {
             this.next();
         }
 
         return new Promise((resolve, reject) => {
-            msg.once(`task-${id}`, function ({result, error}) {
+            msg.once(`task-${id}`, function({ result, error }) {
                 if (result !== undefined) {
                     return resolve(result);
                 }
@@ -41,14 +41,15 @@ class TaskLock {
     }
 
     next() {
-        const {run, id} = this.queue[0];
+        const { run, id } = this.queue[0];
         const self = this;
         run()
             .then(result => {
-                msg.emit(`task-${id}`, {result});
+                msg.emit(`task-${id}`, { result });
                 self.shift();
-            }).catch(error => {
-                msg.emit(`task-${id}`, {error});
+            })
+            .catch(error => {
+                msg.emit(`task-${id}`, { error });
                 self.shift();
             });
     }

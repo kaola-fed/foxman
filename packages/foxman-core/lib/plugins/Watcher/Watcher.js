@@ -1,5 +1,5 @@
-const chokidar = require( 'chokidar' );
-const anymatch = require( 'anymatch' );
+const chokidar = require('chokidar');
+const anymatch = require('anymatch');
 
 let watcher;
 class Watcher {
@@ -54,7 +54,7 @@ class Watcher {
         this.handlers[type].push(handler);
     }
 }
-module.exports = function (...args) {
+module.exports = function(...args) {
     if (!watcher) watcher = new Watcher(...args);
     return watcher;
 };

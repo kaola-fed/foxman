@@ -1,4 +1,4 @@
-const Watcher = require( './Watcher' );
+const Watcher = require('./Watcher');
 
 /**
  * 监听插件

@@ -4,10 +4,11 @@ const typeOf = (obj, type) => {
             return typeOf(obj, item);
         });
     }
-    return Object.prototype.toString.call(obj).toLowerCase().slice(8, -1) == type;
+    return Object.prototype.toString.call(obj).toLowerCase().slice(8, -1) ==
+        type;
 };
 
-module.exports = function (config) {
+module.exports = function(config) {
     if (!typeOf(config.server.port, 'number')) {
         return 'config.server.port must be number';
     }

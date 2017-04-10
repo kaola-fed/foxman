@@ -1,4 +1,4 @@
-const { JSONParse, jsonResolver } = require( './util' );
+const { JSONParse, jsonResolver } = require('./util');
 
 function apiHandler({ handler, dataPath }) {
     if (handler) {
@@ -7,17 +7,21 @@ function apiHandler({ handler, dataPath }) {
                 try {
                     res = JSONParse(res);
                 } catch (error) {
-                    return Promise.reject(`${error.stack || error} \n 源数据：\n ${res}`);
+                    return Promise.reject(
+                        `${error.stack || error} \n 源数据：\n ${res}`
+                    );
                 }
             }
-            return {json: res};
+            return { json: res };
         });
     }
 
     if (Array.isArray(dataPath)) {
-        return Promise.all(dataPath.map(url => {
-            return jsonResolver({url});
-        })).then(resps => {
+        return Promise.all(
+            dataPath.map(url => {
+                return jsonResolver({ url });
+            })
+        ).then(resps => {
             return resps.reduce((bef, aft) => {
                 return {
                     json: Object.assign(bef.json, aft.json)
@@ -26,7 +30,7 @@ function apiHandler({ handler, dataPath }) {
         });
     }
 
-    return jsonResolver({url: dataPath});
+    return jsonResolver({ url: dataPath });
 }
 
 module.exports = apiHandler;

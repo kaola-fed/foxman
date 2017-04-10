@@ -1,5 +1,5 @@
-const Render = require( 'fast-ftl' ).default;
-const { values } = require( './util' );
+const Render = require('fast-ftl').default;
+const { values } = require('./util');
 
 class RenderUtil {
     constructor({ viewRoot, templatePaths = {} }) {

@@ -1,17 +1,16 @@
-const path = require( 'path' );
+const path = require('path');
 
 module.exports = function formatStaticOptions(opts = {}) {
     let options = opts;
     if (typeof options === 'string') {
         options = {
-            dir:
-            path.resolve(process.cwd(), options)
+            dir: path.resolve(process.cwd(), options)
         };
     }
 
     const {
         dir,
-        prefix = ('/' + path.parse(options.dir).base),
+        prefix = '/' + path.parse(options.dir).base,
         maxAge = 0,
         gzip = true,
         preload = false,
@@ -20,8 +19,11 @@ module.exports = function formatStaticOptions(opts = {}) {
     } = options;
 
     return {
-        dir, prefix, maxAge,
-        gzip, preload,
+        dir,
+        prefix,
+        maxAge,
+        gzip,
+        preload,
         dynamic,
         filter
     };

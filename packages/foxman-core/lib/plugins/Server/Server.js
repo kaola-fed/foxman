@@ -1,18 +1,18 @@
-const http = require( 'http' );
-const fs = require( 'fs' );
-const http2 = require( 'http2' );
-const path = require( 'path' );
+const http = require('http');
+const fs = require('fs');
+const http2 = require('http2');
+const path = require('path');
 
-const Koa = require( 'koa' );
-const WebSocket = require( 'ws' );
-const bodyParser = require( 'koa-bodyparser' );
+const Koa = require('koa');
+const WebSocket = require('ws');
+const bodyParser = require('koa-bodyparser');
 
-const {util} = require( '../../helper' );
-const dispatcher = require( './middleware/dispatcher' );
-const routerMap = require( './middleware/routermap' );
-const setStaticHandler = require( './setStaticHandler' );
-const {setRender, setView} = require( './setRender' );
-const setHtmlAppender = require( './setHtmlAppender' );
+const { util } = require('../../helper');
+const dispatcher = require('./middleware/dispatcher');
+const routerMap = require('./middleware/routermap');
+const setStaticHandler = require('./setStaticHandler');
+const { setRender, setView } = require('./setRender');
+const setHtmlAppender = require('./setHtmlAppender');
 
 const WebSocketServer = WebSocket.Server;
 
@@ -23,25 +23,30 @@ class Server {
         this.serverOptions = options;
         this.middleware = [];
         this.ifAppendHtmls = [];
-        this.app = Koa({outputErrors: false});
+        this.app = Koa({ outputErrors: false });
 
-        const {Render, templatePaths, viewRoot} = options;
+        const { Render, templatePaths, viewRoot } = options;
         const app = this.app;
 
         this.tplRender = setRender({
-            Render, templatePaths, viewRoot
+            Render,
+            templatePaths,
+            viewRoot
         });
 
-        setView({app});
+        setView({ app });
     }
 
     registerRouterNamespace(name, value = []) {
-        return this.serverOptions.runtimeRouters[name] = value;
+        return (this.serverOptions.runtimeRouters[name] = value);
     }
 
     getRuntimeRouters() {
         const runtimeRouters = this.serverOptions.runtimeRouters;
-        return values(runtimeRouters).reduce((prev, item) => prev.concat(item), []);
+        return values(runtimeRouters).reduce(
+            (prev, item) => prev.concat(item),
+            []
+        );
     }
 
     updateRuntimeRouters(fn) {
@@ -49,8 +54,8 @@ class Server {
     }
 
     delayInit() {
-        const {app, ifAppendHtmls, tplRender} = this;
-        const {ifProxy, statics} = this.serverOptions;
+        const { app, ifAppendHtmls, tplRender } = this;
+        const { ifProxy, statics } = this.serverOptions;
 
         if (!ifProxy) {
             app.use(bodyParser());
@@ -61,11 +66,11 @@ class Server {
 
         this.middleware.forEach(m => app.use(m));
 
-        app.use(dispatcher({tplRender}));
+        app.use(dispatcher({ tplRender }));
 
-        setHtmlAppender({app, ifAppendHtmls});
+        setHtmlAppender({ app, ifAppendHtmls });
 
-        setStaticHandler({statics, app});
+        setStaticHandler({ statics, app });
     }
 
     use(middleware) {
@@ -79,10 +84,14 @@ class Server {
     createServer() {
         this.delayInit();
 
-        const {port = 3000} = this.serverOptions;
+        const { port = 3000 } = this.serverOptions;
         const httpOptions = {
-            key: fs.readFileSync(path.resolve(__dirname, 'crt', 'localhost.key')),
-            cert: fs.readFileSync(path.resolve(__dirname, 'crt', 'localhost.crt')),
+            key: fs.readFileSync(
+                path.resolve(__dirname, 'crt', 'localhost.key')
+            ),
+            cert: fs.readFileSync(
+                path.resolve(__dirname, 'crt', 'localhost.crt')
+            )
         };
         const callback = this.app.callback();
         const tips = `Server build successfully on ${this.https ? 'https' : 'http'}://127.0.0.1:${port}/`;
@@ -105,7 +114,7 @@ class Server {
         });
     }
 
-    buildWebSocket({serverApp}) {
+    buildWebSocket({ serverApp }) {
         const wss = new WebSocketServer({
             server: serverApp
         });

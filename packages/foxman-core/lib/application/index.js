@@ -1,7 +1,7 @@
 const co = require( 'co' );
-const { lowerCaseFirstLetter, log, notify, entries } = require( '../helper/util' );
+const { lowerCaseFirstLetter, log, entries } = require( '../helper/util' );
 const { init } = require( './Instance' );
-const { register, resolve, dependencies, get } = require( './DI' );
+const { register, di, dependencies, get } = require( './DI' );
 
 module.exports = { use, run, get };
 
@@ -26,22 +26,12 @@ function run() {
 }
 
 function* execute(dependencies) {
-    for (let [, plugin] of entries(dependencies)) {
+    for (const [, plugin] of entries(dependencies)) {
         if (plugin.init && plugin.enable) {
-            resolve(plugin.init, plugin);
+            di(plugin.init, plugin);
 
             if (plugin.pendings) {
-                notify({
-                    title: 'Plugin start pending',
-                    msg: `${plugin.name} start pending`
-                });
-
                 yield Promise.all(plugin.pendings);
-
-                notify({
-                    title: 'Plugin end pending',
-                    msg: `${plugin.name} end pending`
-                });
             }
         }
     }
@@ -49,7 +39,7 @@ function* execute(dependencies) {
 
 function runPlugins(dependencies) {
     return function () {
-        for (let [, plugin] of entries(dependencies)) {
+        for (const [, plugin] of entries(dependencies)) {
             if (plugin.runOnSuccess) {
                 plugin.runOnSuccess();
             }

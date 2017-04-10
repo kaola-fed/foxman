@@ -1,5 +1,5 @@
-const fs = require( 'fs' );
-const path = require( 'path' );
+const fs = require('fs');
+const path = require('path');
 
 function getFileByStream(path) {
     return fs.ReadStream(path);
@@ -17,8 +17,8 @@ function getDirInfo(dir) {
 }
 
 function getFileStat(file) {
-    return new Promise(function (resolve, reject) {
-        fs.lstat(file, function (err, stat) {
+    return new Promise(function(resolve, reject) {
+        fs.lstat(file, function(err, stat) {
             if (err) {
                 return reject(err);
             }
@@ -29,7 +29,7 @@ function getFileStat(file) {
 
 function readFile(file) {
     return new Promise((resolve, reject) => {
-        fs.readFile(file, 'utf-8', function (err, data) {
+        fs.readFile(file, 'utf-8', function(err, data) {
             if (err) {
                 return reject(err);
             }
@@ -40,7 +40,7 @@ function readFile(file) {
 
 function writeFile(filename, text) {
     return new Promise((resolve, reject) => {
-        fs.writeFile(filename, text, (err) => {
+        fs.writeFile(filename, text, err => {
             if (err) {
                 return reject(err);
             }
@@ -59,7 +59,7 @@ function writeUnExistsFile(file, text) {
     return new Promise((...args) => {
         const search = () => {
             file = path.resolve(file, '../');
-            fs.stat(file, (err) => {
+            fs.stat(file, err => {
                 if (err) {
                     needCreateStack.push(file);
                     search();
@@ -86,7 +86,7 @@ function delDir(file) {
         } else {
             var children = fs.readdirSync(file);
             if (children && children.length != 0) {
-                children.forEach(function (item) {
+                children.forEach(function(item) {
                     delDir(path.join(file, item));
                 });
             }

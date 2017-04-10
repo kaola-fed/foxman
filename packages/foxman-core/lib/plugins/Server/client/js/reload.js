@@ -1,16 +1,27 @@
+/* eslint-disable */
+
 (function() {
-    var not_support =  document.createElement('div');
+    var not_support = document.createElement('div');
     not_support.style.cssText = 'position:fixed;top:0;left:0;right:0;background:red;color:white;line-height:30px;text-align:center;';
     not_support.innerHTML = '您的浏览器不支持livereload';
     if (!window.WebSocket) {
         document.body.appendChild(not_support);
-        setTimeout(function() {document.body.removeChild(not_support); } , 3000);
+        setTimeout(
+            function() {
+                document.body.removeChild(not_support);
+            },
+            3000
+        );
         return;
     }
 
     function openSocket() {
         try {
-            var socket = new WebSocket((location.protocol === 'https:' ? 'wss:' : 'ws:') + '//' + location.host);
+            var socket = new WebSocket(
+                (location.protocol === 'https:' ? 'wss:' : 'ws:') +
+                    '//' +
+                    location.host
+            );
             bindEventSocket(socket);
         } catch (e) {}
     }
@@ -41,11 +52,19 @@
         for (var i = 0; i < sheets.length; i++) {
             sheet = sheets[i];
 
-            if (sheet.rel == 'stylesheet' && sheet.href.indexOf(filename) !== -1) {
+            if (
+                sheet.rel == 'stylesheet' && sheet.href.indexOf(filename) !== -1
+            ) {
                 if (sheet.href.indexOf('styleVersion') === -1) {
-                    sheet.href += ((sheet.href.indexOf('?') === -1 ? '?' : '&') +  'styleVersion' + '=' + new Date().getTime());
+                    sheet.href += (sheet.href.indexOf('?') === -1 ? '?' : '&') +
+                        'styleVersion' +
+                        '=' +
+                        new Date().getTime();
                 } else {
-                    sheet.href = sheet.href.replace(/styleVersion=\d+/, 'styleVersion=' + new Date().getTime());
+                    sheet.href = sheet.href.replace(
+                        /styleVersion=\d+/,
+                        'styleVersion=' + new Date().getTime()
+                    );
                 }
                 return;
             }

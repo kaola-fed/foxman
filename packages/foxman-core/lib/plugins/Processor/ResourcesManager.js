@@ -3,10 +3,12 @@ class ResourcesManager {
         this.map = {};
     }
 
-    set({
-        reqPath,
-        processed
-    }) {
+    set(
+        {
+            reqPath,
+            processed
+        }
+    ) {
         this.map[reqPath] = processed;
     }
 

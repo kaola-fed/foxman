@@ -1,7 +1,7 @@
 'use strict';
-const subMain = require( './submain' );
-const Application = require( 'nei/lib/util/args' );
-const { fileUtil } = require( '../../helper' );
+const subMain = require('./submain');
+const Application = require('nei/lib/util/args');
+const { fileUtil } = require('../../helper');
 
 const options = {
     package: require('nei/package.json'),
@@ -17,7 +17,7 @@ const options = {
             this.show(action);
         } else {
             subMain.build(this, action, config);
-            subMain.on('buildSuccess', (arg0) => {
+            subMain.on('buildSuccess', arg0 => {
                 this.emit('buildSuccess', arg0);
             });
         }
@@ -27,7 +27,7 @@ const options = {
         var config = event.options || {};
         config = this.format(action, config);
         subMain.update(this, action, config);
-        subMain.on('buildSuccess', (arg0) => {
+        subMain.on('buildSuccess', arg0 => {
             this.emit('buildSuccess', arg0);
         });
     }
@@ -35,25 +35,25 @@ const options = {
 
 const nei = new Application(options);
 const neiTools = {
-        build(opt) {
-            nei.exec(['build -key', opt.key, '-basedir', opt.basedir]);
-        },
-        update(opt) {
-            nei.exec(['update -basedir', opt.basedir]);
-        },
-        run(opt) {
-            try {
-                fileUtil.delDir(opt.basedir);
-            } catch (e) {
-                // console.log(e);
-            }
-
-            this.build(opt);
-
-            return new Promise(resolve => {
-                nei.on('buildSuccess', v => resolve(v));
-            });
+    build(opt) {
+        nei.exec(['build -key', opt.key, '-basedir', opt.basedir]);
+    },
+    update(opt) {
+        nei.exec(['update -basedir', opt.basedir]);
+    },
+    run(opt) {
+        try {
+            fileUtil.delDir(opt.basedir);
+        } catch (e) {
+            // console.log(e);
         }
-    };
+
+        this.build(opt);
+
+        return new Promise(resolve => {
+            nei.on('buildSuccess', v => resolve(v));
+        });
+    }
+};
 
 module.exports = neiTools;

@@ -1,15 +1,22 @@
 class ReloaderService {
-    constructor({
-        watcher, reloader
-    }) {
+    constructor(
+        {
+            watcher,
+            reloader
+        }
+    ) {
         this.map = {};
         this.watcher = watcher;
         this.reloader = reloader;
     }
 
-    register({
-        reqPath, dependencies, resourcesManager
-    }) {
+    register(
+        {
+            reqPath,
+            dependencies,
+            resourcesManager
+        }
+    ) {
         const oldThings = this.map[reqPath] || [];
         let diff = findNew({
             oldThings: oldThings,
@@ -29,28 +36,41 @@ class ReloaderService {
     }
 }
 
-function findNew({
-    oldThings = [], newThings = []
-}) {
-    const oldThingMap = oldThings.reduce(function (prev, item) {
-        prev[item] = null;
-        return prev;
-    }, {});
+function findNew(
+    {
+        oldThings = [],
+        newThings = []
+    }
+) {
+    const oldThingMap = oldThings.reduce(
+        function(prev, item) {
+            prev[item] = null;
+            return prev;
+        },
+        {}
+    );
 
-    return deDuplication(newThings.filter(item => {
-        return oldThingMap[item] === undefined;
-    }));
+    return deDuplication(
+        newThings.filter(item => {
+            return oldThingMap[item] === undefined;
+        })
+    );
 }
 
 function deDuplication(list = []) {
-    return Object.keys(list.reduce(function (prev, item) {
-        prev[item] = null;
-        return prev;
-    }, {}));
+    return Object.keys(
+        list.reduce(
+            function(prev, item) {
+                prev[item] = null;
+                return prev;
+            },
+            {}
+        )
+    );
 }
 
 let instance;
-module.exports = function (options) {
+module.exports = function(options) {
     if (!instance) {
         instance = new ReloaderService(options);
     }

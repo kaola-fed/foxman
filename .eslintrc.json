@@ -12,7 +12,7 @@
         "no-console": "off",
         "no-unused-vars": "error",
         "linebreak-style": [
-            "error",
+            "warn",
             "unix"
         ],
         "quotes": [

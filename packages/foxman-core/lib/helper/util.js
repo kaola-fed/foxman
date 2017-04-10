@@ -1,25 +1,25 @@
 /**
  * Created by hzxujunyu on 2016/8/15.
  */
-const child_process = require( 'child_process' );
-const crypto = require( 'crypto' );
-const {readFile, writeFileSync} = require( './fileutil' );
-const Logger = require( 'chalklog' );
-const notifier = require( 'node-notifier' );
+const child_process = require('child_process');
+const crypto = require('crypto');
+const { readFile, writeFileSync } = require('./fileutil');
+const Logger = require('chalklog');
+const notifier = require('node-notifier');
 
 const clog = new Logger('foxman');
 
 function notify({ title, msg }) {
     notifier.notify({
-        'title': title,
-        'message': msg,
-        'sound': true,
-        'wait': true
+        title: title,
+        message: msg,
+        sound: true,
+        wait: true
     });
 }
 
 function isPromise(obj) {
-    return (obj && obj.value && obj.value.then);
+    return obj && obj.value && obj.value.then;
 }
 
 function isGeneratorDone(obj) {
@@ -42,7 +42,7 @@ function error(msg) {
     const tips = [
         'Make sure you have the latest version of node.js and foxman.',
         'If you do, this is most likely a problem with the foxman.',
-        'You could contact us(http://github.com/kaola-fed/foxman/issues)',
+        'You could contact us(http://github.com/kaola-fed/foxman/issues)'
     ];
     tips.forEach(errorLog);
 
@@ -64,7 +64,8 @@ function warnLog(msg) {
     clog.yellow(initialsCapitals(msg));
 }
 
-function createSystemId() { // uid
+function createSystemId() {
+    // uid
     let currentId = 0;
     return function getNext() {
         return ++currentId;
@@ -72,14 +73,14 @@ function createSystemId() { // uid
 }
 
 function initialsCapitals(str) {
-    return str.replace(/^\b(\w)(\w*)/, function ($0, $1, $2) {
+    return str.replace(/^\b(\w)(\w*)/, function($0, $1, $2) {
         return $1.toUpperCase() + $2;
     });
 }
 
 function jsSpawn(args) {
     let jsSpawn = child_process.spawn('node', args);
-    jsSpawn.stderr.on('data', (data) => {
+    jsSpawn.stderr.on('data', data => {
         clog.red(`err: ${data}`);
     });
     return {
@@ -135,7 +136,7 @@ function sha1(buf) {
 
 function matchArgs(func) {
     const argList = func.toString().match(/^.*?\s*[^\(]*\(\s*([^\)]*)\)/m);
-    return (argList && argList[1]) ? (argList[1].replace(/ /g, '').split(',')) : [];
+    return argList && argList[1] ? argList[1].replace(/ /g, '').split(',') : [];
 }
 function* entries(obj) {
     for (let key of Object.keys(obj)) {
@@ -147,32 +148,36 @@ function compressHtml(htmlstr) {
     if (typeof htmlstr !== 'string') {
         return htmlstr;
     }
-    return htmlstr.replace(/[\r\n]|\s+(?=[<{])/g, '').replace(/[}>]\s+/g, function (value) {
-        return value.substr(0, 1);
-    });
+    return htmlstr
+        .replace(/[\r\n]|\s+(?=[<{])/g, '')
+        .replace(/[}>]\s+/g, function(value) {
+            return value.substr(0, 1);
+        });
 }
 
 function jsonResolver(opt) {
     return new Promise(resolve => {
-        let url = (typeof opt == 'string') ? opt : opt.url;
+        let url = typeof opt == 'string' ? opt : opt.url;
         let json;
-        readFile(url).then(data => {
-            try {
-                json = JSONParse(data);
-            } catch (e) {
-                warnLog('Parsed failed:');
-                warnLog(e);
-                json = {};
-            }
-            resolve({json});
-        }).catch(() => {
-            resolve({json: {}});
-        });
+        readFile(url)
+            .then(data => {
+                try {
+                    json = JSONParse(data);
+                } catch (e) {
+                    warnLog('Parsed failed:');
+                    warnLog(e);
+                    json = {};
+                }
+                resolve({ json });
+            })
+            .catch(() => {
+                resolve({ json: {} });
+            });
     });
 }
 
 function lowerCaseFirstLetter(str) {
-    return str.replace(/^\b(\w)(\w*)/, function ($0, $1, $2) {
+    return str.replace(/^\b(\w)(\w*)/, function($0, $1, $2) {
         return $1.toLowerCase() + $2;
     });
 }

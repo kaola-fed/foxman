@@ -1,6 +1,6 @@
-const util = require( './util' );
-const fileUtil = require( './fileutil' );
-const RenderUtil = require( './render' );
+const util = require('./util');
+const fileUtil = require('./fileutil');
+const RenderUtil = require('./render');
 
 const DispatherTypes = {
     DIR: 'dir',

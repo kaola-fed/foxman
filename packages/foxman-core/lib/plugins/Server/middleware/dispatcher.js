@@ -1,6 +1,6 @@
-const path = require( 'path' );
-const {fileUtil, util, DispatherTypes} = require( '../../../helper' );
-const apiHandler = require( '../../../helper/apiHandler' );
+const path = require('path');
+const { fileUtil, util, DispatherTypes } = require('../../../helper');
+const apiHandler = require('../../../helper/apiHandler');
 
 /**
  * default dispatcher
@@ -10,28 +10,37 @@ const apiHandler = require( '../../../helper/apiHandler' );
  * @return {[type]}         [description]
  */
 function* dirDispatcher({ dispatcher, next }) {
-    const sortFiles = (list) => {
+    const sortFiles = list => {
         return list.sort((a, b) => {
             return a.name.charAt(0).localeCompare(b.name.charAt(0));
         });
     };
     const viewPath = dispatcher.pagePath;
     const files = yield fileUtil.getDirInfo(viewPath);
-    const promises = files.map((file) => fileUtil.getFileStat(path.resolve(viewPath, file)));
+    const promises = files.map(file =>
+        fileUtil.getFileStat(path.resolve(viewPath, file)));
     let result = (yield Promise.all(promises)).map((item, idx) => {
         return Object.assign(item, {
             name: files[idx],
             isFile: item.isFile(),
-            requestPath: [this.request.path, files[idx], item.isFile() ? '' : '/'].join('')
+            requestPath: [
+                this.request.path,
+                files[idx],
+                item.isFile() ? '' : '/'
+            ].join('')
         });
     });
 
-    const fileList = sortFiles(result.filter((item) => {
-        return item.isFile;
-    }));
-    const dirList = sortFiles(result.filter((item) => {
-        return !item.isFile;
-    }));
+    const fileList = sortFiles(
+        result.filter(item => {
+            return item.isFile;
+        })
+    );
+    const dirList = sortFiles(
+        result.filter(item => {
+            return !item.isFile;
+        })
+    );
 
     yield this.render('cataLog', {
         title: '查看列表',
@@ -47,9 +56,13 @@ function* dirDispatcher({ dispatcher, next }) {
  * @param next
  * @returns {*}
  */
-function* syncDispatcher({
-    dispatcher, tplRender, next
-}) {
+function* syncDispatcher(
+    {
+        dispatcher,
+        tplRender,
+        next
+    }
+) {
     const filePath = dispatcher.pagePath;
     let json;
 
@@ -59,7 +72,8 @@ function* syncDispatcher({
         this.type = 500;
 
         yield this.render('e', {
-            title: '出错了', e: {
+            title: '出错了',
+            e: {
                 code: 500,
                 msg: msg.stack || msg
             }
@@ -67,7 +81,6 @@ function* syncDispatcher({
 
         return yield next;
     }
-
 
     try {
         let result = yield tplRender.parse(filePath, json);
@@ -79,7 +92,8 @@ function* syncDispatcher({
             msg: msg.stack || msg
         });
         yield this.render('e', {
-            title: '出错了', e: {
+            title: '出错了',
+            e: {
                 code: 500,
                 msg: msg.stack || msg
             }
@@ -109,7 +123,8 @@ function* asyncDispather({ dispatcher, next }) {
         this.type = 500;
 
         yield this.render('e', {
-            title: '出错了', e: {
+            title: '出错了',
+            e: {
                 code: 500,
                 msg: msg.stack || msg
             }
@@ -122,9 +137,9 @@ function* asyncDispather({ dispatcher, next }) {
     return yield next;
 }
 
-module.exports = ({tplRender}) => {
+module.exports = ({ tplRender }) => {
     return function*(next) {
-        const {dispatcher = false} = this;
+        const { dispatcher = false } = this;
 
         if (!dispatcher) {
             return yield next;
@@ -134,7 +149,7 @@ module.exports = ({tplRender}) => {
          * 分配给不同的处理器
          * @type {Object}
          */
-        let args = {tplRender, next};
+        let args = { tplRender, next };
 
         let dispatcherMap = {
             [DispatherTypes.DIR]: dirDispatcher,
@@ -145,7 +160,10 @@ module.exports = ({tplRender}) => {
         let handler = dispatcherMap[dispatcher.type];
 
         if (handler) {
-            return yield handler.call(this, Object.assign({dispatcher}, args));
+            return yield handler.call(
+                this,
+                Object.assign({ dispatcher }, args)
+            );
         }
 
         yield next;

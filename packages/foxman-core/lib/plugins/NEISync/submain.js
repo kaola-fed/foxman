@@ -1,11 +1,11 @@
-const main = require( 'nei/main' );
-const Builder = require( 'nei/lib/nei/builder' );
-const EventEmitter = require( 'events' );
-const _fs = require( 'nei/lib/util/file' );
-const fs = require( 'fs' );
-const path = require( 'path' );
-const _util = require( 'nei/lib/util/util' );
-const { logger } = require( 'nei/lib/util/logger' );
+const main = require('nei/main');
+const Builder = require('nei/lib/nei/builder');
+const EventEmitter = require('events');
+const _fs = require('nei/lib/util/file');
+const fs = require('fs');
+const path = require('path');
+const _util = require('nei/lib/util/util');
+const { logger } = require('nei/lib/util/logger');
 
 logger.setLevel('ERROR');
 
@@ -17,7 +17,7 @@ Object.assign(subMain, EventEmitter.prototype);
  * @param action
  * @param args
  */
-subMain.build = function (arg, action, args) {
+subMain.build = function(arg, action, args) {
     this.args = args;
     this.config = {
         action: action
@@ -28,13 +28,16 @@ subMain.build = function (arg, action, args) {
      */
     this.config.outputRoot = args.basedir;
     this.checkConfig();
-    let loadedHandler = (ds) => {
+    let loadedHandler = ds => {
         this.config.pid = ds.project.id;
         this.ds = ds;
         this.fillArgs();
         // 合并完参数后, 需要重新 format 一下, 并且此时需要取默认值
         this.args = arg.format(this.config.action, this.args, true);
-        this.config.neiConfigRoot = path.resolve(this.config.outputRoot, `nei.${this.config.pid}.${this.args.key}`) + '/';
+        this.config.neiConfigRoot = path.resolve(
+            this.config.outputRoot,
+            `nei.${this.config.pid}.${this.args.key}`
+        ) + '/';
         new Builder({
             config: this.config,
             args: this.args,
@@ -50,11 +53,14 @@ subMain.build = function (arg, action, args) {
  * @param  {string}  action - 操作命令
  * @param  {object}  args - 命令行参数对象
  */
-subMain.update = function (arg, action, args) {
+subMain.update = function(arg, action, args) {
     let dir = args.basedir;
     let projects = this.findProjects(args);
     let buildProject = (neiProjectDir, exitIfNotExist) => {
-        let config = _util.file2json(`${neiProjectDir}/nei.json`, exitIfNotExist);
+        let config = _util.file2json(
+            `${neiProjectDir}/nei.json`,
+            exitIfNotExist
+        );
         let mergedArgs = Object.assign({}, config.args, args);
         this.build(arg, action, mergedArgs);
     };
@@ -71,7 +77,9 @@ subMain.update = function (arg, action, args) {
     } else {
         if (projects.length > 1) {
             if (!args.all) {
-                logger.error('存在多个 nei 项目, 请通过 key 参数指定需要更新的项目, 或者使用 --all 参数更新所有项目');
+                logger.error(
+                    '存在多个 nei 项目, 请通过 key 参数指定需要更新的项目, 或者使用 --all 参数更新所有项目'
+                );
                 return process.exit(1);
             } else {
                 projects.forEach(buildProject);
@@ -82,7 +90,7 @@ subMain.update = function (arg, action, args) {
     }
 };
 
-subMain.findProjects = function (args) {
+subMain.findProjects = function(args) {
     let dir = args.basedir;
     if (!_fs.exist(dir)) {
         // 目录不存在, 退出程序
@@ -91,7 +99,7 @@ subMain.findProjects = function (args) {
     }
     let files = fs.readdirSync(dir);
     let projects = [];
-    files.forEach((file) => {
+    files.forEach(file => {
         if (args.key) {
             if (file.startsWith('nei') && file.endsWith(args.key)) {
                 projects.push(`${dir}/${file}`);

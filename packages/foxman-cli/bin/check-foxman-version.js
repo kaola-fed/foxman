@@ -1,13 +1,13 @@
-module.exports = function (upgrade) {
-    const {checkVersion} = require('@foxman/core/lib/helper/checkVersion');
+module.exports = function(upgrade) {
+    const { checkVersion } = require('@foxman/core/lib/helper/checkVersion');
     const pkg = require('../package.json');
 
-    if ((upgrade !== undefined)
-        && (upgrade.version !== undefined)) {
-        let notify = [`Expect foxman version to be higher than v${upgrade.version} in current project!`];
+    if (upgrade !== undefined && upgrade.version !== undefined) {
+        let notify = [
+            `Expect foxman version to be higher than v${upgrade.version} in current project!`
+        ];
 
-        if (upgrade.notify
-            && upgrade.notify.length > 0) {
+        if (upgrade.notify && upgrade.notify.length > 0) {
             notify = upgrade.notify;
         }
 

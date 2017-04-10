@@ -1,5 +1,5 @@
-const { errorLog } = require( './util' );
-const { lt } = require( 'semver' );
+const { errorLog } = require('./util');
+const { lt } = require('semver');
 
 exports.checkVersion = checkVersion;
 

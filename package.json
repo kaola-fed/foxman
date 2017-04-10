@@ -3,8 +3,9 @@
   "private": true,
   "scripts": {
     "boot": "lerna bootstrap",
-    "lint": "eslint packages",
-    "test": "npm run boot && lerna run test",
+    "lint": "eslint packages --quiet",
+    "lint-fix": "eslint packages/**/*.js --fix",
+    "test": "npm run boot && npm run lint && lerna run test",
     "init-contributors": "all-contributors init",
     "add-contributor": "all-contributors add",
     "generate-contributors": "all-contributors generate"

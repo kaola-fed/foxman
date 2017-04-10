@@ -1,7 +1,7 @@
-const Server = require( './Server' );
-const path = require( 'path' );
-const {RenderUtil} = require( '../../helper' );
-const formatStaticOptions = require( './utils/formatStaticOptions' );
+const Server = require('./Server');
+const path = require('path');
+const { RenderUtil } = require('../../helper');
+const formatStaticOptions = require('./utils/formatStaticOptions');
 
 class ServerPlugin {
     constructor(opts = {}) {
@@ -23,7 +23,7 @@ class ServerPlugin {
         options.asyncDataMatch = options.asyncDataMatch ||
             (url => path.join(options.asyncData, url));
 
-        options.divideMethod = Boolean( options.divideMethod );
+        options.divideMethod = Boolean(options.divideMethod);
 
         options.extension = options.extension
             ? String(options.extension)
@@ -39,9 +39,14 @@ class ServerPlugin {
          * 需要 proxyPlugin 来帮助确认是否代理，不代理则开启 bodyParser
          * @type {Server}
          */
-        this.server = new Server(Object.assign({
-            ifProxy: proxyPlugin.enable
-        }, this.options));
+        this.server = new Server(
+            Object.assign(
+                {
+                    ifProxy: proxyPlugin.enable
+                },
+                this.options
+            )
+        );
     }
 
     runOnSuccess() {
@@ -49,12 +54,12 @@ class ServerPlugin {
     }
 }
 
-function ensureArray( target ) {
-    if ( Array.isArray( target ) ) {
+function ensureArray(target) {
+    if (Array.isArray(target)) {
         return target;
     }
 
-    return [ target ];
+    return [target];
 }
 
 module.exports = ServerPlugin;
