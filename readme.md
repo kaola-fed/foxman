@@ -1,5 +1,7 @@
 # Foxman
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/kaola-fed/foxman.svg)](https://greenkeeper.io/)
+
 [][nodei-url]
 [![NPM version][npm-image]][npm-url]
 [![download][downloads-image]][downloads-url]
