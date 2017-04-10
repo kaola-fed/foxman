@@ -29,15 +29,12 @@ function inject(args) {
     return args.map(arg => find(arg));
 }
 
-function find(arg) {
-    if (!hasInjected(arg)) {
-        util.error(`Plugin ${arg} is not loaded!`);
+function find(name) {
+    const injected = dependencies.hasOwnProperty(name);
+    if (!injected) {
+        util.error(`Plugin ${name} is not loaded!`);
     }
-    return dependencies[arg];
-}
-
-function hasInjected(dependency) {
-    return dependencies.hasOwnProperty(dependency);
+    return dependencies[name];
 }
 
 function get(pluginName) {
