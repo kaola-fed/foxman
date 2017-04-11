@@ -5,7 +5,7 @@
  * tplPath
  * dataPath(sync才有)
  */
-const { util, DispatherTypes } = require('../../../helper');
+const { util, DispatherTypes } = require('@foxman/helpers');
 const path = require('path');
 const pathToRegexp = require('path-to-regexp');
 

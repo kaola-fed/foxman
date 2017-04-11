@@ -1,6 +1,3 @@
-/**
- * Created by hzxujunyu on 2016/8/15.
- */
 const child_process = require('child_process');
 const crypto = require('crypto');
 const { readFile, writeFileSync } = require('./fileutil');

@@ -1,4 +1,4 @@
-const util = require('../lib/helper').util;
+const util = require('../lib').util;
 
 test('createSystemId', ()=>{
   const f = util.createSystemId();
