@@ -1,4 +1,4 @@
-const { util, fileUtil } = require('@foxman/helpers');
+const {util, fileUtil} = require('@foxman/helpers');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
@@ -21,10 +21,10 @@ function getMockConfig(config) {
     return require(neiConfigRoot);
 }
 
-function writeNEIConfig({ NEIRoute }, formatR) {
+function writeNEIConfig({NEIRoute}, formatR) {
     fileUtil.writeFile(
         NEIRoute,
-        `module.exports = ${_.inspect(formatR, { maxArrayLength: null })}`,
+        `module.exports = ${_.inspect(formatR, {maxArrayLength: null})}`,
         () => {},
         e => {
             util.error(e);
@@ -67,13 +67,13 @@ function formatRoutes(rules) {
     function getRouteFileInfo(rule) {
         return isSync(rule)
             ? {
-                  filePath: rule.list[0].path,
-                  id: rule.list[0].id
-              }
+                filePath: rule.list[0].path,
+                id: rule.list[0].id
+            }
             : {
-                  filePath: rule.path,
-                  id: rule.id
-              };
+                filePath: rule.path,
+                id: rule.id
+            };
     }
 
     function getRouteURLInfo(ruleName, rule) {
@@ -95,12 +95,12 @@ function formatRoutes(rules) {
     });
 }
 
-function init({ key, update = false }) {
+function init({key, update = false}) {
     const basedir = path.resolve(os.homedir(), 'localMock', key);
     const NEIRoute = path.resolve(basedir, 'nei.route.js');
     const [serverConfigFile] = globule.find(
         path.resolve(basedir, 'nei**/server.config.js')
     );
 
-    return { key, update, basedir, NEIRoute, serverConfigFile };
+    return {key, update, basedir, NEIRoute, serverConfigFile};
 }

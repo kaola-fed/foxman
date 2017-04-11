@@ -5,4 +5,4 @@ const Watcher = require('./Watcher');
 const Debug = require('./Debug');
 const Processor = require('./Processor');
 
-module.exports = { Proxy, Processor, Reloader, Server, Watcher, Debug };
+module.exports = {Proxy, Processor, Reloader, Server, Watcher, Debug};

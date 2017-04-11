@@ -1,12 +1,12 @@
-const { use, run } = require('./application');
+const {use, run} = require('./application');
 const {
-    Proxy,
     Processor,
     Reloader,
     Server,
     Watcher,
     Debug
 } = require('./plugins');
+const Proxy = require('@foxman/plugin-proxy');
 
 module.exports = config => {
     // Watcher Plugin

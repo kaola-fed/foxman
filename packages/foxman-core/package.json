@@ -33,11 +33,11 @@
   "homepage": "https://github.com/kaola-fed/foxman#readme",
   "dependencies": {
     "@foxman/helpers": "^0.1.0",
+    "@foxman/plugin-proxy": "^0.1.0",
     "anymatch": "^1.3.0",
     "chokidar": "^1.6.0",
     "co": "^4.6.0",
     "globule": "^1.0.0",
-    "http-proxy": "^1.15.2",
     "http2": "^3.3.6",
     "koa": "^1.4.0",
     "koa-bodyparser": "^2.5.0",

@@ -1,6 +1,6 @@
 const EventEmitter = require('events');
 const path = require('path');
-const { values } = require('@foxman/helpers/lib/util');
+const {values} = require('@foxman/helpers/lib/util');
 
 class Reloader extends EventEmitter {
     constructor(options) {
@@ -16,7 +16,7 @@ class Reloader extends EventEmitter {
     }
 
     bindChange() {
-        const { server, watcher } = this;
+        const {server, watcher} = this;
         const {
             extension,
             viewRoot,
@@ -25,7 +25,7 @@ class Reloader extends EventEmitter {
             statics
         } = server.serverOptions;
 
-        const reduceTemplateDir = ({ templatePath, extension }) => {
+        const reduceTemplateDir = ({templatePath, extension}) => {
             return path.join(templatePath, '**', '*.' + extension);
         };
 

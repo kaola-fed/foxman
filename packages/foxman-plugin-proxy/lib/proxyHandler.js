@@ -1,6 +1,6 @@
 const zlib = require('zlib');
 const url = require('url');
-const { ServerResponse } = require('http');
+const {ServerResponse} = require('http');
 
 module.exports = function handler(
     {
@@ -10,7 +10,7 @@ module.exports = function handler(
 ) {
     const target = url.parse(service(this.request.url.replace(/^(\/)/, '')));
     const res = new ServerResponse(
-        Object.assign({}, this.req, { url: target.path })
+        Object.assign({}, this.req, {url: target.path})
     );
     const body = [];
     // const write = res.write.bind(res);
@@ -55,16 +55,16 @@ function resolveRes(
     }
 
     switch (headers['content-encoding']) {
-        case 'gzip':
-            return zlib.gunzip(buffer, function(err, decoded) {
-                resolveRes(decoded);
-            });
-        case 'deflate':
-            return zlib.inflate(buffer, function(err, decoded) {
-                resolveRes(decoded);
-            });
-        default:
-            resolveRes(buffer);
+    case 'gzip':
+        return zlib.gunzip(buffer, function(err, decoded) {
+            resolveRes(decoded);
+        });
+    case 'deflate':
+        return zlib.inflate(buffer, function(err, decoded) {
+            resolveRes(decoded);
+        });
+    default:
+        resolveRes(buffer);
     }
 }
 

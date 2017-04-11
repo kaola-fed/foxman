@@ -20,4 +20,5 @@ class DebugPlugin {
         return '<script src="/__FOXMAN__CLIENT__/js/vconsole.min.js"></script>';
     }
 }
+
 module.exports = DebugPlugin;
