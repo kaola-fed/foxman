@@ -11,6 +11,9 @@
   <a href="https://travis-ci.org/kaola-fed/foxman">
     <img src="https://img.shields.io/travis/kaola-fed/foxman.svg?style=flat-square" alt="build">
   </a>
+  <a href="https://codecov.io/gh/kaola-fed/foxman">
+    <img src="https://img.shields.io/codecov/c/github/kaola-fed/foxman.svg?style=flat-square" alt="build">
+  </a>
   <a href="https://www.npmjs.com/package/foxman">
     <img src="https://img.shields.io/npm/dm/foxman.svg?style=flat-square" alt="download">
   </a>

@@ -5,7 +5,7 @@
     "boot": "lerna bootstrap",
     "lint": "eslint packages --quiet",
     "lint-fix": "eslint packages/**/*.js --fix",
-    "test": "npm run boot && npm run lint && lerna run test",
+    "test": "npm run boot && npm run lint && npm run jest",
     "jest": "jest --no-cache",
     "init-contributors": "all-contributors init",
     "add-contributor": "all-contributors add",
