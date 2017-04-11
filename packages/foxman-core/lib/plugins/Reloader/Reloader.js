@@ -1,6 +1,6 @@
 const EventEmitter = require('events');
 const path = require('path');
-const { values } = require('../../helper/util');
+const { values } = require('@foxman/helpers/lib/util');
 
 class Reloader extends EventEmitter {
     constructor(options) {

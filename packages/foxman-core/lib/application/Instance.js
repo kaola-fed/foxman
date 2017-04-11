@@ -1,7 +1,7 @@
 /**
  * Created by hzxujunyu on 2016/9/19.
  */
-const { util: _ } = require('../helper');
+const { util: _ } = require('@foxman/helpers');
 const pid = _.createSystemId();
 
 module.exports = { init };

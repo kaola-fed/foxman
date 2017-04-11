@@ -1,6 +1,6 @@
 const Server = require('./Server');
 const path = require('path');
-const { Renderer } = require('../../helper');
+const { Renderer } = require('@foxman/helpers');
 const formatStaticOptions = require('./utils/formatStaticOptions');
 
 class ServerPlugin {

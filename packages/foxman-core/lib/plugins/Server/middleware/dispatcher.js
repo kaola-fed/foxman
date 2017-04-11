@@ -1,6 +1,6 @@
 const path = require('path');
-const { fileUtil, util, DispatherTypes } = require('../../../helper');
-const apiHandler = require('../../../helper/apiHandler');
+const { fileUtil, util, DispatherTypes } = require('@foxman/helpers');
+const apiHandler = require('@foxman/helpers/lib/apiHandler');
 
 /**
  * default dispatcher

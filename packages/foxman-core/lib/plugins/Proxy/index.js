@@ -1,4 +1,4 @@
-const { util, DispatherTypes } = require('../../helper');
+const { util, DispatherTypes } = require('@foxman/helpers');
 const httpProxy = require('http-proxy');
 const proxyHandler = require('./proxyHandler');
 

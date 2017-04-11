@@ -1,5 +1,5 @@
 var path = require('path');
-var Renderer = require('../lib/helper').Renderer;
+var Renderer = require('../lib').Renderer;
 
 var viewDir = 'fixtures/freemarker/view/';
 var viewRoot = path.resolve(__dirname, viewDir);

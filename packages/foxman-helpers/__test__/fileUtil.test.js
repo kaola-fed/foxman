@@ -1,5 +1,5 @@
 var path = require('path');
-var fileUtil = require('../lib/helper').fileUtil;
+var fileUtil = require('../lib').fileUtil;
 
 test('writeUnExistsFile', function(done) {
     fileUtil.writeUnExistsFile(path.resolve(__dirname, 'foo/bar.txt'),'Foo Bar').then(function (info) {

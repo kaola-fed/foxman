@@ -1,5 +1,5 @@
 const path = require('path');
-const { util, DispatherTypes } = require('../../helper');
+const { util, DispatherTypes } = require('@foxman/helpers');
 const {
     getMockConfig,
     writeNEIConfig,

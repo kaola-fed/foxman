@@ -7,7 +7,7 @@ const Koa = require('koa');
 const WebSocket = require('ws');
 const bodyParser = require('koa-bodyparser');
 
-const { util } = require('../../helper');
+const { util } = require('@foxman/helpers');
 const dispatcher = require('./middleware/dispatcher');
 const routerMap = require('./middleware/routermap');
 const setStaticHandler = require('./setStaticHandler');

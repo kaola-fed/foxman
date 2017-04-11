@@ -42,6 +42,9 @@
   "devDependencies": {
   },
   "dependencies": {
-    "@foxman/core": "^0.1.0"
+    "@foxman/core": "^0.1.0",
+    "@foxman/helpers": "^0.1.0",
+    "update-notifier": "^2.1.0",
+    "yargs": "^7.0.2"
   }
 }

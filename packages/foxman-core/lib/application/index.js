@@ -1,5 +1,5 @@
 const co = require( 'co' );
-const { lowerCaseFirstLetter, log, entries } = require( '../helper/util' );
+const { lowerCaseFirstLetter, log, entries } = require( '@foxman/helpers/lib/util' );
 const { init } = require( './Instance' );
 const { register, di, dependencies, get } = require( './DI' );
 

@@ -1,4 +1,4 @@
-const { util, fileUtil } = require('../../helper');
+const { util, fileUtil } = require('@foxman/helpers');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');

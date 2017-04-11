@@ -1,5 +1,5 @@
 module.exports = function(upgrade) {
-    const { checkVersion } = require('@foxman/core/lib/helper/checkVersion');
+    const { checkVersion } = require('@foxman/helpers/lib/checkVersion');
     const pkg = require('../package.json');
 
     if (upgrade !== undefined && upgrade.version !== undefined) {

@@ -1,5 +1,5 @@
-const { lowerCaseFirstLetter } = require('../helper/util');
-const { util } = require('../helper');
+const { lowerCaseFirstLetter } = require('@foxman/helpers/lib/util');
+const { util } = require('@foxman/helpers');
 
 const dependencies = {};
 
