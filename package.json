@@ -6,13 +6,27 @@
     "lint": "eslint packages --quiet",
     "lint-fix": "eslint packages/**/*.js --fix",
     "test": "npm run boot && npm run lint && lerna run test",
+    "jest": "jest --no-cache",
     "init-contributors": "all-contributors init",
     "add-contributor": "all-contributors add",
     "generate-contributors": "all-contributors generate"
   },
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "packages/**/*.{js}",
+      "!**/node_modules/**"
+    ],
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "testRegex": "/__test__/.*\\.test\\.(js)$"
+  },
   "devDependencies": {
     "all-contributors-cli": "^4.1.0",
     "eslint": "^3.19.0",
+    "jest": "^19.0.2",
     "lerna": "^2.0.0-rc.1"
   },
   "dependencies": {}

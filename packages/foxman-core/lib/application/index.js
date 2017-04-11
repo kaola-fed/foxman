@@ -20,7 +20,7 @@ function use(plugin) {
 }
 
 function run() {
-    co(execute(dependencies))
+    return co(execute(dependencies))
         .then(runPlugins(dependencies))
         .catch(e => console.error(e));
 }
