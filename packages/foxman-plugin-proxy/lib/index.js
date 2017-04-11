@@ -1,4 +1,4 @@
-const { util, DispatherTypes } = require('@foxman/helpers');
+const {util, DispatherTypes} = require('@foxman/helpers');
 const httpProxy = require('http-proxy');
 const proxyHandler = require('./proxyHandler');
 
@@ -12,8 +12,8 @@ class ProxyPlugin {
             proxyConfig = {}
         }
     ) {
-        this.enable = proxyServerName && proxyConfig;
-        const { service = {} } = proxyConfig;
+        this.enable = proxyServerName;
+        const service = proxyConfig.service || {};
 
         if (this.enable) {
             if (!proxyConfig.host) {
@@ -26,29 +26,28 @@ class ProxyPlugin {
                 );
             }
         }
-        Object.assign(this, { proxyServerName, proxyConfig });
-    }
-
-    init(serverPlugin) {
-        const { proxyConfig, proxyServerName } = this;
-        const { server } = serverPlugin;
-
-        const proxy = this.initProxy();
-        this.registerProxy({
-            proxyConfig,
+        Object.assign(this, {
             proxyServerName,
-            server,
-            proxy
+            proxyConfig
         });
     }
 
-    initProxy() {
-        const { proxyConfig } = this;
+    init(serverPlugin) {
+        this.registerProxy({
+            proxyConfig: this.proxyConfig,
+            proxyServerName: this.proxyServerName,
+            server: serverPlugin.server,
+            proxy: this._createProxyServer()
+        });
+    }
+
+    _createProxyServer() {
+        const proxyConfig = this.proxyConfig;
         const proxy = httpProxy.createProxyServer({});
 
-        proxy.on('proxyReq', proxyReq => {
-            proxyReq.setHeader('X-Special-Proxy-Header', 'foxman');
-            proxyReq.setHeader('Host', proxyConfig.host);
+        proxy.on('proxyReq', req => {
+            req.setHeader('X-Special-Proxy-Header', 'foxman');
+            req.setHeader('Host', proxyConfig.host);
         });
 
         proxy.on('end', (req, res, proxyRes) => {
@@ -71,8 +70,9 @@ class ProxyPlugin {
         server.use(
             () =>
                 function*(next) {
-                    const { dispatcher = {} } = this;
-                    const { router = false, type } = dispatcher;
+                    const dispatcher = this.dispatcher || {};
+                    const router = dispatcher.router || false;
+                    const type = dispatcher.type;
 
                     if (type === DispatherTypes.DIR || !router) {
                         return yield next;
