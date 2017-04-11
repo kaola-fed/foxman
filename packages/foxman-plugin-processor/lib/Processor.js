@@ -1,6 +1,6 @@
 const path = require('path');
 const pathToRegexp = require('path-to-regexp');
-const { fileUtil, util } = require('@foxman/helpers');
+const {fileUtil, util} = require('@foxman/helpers');
 const ResourcesManager = require('./ResourcesManager');
 const TaskLock = require('@foxman/helpers/lib/TaskLock');
 const co = require('co');
@@ -9,8 +9,8 @@ exports.dispatcher = dispatcher;
 
 const extname = path.extname;
 
-const { getFileStat, readFile } = fileUtil;
-const { log, warnLog, notify } = util;
+const {getFileStat, readFile} = fileUtil;
+const {log, warnLog, notify} = util;
 
 function noop(p) {
     return p;
@@ -27,7 +27,7 @@ function dispatcher(
     return function() {
         return function*(next) {
             const reqPath = this.request.path;
-            const processor = matchProcessor({ processors, reqPath });
+            const processor = matchProcessor({processors, reqPath});
 
             if (!processor) {
                 return yield next;
@@ -39,7 +39,7 @@ function dispatcher(
                 return false;
             }
 
-            const { pipeline = [], lockTask = false } = processor;
+            const {pipeline = [], lockTask = false} = processor;
             const processdFilenameStack = getSemiFinished({
                 pipeline: [
                     ...pipeline,
@@ -80,7 +80,7 @@ function dispatcher(
                     processed = yield generator;
                 }
 
-                resourcesManager.set({ reqPath, processed });
+                resourcesManager.set({reqPath, processed});
                 this.body = processed;
                 this.type = extname(reqPath);
 
@@ -104,7 +104,7 @@ function* workflow(
 ) {
     let processed = raw;
     for (let item of pipeline) {
-        const { handler } = item;
+        const {handler} = item;
         const filename = processdFilenameStack.pop();
         try {
             processed = yield new Promise((resolve, reject) => {
@@ -146,7 +146,7 @@ function matchProcessor(
     return processor;
 }
 
-function updateDependencies({ reqPath, reloaderService, resourcesManager }) {
+function updateDependencies({reqPath, reloaderService, resourcesManager}) {
     return function(dependencies) {
         reloaderService.register({
             reqPath,
@@ -156,7 +156,7 @@ function updateDependencies({ reqPath, reloaderService, resourcesManager }) {
     };
 }
 
-function combineBase({ base, rawPath }) {
+function combineBase({base, rawPath}) {
     return path.join(base, rawPath);
 }
 
@@ -180,7 +180,7 @@ function getSemiFinished(
 
     return pipeline.reduceRight(
         function(prev, item) {
-            const { toSource = noop } = item;
+            const {toSource = noop} = item;
             const raw = stackTop(prev);
             return [...prev, toSource.call(item, raw)];
         },

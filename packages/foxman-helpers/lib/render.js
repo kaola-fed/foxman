@@ -1,7 +1,7 @@
 const Render = require('fast-ftl').default;
 const { values } = require('./util');
 
-class RenderUtil {
+class Renderer {
     constructor({ viewRoot, templatePaths = {} }) {
         this.freemarker = Render({
             root: viewRoot,
@@ -19,4 +19,4 @@ class RenderUtil {
     }
 }
 
-module.exports = RenderUtil;
+module.exports = Renderer;

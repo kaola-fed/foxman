@@ -1,6 +1,6 @@
 const Server = require('./Server');
 const path = require('path');
-const { RenderUtil } = require('@foxman/helpers');
+const { Renderer } = require('@foxman/helpers');
 const formatStaticOptions = require('./utils/formatStaticOptions');
 
 class ServerPlugin {
@@ -29,7 +29,7 @@ class ServerPlugin {
             ? String(options.extension)
             : 'ftl';
 
-        options.Render = options.Render || RenderUtil;
+        options.Render = options.Render || Renderer;
 
         this.options = options;
     }

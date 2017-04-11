@@ -11,17 +11,20 @@
     "rules": {
         "no-console": "off",
         "no-unused-vars": "error",
+        "indent": ["error", 4],
         "linebreak-style": [
             "warn",
             "unix"
         ],
         "quotes": [
             "error",
-            "single"
+            "single",
+            { "allowTemplateLiterals": true }
         ],
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "comma-dangle": ["error", "never"]
     }
 }

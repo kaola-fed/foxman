@@ -5,7 +5,7 @@ const _fs = require('nei/lib/util/file');
 const fs = require('fs');
 const path = require('path');
 const _util = require('nei/lib/util/util');
-const { logger } = require('nei/lib/util/logger');
+const {logger} = require('nei/lib/util/logger');
 
 logger.setLevel('ERROR');
 

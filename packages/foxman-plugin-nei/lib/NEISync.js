@@ -1,7 +1,7 @@
 'use strict';
 const subMain = require('./submain');
 const Application = require('nei/lib/util/args');
-const { fileUtil } = require('@foxman/helpers');
+const {fileUtil} = require('@foxman/helpers');
 
 const options = {
     package: require('nei/package.json'),
