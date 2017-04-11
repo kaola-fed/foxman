@@ -1,11 +1,32 @@
-# Foxman
+<div align="center">
+  <h1>Foxman</h1>
+  <p>
+  <strong>Fox</strong>狐狸会说谎，有 Mock 之意；
+  <strong>Man</strong> 优雅知性。
+  </p>
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/kaola-fed/foxman.svg)](https://greenkeeper.io/)
-
-[][nodei-url]
-[![NPM version][npm-image]][npm-url]
-[![download][downloads-image]][downloads-url]
-[![build][travis-image]][travis-url]  
+  <a href="https://www.npmjs.com/package/foxman">
+    <img src="https://img.shields.io/npm/v/foxman.svg?style=flat-square" alt="NPM version">
+  </a>
+  <a href="https://travis-ci.org/kaola-fed/foxman">
+    <img src="https://img.shields.io/travis/kaola-fed/foxman.svg?style=flat-square" alt="build">
+  </a>
+  <a href="https://codecov.io/gh/kaola-fed/foxman">
+    <img src="https://img.shields.io/codecov/c/github/kaola-fed/foxman.svg?style=flat-square" alt="build">
+  </a>
+  <a href="https://www.npmjs.com/package/foxman">
+    <img src="https://img.shields.io/npm/dm/foxman.svg?style=flat-square" alt="download">
+  </a>
+  <a href="https://nodejs.org">
+    <img src="https://img.shields.io/node/v/foxman.svg?style=flat-square" alt="node">
+  </a>
+  <a href="https://github.com/kaola-fed/foxman/blob/master/CODE_OF_CONDUCT.md">
+    <img src="https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square" alt="Code of Conduct">
+  </a>
+  <a href="https://github.com/kaola-fed/foxman/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/kaola-fed/foxman.svg?style=flat-square" alt="license">
+  </a>
+</div>
 
 ## Foxman 有什么？
 
@@ -54,16 +75,14 @@ $ npm install --global foxman
 $ cd /path/to/my-project
 $ foxman
 ```
-## LICENSE
-[![license][license-image]][license-url]
 
-[npm-url]: https://www.npmjs.com/package/foxman
-[npm-image]: https://img.shields.io/npm/v/foxman.svg
-[downloads-image]: https://img.shields.io/npm/dm/foxman.svg
-[downloads-url]: https://www.npmjs.com/package/foxman
-[nodei-image]: https://nodei.co/npm/foxman.png?downloads=true&downloadRank=true&stars=true
-[nodei-url]: https://www.npmjs.com/package/foxman
-[license-url]: https://github.com/kaola-fed/foxman/blob/master/LICENSE
-[license-image]: https://img.shields.io/github/license/kaola-fed/foxman.svg
-[travis-image]: https://travis-ci.org/kaola-fed/foxman.svg?branch=master
-[travis-url]: https://travis-ci.org/kaola-fed/foxman
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+| [<img src="https://avatars3.githubusercontent.com/u/10825163?v=3" width="80px;"/><br /><sub>君羽</sub>](https://github.com/imhype)<br />[💻](https://github.com/kaola-fed/foxman/commits?author=ImHype) 🔌 🚇 [📖](https://github.com/kaola-fed/foxman/commits?author=ImHype)<br> [⚠️](https://github.com/kaola-fed/foxman/commits?author=ImHype) [🐛](https://github.com/kaola-fed/foxman/issues?q=author%3AImHype) 💡 | [<img src="https://avatars3.githubusercontent.com/u/9125255?v=3" width="80px;"/><br /><sub>MO</sub>](https://github.com/fengzilong)<br />[💻](https://github.com/kaola-fed/foxman/commits?author=fengzilong) [📖](https://github.com/kaola-fed/foxman/commits?author=fengzilong)<br><br> |
+| :---: | :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+## LICENSE
+
+MIT

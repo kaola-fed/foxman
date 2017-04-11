@@ -1,0 +1,36 @@
+{
+  "projectName": "foxman",
+  "projectOwner": "kaola-fed",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 80,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "ImHype",
+      "name": "君羽",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/10825163?v=3",
+      "profile": "https://github.com/imhype",
+      "contributions": [
+        "code",
+        "plugin",
+        "infra",
+        "doc",
+        "test",
+        "bug",
+        "example"
+      ]
+    },
+    {
+      "login": "fengzilong",
+      "name": "MO",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/9125255?v=3",
+      "profile": "https://github.com/fengzilong",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    }
+  ]
+}

@@ -1,79 +1,33 @@
 {
-  "name": "foxman",
-  "version": "0.8.3",
-  "main": "app.js",
-  "description": "Extensible Mock Server",
-  "preferGlobal": true,
-  "bin": {
-    "foxman": "./bin/foxman"
-  },
-  "files": [
-    "lib",
-    "dist",
-    "bin"
-  ],
-  "directories": {
-    "test": "test"
-  },
-  "engines": {
-    "node": ">=6.4.0"
-  },
+  "name": "foxman-packages",
+  "private": true,
   "scripts": {
-    "build": "gulp && babel src -d dist -x .es6",
-    "builddev": "gulp && babel src -w -d dist -x .es6",
-    "dev": "gulp && babel src -w -d src -s -x .es6",
-    "lint": "eslint src bin",
-    "test": "gulp && babel src -d dist -s -x .es6 &&  mocha ./test",
-    "release": "npm run build && npm publish"
+    "boot": "lerna bootstrap",
+    "lint": "eslint packages --quiet",
+    "lint-fix": "eslint packages/**/*.js --fix",
+    "test": "npm run boot && npm run lint && npm run jest",
+    "jest": "jest --no-cache",
+    "init-contributors": "all-contributors init",
+    "add-contributor": "all-contributors add",
+    "generate-contributors": "all-contributors generate"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kaola-fed/foxman.git"
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "packages/**/*.{js}",
+      "!**/node_modules/**"
+    ],
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "testRegex": "/__test__/.*\\.test\\.(js)$"
   },
-  "keywords": [
-    "extensible",
-    "node",
-    "mock",
-    "proxy",
-    "server",
-    "kaola",
-    "nei"
-  ],
-  "author": "junyu",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/kaola-fed/foxman/issues"
-  },
-  "homepage": "https://github.com/kaola-fed/foxman#readme",
   "devDependencies": {
-    "babel-cli": "^6.11.4",
-    "babel-plugin-transform-runtime": "^6.15.0",
-    "babel-preset-es2015": "^6.13.2",
+    "all-contributors-cli": "^4.1.0",
     "eslint": "^3.19.0",
-    "gulp": "^3.9.1",
-    "gulp-clean": "^0.3.2",
-    "mocha": "^3.2.0"
+    "jest": "^19.0.2",
+    "lerna": "^2.0.0-rc.1"
   },
-  "dependencies": {
-    "anymatch": "^1.3.0",
-    "babel-runtime": "^6.20.0",
-    "chalklog": "^1.1.2",
-    "chokidar": "^1.6.0",
-    "co": "^4.6.0",
-    "fast-ftl": "latest",
-    "globule": "^1.0.0",
-    "http-proxy": "^1.15.2",
-    "http2": "^3.3.6",
-    "koa": "^1.4.0",
-    "koa-bodyparser": "^2.5.0",
-    "koa-ejs": "^3.0.0",
-    "koa-static-cache": "^4.0.0",
-    "nei": "^3.0.3",
-    "node-notifier": "^5.1.2",
-    "path-to-regexp": "^1.5.3",
-    "semver": "^5.3.0",
-    "update-notifier": "^2.1.0",
-    "ws": "^2.2.3",
-    "yargs": "^7.0.2"
-  }
+  "dependencies": {}
 }
