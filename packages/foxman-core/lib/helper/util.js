@@ -134,10 +134,6 @@ function sha1(buf) {
     return crypto.createHash('sha1').update(buf).digest('hex');
 }
 
-function matchArgs(func) {
-    const argList = func.toString().match(/^.*?\s*[^\(]*\(\s*([^\)]*)\)/m);
-    return argList && argList[1] ? argList[1].replace(/ /g, '').split(',') : [];
-}
 function* entries(obj) {
     for (let key of Object.keys(obj)) {
         yield [key, obj[key]];
@@ -211,7 +207,6 @@ module.exports = {
     JSONParse,
     isPromise,
     isGeneratorDone,
-    matchArgs,
     entries,
     compressHtml,
     jsonResolver,

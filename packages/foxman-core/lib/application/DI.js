@@ -10,12 +10,8 @@ function register(key, value) {
 }
 
 function di(fn, context = {}) {
-    const args = util.matchArgs(fn);
-    fn.apply(context, inject(args));
-}
-
-function inject(args) {
-    return args.map(arg => find(arg));
+    const args = matchArguments(fn);
+    fn.apply(context, args.map(arg => find(arg)));
 }
 
 function find(name) {
@@ -28,4 +24,9 @@ function find(name) {
 
 function get(pluginName) {
     return dependencies[lowerCaseFirstLetter(pluginName)];
+}
+
+function matchArguments(fn) {
+    const args = fn.toString().match(/^.*?\s*[^\(]*\(\s*([^\)]*)\)/m);
+    return args && args[1] ? args[1].replace(/ /g, '').split(',') : [];
 }

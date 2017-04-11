@@ -46,7 +46,7 @@ function resolveRes(
 ) {
     const headers = res._headers;
     const buffer = Buffer.concat(body);
-    const resolveRes = wrapperResolve({ res, resolve });
+    const resolveRes = wrapperResolve(resolve);
 
     for (var name in headers) {
         if ('transfer-encoding' !== name && 'content-encoding' !== name) {
@@ -68,7 +68,7 @@ function resolveRes(
     }
 }
 
-function wrapperResolve({ resolve }) {
+function wrapperResolve(resolve) {
     return function(body) {
         resolve(body.toString());
     };

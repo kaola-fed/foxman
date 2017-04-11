@@ -20,13 +20,8 @@ function init(plugin) {
     );
 }
 
-/**
- * plugin的方法，作用是挂起application的加载plugin
- * @param fn
- * @returns {Number}
- */
 function pending(fn, plugin) {
-    let pending = new Promise(resolve => {
+    const pending = new Promise(resolve => {
         process.nextTick(() => {
             returnPromise(fn(resolve)).catch(e => {
                 console.error(e);
@@ -42,11 +37,5 @@ function returnPromise(result) {
     if (_.isPromise(result)) {
         return result;
     }
-    return wrapPromise(result);
-}
-
-function wrapPromise(result) {
-    return new Promise(resolve => {
-        resolve(result);
-    });
+    return Promise.resolve(result);
 }

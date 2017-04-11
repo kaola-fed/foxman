@@ -1,6 +1,6 @@
 const util = require('./util');
 const fileUtil = require('./fileutil');
-const RenderUtil = require('./render');
+const Renderer = require('./render');
 
 const DispatherTypes = {
     DIR: 'dir',
@@ -8,4 +8,4 @@ const DispatherTypes = {
     ASYNC: 'async'
 };
 
-module.exports = { util, fileUtil, DispatherTypes, RenderUtil };
+module.exports = { util, fileUtil, DispatherTypes, Renderer };
