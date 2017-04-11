@@ -10,7 +10,6 @@
     "node": ">=6.4.0"
   },
   "scripts": {
-    "test": "mocha ./__test__"
   },
   "repository": {
     "type": "git",
@@ -34,6 +33,8 @@
   "dependencies": {
     "@foxman/helpers": "^0.1.0",
     "@foxman/plugin-proxy": "^0.1.0",
+    "@foxman/plugin-vconsole": "^0.1.0",
+    "@foxman/plugin-livereload": "^0.1.0",
     "anymatch": "^1.3.0",
     "chokidar": "^1.6.0",
     "co": "^4.6.0",

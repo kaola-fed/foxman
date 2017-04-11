@@ -1,8 +1,6 @@
-const Reloader = require('./Reloader');
-/**
- * 监听插件
- */
-class ReloaderPlugin {
+const Reloader = require('./reloader');
+
+class LivereloadPlugin {
     constructor(options) {
         this.options = options;
     }
@@ -12,7 +10,7 @@ class ReloaderPlugin {
         const watcher = watcherPlugin.watcher;
         server.appendHtml({
             condition: () => true,
-            html: '<script src=\'/__FOXMAN__CLIENT__/js/reload.js\'></script>'
+            html: `<script src='/__FOXMAN__CLIENT__/js/reload.js'></script>`
         });
 
         this.reloader = new Reloader(
@@ -26,4 +24,4 @@ class ReloaderPlugin {
         );
     }
 }
-module.exports = ReloaderPlugin;
+module.exports = LivereloadPlugin;

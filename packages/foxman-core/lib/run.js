@@ -1,31 +1,26 @@
 const {use, run} = require('./application');
 const {
     Processor,
-    Reloader,
     Server,
-    Watcher,
-    Debug
+    Watcher
 } = require('./plugins');
 const Proxy = require('@foxman/plugin-proxy');
+const VConsole = require('@foxman/plugin-vconsole');
+const Livereload = require('@foxman/plugin-livereload');
 
 module.exports = config => {
-    // Watcher Plugin
     use(new Watcher(config.watch));
 
-    // Server Plugin
     use(new Server(config.server));
 
-    // Reloader Plugin
-    use(new Reloader({}));
+    use(new Livereload({}));
 
-    // Processor Plugin
     use(
         new Processor({
             processors: config.processors
         })
     );
 
-    // Nei Plugin
     if (config.nei) {
         const Nei = require('./plugins/NEISync');
         use(
@@ -37,17 +32,13 @@ module.exports = config => {
         );
     }
 
-    // Outer Plugin
+    // Outer Plugins
     use(config.plugins);
 
-    // Debug Plugin
-    use(
-        new Debug({
-            debugTool: config.server.debugTool
-        })
-    );
+    if (config.server.debugTool) {
+        use(new VConsole());
+    }
 
-    // Proxy Plugin
     use(
         new Proxy({
             proxyConfig: config.proxy,

@@ -1,0 +1,13 @@
+{
+  "name": "@foxman/plugin-livereload",
+  "version": "0.1.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+  }
+}
