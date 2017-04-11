@@ -1,5 +1,5 @@
 {
-  "name": "@foxman/plugin-livereload",
+  "name": "@foxman/plugin-watch",
   "version": "0.1.0",
   "description": "",
   "main": "lib/index.js",
@@ -9,6 +9,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@foxman/helpers": "^0.1.0"
+    "anymatch": "^1.3.0",
+    "chokidar": "^1.6.0"
   }
 }

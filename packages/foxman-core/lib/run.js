@@ -1,30 +1,26 @@
-const {use, run} = require('./application');
-const {
-    Processor,
-    Server,
-    Watcher
-} = require('./plugins');
+const app = require('./application');
 const Proxy = require('@foxman/plugin-proxy');
-const VConsole = require('@foxman/plugin-vconsole');
 const Livereload = require('@foxman/plugin-livereload');
+const Processor = require('@foxman/plugin-processor');
+const Watch = require('@foxman/plugin-watch');
+const Server = require('@foxman/plugin-server');
 
 module.exports = config => {
-    use(new Watcher(config.watch));
+    app.use(new Watch(config.watch));
 
-    use(new Server(config.server));
+    app.use(new Server(config.server));
 
-    use(new Livereload({}));
+    app.use(new Livereload());
 
-    use(
+    app.use(
         new Processor({
             processors: config.processors
         })
     );
 
     if (config.nei) {
-        const Nei = require('./plugins/NEISync');
-        use(
-            new Nei(
+        app.use(
+            new require('@foxman/plugin-nei')(
                 Object.assign(config.nei, {
                     update: config.argv.update
                 })
@@ -33,18 +29,18 @@ module.exports = config => {
     }
 
     // Outer Plugins
-    use(config.plugins);
+    app.use(config.plugins);
 
     if (config.server.debugTool) {
-        use(new VConsole());
+        app.use(new require('@foxman/plugin-vconsole')());
     }
 
-    use(
+    app.use(
         new Proxy({
             proxyConfig: config.proxy,
             proxyServerName: config.argv.proxy
         })
     );
 
-    run();
+    app.run();
 };

@@ -1,5 +1,5 @@
 {
-  "name": "@foxman/plugin-livereload",
+  "name": "@foxman/plugin-processor",
   "version": "0.1.0",
   "description": "",
   "main": "lib/index.js",
@@ -9,6 +9,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@foxman/helpers": "^0.1.0"
+    "@foxman/helpers": "^0.1.0",
+    "co": "^4.6.0",
+    "path-to-regexp": "^1.5.3"
   }
 }

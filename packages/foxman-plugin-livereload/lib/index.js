@@ -2,7 +2,7 @@ const Reloader = require('./reloader');
 
 class LivereloadPlugin {
     constructor(options) {
-        this.options = options;
+        this.options = options || {};
     }
 
     init(watcherPlugin, serverPlugin) {

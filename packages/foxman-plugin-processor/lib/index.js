@@ -9,11 +9,11 @@ class ProcessorPlugin {
         }
     }
 
-    init(serverPlugin, watcherPlugin, reloaderPlugin) {
+    init(serverPlugin, watcherPlugin, livereloadPlugin) {
         const {processors} = this;
         const {server} = serverPlugin;
         const {watcher} = watcherPlugin;
-        const {reloader} = reloaderPlugin;
+        const {reloader} = livereloadPlugin;
 
         const reloaderService = ReloaderService({
             watcher,

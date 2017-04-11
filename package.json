@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "boot": "lerna bootstrap",
+    "clean": "lerna clean",
     "lint": "eslint packages --quiet",
     "lint-fix": "eslint packages/**/*.js --fix",
     "test": "npm run boot && npm run lint && npm run jest",

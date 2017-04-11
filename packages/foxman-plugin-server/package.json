@@ -1,0 +1,21 @@
+{
+  "name": "@foxman/plugin-server",
+  "version": "0.1.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@foxman/helpers": "^0.1.0",
+    "path-to-regexp": "^1.5.3",
+    "http2": "^3.3.6",
+    "koa": "^1.4.0",
+    "koa-bodyparser": "^2.5.0",
+    "koa-ejs": "^3.0.0",
+    "koa-static-cache": "^4.0.0",
+    "ws": "^2.2.3"
+  }
+}
