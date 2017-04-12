@@ -122,9 +122,11 @@ function* workflow(
                 });
             });
         } catch (e) {
+            const errorTitle = `File ${filename} compile failed!`;
+            warnLog(errorTitle);
             warnLog(e);
             notify({
-                title: 'Error caused by Processor',
+                title: errorTitle,
                 msg: e.stack || e
             });
             throw e;

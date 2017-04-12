@@ -19,8 +19,9 @@ module.exports = config => {
     );
 
     if (config.nei) {
+        const VconsolePlugin = require('@foxman/plugin-nei');
         app.use(
-            new require('@foxman/plugin-nei')(
+            new VconsolePlugin(
                 Object.assign(config.nei, {
                     update: config.argv.update
                 })
@@ -32,7 +33,8 @@ module.exports = config => {
     app.use(config.plugins);
 
     if (config.server.debugTool) {
-        app.use(new require('@foxman/plugin-vconsole')());
+        const VconsolePlugin = require('@foxman/plugin-vconsole');
+        app.use(new VconsolePlugin());
     }
 
     app.use(
