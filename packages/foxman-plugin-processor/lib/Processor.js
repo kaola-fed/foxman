@@ -1,9 +1,9 @@
 const path = require('path');
 const pathToRegexp = require('path-to-regexp');
-const {fileUtil, util} = require('@foxman/helpers');
-const ResourcesManager = require('./ResourcesManager');
-const TaskLock = require('@foxman/helpers/lib/TaskLock');
 const co = require('co');
+const {fileUtil, util} = require('@foxman/helpers');
+const TaskLock = require('@foxman/helpers/lib/TaskLock');
+const ResourcesManager = require('./ResourcesManager');
 
 exports.dispatcher = dispatcher;
 

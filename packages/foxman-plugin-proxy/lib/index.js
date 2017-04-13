@@ -20,7 +20,7 @@ class ProxyPlugin {
                 util.error('To configure config proxy.host');
             }
 
-            if (Object.keys(service).indexOf(proxyServerName) === -1) {
+            if (!~Object.keys(service).indexOf(proxyServerName)) {
                 util.error(
                     'To check config, and input correct proxyServer name'
                 );

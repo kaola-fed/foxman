@@ -38,7 +38,7 @@ function updateLocalFiles(routes = [], getFilePath) {
                     /**
              * 本地路径（非nei）
              */
-                    let dataPath = getFilePath(route);
+                    const dataPath = getFilePath(route);
                     fs.stat(dataPath, error => {
                         /**
                  * 文件不存在或者文件内容为空

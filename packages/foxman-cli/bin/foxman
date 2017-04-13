@@ -4,14 +4,15 @@ const path = require('path');
 const updateNotifier = require('update-notifier');
 const foxman = require('@foxman/core');
 const validate = require('./validate');
-const { log, warnLog } = require('@foxman/helpers/lib/util');
+const {log, warnLog} = require('@foxman/helpers/lib/util');
 const checkNodeVersion = require('./check-node-version');
 const checkFoxmanVersion = require('./check-foxman-version');
+const welcome = require('./welcome');
 const pkg = require('../package.json');
 
 checkNodeVersion();
 
-updateNotifier({ pkg }).notify();
+updateNotifier({pkg}).notify();
 
 const argv = yargs
     .usage('Usage: foxman [options]')
@@ -48,8 +49,8 @@ try {
         if (~err.toString().indexOf(configPath)) {
             warnLog('Please add foxman.config.js in current directory.');
             warnLog('Also you can appoint your special name,');
-            warnLog("use command 'foxman --config yourfoxman.config.js'.");
-            warnLog("See more in command 'foxman --help'");
+            warnLog('use command \'foxman --config yourfoxman.config.js\'.');
+            warnLog('See more in command \'foxman --help\'');
         } else {
             warnLog(
                 'Make sure you have the latest version of node.js and foxman.'
@@ -61,7 +62,7 @@ try {
             console.log('\n');
             console.log(err.stack);
             console.log('\n');
-            warnLog("You can try 'npm install' or check the foxman.config.js");
+            warnLog('You can try \'npm install\' or check the foxman.config.js');
         }
     } else {
         warnLog(
@@ -87,4 +88,6 @@ if (res !== true) {
 
 checkFoxmanVersion(config.upgrade || {});
 
-foxman(Object.assign({}, config, { argv, configPath }));
+welcome();
+
+foxman(Object.assign({}, config, {argv, configPath}));

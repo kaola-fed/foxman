@@ -1,39 +1,41 @@
 /**
  * Created by hzxujunyu on 2016/9/19.
  */
-const { util: _ } = require('@foxman/helpers');
+const {util: _} = require('@foxman/helpers');
 const pid = _.createSystemId();
 
-module.exports = { init };
+module.exports = {init};
 
 function init(plugin) {
-    Object.assign(
-        plugin,
-        {
-            id: pid(),
-            name: plugin.constructor.name
+    Object.assign(plugin, {
+        id: pid(),
+        name: plugin.constructor.name,
+        pending: fn => {
+            registerPendingToPlugin(generatePending(fn), plugin);
         },
-        {
-            pending: fn => pending(fn, plugin),
-            enable: typeof plugin.enable === 'undefined' ? true : plugin.enable
-        }
-    );
+        enable: typeof plugin.enable === 'undefined' ? true : plugin.enable
+    });
 }
 
-function pending(fn, plugin) {
-    const pending = new Promise(resolve => {
+function generatePending(fn) {
+    return new Promise(resolve => {
         process.nextTick(() => {
-            returnPromise(fn(resolve)).catch(e => {
+            ensurePromise(fn(resolve)).catch(e => {
                 console.error(e);
             });
         });
     });
-    plugin.pendings = plugin.pendings
-        ? [...plugin.pendings, pending]
-        : [pending];
 }
 
-function returnPromise(result) {
+function registerPendingToPlugin(pending, plugin) {
+    if (!plugin.pendings) {
+        plugin.pendings = [];
+    }
+
+    plugin.pendings = [...plugin.pendings, pending];
+}
+
+function ensurePromise(result) {
     if (_.isPromise(result)) {
         return result;
     }

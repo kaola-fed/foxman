@@ -10,10 +10,10 @@ class ProcessorPlugin {
     }
 
     init(serverPlugin, watcherPlugin, livereloadPlugin) {
-        const {processors} = this;
-        const {server} = serverPlugin;
-        const {watcher} = watcherPlugin;
-        const {reloader} = livereloadPlugin;
+        const processors = this.processors;
+        const server = serverPlugin.server;
+        const watcher = watcherPlugin.watcher;
+        const reloader = livereloadPlugin.reloader;
 
         const reloaderService = ReloaderService({
             watcher,

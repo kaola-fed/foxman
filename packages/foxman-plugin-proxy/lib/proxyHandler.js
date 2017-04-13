@@ -13,7 +13,6 @@ module.exports = function handler(
         Object.assign({}, this.req, {url: target.path})
     );
     const body = [];
-    // const write = res.write.bind(res);
 
     res.write = function(chunk) {
         body.push(chunk);
