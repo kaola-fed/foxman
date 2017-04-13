@@ -43,26 +43,22 @@ function findNew(
     }
 ) {
     const oldThingMap = oldThings.reduce(
-        function(prev, item) {
-            prev[item] = null;
-            return prev;
+        function(total, current) {
+            total[current] = true;
+            return total;
         },
         {}
     );
 
-    return deDuplication(
-        newThings.filter(item => {
-            return oldThingMap[item] === undefined;
-        })
-    );
+    return unique(newThings.filter(item => !oldThingMap[item]));
 }
 
-function deDuplication(list = []) {
+function unique(array = []) {
     return Object.keys(
-        list.reduce(
-            function(prev, item) {
-                prev[item] = null;
-                return prev;
+        array.reduce(
+            function(total, current) {
+                total[current] = null;
+                return total;
             },
             {}
         )

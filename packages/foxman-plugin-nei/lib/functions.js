@@ -26,9 +26,7 @@ function writeNEIConfig({NEIRoute}, formatR) {
         NEIRoute,
         `module.exports = ${_.inspect(formatR, {maxArrayLength: null})}`,
         () => {},
-        e => {
-            util.error(e);
-        }
+        e => util.error(e)
     );
 }
 
