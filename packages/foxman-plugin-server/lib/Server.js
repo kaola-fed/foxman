@@ -7,25 +7,25 @@ const Koa = require('koa');
 const WebSocket = require('ws');
 const bodyParser = require('koa-bodyparser');
 
-const { util } = require('@foxman/helpers');
+const {util} = require('@foxman/helpers');
 const dispatcher = require('./middleware/dispatcher');
 const routerMap = require('./middleware/routermap');
 const setStaticHandler = require('./setStaticHandler');
-const { setRender, setView } = require('./setRender');
+const {setRender, setView} = require('./setRender');
 const setHtmlAppender = require('./setHtmlAppender');
 
 const WebSocketServer = WebSocket.Server;
 
-const { notify, values } = util;
+const {notify, values} = util;
 
 class Server {
     constructor(options) {
         this.serverOptions = options;
         this.middleware = [];
         this.ifAppendHtmls = [];
-        this.app = Koa({ outputErrors: false });
+        this.app = Koa({outputErrors: false});
 
-        const { Render, templatePaths, viewRoot } = options;
+        const {Render, templatePaths, viewRoot} = options;
         const app = this.app;
 
         this.tplRender = setRender({
@@ -34,7 +34,7 @@ class Server {
             viewRoot
         });
 
-        setView({ app });
+        setView({app});
     }
 
     registerRouterNamespace(name, value = []) {
@@ -54,8 +54,8 @@ class Server {
     }
 
     delayInit() {
-        const { app, ifAppendHtmls, tplRender } = this;
-        const { ifProxy, statics } = this.serverOptions;
+        const {app, ifAppendHtmls, tplRender} = this;
+        const {ifProxy, statics} = this.serverOptions;
 
         if (!ifProxy) {
             app.use(bodyParser());
@@ -64,13 +64,13 @@ class Server {
         // {extension, runtimeRouters, divideMethod, viewRoot, syncData, asyncData, syncDataMatch, asyncDataMatch}
         app.use(routerMap(this.serverOptions));
 
-        this.middleware.forEach(m => app.use(m));
+        this.middleware.forEach(app.use);
 
-        app.use(dispatcher({ tplRender }));
+        app.use(dispatcher({tplRender}));
 
-        setHtmlAppender({ app, ifAppendHtmls });
+        setHtmlAppender({app, ifAppendHtmls});
 
-        setStaticHandler({ statics, app });
+        setStaticHandler({statics, app});
     }
 
     use(middleware) {
@@ -84,7 +84,7 @@ class Server {
     createServer() {
         this.delayInit();
 
-        const { port = 3000 } = this.serverOptions;
+        const port = this.serverOptions.port || 3000;
         const httpOptions = {
             key: fs.readFileSync(
                 path.resolve(__dirname, 'crt', 'localhost.key')
@@ -114,7 +114,7 @@ class Server {
         });
     }
 
-    buildWebSocket({ serverApp }) {
+    buildWebSocket({serverApp}) {
         const wss = new WebSocketServer({
             server: serverApp
         });
@@ -132,6 +132,7 @@ class Server {
                 }
             });
         };
+
         return wss;
     }
 }
