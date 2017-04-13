@@ -107,7 +107,7 @@ function getResourcesDispatcher(
         },
         [SYNC]: {
             type: DispatherTypes.SYNC,
-            dataPath: jsonPathResolve(syncDataMatch(reqPath))
+            dataPath: syncDataMatch(jsonPathResolve(reqPath))
         }
     };
 
