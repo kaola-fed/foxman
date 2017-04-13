@@ -10,7 +10,7 @@ const bodyParser = require('koa-bodyparser');
 const {util} = require('@foxman/helpers');
 const dispatcher = require('./middleware/dispatcher');
 const routerMap = require('./middleware/routermap');
-const setStaticHandler = require('./setStaticHandler');
+const configureStatics = require('./configureStatics');
 const {configureViewEngine, configureEjs} = require('./configureViewEngine');
 
 const WebSocketServer = WebSocket.Server;
@@ -82,7 +82,7 @@ class Server {
             yield next;
         });
 
-        setStaticHandler({statics, app});
+        configureStatics({statics, app});
     }
 
     use(middleware) {
