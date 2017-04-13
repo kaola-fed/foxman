@@ -48,7 +48,7 @@ test('sha1',()=>{
   expect(util.sha1(a)).toBe('23fcf96d70494b81c5084c0da6a6e8d84a9c5d20');
 });
 
-test('JSONParse', ()=>{
+test('parseJSON', ()=>{
   'use strict';
-  expect(util.JSONParse('{a:1}').a ===1).toBe(!0);
+  expect(util.parseJSON('{a:1}').a ===1).toBe(!0);
 });

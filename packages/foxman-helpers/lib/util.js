@@ -1,12 +1,12 @@
 const child_process = require('child_process');
 const crypto = require('crypto');
-const { readFile, writeFileSync } = require('./fileutil');
+const {readFile, writeFileSync} = require('./fileutil');
 const Logger = require('chalklog');
 const notifier = require('node-notifier');
 
 const clog = new Logger('foxman');
 
-function notify({ title, msg }) {
+function notify({title, msg}) {
     notifier.notify({
         title: title,
         message: msg,
@@ -113,7 +113,7 @@ function appendHeadBreak(str) {
     return '/' + str;
 }
 
-function JSONParse(jsonStr) {
+function parseJSON(jsonStr) {
     const result = new Function(`return ${jsonStr}`)();
 
     if (typeOf(result) === 'object') {
@@ -148,23 +148,22 @@ function compressHtml(htmlstr) {
         });
 }
 
-function jsonResolver(opt) {
+function readJSONFile(url) {
     return new Promise(resolve => {
-        let url = typeof opt == 'string' ? opt : opt.url;
         let json;
         readFile(url)
             .then(data => {
                 try {
-                    json = JSONParse(data);
+                    json = parseJSON(data);
                 } catch (e) {
                     warnLog('Parsed failed:');
                     warnLog(e);
                     json = {};
                 }
-                resolve({ json });
+                resolve({json});
             })
             .catch(() => {
-                resolve({ json: {} });
+                resolve({json: {}});
             });
     });
 }
@@ -201,12 +200,12 @@ module.exports = {
     removeSuffix,
     appendHeadBreak,
     sha1,
-    JSONParse,
+    parseJSON,
     isPromise,
     isGeneratorDone,
     entries,
     compressHtml,
-    jsonResolver,
+    readJSONFile,
     values,
     notify,
     addDataExt
