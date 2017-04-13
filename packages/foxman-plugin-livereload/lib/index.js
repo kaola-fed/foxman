@@ -8,9 +8,9 @@ class LivereloadPlugin {
     init(watcherPlugin, serverPlugin) {
         const server = serverPlugin.server;
         const watcher = watcherPlugin.watcher;
-        server.appendHtml({
+        server.injectScript({
             condition: () => true,
-            html: `<script src='/__FOXMAN__CLIENT__/js/reload.js'></script>`
+            src: `/__FOXMAN__CLIENT__/js/reload.js`
         });
 
         this.reloader = new Reloader(

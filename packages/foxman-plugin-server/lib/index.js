@@ -1,6 +1,6 @@
 const Server = require('./Server');
 const path = require('path');
-const { Renderer } = require('@foxman/helpers');
+const {Renderer} = require('@foxman/helpers');
 const formatStaticOptions = require('./utils/formatStaticOptions');
 
 class ServerPlugin {
@@ -13,7 +13,7 @@ class ServerPlugin {
             .filter(item => !!item)
             .map(formatStaticOptions);
 
-        options.runtimeRouters = { routers: options.routers || [] };
+        options.runtimeRouters = {routers: options.routers || []};
 
         delete options.routers;
 
@@ -50,7 +50,7 @@ class ServerPlugin {
     }
 
     runOnSuccess() {
-        this.server.createServer();
+        this.server.start();
     }
 }
 

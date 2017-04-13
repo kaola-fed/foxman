@@ -2,18 +2,10 @@ class VconsolePlugin {
     constructor() {}
 
     init(serverPlugin) {
-        serverPlugin.server.appendHtml({
-            condition: VconsolePlugin.condition,
-            html: VconsolePlugin.getHtml()
+        serverPlugin.server.injectScript({
+            condition: request => request.query.debug == 1,
+            src: `/__FOXMAN__CLIENT__/js/vconsole.min.js`
         });
-    }
-
-    static condition(request) {
-        return request.query.debug == 1;
-    }
-
-    static getHtml() {
-        return '<script src="/__FOXMAN__CLIENT__/js/vconsole.min.js"></script>';
     }
 }
 

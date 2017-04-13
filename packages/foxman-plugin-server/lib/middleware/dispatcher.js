@@ -1,5 +1,5 @@
 const path = require('path');
-const { fileUtil, util, DispatherTypes } = require('@foxman/helpers');
+const {fileUtil, util, DispatherTypes} = require('@foxman/helpers');
 const apiHandler = require('@foxman/helpers/lib/apiHandler');
 
 /**
@@ -9,7 +9,7 @@ const apiHandler = require('@foxman/helpers/lib/apiHandler');
  * @param  {[type]} next [description]
  * @return {[type]}         [description]
  */
-function* dirDispatcher({ dispatcher, next }) {
+function* dirDispatcher({dispatcher, next}) {
     const sortFiles = list => {
         return list.sort((a, b) => {
             return a.name.charAt(0).localeCompare(b.name.charAt(0));
@@ -59,7 +59,7 @@ function* dirDispatcher({ dispatcher, next }) {
 function* syncDispatcher(
     {
         dispatcher,
-        tplRender,
+        viewEngine,
         next
     }
 ) {
@@ -83,7 +83,7 @@ function* syncDispatcher(
     }
 
     try {
-        let result = yield tplRender.parse(filePath, json);
+        let result = yield viewEngine.parse(filePath, json);
         this.type = 'text/html; charset=utf-8';
         this.body = result;
     } catch (msg) {
@@ -110,7 +110,7 @@ function* syncDispatcher(
  * @param next
  * @returns {*}
  */
-function* asyncDispather({ dispatcher, next }) {
+function* asyncDispather({dispatcher, next}) {
     /**
      * 异步接口处理
      * @type {[type]}
@@ -137,9 +137,9 @@ function* asyncDispather({ dispatcher, next }) {
     return yield next;
 }
 
-module.exports = ({ tplRender }) => {
+module.exports = ({viewEngine}) => {
     return function*(next) {
-        const { dispatcher = false } = this;
+        const {dispatcher = false} = this;
 
         if (!dispatcher) {
             return yield next;
@@ -149,7 +149,7 @@ module.exports = ({ tplRender }) => {
          * 分配给不同的处理器
          * @type {Object}
          */
-        let args = { tplRender, next };
+        let args = {viewEngine, next};
 
         let dispatcherMap = {
             [DispatherTypes.DIR]: dirDispatcher,
@@ -160,10 +160,7 @@ module.exports = ({ tplRender }) => {
         let handler = dispatcherMap[dispatcher.type];
 
         if (handler) {
-            return yield handler.call(
-                this,
-                Object.assign({ dispatcher }, args)
-            );
+            return yield handler.call(this, Object.assign({dispatcher}, args));
         }
 
         yield next;

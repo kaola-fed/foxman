@@ -11,8 +11,7 @@ const {util} = require('@foxman/helpers');
 const dispatcher = require('./middleware/dispatcher');
 const routerMap = require('./middleware/routermap');
 const setStaticHandler = require('./setStaticHandler');
-const {setRender, setView} = require('./setRender');
-const setHtmlAppender = require('./setHtmlAppender');
+const {configureViewEngine, configureEjs} = require('./configureViewEngine');
 
 const WebSocketServer = WebSocket.Server;
 
@@ -22,19 +21,19 @@ class Server {
     constructor(options) {
         this.serverOptions = options;
         this.middlewares = [];
-        this.ifAppendHtmls = [];
+        this._injectedScripts = [];
         this.app = Koa({outputErrors: false});
 
         const {Render, templatePaths, viewRoot} = options;
         const app = this.app;
 
-        this.tplRender = setRender({
+        this.viewEngine = configureViewEngine({
             Render,
             templatePaths,
             viewRoot
         });
 
-        setView({app});
+        configureEjs({app});
     }
 
     registerRouterNamespace(name, value = []) {
@@ -54,7 +53,7 @@ class Server {
     }
 
     delayInit() {
-        const {app, ifAppendHtmls, tplRender} = this;
+        const {app, _injectedScripts, viewEngine} = this;
         const {ifProxy, statics} = this.serverOptions;
 
         if (!ifProxy) {
@@ -66,9 +65,22 @@ class Server {
 
         this.middlewares.forEach(middleware => app.use(middleware));
 
-        app.use(dispatcher({tplRender}));
+        app.use(dispatcher({viewEngine}));
 
-        setHtmlAppender({app, ifAppendHtmls});
+        // inject scripts
+        app.use(function*(next) {
+            if (/text\/html/ig.test(this.type)) {
+                this.body = this.body +
+                    _injectedScripts
+                        .map(script => {
+                            return script.condition(this.request)
+                                ? `<script type="text/javascript" src="${script.src}"></script>`
+                                : '';
+                        })
+                        .join('');
+            }
+            yield next;
+        });
 
         setStaticHandler({statics, app});
     }
@@ -77,11 +89,11 @@ class Server {
         this.middlewares.push(middleware(this));
     }
 
-    appendHtml(condition) {
-        this.ifAppendHtmls.push(condition);
+    injectScript({condition, src}) {
+        this._injectedScripts.push({condition, src});
     }
 
-    createServer() {
+    start() {
         this.delayInit();
 
         const port = this.serverOptions.port || 3000;

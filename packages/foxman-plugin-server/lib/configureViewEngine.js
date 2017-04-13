@@ -1,16 +1,16 @@
 const render = require('koa-ejs');
 const path = require('path');
 
-module.exports = { setRender, setView };
+module.exports = { configureViewEngine, configureEjs };
 
-function setRender({ Render, templatePaths, viewRoot }) {
+function configureViewEngine({ Render, templatePaths, viewRoot }) {
     return new Render({
         templatePaths: templatePaths,
         viewRoot: viewRoot
     });
 }
 
-function setView({ app }) {
+function configureEjs({ app }) {
     render(app, {
         root: path.resolve(__dirname, 'views'),
         layout: 'template',
