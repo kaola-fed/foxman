@@ -21,7 +21,7 @@ const {notify, values} = util;
 class Server {
     constructor(options) {
         this.serverOptions = options;
-        this.middleware = [];
+        this.middlewares = [];
         this.ifAppendHtmls = [];
         this.app = Koa({outputErrors: false});
 
@@ -64,7 +64,7 @@ class Server {
         // {extension, runtimeRouters, divideMethod, viewRoot, syncData, asyncData, syncDataMatch, asyncDataMatch}
         app.use(routerMap(this.serverOptions));
 
-        this.middleware.forEach(app.use);
+        this.middlewares.forEach(middleware => app.use(middleware));
 
         app.use(dispatcher({tplRender}));
 
@@ -74,7 +74,7 @@ class Server {
     }
 
     use(middleware) {
-        this.middleware.push(middleware(this));
+        this.middlewares.push(middleware(this));
     }
 
     appendHtml(condition) {
