@@ -2,7 +2,7 @@
 *.idea*
 *.vscode*
 .DS_Store
-
+jest/
 
 # target
 **dist**
