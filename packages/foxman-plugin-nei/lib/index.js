@@ -111,7 +111,7 @@ class NEISyncPlugin {
         const {key, basedir} = this.NEIInfo;
 
         return this.pending(end => {
-            return require('./NEISync').default
+            return require('./NEISync')
                 .run({key, basedir})
                 .then(config => this.getUpdate(config))
                 .then(routes => {
