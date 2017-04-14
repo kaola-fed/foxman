@@ -1,6 +1,6 @@
 {
   "name": "foxman",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "main": "app.js",
   "description": "Extensible Mock Server",
   "preferGlobal": true,
@@ -18,8 +18,7 @@
   "engines": {
     "node": ">=6.4.0"
   },
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kaola-fed/foxman.git"
@@ -39,11 +38,10 @@
     "url": "https://github.com/kaola-fed/foxman/issues"
   },
   "homepage": "https://github.com/kaola-fed/foxman#readme",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
-    "@foxman/core": "^0.1.0",
-    "@foxman/helpers": "^0.1.0",
+    "@foxman/core": "^0.1.1",
+    "@foxman/helpers": "^0.1.1",
     "update-notifier": "^2.1.0",
     "yargs": "^7.0.2"
   }
