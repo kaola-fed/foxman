@@ -88,10 +88,7 @@ class ProxyPlugin {
                 }
         );
 
-        util.notify({
-            title: 'Proxy successfully',
-            msg: `Proxying to remote server ${proxyServerName}`
-        });
+        util.log(`Proxying to remote server ${proxyServerName}`);
     }
 }
 

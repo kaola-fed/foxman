@@ -29,9 +29,10 @@ function* execute(dependencies) {
     for (const [, plugin] of entries(dependencies)) {
         if (plugin.init && plugin.enable) {
             di(plugin.init, plugin);
-
             if (plugin.pendings) {
+                log(`plugin pedding: ${plugin.name}`);
                 yield Promise.all(plugin.pendings);
+                log(`plugin done: ${plugin.name}`);
             }
         }
     }
