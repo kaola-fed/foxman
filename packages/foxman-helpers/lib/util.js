@@ -185,28 +185,50 @@ function addDataExt(filePath) {
     return filePath + '.json';
 }
 
-module.exports = {
-    debugLog,
-    error,
-    warnLog,
-    log,
-    typeOf,
-    createSystemId,
-    initialsCapitals,
-    lowerCaseFirstLetter,
-    jsSpawn,
-    jsonPathResolve,
-    removeHeadBreak,
-    removeSuffix,
-    appendHeadBreak,
-    sha1,
-    parseJSON,
-    isPromise,
-    isGeneratorDone,
-    entries,
-    compressHtml,
-    readJSONFile,
-    values,
-    notify,
-    addDataExt
-};
+exports.debugLog = debugLog;
+
+exports.error = error;
+
+exports.log = log;
+
+exports.typeOf = typeOf;
+
+exports.warnLog = warnLog;
+
+exports.createSystemId = createSystemId;
+
+exports.initialsCapitals = initialsCapitals;
+
+exports.lowerCaseFirstLetter = lowerCaseFirstLetter;
+
+exports.jsSpawn = jsSpawn;
+
+exports.jsonPathResolve = jsonPathResolve;
+
+exports.removeHeadBreak = removeHeadBreak;
+
+exports.removeSuffix = removeSuffix;
+
+exports.appendHeadBreak = appendHeadBreak;
+
+exports.sha1 = sha1;
+
+exports.parseJSON = parseJSON;
+
+exports.isPromise = isPromise;
+
+exports.isGeneratorDone = isGeneratorDone;
+
+exports.isPromise = isPromise;
+
+exports.entries = entries;
+
+exports.compressHtml = compressHtml;
+
+exports.readJSONFile = readJSONFile;
+
+exports.values = values;
+
+exports.addDataExt = addDataExt;
+
+exports.notify = notify;
