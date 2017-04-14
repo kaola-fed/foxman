@@ -1,8 +1,10 @@
-# ide
+# dev
 *.idea*
 *.vscode*
-.DS_Store
 jest/
+
+# env
+.DS_Store
 
 # target
 **dist**
