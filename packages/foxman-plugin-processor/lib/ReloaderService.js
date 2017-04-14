@@ -29,7 +29,7 @@ class ReloaderService {
 
         this.watcher.onUpdate(diff, () => {
             resourcesManager.clear(reqPath);
-            this.reloader.reload(reqPath);
+            this.reloader.notifyReload(reqPath);
         });
 
         this.map[reqPath] = [...oldThings, ...diff];

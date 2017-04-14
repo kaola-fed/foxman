@@ -15,7 +15,8 @@ module.exports = function formatStaticOptions(opts = {}) {
         gzip = true,
         preload = false,
         dynamic = true,
-        filter = file => file.indexOf('node_modules') === -1
+        buffer = true,
+        filter = file => !~file.indexOf('node_modules')
     } = options;
 
     return {
@@ -25,6 +26,7 @@ module.exports = function formatStaticOptions(opts = {}) {
         gzip,
         preload,
         dynamic,
+        buffer,
         filter
     };
 };

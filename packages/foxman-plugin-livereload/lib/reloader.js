@@ -1,21 +1,19 @@
-const EventEmitter = require('events');
 const path = require('path');
 const {values} = require('@foxman/helpers/lib/util');
 
-class Reloader extends EventEmitter {
+class Reloader {
     constructor(options) {
-        super();
         Object.assign(this, options);
-        this.bindChange();
+        this.watch();
     }
 
-    reload(url) {
+    notifyReload(url) {
         if (this.server && this.server.wss) {
             this.server.wss.broadcast(url);
         }
     }
 
-    bindChange() {
+    watch() {
         const {server, watcher} = this;
         const {
             extension,
@@ -29,7 +27,7 @@ class Reloader extends EventEmitter {
             return path.join(templatePath, '**', '*.' + extension);
         };
 
-        const templatePathes = [
+        const templates = [
             ...values(templatePaths),
             viewRoot
         ].map(templatePath =>
@@ -40,21 +38,18 @@ class Reloader extends EventEmitter {
 
         const syncDataRoot = path.join(syncData, '**', '*.json');
         const resources = statics.reduce(
-            (prev, item) => {
+            (total, current) => {
                 return [
-                    ...prev,
-                    ...['*.css', '*.js', '*.html'].map(ext =>
-                        path.join(item.dir, '**', ext))
+                    ...total,
+                    ...['*.css', '*.js', '*.html'].map(tail =>
+                        path.join(current.dir, '**', tail))
                 ];
             },
             []
         );
 
-        const reloadResources = [...templatePathes, syncDataRoot, ...resources];
-
-        watcher.onUpdate(reloadResources, arg0 => {
-            this.reload(path.basename(arg0));
-        });
+        watcher.onUpdate([...templates, syncDataRoot, ...resources], filepath =>
+            this.notifyReload(path.basename(filepath)));
     }
 }
 module.exports = Reloader;
