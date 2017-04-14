@@ -1,6 +1,6 @@
 {
   "name": "foxman",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "main": "app.js",
   "description": "Extensible Mock Server",
   "preferGlobal": true,
@@ -40,8 +40,8 @@
   "homepage": "https://github.com/kaola-fed/foxman#readme",
   "devDependencies": {},
   "dependencies": {
-    "@foxman/core": "^0.1.1",
-    "@foxman/helpers": "^0.1.1",
+    "@foxman/core": "^0.1.2",
+    "@foxman/helpers": "^0.1.2",
     "update-notifier": "^2.1.0",
     "yargs": "^7.0.2"
   }
