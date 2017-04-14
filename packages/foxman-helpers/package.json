@@ -9,7 +9,7 @@
   "license": "MIT",
   "dependencies": {
     "chalklog": "^1.1.2",
-    "fast-ftl": "latest",
+    "fast-ftl": "1.7.1",
     "node-notifier": "^5.1.2",
     "semver": "^5.3.0"
   }
