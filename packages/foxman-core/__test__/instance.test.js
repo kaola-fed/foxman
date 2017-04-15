@@ -1,4 +1,4 @@
-const { init, generatePending } = require('../lib/application/Instance');
+const { init, generatePending } = require('../lib/Instance');
 
 class NoPendingPlugin {
     constructor() {
@@ -11,7 +11,7 @@ class NoPendingPlugin {
 
 class PendingPlugin {
     constructor() {
-        
+
     }
     init() {
         this.pending(function (done) {
@@ -22,7 +22,7 @@ class PendingPlugin {
 
 test('NoPendingPlugin', function() {
     const instance = new NoPendingPlugin();
-    
+
     init(instance);
     instance.init();
 
@@ -32,11 +32,11 @@ test('NoPendingPlugin', function() {
 
 test('PendingPlugin', function() {
     const instance = new PendingPlugin();
-    
+
     init(instance);
 
     instance.init();
-    
+
     expect(instance.pendings.length).toBe(1);
 });
 
