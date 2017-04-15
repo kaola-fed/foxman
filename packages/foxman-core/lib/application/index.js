@@ -1,5 +1,5 @@
 const co = require( 'co' );
-const { lowerCaseFirstLetter, log, entries } = require( '@foxman/helpers/lib/util' );
+const { log, entries } = require( '@foxman/helpers/lib/util' );
 const { init } = require( './Instance' );
 const { register, di, dependencies, get } = require( './DI' );
 
@@ -14,7 +14,7 @@ function use(plugin) {
 
     init(plugin);
 
-    register(lowerCaseFirstLetter(plugin.name), plugin);
+    register(plugin.name, plugin);
 
     log(`plugin loaded: ${plugin.name}`);
 }
@@ -29,7 +29,7 @@ function* execute(dependencies) {
     for (const [, plugin] of entries(dependencies)) {
         if (plugin.init && plugin.enable) {
             di(plugin.init, plugin);
-            if (plugin.pendings) {
+            if (plugin.pendings.length > 0 ) {
                 log(`plugin pedding: ${plugin.name}`);
                 yield Promise.all(plugin.pendings);
                 log(`plugin done: ${plugin.name}`);

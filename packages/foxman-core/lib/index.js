@@ -4,6 +4,7 @@ const Livereload = require('@foxman/plugin-livereload');
 const Processor = require('@foxman/plugin-processor');
 const Watch = require('@foxman/plugin-watch');
 const Server = require('@foxman/plugin-server');
+const VconsolePlugin = require('@foxman/plugin-vconsole');
 
 module.exports = config => {
     app.use(new Watch(config.watch));
@@ -19,9 +20,9 @@ module.exports = config => {
     );
 
     if (config.nei) {
-        const VconsolePlugin = require('@foxman/plugin-nei');
+        const NEISyncPlugin = require('@foxman/plugin-nei');
         app.use(
-            new VconsolePlugin(
+            new NEISyncPlugin(
                 Object.assign(config.nei, {
                     update: config.argv.update
                 })
@@ -29,13 +30,9 @@ module.exports = config => {
         );
     }
 
-    // Outer Plugins
     app.use(config.plugins);
 
-    if (config.server.debugTool) {
-        const VconsolePlugin = require('@foxman/plugin-vconsole');
-        app.use(new VconsolePlugin());
-    }
+    app.use(new VconsolePlugin());
 
     app.use(
         new Proxy({
