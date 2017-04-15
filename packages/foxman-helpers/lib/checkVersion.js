@@ -8,4 +8,5 @@ function checkVersion({ version, versionLimit, notify = [] }) {
         notify.forEach(errorLog);
         process.exit(1);
     }
+    return true;
 }

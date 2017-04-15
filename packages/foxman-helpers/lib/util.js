@@ -202,6 +202,8 @@ exports.error = error;
 
 exports.log = log;
 
+exports.errorLog = errorLog;
+
 exports.typeOf = typeOf;
 
 exports.warnLog = warnLog;
