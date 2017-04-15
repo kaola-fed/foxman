@@ -7,7 +7,7 @@ const {
 const {init} = require('./Instance');
 const {register, di, dependencies, get} = require('./DI');
 
-module.exports = {use, run, get};
+module.exports = {use, run, stop, get};
 
 function use(plugin) {
     if (!plugin) {
