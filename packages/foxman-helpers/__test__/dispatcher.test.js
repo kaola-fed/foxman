@@ -9,13 +9,12 @@ test('apiHandler', function() {
     ]
   }).then(info => {
     expect(info.json.foo).toBe('bar');
-  }, function () {
   });
 });
 
 test('apiHandler-sigleDataPath', function() {
   var combine = apiHandler({
-    dataPath: path.resolve(__dirname, 'fixtures/dispatcher/foo/foo.json')
+    dataPath: path.resolve(__dirname, 'fixtures/dispatcher/foo/bar.json')
   }).then(info => {
     expect(info.json.foo).toBe('bar');
   });
