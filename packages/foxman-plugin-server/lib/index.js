@@ -6,7 +6,10 @@ const checkServerConfig = require('./utils/checkServerConfig');
 
 class ServerPlugin {
     constructor(opts = {}) {
-        checkServerConfig(opts);
+        const result = checkServerConfig(opts);
+        if (result) {
+            _.errorLog(result);
+        }
 
         // TODO: 需要deepClone
         const options = Object.assign({}, opts);
