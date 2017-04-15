@@ -1,11 +1,7 @@
-const { register, di, dependencies, get } = require('../lib/DI')();
+const { register, di, dependencies } = require('../lib/DI')();
 
 test('register', function() {
     expect(register('key', { name: 'plugin1' })).toBe(undefined);
-});
-
-test('get', function() {
-    expect(get('key').name).toBe('plugin1');
 });
 
 test('di', function() {

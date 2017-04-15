@@ -63,9 +63,4 @@ module.exports = class Core {
             }
         }).catch(e => console.error(e));
     }
-
-    get(...args) {
-        const get = this.di.get;
-        return get(...args);
-    }
 };
