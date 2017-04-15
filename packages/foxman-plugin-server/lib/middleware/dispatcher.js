@@ -17,10 +17,7 @@ module.exports = ({viewEngine}) => {
         if (!dispatcher) {
             return yield next;
         }
-        /**
-         * 分配给不同的处理器
-         * @type {Object}
-         */
+
         let args = {viewEngine, next};
         let handler = getHandler(dispatcher.type);
         
