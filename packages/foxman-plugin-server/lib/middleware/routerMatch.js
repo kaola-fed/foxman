@@ -7,7 +7,7 @@ const {DIR, SYNC} = consts.DispatherTypes;
 const { values, removeSuffix, addDataExt, jsonPathResolve } = _;
 
 // 获得路由的 dispatcher 对象
-function mapRouter(
+function matchRouter(
     {
         runtimeRouters,
         reqQuery,
@@ -64,7 +64,7 @@ function mapRouter(
     return dispatcher;
 }
 
-function mapResource({
+function matchResource({
         reqQuery,
         reqPath,
         extension,
@@ -115,10 +115,9 @@ module.exports = (
     }
 ) => {
     return function*(next) {
-        const { method, query, path } = this.request;
-        const [reqPath, reqMethod, reqQuery] = [path, method, query];
+        const { method: reqMethod, query: reqQuery, path: reqPath } = this.request;
 
-        const routerDispatcher = mapRouter({
+        this.dispatcher = matchRouter({
             runtimeRouters,
             reqQuery,
             reqMethod,
@@ -128,15 +127,13 @@ module.exports = (
             divideMethod,
             syncDataMatch,
             asyncDataMatch
-        });
-        const resourcesDispatcher = mapResource({
+        }) || matchResource({
             reqPath,
             reqQuery,
             extension,
             viewRoot,
             syncDataMatch
         });
-        this.dispatcher = routerDispatcher || resourcesDispatcher;
 
         return yield next;
     };

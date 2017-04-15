@@ -8,8 +8,10 @@ const WebSocket = require('ws');
 const bodyParser = require('koa-bodyparser');
 
 const {util} = require('@foxman/helpers');
-const dispatcher = require('./middleware/dispatcher');
-const routerMap = require('./middleware/routerMapping');
+const routerMatch = require('./middleware/routerMatch');
+const apiInterceptor = require('./middleware/apiInterceptor');
+const pageInterceptor = require('./middleware/pageInterceptor');
+const dirInterceptor = require('./middleware/dirInterceptor');
 const configureStatics = require('./configureStatics');
 const {configureViewEngine, configureEjs} = require('./configureViewEngine');
 
@@ -61,11 +63,13 @@ class Server {
         }
 
         // {extension, runtimeRouters, divideMethod, viewRoot, syncData, asyncData, syncDataMatch, asyncDataMatch}
-        app.use(routerMap(this.serverOptions));
+        app.use(routerMatch(this.serverOptions));
 
         this._middlewares.forEach(middleware => app.use(middleware));
 
-        app.use(dispatcher({viewEngine}));
+        app.use(pageInterceptor({viewEngine}));
+        app.use(apiInterceptor());
+        app.use(dirInterceptor());
 
         // inject builtin scripts
         app.use(function*(next) {
