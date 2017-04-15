@@ -42,6 +42,13 @@
   "dependencies": {
     "@foxman/core": "^0.1.2",
     "@foxman/helpers": "^0.1.2",
+	"@foxman/plugin-livereload": "^0.1.2",
+    "@foxman/plugin-nei": "^0.1.2",
+    "@foxman/plugin-processor": "^0.1.2",
+    "@foxman/plugin-proxy": "^0.1.2",
+    "@foxman/plugin-server": "^0.1.2",
+    "@foxman/plugin-vconsole": "^0.1.1",
+    "@foxman/plugin-watch": "^0.1.1",
     "update-notifier": "^2.1.0",
     "yargs": "^7.0.2"
   }
