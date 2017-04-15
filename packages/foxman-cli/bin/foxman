@@ -9,7 +9,9 @@ const checkFoxmanConfig = require('./check-foxman-config');
 const welcome = require('./welcome');
 const pkg = require('../package.json');
 
-checkNodeVersion();
+if (!checkNodeVersion()) {
+    process.exit(1);
+}
 
 updateNotifier({pkg}).notify();
 
@@ -40,7 +42,9 @@ const argv = yargs
 
 const configPath = path.join(process.cwd(), argv.config);
 
-checkFoxmanConfig(configPath);
+if (!checkFoxmanConfig(configPath)) {
+    process.exit(1);
+}
 
 const config = require(configPath);
 
@@ -48,7 +52,9 @@ if (argv.port) {
     config.server.port = parseInt(argv.port);
 }
 
-checkFoxmanVersion(config.upgrade || {});
+if (!checkFoxmanVersion(config.upgrade)) {
+    process.exit(1);
+}
 
 welcome();
 

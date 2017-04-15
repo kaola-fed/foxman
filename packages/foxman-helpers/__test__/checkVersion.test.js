@@ -9,6 +9,14 @@ test('checkVersion', function () {
         /** expectedValue */
         true
         );
+
+    expect(
+        /** result */
+        checkVersion({ version: '1.0.0', versionLimit: '2.0.0' })
+    ).toBe(
+        /** expectedValue */
+        false
+        );
 });
 
 test('checkVersion-prerelease', function () {

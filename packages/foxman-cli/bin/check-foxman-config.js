@@ -30,6 +30,7 @@ module.exports = function (configPath) {
             );
             console.log(err);
         }
-        process.exit(1);
+        return false;
     }
+    return true;
 };

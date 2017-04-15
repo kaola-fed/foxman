@@ -1,4 +1,4 @@
-module.exports = function(upgrade) {
+module.exports = function(upgrade = {}) {
     const { checkVersion } = require('@foxman/helpers/lib/checkVersion');
     const pkg = require('../package.json');
 
@@ -11,7 +11,7 @@ module.exports = function(upgrade) {
             notify = upgrade.notify;
         }
 
-        checkVersion({
+        return checkVersion({
             version: pkg.version,
             versionLimit: upgrade.version,
             notify: [
@@ -23,4 +23,6 @@ module.exports = function(upgrade) {
             ]
         });
     }
+    
+    return true;
 };
