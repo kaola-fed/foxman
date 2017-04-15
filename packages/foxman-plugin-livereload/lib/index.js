@@ -13,15 +13,7 @@ class LivereloadPlugin {
             src: `/__FOXMAN__CLIENT__/js/reload.js`
         });
 
-        this.reloader = new Reloader(
-            Object.assign(
-                {
-                    watcher,
-                    server
-                },
-                this.options
-            )
-        );
+        this.reloader = new Reloader({watcher, server});
     }
 }
 module.exports = LivereloadPlugin;
