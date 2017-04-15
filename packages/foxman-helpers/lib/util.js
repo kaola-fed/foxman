@@ -196,6 +196,14 @@ function ensurePromise(result) {
     return Promise.resolve(result);
 }
 
+function ensureArray(target) {
+    if (Array.isArray(target)) {
+        return target;
+    }
+
+    return [target];
+}
+
 exports.debugLog = debugLog;
 
 exports.error = error;
@@ -247,3 +255,5 @@ exports.addDataExt = addDataExt;
 exports.notify = notify;
 
 exports.ensurePromise = ensurePromise;
+
+exports.ensureArray = ensureArray;

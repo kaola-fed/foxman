@@ -237,10 +237,18 @@ test('sha1', function () {
 });
 
 test('parseJSON', function () {
-  'use strict';
   expect(
     _.parseJSON('{a:1}').a
   ).toBe(
     1
     );
 });
+
+test('ensureArray', function () {
+  expect(
+    _.ensureArray(1)[0]
+  ).toBe(
+    1
+    );
+});
+
