@@ -34,7 +34,7 @@ module.exports = config => {
     // Outer Plugins
     core.use(config.plugins);
 
-    if (config.server.debugTool) {
+    if (config.vconsole || config.server.debugTool) {
         const VconsolePlugin = require('@foxman/plugin-vconsole');
         core.use(new VconsolePlugin());
     }
