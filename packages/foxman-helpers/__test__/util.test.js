@@ -66,10 +66,10 @@ test('log', function () {
     );
 });
 
-test('initialsCapitals', function () {
+test('upperCaseFirstLetter', function () {
   expect(
     /** result */
-    _.initialsCapitals('hello')
+    _.upperCaseFirstLetter('hello')
   ).toBe(
     /** expectedValue */
     'Hello'
@@ -79,7 +79,7 @@ test('initialsCapitals', function () {
 test('firstUpperCase', function () {
   var url = 'http://www.kaola.com';
   expect(
-    _.initialsCapitals('abb')
+    _.upperCaseFirstLetter('abb')
   ).toBe(
     'Abb'
     );

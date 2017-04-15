@@ -25,7 +25,7 @@ function isGeneratorDone(obj) {
 
 function debugLog(msg) {
     if (process.env.NODE_ENV === 'development') {
-        clog.blue(initialsCapitals(msg));
+        clog.blue(upperCaseFirstLetter(msg));
     }
     return 0;
 }
@@ -55,13 +55,13 @@ function error(msg) {
 }
 
 function log(msg) {
-    clog.green(initialsCapitals(msg));
+    clog.green(upperCaseFirstLetter(msg));
     return 0;
 }
 
 function warnLog(msg) {
     msg = msg.stack || msg;
-    clog.yellow(initialsCapitals(msg));
+    clog.yellow(upperCaseFirstLetter(msg));
 }
 
 function createSystemId() {
@@ -72,7 +72,7 @@ function createSystemId() {
     };
 }
 
-function initialsCapitals(str) {
+function upperCaseFirstLetter(str) {
     return str.replace(/^\b(\w)(\w*)/, function($0, $1, $2) {
         return $1.toUpperCase() + $2;
     });
@@ -217,7 +217,7 @@ exports.warnLog = warnLog;
 
 exports.createSystemId = createSystemId;
 
-exports.initialsCapitals = initialsCapitals;
+exports.upperCaseFirstLetter = upperCaseFirstLetter;
 
 exports.lowerCaseFirstLetter = lowerCaseFirstLetter;
 
