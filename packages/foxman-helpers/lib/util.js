@@ -1,11 +1,11 @@
 const child_process = require('child_process');
 const crypto = require('crypto');
-const {readFile, writeFileSync} = require('./fileutil');
+const { readFile, writeFileSync } = require('./fileutil');
 const Logger = require('chalklog');
 const notifier = require('node-notifier');
 const clog = new Logger('foxman');
 
-function notify({title, msg}) {
+function notify({ title, msg }) {
     notifier.notify({
         title: title,
         message: msg,
@@ -134,12 +134,6 @@ function sha1(buf) {
     return crypto.createHash('sha1').update(buf).digest('hex');
 }
 
-function* entries(obj) {
-    for (let key of Object.keys(obj)) {
-        yield [key, obj[key]];
-    }
-}
-
 function compressHtml(htmlstr) {
     if (typeof htmlstr !== 'string') {
         return htmlstr;
@@ -163,10 +157,10 @@ function readJSONFile(url) {
                     warnLog(e);
                     json = {};
                 }
-                resolve({json});
+                resolve({ json });
             })
             .catch(() => {
-                resolve({json: {}});
+                resolve({ json: {} });
             });
     });
 }
@@ -240,8 +234,6 @@ exports.isPromise = isPromise;
 exports.isGeneratorDone = isGeneratorDone;
 
 exports.isPromise = isPromise;
-
-exports.entries = entries;
 
 exports.compressHtml = compressHtml;
 

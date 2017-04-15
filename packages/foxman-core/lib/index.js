@@ -1,5 +1,5 @@
 const co = require('co');
-const { log, entries } = require('@foxman/helpers/lib/util');
+const { log } = require('@foxman/helpers/lib/util');
 const initializePlugin = require('./initializePlugin');
 const DI = require('./DI');
 
@@ -26,7 +26,9 @@ module.exports = class Core {
     start() {
         const { dependencies, di } = this.di;
         return co(function*() {
-            for (const [, plugin] of entries(dependencies)) {
+            for (const i in dependencies) {
+                const plugin = dependencies[i];
+
                 if (plugin.init && plugin.enable) {
                     di(plugin.init, plugin);
                     if (plugin.pendings.length > 0) {
@@ -38,7 +40,9 @@ module.exports = class Core {
             }
         })
             .then(() => {
-                for (const [, plugin] of entries(dependencies)) {
+                for (const i in dependencies) {
+                    const plugin = dependencies[i];
+
                     if (plugin.runOnSuccess) {
                         plugin.runOnSuccess();
                     }
@@ -50,7 +54,9 @@ module.exports = class Core {
     stop() {
         const { dependencies } = this.di;
         return co(function*() {
-            for (const [, plugin] of entries(dependencies)) {
+            for (const i in dependencies) {
+                const plugin = dependencies[i];
+
                 if (plugin.destroy && plugin.enable) {
                     yield plugin.destroy();
                 }
