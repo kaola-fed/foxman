@@ -1,31 +1,13 @@
-/**
- * dispatcher
- * type
- * filePath
- * tplPath
- * dataPath(sync才有)
- */
-const { util, DispatherTypes } = require('@foxman/helpers');
+const {util: _ } = require('@foxman/helpers');
 const path = require('path');
 const pathToRegexp = require('path-to-regexp');
+const {consts} = require('@foxman/helpers');
+const {DIR, SYNC} = consts.DispatherTypes;
 
-/**
- * 全局中间件,会将具体的页面转换成需要的资源
- * 1.同步
- *  { commonTplPath,commonSync }
- * 2.异步
- *  { commonAsync }
- * @param  {[type]} config [description]
- * @return {[type]}        [description]
- */
+const { values, removeSuffix, addDataExt, jsonPathResolve } = _;
 
-const { values, removeSuffix, addDataExt, jsonPathResolve } = util;
-
-/**
- * ① 拦截 router
- * 遍历路由表, 并给请求对象处理,生成 dispatcher
- */
-function getRouterDispatcher(
+// 获得路由的 dispatcher 对象
+function mapRouter(
     {
         runtimeRouters,
         reqQuery,
@@ -82,31 +64,24 @@ function getRouterDispatcher(
     return dispatcher;
 }
 
-/**
- * ② 未拦截到 router 入口时，拦截 router
- */
-function getResourcesDispatcher(
-    {
+function mapResource({
         reqQuery,
         reqPath,
         extension,
         viewRoot,
         syncDataMatch
-    }
-) {
+    }) {
     if (Number(reqQuery.mode) !== 1 && reqPath === '/') {
         reqPath = '/index.html';
     }
 
-    const DIR = '/';
-    const SYNC = `.${extension}`;
     const dispatcherMap = {
-        [DIR]: {
-            type: DispatherTypes.DIR,
+        ['/']: {
+            type: DIR,
             dataPath: null
         },
-        [SYNC]: {
-            type: DispatherTypes.SYNC,
+        [`.${extension}`]: {
+            type: SYNC,
             dataPath: syncDataMatch(jsonPathResolve(reqPath))
         }
     };
@@ -131,19 +106,19 @@ function getResourcesDispatcher(
 
 module.exports = (
     {
-        runtimeRouters, // structor
+        runtimeRouters, 
         extension,
-        divideMethod, // string
-        viewRoot, //path
+        divideMethod, 
+        viewRoot,
         syncDataMatch,
-        asyncDataMatch // fns
+        asyncDataMatch
     }
 ) => {
     return function*(next) {
         const { method, query, path } = this.request;
         const [reqPath, reqMethod, reqQuery] = [path, method, query];
 
-        const routerDispatcher = getRouterDispatcher({
+        const routerDispatcher = mapRouter({
             runtimeRouters,
             reqQuery,
             reqMethod,
@@ -154,7 +129,7 @@ module.exports = (
             syncDataMatch,
             asyncDataMatch
         });
-        const resourcesDispatcher = getResourcesDispatcher({
+        const resourcesDispatcher = mapResource({
             reqPath,
             reqQuery,
             extension,

@@ -9,7 +9,7 @@ const bodyParser = require('koa-bodyparser');
 
 const {util} = require('@foxman/helpers');
 const dispatcher = require('./middleware/dispatcher');
-const routerMap = require('./middleware/routermap');
+const routerMap = require('./middleware/routerMapping');
 const configureStatics = require('./configureStatics');
 const {configureViewEngine, configureEjs} = require('./configureViewEngine');
 

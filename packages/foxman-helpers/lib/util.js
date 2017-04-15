@@ -3,7 +3,6 @@ const crypto = require('crypto');
 const {readFile, writeFileSync} = require('./fileutil');
 const Logger = require('chalklog');
 const notifier = require('node-notifier');
-
 const clog = new Logger('foxman');
 
 function notify({title, msg}) {
