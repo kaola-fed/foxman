@@ -12,6 +12,8 @@ class ServerPlugin {
         const options = Object.assign({}, opts);
         const statics = options.static ? ensureArray(options.static) : [];
 
+        options.port = options.port || 3000;
+        
         options.statics = statics
             .filter(item => !!item)
             .map(formatStaticOptions);

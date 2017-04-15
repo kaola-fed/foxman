@@ -20,7 +20,7 @@ const {notify, values} = util;
 class Server {
     constructor(options) {
         this.serverOptions = options;
-        this.middlewares = [];
+        this._middlewares = [];
         this._injectedScripts = [];
         this.app = Koa({outputErrors: false});
 
@@ -63,7 +63,7 @@ class Server {
         // {extension, runtimeRouters, divideMethod, viewRoot, syncData, asyncData, syncDataMatch, asyncDataMatch}
         app.use(routerMap(this.serverOptions));
 
-        this.middlewares.forEach(middleware => app.use(middleware));
+        this._middlewares.forEach(middleware => app.use(middleware));
 
         app.use(dispatcher({viewEngine}));
 
@@ -86,7 +86,7 @@ class Server {
     }
 
     use(middleware) {
-        this.middlewares.push(middleware(this));
+        this._middlewares.push(middleware(this));
     }
 
     injectScript({condition, src}) {
@@ -95,20 +95,19 @@ class Server {
 
     start() {
         this.delayInit();
-
-        const port = this.serverOptions.port || 3000;
-        const httpOptions = {
-            key: fs.readFileSync(
-                path.resolve(__dirname, 'crt', 'localhost.key')
-            ),
-            cert: fs.readFileSync(
-                path.resolve(__dirname, 'crt', 'localhost.crt')
-            )
-        };
         const callback = this.app.callback();
-        const tips = `Server build successfully on ${this.https ? 'https' : 'http'}://127.0.0.1:${port}/`;
+        const {port, https} = this.serverOptions;
+        const tips = `Server build successfully on ${https ? 'https' : 'http'}://127.0.0.1:${port}/`;
 
-        if (this.https) {
+        if (https) {
+            const httpOptions = {
+                key: fs.readFileSync(
+                    path.resolve(__dirname, 'crt', 'localhost.key')
+                ),
+                cert: fs.readFileSync(
+                    path.resolve(__dirname, 'crt', 'localhost.crt')
+                )
+            };
             this.serverApp = http2.createServer(httpOptions, callback);
         } else {
             this.serverApp = http.createServer(callback);
