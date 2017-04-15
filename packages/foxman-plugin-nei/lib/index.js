@@ -1,5 +1,6 @@
 const path = require('path');
-const {util, DispatherTypes} = require('@foxman/helpers');
+const {util, consts} = require('@foxman/helpers');
+const {DIR, SYNC} = consts.DispatherTypes;
 const {
     getMockConfig,
     writeNEIConfig,
@@ -59,13 +60,13 @@ class NEISyncPlugin {
                     const {from} = router;
 
                     if (
-                        type === DispatherTypes.DIR || !router || from !== FROM
+                        type === DIR || !router || from !== FROM
                     ) {
                         return yield next;
                     }
 
                     const routeModel = {
-                        sync: DispatherTypes.SYNC == type,
+                        sync: SYNC == type,
                         filePath: filePath
                     };
 

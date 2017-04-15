@@ -9,7 +9,7 @@ const bodyParser = require('koa-bodyparser');
 
 const {util} = require('@foxman/helpers');
 const dispatcher = require('./middleware/dispatcher');
-const routerMap = require('./middleware/routermap');
+const routerMap = require('./middleware/routerMapping');
 const configureStatics = require('./configureStatics');
 const {configureViewEngine, configureEjs} = require('./configureViewEngine');
 
@@ -20,7 +20,7 @@ const {notify, values} = util;
 class Server {
     constructor(options) {
         this.serverOptions = options;
-        this.middlewares = [];
+        this._middlewares = [];
         this._injectedScripts = [];
         this.app = Koa({outputErrors: false});
 
@@ -63,7 +63,7 @@ class Server {
         // {extension, runtimeRouters, divideMethod, viewRoot, syncData, asyncData, syncDataMatch, asyncDataMatch}
         app.use(routerMap(this.serverOptions));
 
-        this.middlewares.forEach(middleware => app.use(middleware));
+        this._middlewares.forEach(middleware => app.use(middleware));
 
         app.use(dispatcher({viewEngine}));
 
@@ -104,7 +104,7 @@ class Server {
     }
 
     use(middleware) {
-        this.middlewares.push(middleware(this));
+        this._middlewares.push(middleware(this));
     }
 
     injectScript({condition, src}) {
@@ -135,19 +135,18 @@ class Server {
 
     start() {
         this.prepare();
-
-        const port = this.serverOptions.port || 3000;
-        const httpOptions = {
-            key: fs.readFileSync(
-                path.resolve(__dirname, 'crt', 'localhost.key')
-            ),
-            cert: fs.readFileSync(
-                path.resolve(__dirname, 'crt', 'localhost.crt')
-            )
-        };
+        const {port, https} = this.serverOptions;
         const callback = this.app.callback();
 
-        if (this.https) {
+        if (https) {
+            const httpOptions = {
+                key: fs.readFileSync(
+                    path.resolve(__dirname, 'crt', 'localhost.key')
+                ),
+                cert: fs.readFileSync(
+                    path.resolve(__dirname, 'crt', 'localhost.crt')
+                )
+            };
             this.serverApp = http2.createServer(httpOptions, callback);
         } else {
             this.serverApp = http.createServer(callback);

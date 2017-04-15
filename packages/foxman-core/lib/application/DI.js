@@ -5,21 +5,21 @@ const dependencies = {};
 
 module.exports = { register, di, dependencies, get };
 
-function register(key, value) {
-    dependencies[key] = value;
+function register(pluginName, plugin) {
+    dependencies[lowerCaseFirstLetter(pluginName)] = plugin;
 }
 
 function di(fn, context = {}) {
     const args = matchArguments(fn);
-    fn.apply(context, args.map(arg => find(arg)));
+    return fn.apply(context, args.map(pluginName => find(pluginName)));
 }
 
-function find(name) {
-    const injected = dependencies.hasOwnProperty(name);
-    if (!injected) {
-        util.error(`Plugin ${name} is not loaded!`);
+function find(pluginName) {
+    const plugin = get(pluginName);
+    if (!plugin) {
+        return util.error(`Plugin ${pluginName} is not loaded!`);
     }
-    return dependencies[name];
+    return plugin;
 }
 
 function get(pluginName) {

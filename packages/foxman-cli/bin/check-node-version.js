@@ -2,7 +2,7 @@ module.exports = function() {
     const { checkVersion } = require('@foxman/helpers/lib/checkVersion');
     const MIN_SUPPORT_NODE_VERSION = '6.4.0';
 
-    checkVersion({
+    return checkVersion({
         version: process.version,
         versionLimit: MIN_SUPPORT_NODE_VERSION,
         notify: [

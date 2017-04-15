@@ -4,40 +4,32 @@
 const {util: _} = require('@foxman/helpers');
 const pid = _.createSystemId();
 
-module.exports = {init};
+exports.init = init;
+exports.generatePending = generatePending;
 
 function init(plugin) {
+    const {enable = true} = plugin;
+
     Object.assign(plugin, {
-        id: pid(),
-        name: plugin.constructor.name,
+        id: pid(), name: plugin.constructor.name, enable,
+        pendings: [],
         pending: fn => {
             registerPendingToPlugin(generatePending(fn), plugin);
-        },
-        enable: typeof plugin.enable === 'undefined' ? true : plugin.enable
+        }
     });
 }
 
 function generatePending(fn) {
-    return new Promise(resolve => {
-        process.nextTick(() => {
-            ensurePromise(fn(resolve)).catch(e => {
-                console.error(e);
-            });
+    return new Promise(done => {
+        // process.nextTick(() => {
+        _.ensurePromise(fn(done)).catch(e => {
+            console.error(e);
         });
+        // });
     });
 }
 
 function registerPendingToPlugin(pending, plugin) {
-    if (!plugin.pendings) {
-        plugin.pendings = [];
-    }
-
     plugin.pendings = [...plugin.pendings, pending];
 }
 
-function ensurePromise(result) {
-    if (_.isPromise(result)) {
-        return result;
-    }
-    return Promise.resolve(result);
-}

@@ -18,7 +18,8 @@
     "coverageDirectory": "coverage",
     "collectCoverageFrom": [
       "packages/**/*.{js}",
-      "!**/node_modules/**"
+      "!**/node_modules/**",
+      "!**/foxman-plugin-server/lib/client/**"
     ],
     "moduleFileExtensions": [
       "js"

@@ -10,6 +10,7 @@ function welcome() {
             '\n'
         ].join('\n')
     );
+    return 0;
 }
 
 module.exports = welcome;

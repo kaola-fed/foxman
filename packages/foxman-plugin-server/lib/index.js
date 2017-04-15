@@ -1,17 +1,22 @@
 const Server = require('./Server');
 const path = require('path');
-const {Renderer} = require('@foxman/helpers');
+const {Renderer, util: _} = require('@foxman/helpers');
 const formatStaticOptions = require('./utils/formatStaticOptions');
 const checkServerConfig = require('./utils/checkServerConfig');
 
 class ServerPlugin {
     constructor(opts = {}) {
-        checkServerConfig(opts);
+        const result = checkServerConfig(opts);
+        if (result) {
+            _.errorLog(result);
+        }
 
         // TODO: 需要deepClone
         const options = Object.assign({}, opts);
-        const statics = options.static ? ensureArray(options.static) : [];
+        const statics = options.static ? _.ensureArray(opts.static) : [];
 
+        options.port = options.port || 3000;
+        
         options.statics = statics
             .filter(item => !!item)
             .map(formatStaticOptions);
@@ -51,14 +56,6 @@ class ServerPlugin {
     runOnSuccess() {
         this.server.start();
     }
-}
-
-function ensureArray(target) {
-    if (Array.isArray(target)) {
-        return target;
-    }
-
-    return [target];
 }
 
 module.exports = ServerPlugin;

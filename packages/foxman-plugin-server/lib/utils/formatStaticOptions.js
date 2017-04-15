@@ -1,23 +1,24 @@
 const path = require('path');
 
 module.exports = function formatStaticOptions(opts = {}) {
-    let options = opts;
-    if (typeof options === 'string') {
-        options = {
-            dir: path.resolve(process.cwd(), options)
+    if (typeof opts === 'string') {
+        opts = {
+            dir: opts
         };
     }
 
+    opts.dir = path.resolve(process.cwd(), opts.dir);
+    
     const {
         dir,
-        prefix = '/' + path.parse(options.dir).base,
+        prefix = '/' + path.parse(opts.dir).base,
         maxAge = 0,
         gzip = true,
         preload = false,
         dynamic = true,
         buffer = true,
         filter = file => !~file.indexOf('node_modules')
-    } = options;
+    } = opts;
 
     return {
         dir,
