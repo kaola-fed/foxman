@@ -1,9 +1,13 @@
-const co = require( 'co' );
-const { lowerCaseFirstLetter, log, entries } = require( '@foxman/helpers/lib/util' );
-const { init } = require( './Instance' );
-const { register, di, dependencies, get } = require( './DI' );
+const co = require('co');
+const {
+    lowerCaseFirstLetter,
+    log,
+    entries
+} = require('@foxman/helpers/lib/util');
+const {init} = require('./Instance');
+const {register, di, dependencies, get} = require('./DI');
 
-module.exports = { use, run, get };
+module.exports = {use, run, get};
 
 function use(plugin) {
     if (!plugin) {
@@ -17,6 +21,16 @@ function use(plugin) {
     register(lowerCaseFirstLetter(plugin.name), plugin);
 
     log(`plugin loaded: ${plugin.name}`);
+}
+
+function stop() {
+    return co(function*() {
+        for (const [, plugin] of entries(dependencies)) {
+            if (plugin.destroy && plugin.enable) {
+                yield plugin.destroy();
+            }
+        }
+    }).catch(e => console.error(e));
 }
 
 function run() {
@@ -39,7 +53,7 @@ function* execute(dependencies) {
 }
 
 function runPlugins(dependencies) {
-    return function () {
+    return function() {
         for (const [, plugin] of entries(dependencies)) {
             if (plugin.runOnSuccess) {
                 plugin.runOnSuccess();
