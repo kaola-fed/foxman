@@ -1,4 +1,4 @@
-const { init, generatePending } = require('../lib/application/instance');
+const { init, generatePending } = require('../lib/application/Instance');
 
 class NoPendingPlugin {
     constructor() {
