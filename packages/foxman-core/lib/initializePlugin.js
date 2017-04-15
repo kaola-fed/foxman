@@ -4,8 +4,7 @@
 const {util: _} = require('@foxman/helpers');
 const pid = _.createSystemId();
 
-exports.init = init;
-exports.generatePending = generatePending;
+module.exports = init;
 
 function init(plugin) {
     const {enable = true} = plugin;
@@ -32,4 +31,3 @@ function generatePending(fn) {
 function registerPendingToPlugin(pending, plugin) {
     plugin.pendings = [...plugin.pendings, pending];
 }
-
