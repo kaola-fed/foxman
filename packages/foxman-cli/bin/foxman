@@ -2,11 +2,11 @@
 const yargs = require('yargs');
 const path = require('path');
 const updateNotifier = require('update-notifier');
-const foxman = require('@foxman/core');
 const checkNodeVersion = require('./check-node-version');
 const checkFoxmanVersion = require('./check-foxman-version');
 const checkFoxmanConfig = require('./check-foxman-config');
 const welcome = require('./welcome');
+const run = require('./run');
 const pkg = require('../package.json');
 
 if (!checkNodeVersion()) {
@@ -58,4 +58,4 @@ if (!checkFoxmanVersion(config.upgrade)) {
 
 welcome();
 
-foxman(Object.assign({}, config, {argv, configPath}));
+run(Object.assign({}, config, {argv, configPath}));

@@ -14,10 +14,7 @@ class LivereloadPlugin {
             src: `/__FOXMAN__CLIENT__/js/reload.js`
         });
 
-        this.reloader = new Reloader({
-            watcher,
-            server
-        });
+        this.reloader = new Reloader({watcher, server});
     }
 }
 

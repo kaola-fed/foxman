@@ -52,7 +52,7 @@ class Server {
         return fn(this.getRuntimeRouters());
     }
 
-    delayInit() {
+    prepare() {
         const {app, _injectedScripts, viewEngine} = this;
         const {ifProxy, statics} = this.serverOptions;
 
@@ -66,6 +66,24 @@ class Server {
         this._middlewares.forEach(middleware => app.use(middleware));
 
         app.use(dispatcher({viewEngine}));
+
+        // inject builtin scripts
+        app.use(function*(next) {
+            if (/text\/html/ig.test(this.type)) {
+                this.body = this.body +
+                    [
+                        '/__FOXMAN__CLIENT__/js/builtin/eventbus.js',
+                        '/__FOXMAN__CLIENT__/js/builtin/websocket-connector.js',
+                        '/__FOXMAN__CLIENT__/js/builtin/eval.js'
+                    ]
+                        .map(
+                            _script =>
+                                `<script type="text/javascript" src="${_script}"></script>`
+                        )
+                        .join('');
+            }
+            yield next;
+        });
 
         // inject scripts
         app.use(function*(next) {
@@ -93,11 +111,32 @@ class Server {
         this._injectedScripts.push({condition, src});
     }
 
+    // only eval for one time
+    eval(code) {
+        const wss = this.wss;
+
+        if (wss) {
+            this.wss.broadcast({
+                type: 'eval',
+                payload: code
+            });
+        }
+    }
+
+    evalAlways(code) {
+        if (!this._waitForSending) {
+            this._waitForSending = [];
+        }
+        this._waitForSending.push({
+            type: 'eval',
+            payload: code
+        });
+    }
+
     start() {
-        this.delayInit();
-        const callback = this.app.callback();
+        this.prepare();
         const {port, https} = this.serverOptions;
-        const tips = `Server build successfully on ${https ? 'https' : 'http'}://127.0.0.1:${port}/`;
+        const callback = this.app.callback();
 
         if (https) {
             const httpOptions = {
@@ -114,38 +153,45 @@ class Server {
         }
 
         this.serverApp.listen(port);
-        this.wss = this.buildWebSocket({
-            serverApp: this.serverApp
+        this.wss = buildWebSocket(this.serverApp);
+        this.wss.on('connection', ws => {
+            ws.on('message', message => {
+                console.log('received: %s', message);
+            });
+
+            const waitForSending = this._waitForSending;
+            if (!waitForSending) {
+                return;
+            }
+            waitForSending.forEach(wfs => {
+                ws.send(JSON.stringify(wfs));
+            });
         });
 
+        const tips = `Server build successfully on ${this.https ? 'https' : 'http'}://127.0.0.1:${port}/`;
         util.log(tips);
         notify({
             title: 'Run successfully',
             msg: tips
         });
     }
+}
 
-    buildWebSocket({serverApp}) {
-        const wss = new WebSocketServer({
-            server: serverApp
+function buildWebSocket(server) {
+    const wss = new WebSocketServer({
+        server: server
+    });
+
+    wss.broadcast = data => {
+        data = JSON.stringify(data);
+        wss.clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(data);
+            }
         });
+    };
 
-        wss.on('connection', ws => {
-            ws.on('message', message => {
-                console.log('received: %s', message);
-            });
-        });
-
-        wss.broadcast = data => {
-            wss.clients.forEach(client => {
-                if (client.readyState === WebSocket.OPEN) {
-                    client.send(data);
-                }
-            });
-        };
-
-        return wss;
-    }
+    return wss;
 }
 
 module.exports = Server;
