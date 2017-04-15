@@ -20,7 +20,7 @@ function init(plugin) {
 function generatePending(fn) {
     return new Promise(resolve => {
         process.nextTick(() => {
-            ensurePromise(fn(resolve)).catch(e => {
+            _.ensurePromise(fn(resolve)).catch(e => {
                 console.error(e);
             });
         });
@@ -35,9 +35,3 @@ function registerPendingToPlugin(pending, plugin) {
     plugin.pendings = [...plugin.pendings, pending];
 }
 
-function ensurePromise(result) {
-    if (_.isPromise(result)) {
-        return result;
-    }
-    return Promise.resolve(result);
-}

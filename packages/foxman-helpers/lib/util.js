@@ -13,10 +13,11 @@ function notify({title, msg}) {
         sound: true,
         wait: true
     });
+    return 0;
 }
 
 function isPromise(obj) {
-    return obj && obj.value && obj.value.then;
+    return !!(obj && obj.then);
 }
 
 function isGeneratorDone(obj) {
@@ -27,10 +28,12 @@ function debugLog(msg) {
     if (process.env.NODE_ENV === 'development') {
         clog.blue(initialsCapitals(msg));
     }
+    return 0;
 }
 
 function errorLog(msg) {
     clog.red(msg);
+    return 0;
 }
 
 function error(msg) {
@@ -54,6 +57,7 @@ function error(msg) {
 
 function log(msg) {
     clog.green(initialsCapitals(msg));
+    return 0;
 }
 
 function warnLog(msg) {
@@ -65,7 +69,7 @@ function createSystemId() {
     // uid
     let currentId = 0;
     return function getNext() {
-        return ++currentId;
+        return currentId++;
     };
 }
 
@@ -185,6 +189,13 @@ function addDataExt(filePath) {
     return filePath + '.json';
 }
 
+function ensurePromise(result) {
+    if (isPromise(result)) {
+        return result;
+    }
+    return Promise.resolve(result);
+}
+
 exports.debugLog = debugLog;
 
 exports.error = error;
@@ -232,3 +243,5 @@ exports.values = values;
 exports.addDataExt = addDataExt;
 
 exports.notify = notify;
+
+exports.ensurePromise = ensurePromise;
