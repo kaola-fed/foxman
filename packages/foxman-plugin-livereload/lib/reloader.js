@@ -2,9 +2,9 @@ const path = require('path');
 const {values} = require('@foxman/helpers/lib/util');
 
 class Reloader {
-    constructor(options) {
-        this.server = options.server;
-        this.watcher = options.watcher;
+    constructor({server, watcher}) {
+        this.server = server;
+        this.watcher = watcher;
         this.watch();
     }
 
