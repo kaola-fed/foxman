@@ -6,8 +6,12 @@ const proxyHandler = require('./proxyHandler');
  * 全局代理插件
  */
 class ProxyPlugin {
-    get name() {
+    name() {
         return 'proxy';
+    }
+
+    service() {
+        return {};
     }
 
     constructor({ proxyServerName = '', proxyConfig = {} }) {

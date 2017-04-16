@@ -1,8 +1,12 @@
 const Reloader = require('./reloader');
 
 class LivereloadPlugin {
-    get name() {
+    name() {
         return 'livereload';
+    }
+
+    service() {
+        return {};
     }
 
     constructor() {}

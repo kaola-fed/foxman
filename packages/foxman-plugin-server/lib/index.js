@@ -5,8 +5,12 @@ const formatStaticOptions = require('./utils/formatStaticOptions');
 const checkServerConfig = require('./utils/checkServerConfig');
 
 class ServerPlugin {
-    get name() {
+    name() {
         return 'server';
+    }
+
+    service() {
+        return {};
     }
 
     constructor(opts = {}) {

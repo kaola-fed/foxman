@@ -14,8 +14,12 @@ const FROM = 'NEI';
  * Nei 插件
  */
 class NEISyncPlugin {
-    get name() {
+    name() {
         return 'nei';
+    }
+
+    service() {
+        return {};
     }
 
     constructor(options) {

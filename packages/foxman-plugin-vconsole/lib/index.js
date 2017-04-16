@@ -1,6 +1,10 @@
 class VconsolePlugin {
-    get name() {
+    name() {
         return 'livereload';
+    }
+
+    service() {
+        return {};
     }
 
     constructor() {}
