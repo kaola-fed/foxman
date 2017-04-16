@@ -1,10 +1,12 @@
 const Reloader = require('./reloader');
 
 class LivereloadPlugin {
-    constructor() {
-        
+    name() {
+        return 'livereload';
     }
-
+    service() {
+        return {};
+    }
     init({service}) {
         service('server.injectScript')({
             condition: () => true,

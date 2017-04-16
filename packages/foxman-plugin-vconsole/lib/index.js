@@ -1,4 +1,12 @@
 class VconsolePlugin {
+    name() {
+        return 'livereload';
+    }
+
+    service() {
+        return {};
+    }
+
     constructor() {}
 
     init(serverPlugin) {

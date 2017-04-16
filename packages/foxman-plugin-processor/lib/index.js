@@ -1,8 +1,16 @@
-const {dispatcher} = require('./Processor');
+const { dispatcher } = require('./Processor');
 const ReloaderService = require('./ReloaderService');
 
 class ProcessorPlugin {
-    constructor({processors}) {
+    name() {
+        return 'processor';
+    }
+
+    service() {
+        return {};
+    }
+
+    constructor({ processors }) {
         this.processors = processors;
         if (undefined === processors) {
             this.enable = false;

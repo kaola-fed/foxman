@@ -1,10 +1,18 @@
 const Server = require('./Server');
 const path = require('path');
-const {Renderer, util: _} = require('@foxman/helpers');
+const { Renderer, util: _ } = require('@foxman/helpers');
 const formatStaticOptions = require('./utils/formatStaticOptions');
 const checkServerConfig = require('./utils/checkServerConfig');
 
 class ServerPlugin {
+    name() {
+        return 'server';
+    }
+
+    service() {
+        return {};
+    }
+
     constructor(opts = {}) {
         const result = checkServerConfig(opts);
         if (result) {
@@ -16,19 +24,20 @@ class ServerPlugin {
         const statics = options.static ? _.ensureArray(opts.static) : [];
 
         options.port = options.port || 3000;
-        
+
         options.statics = statics
             .filter(item => !!item)
             .map(formatStaticOptions);
 
-        options.runtimeRouters = {routers: options.routers || []};
+        options.runtimeRouters = { routers: options.routers || [] };
 
         delete options.routers;
 
-        options.syncDataMatch = options.syncDataMatch ||
-            (url => path.join(options.syncData, url));
+        options.syncDataMatch =
+            options.syncDataMatch || (url => path.join(options.syncData, url));
 
-        options.asyncDataMatch = options.asyncDataMatch ||
+        options.asyncDataMatch =
+            options.asyncDataMatch ||
             (url => path.join(options.asyncData, url));
 
         options.divideMethod = Boolean(options.divideMethod);
