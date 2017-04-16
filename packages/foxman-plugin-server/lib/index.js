@@ -10,7 +10,43 @@ class ServerPlugin {
     }
 
     service() {
-        return {};
+        return {
+            injectScript({ condition, src }) {
+                if (!this.server) {
+                    return;
+                }
+
+                return this.server.injectScript({ condition, src });
+            },
+            eval(code) {
+                if (!this.server) {
+                    return;
+                }
+
+                return this.server.eval(code);
+            },
+            evalAlways(code) {
+                if (!this.server) {
+                    return;
+                }
+
+                return this.server.evalAlways(code);
+            },
+            use(middleware) {
+                if (!this.server) {
+                    return;
+                }
+
+                return this.server.use(middleware);
+            },
+            broadcast(...args) {
+                if (!this.server || !this.server.wss) {
+                    return;
+                }
+
+                return this.server.wss.broadcast(...args);
+            }
+        };
     }
 
     constructor(opts = {}) {

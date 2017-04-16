@@ -9,7 +9,15 @@ class WatcherPlugin {
     }
 
     service() {
-        return {};
+        return {
+            watch(type, files, fn) {
+                if (!this.watcher) {
+                    return;
+                }
+
+                return this.watcher.addWatch(type, files, fn);
+            }
+        };
     }
 
     constructor({ root = process.cwd(), enable = true } = {}) {

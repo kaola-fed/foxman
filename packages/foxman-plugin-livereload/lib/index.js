@@ -6,7 +6,15 @@ class LivereloadPlugin {
     }
 
     service() {
-        return {};
+        return {
+            reload(url) {
+                if (!this.reloader) {
+                    return;
+                }
+
+                return this.reloader.notifyReload(url);
+            }
+        };
     }
 
     constructor() {}
