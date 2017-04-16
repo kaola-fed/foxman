@@ -1,5 +1,5 @@
 {
-  "name": "@foxman/plugin-watch",
+  "name": "@foxman/plugin-watcher",
   "version": "0.1.1",
   "description": "",
   "main": "lib/index.js",

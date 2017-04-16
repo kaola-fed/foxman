@@ -42,15 +42,26 @@ class ServerPlugin {
         this.options = options;
     }
 
-    init(proxyPlugin) {
+    init({getter}) {
         this.server = new Server(
             Object.assign(
                 {
-                    ifProxy: proxyPlugin.enable
+                    
+                    ifProxy: getter('proxy.enable')
                 },
                 this.options
             )
         );
+    }
+
+    service() {
+        return {
+            injectScript: void 0,
+            evalAlways: void 0,
+            eval: void 0,
+            use: void 0,
+            livereload: void 0
+        };
     }
 
     runOnSuccess() {

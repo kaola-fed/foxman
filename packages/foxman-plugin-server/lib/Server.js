@@ -137,6 +137,17 @@ class Server {
         });
     }
 
+    livereload(url) {
+        const wss = this.wss;
+
+        if (wss) {
+            this.wss.broadcast({
+                type: 'livereload',
+                payload: url
+            });
+        }
+    }
+
     start() {
         this.prepare();
         const {port, https} = this.serverOptions;
