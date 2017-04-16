@@ -1,59 +1,38 @@
 const path = require('path');
-const {values} = require('@foxman/helpers/lib/util');
+
+const {template, resources, syncData} = require('./utils/getReloadPattern');
 
 class Reloader {
-    constructor({server, watcher}) {
-        this.server = server;
-        this.watcher = watcher;
-        this.watch();
+    constructor({
+        livereload, createWatcher, serverOptions
+    }) {
+        this.notifyReload = (url) => livereload(url);
+        this.watcher = createWatcher();
+
+        this.watch(serverOptions);
     }
 
-    notifyReload(url) {
-        if (this.server && this.server.wss) {
-            this.server.wss.broadcast({
-                type: 'livereload',
-                payload: url
-            });
-        }
-    }
-
-    watch() {
-        const {server, watcher} = this;
-        const {
+    watch({
             extension,
             viewRoot,
             templatePaths,
-            syncData,
+            syncData: syncDataRoot,
             statics
-        } = server.serverOptions;
+    }) {
+        const templatePattern = template({
+            extension,
+            viewRoot,
+            templatePaths
+        });
+        const resourcesPattern = resources(statics);
+        const syncDataPattern = syncData(syncDataRoot);
 
-        const reduceTemplateDir = ({templatePath, extension}) => {
-            return path.join(templatePath, '**', '*.' + extension);
-        };
+        const watchPatterns = templatePattern.concat(syncDataPattern).concat(resourcesPattern);
 
-        const templates = [
-            ...values(templatePaths),
-            viewRoot
-        ].map(templatePath =>
-            reduceTemplateDir({
-                templatePath,
-                extension
-            }));
-
-        const syncDataRoot = path.join(syncData, '**', '*.json');
-        const resources = statics.reduce(
-            (total, current) => {
-                return [
-                    ...total,
-                    ...['*.css', '*.js', '*.html'].map(tail =>
-                        path.join(current.dir, '**', tail))
-                ];
-            },
-            []
-        );
-
-        watcher.onUpdate([...templates, syncDataRoot, ...resources], filepath =>
-            this.notifyReload(path.basename(filepath)));
+        this.watcher.watch(watchPatterns).on('change', function (filepath) {
+            this.notifyReload(path.basename(filepath));
+        });
     }
 }
+
 module.exports = Reloader;
