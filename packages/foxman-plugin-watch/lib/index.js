@@ -20,13 +20,15 @@ class WatcherPlugin {
         };
     }
 
-    constructor({ root = process.cwd(), enable = true } = {}) {
-        this.root = root;
-        this.enable = enable;
+    constructor({ root = process.cwd() } = {}) {
+        this.$options = {
+            root: root,
+            enable: true
+        };
     }
 
     init() {
-        this.watcher = new Watcher(this.root);
+        this.watcher = new Watcher(this.$options.root);
     }
 }
 module.exports = WatcherPlugin;

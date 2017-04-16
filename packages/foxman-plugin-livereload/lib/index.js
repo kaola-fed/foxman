@@ -19,16 +19,18 @@ class LivereloadPlugin {
 
     constructor() {}
 
-    init(watcherPlugin, serverPlugin) {
-        const server = serverPlugin.server;
-        const watcher = watcherPlugin.watcher;
+    init({ service, getter }) {
+        const injectScript = service('server.injectScript');
+        const broadcast = service('server.broadcast');
+        const watch = service('watch.watch');
+        const serverOptions = getter('server');
 
-        server.injectScript({
+        injectScript({
             condition: () => true,
             src: `/__FOXMAN__CLIENT__/js/reload.js`
         });
 
-        this.reloader = new Reloader({ watcher, server });
+        this.reloader = new Reloader({ broadcast, watch, serverOptions });
     }
 }
 

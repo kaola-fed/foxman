@@ -26,8 +26,13 @@ class NEISyncPlugin {
         this.NEIInfo = init(options);
     }
 
-    init(serverPlugin) {
-        this.server = serverPlugin.server;
+    init({ service, getter }) {
+        const { use, registerRouterNamespace } = service('server');
+
+        this.$use = use;
+        this.$registerRouterNamespace = registerRouterNamespace;
+        this.$serverOptions = getter('server');
+
         const { update } = this.NEIInfo;
 
         this.updateNEIDataProxy({ update });
@@ -43,12 +48,11 @@ class NEISyncPlugin {
     }
 
     registerMiddleware() {
-        const server = this.server;
         const genCommonPath = this.genCommonPath.bind(this);
         const genNeiApiUrl = this.genNeiApiUrl.bind(this);
 
         // update function
-        server.use(
+        this.$use(
             () =>
                 function*(next) {
                     const requestPath = this.request.path;
@@ -60,7 +64,7 @@ class NEISyncPlugin {
                 }
         );
 
-        server.use(
+        this.$use(
             () =>
                 function*(next) {
                     const { dispatcher = {} } = this;
@@ -145,8 +149,6 @@ class NEISyncPlugin {
     }
 
     updateRoutes(routers) {
-        const server = this.server;
-
         const addNEIMark = routers => {
             return routers.map(router => {
                 return Object.assign(
@@ -158,7 +160,7 @@ class NEISyncPlugin {
             });
         };
 
-        server.registerRouterNamespace('nei', addNEIMark(routers));
+        this.$registerRouterNamespace('nei', addNEIMark(routers));
     }
 
     genCommonPath({ sync, filePath }) {
@@ -166,7 +168,7 @@ class NEISyncPlugin {
             divideMethod,
             syncDataMatch,
             asyncDataMatch
-        } = this.server.serverOptions;
+        } = this.$serverOptions;
 
         if (sync) {
             return syncDataMatch(util.jsonPathResolve(filePath));

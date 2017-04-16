@@ -45,6 +45,14 @@ class ServerPlugin {
                 }
 
                 return this.server.wss.broadcast(...args);
+            },
+            // TODO: why?
+            registerRouterNamespace(...args) {
+                if (!this.server) {
+                    return;
+                }
+
+                return this.server.registerRouterNamespace(...args);
             }
         };
     }
@@ -84,16 +92,16 @@ class ServerPlugin {
 
         options.Render = options.Render || Renderer;
 
-        this.options = options;
+        this.$options = options;
     }
 
-    init(proxyPlugin) {
+    init({ getter }) {
         this.server = new Server(
             Object.assign(
                 {
-                    ifProxy: proxyPlugin.enable
+                    ifProxy: getter('proxy.enable')
                 },
-                this.options
+                this.$options
             )
         );
     }

@@ -1,6 +1,6 @@
 class VconsolePlugin {
     name() {
-        return 'livereload';
+        return 'vconsole';
     }
 
     service() {
@@ -9,8 +9,10 @@ class VconsolePlugin {
 
     constructor() {}
 
-    init(serverPlugin) {
-        serverPlugin.server.injectScript({
+    init({ service }) {
+        const injectScript = service('service.injectScript');
+
+        injectScript({
             condition: request => request.query.debug == 1,
             src: `/__FOXMAN__CLIENT__/js/vconsole.min.js`
         });

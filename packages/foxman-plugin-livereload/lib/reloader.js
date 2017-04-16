@@ -1,33 +1,31 @@
 const path = require('path');
-const {values} = require('@foxman/helpers/lib/util');
+const { values } = require('@foxman/helpers/lib/util');
 
 class Reloader {
-    constructor({server, watcher}) {
-        this.server = server;
-        this.watcher = watcher;
-        this.watch();
+    constructor({ broadcast, watch, serverOptions }) {
+        this.broadcast = broadcast;
+        this.watch = watch;
+        this.serverOptions = serverOptions;
+        this._watch();
     }
 
     notifyReload(url) {
-        if (this.server && this.server.wss) {
-            this.server.wss.broadcast({
-                type: 'livereload',
-                payload: url
-            });
-        }
+        this.broadcast({
+            type: 'livereload',
+            payload: url
+        });
     }
 
-    watch() {
-        const {server, watcher} = this;
+    _watch() {
         const {
             extension,
             viewRoot,
             templatePaths,
             syncData,
             statics
-        } = server.serverOptions;
+        } = this.serverOptions;
 
-        const reduceTemplateDir = ({templatePath, extension}) => {
+        const reduceTemplateDir = ({ templatePath, extension }) => {
             return path.join(templatePath, '**', '*.' + extension);
         };
 
@@ -38,22 +36,24 @@ class Reloader {
             reduceTemplateDir({
                 templatePath,
                 extension
-            }));
-
-        const syncDataRoot = path.join(syncData, '**', '*.json');
-        const resources = statics.reduce(
-            (total, current) => {
-                return [
-                    ...total,
-                    ...['*.css', '*.js', '*.html'].map(tail =>
-                        path.join(current.dir, '**', tail))
-                ];
-            },
-            []
+            })
         );
 
-        watcher.onUpdate([...templates, syncDataRoot, ...resources], filepath =>
-            this.notifyReload(path.basename(filepath)));
+        const syncDataRoot = path.join(syncData, '**', '*.json');
+        const resources = statics.reduce((total, current) => {
+            return [
+                ...total,
+                ...['*.css', '*.js', '*.html'].map(tail =>
+                    path.join(current.dir, '**', tail)
+                )
+            ];
+        }, []);
+
+        this.watch(
+            'change',
+            [...templates, syncDataRoot, ...resources],
+            filepath => this.notifyReload(path.basename(filepath))
+        );
     }
 }
 module.exports = Reloader;

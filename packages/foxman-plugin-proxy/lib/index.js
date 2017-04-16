@@ -15,10 +15,11 @@ class ProxyPlugin {
     }
 
     constructor({ proxyServerName = '', proxyConfig = {} }) {
-        this.enable = proxyServerName;
+        this.$options = {};
+        this.$options.enable = !!proxyServerName;
         const service = proxyConfig.service || {};
 
-        if (this.enable) {
+        if (this.$options.enable) {
             if (!proxyConfig.host) {
                 util.error('To configure config proxy.host');
             }
@@ -35,11 +36,13 @@ class ProxyPlugin {
         });
     }
 
-    init(serverPlugin) {
+    init({ service }) {
+        const use = service('server.use');
+
         this.registerProxy({
             proxyConfig: this.proxyConfig,
             proxyServerName: this.proxyServerName,
-            server: serverPlugin.server,
+            use,
             proxy: this._createProxyServer()
         });
     }
@@ -60,10 +63,10 @@ class ProxyPlugin {
         return proxy;
     }
 
-    registerProxy({ server, proxy, proxyConfig, proxyServerName }) {
+    registerProxy({ use, proxy, proxyConfig, proxyServerName }) {
         const service = proxyConfig.service[proxyServerName];
 
-        server.use(
+        use(
             () =>
                 function*(next) {
                     const dispatcher = this.dispatcher || {};
