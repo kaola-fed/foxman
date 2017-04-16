@@ -4,7 +4,11 @@ const Watcher = require('./Watcher');
  * 监听插件
  */
 class WatcherPlugin {
-    constructor({root = process.cwd(), enable = true} = {}) {
+    get name() {
+        return 'watch';
+    }
+
+    constructor({ root = process.cwd(), enable = true } = {}) {
         this.root = root;
         this.enable = enable;
     }

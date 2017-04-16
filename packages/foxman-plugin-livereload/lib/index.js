@@ -1,9 +1,11 @@
 const Reloader = require('./reloader');
 
 class LivereloadPlugin {
-    constructor() {
-        
+    get name() {
+        return 'livereload';
     }
+
+    constructor() {}
 
     init(watcherPlugin, serverPlugin) {
         const server = serverPlugin.server;
@@ -14,7 +16,7 @@ class LivereloadPlugin {
             src: `/__FOXMAN__CLIENT__/js/reload.js`
         });
 
-        this.reloader = new Reloader({watcher, server});
+        this.reloader = new Reloader({ watcher, server });
     }
 }
 

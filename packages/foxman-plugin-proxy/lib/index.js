@@ -1,4 +1,4 @@
-const {util, DispatherTypes} = require('@foxman/helpers');
+const { util, DispatherTypes } = require('@foxman/helpers');
 const httpProxy = require('http-proxy');
 const proxyHandler = require('./proxyHandler');
 
@@ -6,12 +6,11 @@ const proxyHandler = require('./proxyHandler');
  * 全局代理插件
  */
 class ProxyPlugin {
-    constructor(
-        {
-            proxyServerName = '',
-            proxyConfig = {}
-        }
-    ) {
+    get name() {
+        return 'proxy';
+    }
+
+    constructor({ proxyServerName = '', proxyConfig = {} }) {
         this.enable = proxyServerName;
         const service = proxyConfig.service || {};
 
@@ -57,14 +56,7 @@ class ProxyPlugin {
         return proxy;
     }
 
-    registerProxy(
-        {
-            server,
-            proxy,
-            proxyConfig,
-            proxyServerName
-        }
-    ) {
+    registerProxy({ server, proxy, proxyConfig, proxyServerName }) {
         const service = proxyConfig.service[proxyServerName];
 
         server.use(
