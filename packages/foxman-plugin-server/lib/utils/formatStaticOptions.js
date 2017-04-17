@@ -12,7 +12,7 @@ module.exports = function formatStaticOptions(opts = {}) {
         dir,
         prefix = '/' + path.parse(options.dir).base,
         maxAge = 0,
-        gzip = true,
+        gzip = false,
         preload = false,
         dynamic = true,
         buffer = true,
