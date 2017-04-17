@@ -12,9 +12,6 @@ module.exports = function formatStaticOptions(opts = {}) {
         dir,
         prefix = '/' + path.parse(options.dir).base,
         maxAge = 0,
-        gzip = false,
-        preload = false,
-        dynamic = true,
         buffer = true,
         filter = file => !~file.indexOf('node_modules')
     } = options;
@@ -23,9 +20,6 @@ module.exports = function formatStaticOptions(opts = {}) {
         dir,
         prefix,
         maxAge,
-        gzip,
-        preload,
-        dynamic,
         buffer,
         filter
     };

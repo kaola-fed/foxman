@@ -1,14 +1,14 @@
-const staticCache = require('koa-static-cache');
+const koaStatic = require('koa-sdf');
 const path = require('path');
 const formatStaticOptions = require('./utils/formatStaticOptions');
 
 module.exports = ({ app, statics }) => {
     statics.forEach(options => {
-        app.use(staticCache(options));
+        app.use(koaStatic(options));
     });
 
     app.use(
-        staticCache(
+        koaStatic(
             formatStaticOptions({
                 dir: path.resolve(__dirname, 'client'),
                 prefix: '/__FOXMAN__CLIENT__',
