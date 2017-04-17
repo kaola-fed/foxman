@@ -10,24 +10,12 @@ module.exports = function formatStaticOptions(opts = {}) {
     opts.dir = path.resolve(process.cwd(), opts.dir);
     
     const {
-        dir,
+        dir, maxAge = 0, buffer = true,
         prefix = '/' + path.parse(opts.dir).base,
-        maxAge = 0,
-        gzip = true,
-        preload = false,
-        dynamic = true,
-        buffer = true,
         filter = file => !~file.indexOf('node_modules')
     } = opts;
 
     return {
-        dir,
-        prefix,
-        maxAge,
-        gzip,
-        preload,
-        dynamic,
-        buffer,
-        filter
+        dir, prefix, maxAge, buffer, filter
     };
 };
