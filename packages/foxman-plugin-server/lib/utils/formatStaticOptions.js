@@ -9,18 +9,12 @@ module.exports = function formatStaticOptions(opts = {}) {
     }
 
     const {
-        dir,
+        dir, maxAge = 0, buffer = true,
         prefix = '/' + path.parse(options.dir).base,
-        maxAge = 0,
-        buffer = true,
         filter = file => !~file.indexOf('node_modules')
     } = options;
 
     return {
-        dir,
-        prefix,
-        maxAge,
-        buffer,
-        filter
+        dir, prefix, maxAge, buffer, filter
     };
 };
