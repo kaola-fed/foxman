@@ -4,15 +4,14 @@ const { lt } = require('semver');
 exports.checkVersion = checkVersion;
 
 function checkVersion({ version, versionLimit, notify = [] }) {
-    if (lt(ensureVersion(version), ensureVersion(versionLimit))) {
+    if (lt(normalizeVersion(version), normalizeVersion(versionLimit))) {
         notify.forEach(errorLog);
         return false;
     }
     return true;
 }
 
-
-function ensureVersion(version) {
+function normalizeVersion(version) {
     if (version.startsWith('v')) {
         return version.slice(1);
     }
