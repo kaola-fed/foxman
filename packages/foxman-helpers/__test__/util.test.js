@@ -1,54 +1,254 @@
-const util = require('../lib').util;
+const _ = require('../lib').util;
+const path = require('path');
 
-test('createSystemId', ()=>{
-  const f = util.createSystemId();
-  const num = parseInt(Math.random()*100);
+test('createSystemId', function () {
+  const f = _.createSystemId();
+  const num = parseInt(Math.random() * 100);
   for (var i = 0; i < num; i++) {
     f();
   }
-  expect(f()).toBe(i+1);
+  expect(f()).toBe(i);
 });
 
-test('firstUpperCase', ()=>{
+test('notify', function () {
+  const title = 'hello';
+  const msg = 'world';
+  expect(
+    /** result */
+    _.notify({
+      title, msg
+    })
+  ).toBe(
+    /** expectedValue */
+    0
+    );
+});
+
+test('isPromise', function () {
+  expect(
+    /** result */
+    _.isPromise(new Promise(function (resolve, reject) {
+      resolve(0);
+    }))
+  ).toBe(
+    /** expectedValue */
+    true
+    );
+});
+
+test('ensurePromise', function () {
+  expect(
+    /** result */
+    _.isPromise(_.ensurePromise(1))
+  ).toBe(
+    /** expectedValue */
+    true
+    );
+});
+
+test('debugLog', function () {
+  expect(
+    /** result */
+    _.debugLog('')
+  ).toBe(
+    /** expectedValue */
+    0
+    );
+});
+
+test('log', function () {
+  expect(
+    /** result */
+    _.log('1')
+  ).toBe(
+    /** expectedValue */
+    0
+    );
+});
+
+test('initialsCapitals', function () {
+  expect(
+    /** result */
+    _.initialsCapitals('hello')
+  ).toBe(
+    /** expectedValue */
+    'Hello'
+    );
+});
+
+test('firstUpperCase', function () {
   var url = 'http://www.kaola.com';
-  expect(util.initialsCapitals('abb')).toBe('Abb');
+  expect(
+    _.initialsCapitals('abb')
+  ).toBe(
+    'Abb'
+    );
 });
 
-test('removeHeadBreak', ()=>{
-  expect(util.removeHeadBreak('\\nihao')).toBe('nihao');
-  expect(util.removeHeadBreak('/nihao')).toBe('nihao');
+test('removeHeadBreak', function () {
+  expect(
+    _.removeHeadBreak('\\nihao')
+  ).toBe(
+    'nihao'
+    );
+  expect(
+    _.removeHeadBreak('/nihao')
+  ).toBe(
+    'nihao'
+    );
 });
 
-test('removeSuffix', ()=>{
-  expect(util.removeSuffix('/test/ashaioshaoishoias.json')).toBe('/test/ashaioshaoishoias');
+test('removeSuffix', function () {
+  expect(
+    _.removeSuffix('/test/ashaioshaoishoias.json')
+  ).toBe(
+    '/test/ashaioshaoishoias'
+    );
 });
 
-test('removeSuffix2', ()=>{
-  expect(util.removeSuffix('/test/ashaioshaoishoias.json', 'json')).toBe('/test/ashaioshaoishoias');
+test('removeSuffix2', function () {
+  expect(
+    _.removeSuffix('/test/ashaioshaoishoias.json', 'json')
+  ).toBe(
+    '/test/ashaioshaoishoias'
+    );
 });
 
-test('removeSuffix3', ()=>{
-  expect(util.removeSuffix('/test/foo.bar', 'json')).toBe('/test/foo.bar');
+test('removeSuffix3', function () {
+  expect(
+    _.removeSuffix('/test/foo.bar', 'json')
+  ).toBe(
+    '/test/foo.bar'
+    );
 });
 
-test('jsonPathResolve', ()=>{
-  expect(util.jsonPathResolve('/test/ashaioshaoishoias')).toBe('test/ashaioshaoishoias.json');
+test('entries', function () {
+  const res = _.entries({
+    a: 1
+  }).next().value;
+
+  expect(
+    /** result */
+    res[0]
+  ).toBe(
+    /** expectedValue */
+    'a'
+    );
+
+  expect(
+    /** result */
+    res[1]
+  ).toBe(
+    /** expectedValue */
+    1
+    );
 });
 
-test('appendHeadBreak', ()=>{
-  expect(util.appendHeadBreak('buisagsa')).toBe('/buisagsa');
+test('compressHtml', function () {
+  expect(
+    /** result */
+    _.compressHtml(
+      `
+hello Jack
+`)
+  ).toBe(
+    /** expectedValue */
+    'hello Jack'
+    );
 });
 
-test('typeof', ()=>{
-    expect(util.typeOf({})).toBe('object');
+it('readJSONFile', function () {
+  return _.readJSONFile(
+    path.join(__dirname, 'fixtures', 'foo.json')
+  ).then(function ({json}) {
+    expect(json.foo).toBe('bar');
+  });
 });
 
-test('sha1',()=>{
+test('lowerCaseFirstLetter', function () {
+  expect(
+    /** result */
+    _.lowerCaseFirstLetter('Hello')
+  ).toBe(
+    /** expectedValue */
+    'hello'
+    );
+});
+
+test('values', function () {
+  expect(
+    /** result */
+    _.values({ a: 1 })[0]
+  ).toBe(
+    /** expectedValue */
+    1
+    );
+});
+
+test('addDataExt', function () {
+  expect(
+    /** result */
+    _.addDataExt('1')
+  ).toBe(
+    /** expectedValue */
+    '1.json'
+    );
+
+  expect(
+    /** result */
+    _.addDataExt('1.json')
+  ).toBe(
+    /** expectedValue */
+    '1.json'
+    );
+});
+
+test('jsonPathResolve', function () {
+  expect(
+    _.jsonPathResolve('/test/ashaioshaoishoias')
+  ).toBe(
+    'test/ashaioshaoishoias.json'
+    );
+});
+
+test('appendHeadBreak', function () {
+  expect(
+    _.appendHeadBreak('buisagsa')
+  ).toBe(
+    '/buisagsa'
+    );
+});
+
+test('typeof', function () {
+  expect(
+    _.typeOf({})
+  ).toBe(
+    'object'
+    );
+});
+
+test('sha1', function () {
   var a = 'nihao';
-  expect(util.sha1(a)).toBe('23fcf96d70494b81c5084c0da6a6e8d84a9c5d20');
+  expect(
+    _.sha1(a)
+  ).toBe(
+    '23fcf96d70494b81c5084c0da6a6e8d84a9c5d20'
+    );
 });
 
-test('parseJSON', ()=>{
-  'use strict';
-  expect(util.parseJSON('{a:1}').a ===1).toBe(!0);
+test('parseJSON', function () {
+  expect(
+    _.parseJSON('{a:1}').a
+  ).toBe(
+    1
+    );
 });
+
+test('ensureArray', function () {
+  expect(
+    _.ensureArray(1)[0]
+  ).toBe(
+    1
+    );
+});
+

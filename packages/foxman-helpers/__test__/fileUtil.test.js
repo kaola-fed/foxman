@@ -2,7 +2,7 @@ var path = require('path');
 var fileUtil = require('../lib').fileUtil;
 
 test('writeUnExistsFile', function(done) {
-    fileUtil.writeUnExistsFile(path.resolve(__dirname, 'foo/bar.txt'),'Foo Bar').then(function (info) {
+    fileUtil.writeUnExistsFile(path.resolve(__dirname, 'fixtures/foo/bar.txt'),'Foo Bar').then(function (info) {
         expect(!!~info.indexOf('Foo Bar')).toBe(true);
         done();
     }, function (err) {
@@ -11,7 +11,7 @@ test('writeUnExistsFile', function(done) {
 });
 
 test('getDirInfo', function(done) {
-    fileUtil.getDirInfo(path.resolve(__dirname, 'foo')).then(function (info) {
+    fileUtil.getDirInfo(path.resolve(__dirname, 'fixtures/foo')).then(function (info) {
         expect(info.length).toBe(1);
         done();
     }, function (err) {
@@ -20,7 +20,7 @@ test('getDirInfo', function(done) {
 });
 
 test('getFileStat', function(done) {
-  fileUtil.getFileStat(path.resolve(__dirname, 'foo/bar.txt')).then(function (info) {
+  fileUtil.getFileStat(path.resolve(__dirname, 'fixtures/foo/bar.txt')).then(function (info) {
     expect(info.nlink).toBe(1);
     done();
   }, function (err) {
@@ -29,7 +29,7 @@ test('getFileStat', function(done) {
 });
 
 test('readFile', function(done) {
-  fileUtil.readFile(path.resolve(__dirname, 'foo/bar.txt')).then(function (info) {
+  fileUtil.readFile(path.resolve(__dirname, 'fixtures/foo/bar.txt')).then(function (info) {
     expect(!!~info.indexOf('Foo Bar')).toBe(true);
     done();
   }, function (err) {
@@ -38,5 +38,5 @@ test('readFile', function(done) {
 });
 
 test('delDir', function() {
-  expect(fileUtil.delDir(path.resolve(__dirname, 'foo/bar.txt'))).toBe(undefined);
+  expect(fileUtil.delDir(path.resolve(__dirname, 'fixtures/foo/bar.txt'))).toBe(undefined);
 });

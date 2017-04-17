@@ -1,8 +1,8 @@
-const {parseJSON, readJSONFile} = require('./util');
+const {parseJSON, readJSONFile, ensurePromise} = require('./util');
 
 function apiHandler({handler, dataPath}) {
     if (handler) {
-        return handler(this).then(res => {
+        return ensurePromise(handler(this)).then(res => {
             if (typeof res === 'string') {
                 try {
                     res = parseJSON(res);

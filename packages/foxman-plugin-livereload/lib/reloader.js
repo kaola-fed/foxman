@@ -2,14 +2,18 @@ const path = require('path');
 const {values} = require('@foxman/helpers/lib/util');
 
 class Reloader {
-    constructor(options) {
-        Object.assign(this, options);
+    constructor({server, watcher}) {
+        this.server = server;
+        this.watcher = watcher;
         this.watch();
     }
 
     notifyReload(url) {
         if (this.server && this.server.wss) {
-            this.server.wss.broadcast(url);
+            this.server.wss.broadcast({
+                type: 'livereload',
+                payload: url
+            });
         }
     }
 
