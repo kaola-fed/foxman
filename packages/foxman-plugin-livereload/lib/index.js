@@ -1,25 +1,33 @@
-const Reloader = require('./reloader');
-
+const Reloader = require('./Reloader');
 class LivereloadPlugin {
     name() {
         return 'livereload';
     }
     service() {
-        return {};
+        return {
+            reload(url) {
+                if (!this.reloader) {
+                    return;
+                }
+
+                return this.reloader.notifyReload(url);
+            }
+        };
     }
-    init({service}) {
+
+    constructor() {}
+
+    init({ service, getter }) {
+        const livereload = service('server.livereload');
+        const serverOptions = getter('server');
+        const createWatcher = service('watcher.createWatcher');
+        
         service('server.injectScript')({
             condition: () => true,
             src: `/__FOXMAN__CLIENT__/js/reload.js`
         });
 
-        const livereload = service('server.livereload');
-        const createWatcher = service('watcher.livereload');
-        const serverOptions = service('server.$options');
-
-        this.reloader = new Reloader({
-            livereload, createWatcher, serverOptions
-        });
+        this.reloader = new Reloader({ livereload, createWatcher, serverOptions });
     }
 }
 

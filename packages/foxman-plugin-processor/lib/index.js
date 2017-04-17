@@ -13,25 +13,19 @@ class ProcessorPlugin {
     constructor({ processors }) {
         this.processors = processors;
         if (undefined === processors) {
-            this.enable = false;
+            this.$options.enable = false;
         }
     }
 
-    init(serverPlugin, watcherPlugin, livereloadPlugin) {
-        const processors = this.processors;
-        const server = serverPlugin.server;
-        const watcher = watcherPlugin.watcher;
-        const reloader = livereloadPlugin.reloader;
+    init({ service }) {
+        const use = service('server.use');
+        const watch = service('watch.watch');
+        const reload = service('livereload.reload');
 
-        const reloaderService = ReloaderService({
-            watcher,
-            reloader
-        });
-
-        server.use(
+        use(
             dispatcher({
-                processors,
-                reloaderService
+                processors: this.processors,
+                reloaderService: ReloaderService({ watch, reload })
             })
         );
     }

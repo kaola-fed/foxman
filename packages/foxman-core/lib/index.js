@@ -1,47 +1,108 @@
 const co = require('co');
-const { log } = require('@foxman/helpers/lib/util');
+const dotProp = require('dot-prop');
+const { log, upperCaseFirstLetter, lowerCaseFirstLetter } = require('@foxman/helpers/lib/util');
 const initializePlugin = require('./initializePlugin');
-const DI = require('./DI');
+const createRegistry = require('./createRegistry');
 
 module.exports = class Core {
     constructor() {
-        this.di = DI();
+        this._pluginRegistry = createRegistry();
+        this._serviceRegistry = createRegistry();
     }
 
     use(plugin) {
-        const { register } = this.di;
         if (!plugin) {
-            return false;
+            return;
         }
 
         if (Array.isArray(plugin)) return plugin.forEach(this.use.bind(this));
 
         initializePlugin(plugin);
 
-        register(plugin.name, plugin);
+        this._register(plugin);
+        
+        log(`plugin loaded: ${upperCaseFirstLetter(plugin.name())}`);
+    }
 
-        log(`plugin loaded: ${plugin.name}`);
+    _register(plugin) {
+        const name = lowerCaseFirstLetter(plugin.name());
+        const services = typeof plugin.service === 'function'
+            ? plugin.service()
+            : {};
+
+        this._pluginRegistry.register(name, plugin);
+        this._serviceRegistry.register(
+            name,
+            this._bindServiceContext(services, plugin)
+        );
+    }
+
+    // 绑定service上下文
+    _bindServiceContext(services, context) {
+        const tmp = {};
+        Object.keys(services).forEach(name => {
+            const service = services[name];
+            tmp[name] = service.bind(context);
+        });
+        return tmp;
+    }
+
+    _getter(keypath) {
+        const [pluginName, ...rest] = keypath.split('.');
+        const plugin = this._pluginRegistry.lookup(pluginName);
+        if (!plugin) {
+            return;
+        }
+        
+        if (rest.length === 0) {
+            // TODO: deepClone
+            return plugin.$options;
+        }
+
+        return dotProp.get(plugin.$options || {}, rest.join('.'));
+    }
+
+    _service(keypath) {
+        const [pluginName, serviceName] = keypath.split('.');
+        
+        if (!serviceName) {
+            return this._serviceRegistry.lookup(pluginName);
+        }
+
+        const services = this._serviceRegistry.lookup(pluginName);
+
+        if (!services) {
+            return function() {};
+        }
+
+        return services[serviceName] || function() {};
     }
 
     start() {
-        const { dependencies, di } = this.di;
-        return co(function*() {
-            for (const i in dependencies) {
-                const plugin = dependencies[i];
+        const plugins = this._pluginRegistry.all();
 
-                if (plugin.init && plugin.enable) {
-                    di(plugin.init, plugin);
+        const getter = this._getter.bind(this);
+        const service = this._service.bind(this);
+
+        return co(function*() {
+            for (const i in plugins) {
+                const plugin = plugins[i];
+
+                if (plugin.init && plugin.$options.enable) {
+                    plugin.init({ getter, service });
+
                     if (plugin.pendings.length > 0) {
-                        log(`plugin pedding: ${plugin.name}`);
+                        const pluginName = upperCaseFirstLetter(plugin.name());
+                        log(`plugin pedding: ${pluginName}`);
                         yield Promise.all(plugin.pendings);
-                        log(`plugin done: ${plugin.name}`);
+                        log(`plugin done: ${pluginName}`);
                     }
                 }
             }
         })
             .then(() => {
-                for (const i in dependencies) {
-                    const plugin = dependencies[i];
+                for (const i in plugins) {
+                    const plugin = plugins[i];
 
                     if (plugin.runOnSuccess) {
                         plugin.runOnSuccess();
@@ -52,12 +113,13 @@ module.exports = class Core {
     }
 
     stop() {
-        const { dependencies } = this.di;
-        return co(function*() {
-            for (const i in dependencies) {
-                const plugin = dependencies[i];
+        const plugins = this._pluginRegistry.all();
 
-                if (plugin.destroy && plugin.enable) {
+        return co(function*() {
+            for (const i in plugins) {
+                const plugin = plugins[i];
+
+                if (plugin.destroy && plugin.$options.enable) {
                     yield plugin.destroy();
                 }
             }

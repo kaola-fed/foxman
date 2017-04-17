@@ -1,10 +1,8 @@
 const chokidar = require('chokidar');
 
-/**
- * 监听插件
- */
+// Watcher Plugin
 class WatcherPlugin {
-    get name() {
+    name() {
         return 'Watcher';
     }
     
@@ -23,8 +21,8 @@ class WatcherPlugin {
 
     createWatcher({
         files, 
-        options
-    }) {
+        options = {}
+    } = {}) {
         const watcher = chokidar.watch(files, Object.assign({
             ignored: /(\.git)|(node_modules)/,
             ignoreInitial: true,
@@ -41,23 +39,17 @@ class WatcherPlugin {
             },
 
             ignorePermissionErrors: false,
-            atomic: true // or a custom 'atomicity delay', in milliseconds (default 100)
+            atomic: true 
         }, options));
 
         this.watcherStore.push(watcher);
-
         return watcher;
     }
 
     service() {
         return {
-            createWatcher({
-                files, 
-                options = {}
-            }) {
-                return this.createWatcher({
-                    files, options
-                });
+            createWatcher(...args) {
+                return this.createWatcher(...args);
             }
         };
     }

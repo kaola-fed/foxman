@@ -9,8 +9,8 @@ const MockControl = require('foxman-plugin-mock-control');
 const Automount = require('foxman-plugin-automount');
 const WebpackDevServer = require('foxman-plugin-webpack-dev-server');
 
-function urlTransformer (ip) {
-    return function (reqPath) {
+function urlTransformer(ip) {
+    return function(reqPath) {
         return `http://${ip}/${reqPath}`;
     };
 }
@@ -25,11 +25,11 @@ Object.assign(paths, {
     asyncData: path.join(paths.webapp, 'mock', 'async')
 });
 
-Object.assign(paths,{
+Object.assign(paths, {
     commonTpl: path.join(paths.webapp, 'commonTpl')
 });
 
-Object.assign(paths,{
+Object.assign(paths, {
     src: path.join(__dirname, 'src')
 });
 
@@ -45,34 +45,33 @@ module.exports = {
     // },
 
     plugins: [
-        new RouteDisplay(),
-
-        new MockControl({
-            /**
-             * 在 mock json 的同目录下找，文件名一样 的 .js 文件, 默认如下
-             * @param dataPath
-             * @returns {string|*|XML|void}
-             */
-            mapJS: function (dataPath) {
-                return dataPath.replace(/\.json$/, '.js');
-            }
-        }),
-
-        new Automount({
-            tplUrlMap: {
-                '/index.html': 'foo.bar'
-            }
-        }),
-
-        new WebpackDevServer({
-            webpackConfig,
-            devServerConfig:{
-                quiet: true,
-                noInfo: true,
-                lazy: false
-            }
-        })
-
+        // new RouteDisplay(),
+        //
+        // new MockControl({
+        //     /**
+        //      * 在 mock json 的同目录下找，文件名一样 的 .js 文件, 默认如下
+        //      * @param dataPath
+        //      * @returns {string|*|XML|void}
+        //      */
+        //     mapJS: function (dataPath) {
+        //         return dataPath.replace(/\.json$/, '.js');
+        //     }
+        // }),
+        //
+        // new Automount({
+        //     tplUrlMap: {
+        //         '/index.html': 'foo.bar'
+        //     }
+        // }),
+        //
+        // new WebpackDevServer({
+        //     webpackConfig,
+        //     devServerConfig:{
+        //         quiet: true,
+        //         noInfo: true,
+        //         lazy: false
+        //     }
+        // })
     ],
 
     /**
@@ -123,11 +122,16 @@ module.exports = {
          */
         routers: [
             {
-                method: 'GET', url: '/ajax/index.html', 
-                sync: false, filePath: 'foo.bar'
-            }, {
-                method: 'GET', url: '/fooBar.html', 
-                sync: true, filePath: 'foo.bar'
+                method: 'GET',
+                url: '/ajax/index.html',
+                sync: false,
+                filePath: 'foo.bar'
+            },
+            {
+                method: 'GET',
+                url: '/fooBar.html',
+                sync: true,
+                filePath: 'foo.bar'
             }
         ],
         /**
@@ -163,8 +167,8 @@ module.exports = {
         /**
          * 静态资源目录
          */
-        static: [ 
-            // paths.src 
+        static: [
+            // paths.src
         ]
     }
 };

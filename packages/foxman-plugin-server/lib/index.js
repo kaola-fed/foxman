@@ -10,7 +10,56 @@ class ServerPlugin {
     }
 
     service() {
-        return {};
+        return {
+            injectScript({ condition, src }) {
+                if (!this.server) {
+                    return;
+                }
+
+                return this.server.injectScript({ condition, src });
+            },
+            
+            eval(code) {
+                if (!this.server) {
+                    return;
+                }
+
+                return this.server.eval(code);
+            },
+            
+            evalAlways(code) {
+                if (!this.server) {
+                    return;
+                }
+
+                return this.server.evalAlways(code);
+            },
+
+            livereload(url) {
+                if (!this.server || !this.server.wss) {
+                    return;
+                }
+
+                return this.server.wss.livereload(url);
+            },
+            
+            use(middleware) {
+                if (!this.server) {
+                    return;
+                }
+
+                return this.server.use(middleware);
+            },
+            
+            // TODO: why?
+            registerRouterNamespace(...args) {
+                if (!this.server) {
+                    return;
+                }
+
+                return this.server.registerRouterNamespace(...args);
+            }
+        };
     }
 
     constructor(opts = {}) {
@@ -48,29 +97,18 @@ class ServerPlugin {
 
         options.Render = options.Render || Renderer;
 
-        this.options = options;
+        this.$options = options;
     }
 
-    init({getter}) {
+    init({ getter }) {
         this.server = new Server(
             Object.assign(
                 {
-                    
                     ifProxy: getter('proxy.enable')
                 },
-                this.options
+                this.$options
             )
         );
-    }
-
-    service() {
-        return {
-            injectScript: void 0,
-            evalAlways: void 0,
-            eval: void 0,
-            use: void 0,
-            livereload: void 0
-        };
     }
 
     runOnSuccess() {

@@ -1,22 +1,11 @@
 class ReloaderService {
-    constructor(
-        {
-            watcher,
-            reloader
-        }
-    ) {
+    constructor({ watch, reload }) {
         this.map = {};
-        this.watcher = watcher;
-        this.reloader = reloader;
+        this.$watch = watch;
+        this.$reload = reload;
     }
 
-    register(
-        {
-            reqPath,
-            dependencies,
-            resourcesManager
-        }
-    ) {
+    register({ reqPath, dependencies, resourcesManager }) {
         const oldThings = this.map[reqPath] || [];
         let diff = findNew({
             oldThings: oldThings,
@@ -27,41 +16,30 @@ class ReloaderService {
             return;
         }
 
-        this.watcher.onUpdate(diff, () => {
+        this.$watch('change', diff, () => {
             resourcesManager.clear(reqPath);
-            this.reloader.notifyReload(reqPath);
+            this.$reload(reqPath);
         });
 
         this.map[reqPath] = [...oldThings, ...diff];
     }
 }
 
-function findNew(
-    {
-        oldThings = [],
-        newThings = []
-    }
-) {
-    const oldThingMap = oldThings.reduce(
-        function(total, current) {
-            total[current] = true;
-            return total;
-        },
-        {}
-    );
+function findNew({ oldThings = [], newThings = [] }) {
+    const oldThingMap = oldThings.reduce(function(total, current) {
+        total[current] = true;
+        return total;
+    }, {});
 
     return unique(newThings.filter(item => !oldThingMap[item]));
 }
 
 function unique(array = []) {
     return Object.keys(
-        array.reduce(
-            function(total, current) {
-                total[current] = null;
-                return total;
-            },
-            {}
-        )
+        array.reduce(function(total, current) {
+            total[current] = null;
+            return total;
+        }, {})
     );
 }
 

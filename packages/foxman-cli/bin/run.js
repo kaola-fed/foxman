@@ -2,13 +2,13 @@ const Core = require('@foxman/core');
 const Proxy = require('@foxman/plugin-proxy');
 const Livereload = require('@foxman/plugin-livereload');
 const Processor = require('@foxman/plugin-processor');
-const Watch = require('@foxman/plugin-watch');
+const Watcher = require('@foxman/plugin-watcher');
 const Server = require('@foxman/plugin-server');
 
 module.exports = config => {
     const core = new Core();
 
-    core.use(new Watch(config.watch));
+    core.use(new Watcher(config.watch));
 
     core.use(new Server(config.server));
 
@@ -21,9 +21,9 @@ module.exports = config => {
     );
 
     if (config.nei) {
-        const VconsolePlugin = require('@foxman/plugin-nei');
+        const NEIPlugin = require('@foxman/plugin-nei');
         core.use(
-            new VconsolePlugin(
+            new NEIPlugin(
                 Object.assign(config.nei, {
                     update: config.argv.update
                 })
