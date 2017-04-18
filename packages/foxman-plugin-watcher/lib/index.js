@@ -6,20 +6,18 @@ class WatcherPlugin {
         return 'Watcher';
     }
     
-    constructor({enable = true} = {}) {
+    constructor(options = {}) {
         this.$options = {
-            enable
+            enable: typeof options.enable !== 'undefined' ? options.enable : true
         };
-        this.watcherStore = [];
+        this._watchers = [];
     }
 
     stop() {
-        this.watcherStore.forEach(watcher => {
-            watcher.close();
-        });
+        this._watchers.forEach(watcher => watcher.close());
     }
 
-    createWatcher({
+    _createWatcher({
         files, 
         options = {}
     } = {}) {
@@ -42,14 +40,14 @@ class WatcherPlugin {
             atomic: true 
         }, options));
 
-        this.watcherStore.push(watcher);
+        this._watchers.push(watcher);
         return watcher;
     }
 
     service() {
         return {
             createWatcher(...args) {
-                return this.createWatcher(...args);
+                return this._createWatcher(...args);
             }
         };
     }
