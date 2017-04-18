@@ -44,11 +44,7 @@
 
 🤔 **Extensible** Extensible enough for adding your own functionality
 
-## Documentation
-
-[Get Started](https://foxman.js.org/#/get-started)
-
-### Installation
+## Installation
 
 ```bash
 # with npm
@@ -63,7 +59,17 @@ $ yarn global add foxman
 
 ### 1. Configuration
 
-[Configure foxman making it fits your case](https://foxman.js.org/#/configuration)
+Simply populate a foxman.config.js file in your project root
+
+Add following content into this file:
+
+```js
+module.exports = {
+	// ...
+};
+```
+
+You can head to [documentation](https://foxman.js.org/#/configuration) for more configuration detail
 
 ### 2. Run
 
