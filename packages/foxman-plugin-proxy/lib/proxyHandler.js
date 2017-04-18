@@ -45,7 +45,6 @@ function resolveRes(
 ) {
     const headers = res._headers;
     const buffer = Buffer.concat(body);
-    const resolveRes = wrapperResolve(resolve);
 
     for (var name in headers) {
         if ('transfer-encoding' !== name && 'content-encoding' !== name) {
@@ -56,19 +55,13 @@ function resolveRes(
     switch (headers['content-encoding']) {
     case 'gzip':
         return zlib.gunzip(buffer, function(err, decoded) {
-            resolveRes(decoded);
+            resolve(decoded.toString());
         });
     case 'deflate':
         return zlib.inflate(buffer, function(err, decoded) {
-            resolveRes(decoded);
+            resolve(decoded.toString());
         });
     default:
-        resolveRes(buffer);
+        resolve(buffer.toString());
     }
-}
-
-function wrapperResolve(resolve) {
-    return function(body) {
-        resolve(body.toString());
-    };
 }
