@@ -59,7 +59,7 @@ $ yarn global add foxman
 
 ### 1. Configuration
 
-Simply populate a foxman.config.js file in your project root
+Simply populate a `foxman.config.js` file in your project root
 
 Add following content into this file:
 
