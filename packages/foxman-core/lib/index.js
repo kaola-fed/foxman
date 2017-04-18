@@ -1,6 +1,10 @@
 const co = require('co');
 const dotProp = require('dot-prop');
-const { log, upperCaseFirstLetter, lowerCaseFirstLetter } = require('@foxman/helpers/lib/util');
+const {
+    log,
+    upperCaseFirstLetter,
+    lowerCaseFirstLetter
+} = require('@foxman/helpers/lib/util');
 const initializePlugin = require('./initializePlugin');
 const createRegistry = require('./createRegistry');
 
@@ -20,7 +24,7 @@ module.exports = class Core {
         initializePlugin(plugin);
 
         this._register(plugin);
-        
+
         log(`plugin loaded: ${upperCaseFirstLetter(plugin.name())}`);
     }
 
@@ -53,7 +57,7 @@ module.exports = class Core {
         if (!plugin) {
             return;
         }
-        
+
         if (rest.length === 0) {
             // TODO: deepClone
             return plugin.$options;
@@ -64,7 +68,7 @@ module.exports = class Core {
 
     _service(keypath) {
         const [pluginName, serviceName] = keypath.split('.');
-        
+
         if (!serviceName) {
             return this._serviceRegistry.lookup(pluginName);
         }
@@ -89,7 +93,7 @@ module.exports = class Core {
                 const plugin = plugins[i];
 
                 if (plugin.init && plugin.$options.enable) {
-                    plugin.init({ getter, service });
+                    plugin.init({getter, service});
 
                     if (plugin.pendings.length > 0) {
                         const pluginName = upperCaseFirstLetter(plugin.name());
@@ -104,8 +108,8 @@ module.exports = class Core {
                 for (const i in plugins) {
                     const plugin = plugins[i];
 
-                    if (plugin.runOnSuccess) {
-                        plugin.runOnSuccess();
+                    if (plugin.ready) {
+                        plugin.ready();
                     }
                 }
             })
