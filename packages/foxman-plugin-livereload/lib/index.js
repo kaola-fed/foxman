@@ -1,4 +1,10 @@
 const Reloader = require('./Reloader');
+const {
+    getTemplatePattern,
+    getResourcesPattern,
+    getSyncDataPattern
+} = require('./patterns');
+
 class LivereloadPlugin {
     name() {
         return 'livereload';
@@ -17,18 +23,41 @@ class LivereloadPlugin {
 
     constructor() {}
 
-    init({ service, getter }) {
+    init({service, getter}) {
+        const injectScript = service('server.injectScript');
         const livereload = service('server.livereload');
-        const serverOptions = getter('server');
         const createWatcher = service('watcher.create');
-        
-        service('server.injectScript')({
+        const serverOptions = getter('server');
+
+        injectScript({
             condition: () => true,
             src: `/__FOXMAN__CLIENT__/js/reload.js`
         });
 
-        this.reloader = new Reloader({ livereload, createWatcher, serverOptions });
+        const files = getWatchFiles(serverOptions);
+        this.reloader = new Reloader({livereload, createWatcher});
+        this.reloader.watch(files);
     }
+}
+
+function getWatchFiles(serverOptions = {}) {
+    const {
+        extension,
+        viewRoot,
+        templatePaths,
+        syncData,
+        statics
+    } = serverOptions;
+
+    return [
+        ...getTemplatePattern({
+            extension,
+            viewRoot,
+            templatePaths
+        }),
+        ...getSyncDataPattern(syncData),
+        ...getResourcesPattern(statics)
+    ];
 }
 
 module.exports = LivereloadPlugin;

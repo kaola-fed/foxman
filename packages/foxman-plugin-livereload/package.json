@@ -8,6 +8,5 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@foxman/helpers": "^0.1.2"
   }
 }
