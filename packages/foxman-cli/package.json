@@ -1,6 +1,6 @@
 {
   "name": "foxman",
-  "version": "0.8.6",
+  "version": "0.8.7-0",
   "main": "app.js",
   "description": "Extensible Mock Server",
   "preferGlobal": true,
@@ -40,15 +40,15 @@
   "homepage": "https://github.com/kaola-fed/foxman#readme",
   "devDependencies": {},
   "dependencies": {
-    "@foxman/core": "^0.1.3",
-    "@foxman/helpers": "^0.1.3",
-    "@foxman/plugin-livereload": "^0.1.3",
-    "@foxman/plugin-nei": "^0.1.3",
-    "@foxman/plugin-processor": "^0.1.3",
-    "@foxman/plugin-proxy": "^0.1.3",
-    "@foxman/plugin-server": "^0.1.3",
+    "@foxman/core": "^0.1.4",
+    "@foxman/helpers": "^0.1.4",
+    "@foxman/plugin-livereload": "^0.1.4",
+    "@foxman/plugin-nei": "^0.1.4",
+    "@foxman/plugin-processor": "^0.1.4",
+    "@foxman/plugin-proxy": "^0.1.4",
+    "@foxman/plugin-server": "^0.1.4",
     "@foxman/plugin-vconsole": "^0.1.1",
-    "@foxman/plugin-watch": "^0.1.2",
+    "@foxman/plugin-watch": "^0.1.3",
     "update-notifier": "^2.1.0",
     "yargs": "^7.0.2"
   }

@@ -1,4 +1,5 @@
-const {util, DispatherTypes} = require('@foxman/helpers');
+const {util, consts} = require('@foxman/helpers');
+const {DIR} = consts.DispatherTypes;
 const httpProxy = require('http-proxy');
 const proxyHandler = require('./proxyHandler');
 
@@ -74,7 +75,7 @@ class ProxyPlugin {
                     const router = dispatcher.router || false;
                     const type = dispatcher.type;
 
-                    if (type === DispatherTypes.DIR || !router) {
+                    if (type === DIR || !router) {
                         return yield next;
                     }
 

@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-processor",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "",
   "main": "lib/index.js",
   "scripts": {},
@@ -8,7 +8,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@foxman/helpers": "^0.1.3",
+    "@foxman/helpers": "^0.1.4",
     "co": "^4.6.0",
     "path-to-regexp": "^1.5.3",
     "task-lock": "1.4.0"
