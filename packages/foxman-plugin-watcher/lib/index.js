@@ -46,7 +46,7 @@ class WatcherPlugin {
 
     service() {
         return {
-            createWatcher(...args) {
+            create(...args) {
                 return this._createWatcher(...args);
             }
         };
