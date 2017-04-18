@@ -20,7 +20,7 @@ class LivereloadPlugin {
     init({ service, getter }) {
         const livereload = service('server.livereload');
         const serverOptions = getter('server');
-        const createWatcher = service('watcher.createWatcher');
+        const createWatcher = service('watcher.create');
         
         service('server.injectScript')({
             condition: () => true,
