@@ -1,4 +1,4 @@
-const apiHandler = require('@foxman/helpers/lib/apiHandler');
+const apiHandler = require('../utils/apiHandler');
 const {util: _} = require('@foxman/helpers');
 const {consts} = require('@foxman/helpers');
 const {SYNC} = consts.DispatherTypes;
