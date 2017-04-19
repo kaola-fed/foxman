@@ -7,26 +7,29 @@ const Koa = require('koa');
 const WebSocket = require('ws');
 const bodyParser = require('koa-bodyparser');
 
-const {util} = require('@foxman/helpers');
+const { util } = require('@foxman/helpers');
 const routerMatch = require('./middleware/routerMatch');
 const apiInterceptor = require('./middleware/apiInterceptor');
 const pageInterceptor = require('./middleware/pageInterceptor');
 const dirInterceptor = require('./middleware/dirInterceptor');
-const configureStatics = require('./configureStatics');
-const {configureViewEngine, configureEjs} = require('./configureViewEngine');
+const {
+    configureViewEngine,
+    configureEjs,
+    configureStatics
+} = require('./configure');
 
 const WebSocketServer = WebSocket.Server;
 
-const {notify, values} = util;
+const { notify, values } = util;
 
 class Server {
     constructor(options) {
         this.serverOptions = options;
         this._middlewares = [];
         this._injectedScripts = [];
-        this.app = Koa({outputErrors: false});
+        this.app = Koa({ outputErrors: false });
 
-        const {Render, templatePaths, viewRoot} = options;
+        const { Render, templatePaths, viewRoot } = options;
         const app = this.app;
 
         this.viewEngine = configureViewEngine({
@@ -35,7 +38,7 @@ class Server {
             viewRoot
         });
 
-        configureEjs({app});
+        configureEjs({ app });
     }
 
     registerRouterNamespace(name, value = []) {
@@ -55,8 +58,8 @@ class Server {
     }
 
     prepare() {
-        const {app, _injectedScripts, viewEngine} = this;
-        const {ifProxy, statics} = this.serverOptions;
+        const { app, _injectedScripts, viewEngine } = this;
+        const { ifProxy, statics } = this.serverOptions;
 
         if (!ifProxy) {
             app.use(bodyParser());
@@ -67,14 +70,15 @@ class Server {
 
         this._middlewares.forEach(middleware => app.use(middleware));
 
-        app.use(pageInterceptor({viewEngine}));
+        app.use(pageInterceptor({ viewEngine }));
         app.use(apiInterceptor());
         app.use(dirInterceptor());
 
         // inject builtin scripts
         app.use(function*(next) {
             if (/text\/html/ig.test(this.type)) {
-                this.body = this.body +
+                this.body =
+                    this.body +
                     [
                         '/__FOXMAN__CLIENT__/js/builtin/eventbus.js',
                         '/__FOXMAN__CLIENT__/js/builtin/websocket-connector.js',
@@ -92,7 +96,8 @@ class Server {
         // inject scripts
         app.use(function*(next) {
             if (/text\/html/ig.test(this.type)) {
-                this.body = this.body +
+                this.body =
+                    this.body +
                     _injectedScripts
                         .map(script => {
                             return script.condition(this.request)
@@ -104,15 +109,15 @@ class Server {
             yield next;
         });
 
-        configureStatics({statics, app});
+        configureStatics({ statics, app });
     }
 
     use(middleware) {
         this._middlewares.push(middleware(this));
     }
 
-    injectScript({condition, src}) {
-        this._injectedScripts.push({condition, src});
+    injectScript({ condition, src }) {
+        this._injectedScripts.push({ condition, src });
     }
 
     // only eval for one time
@@ -150,7 +155,7 @@ class Server {
 
     start() {
         this.prepare();
-        const {port, https} = this.serverOptions;
+        const { port, https } = this.serverOptions;
         const callback = this.app.callback();
 
         if (https) {
