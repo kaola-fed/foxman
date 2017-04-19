@@ -1,7 +1,7 @@
 'use strict';
 const subMain = require('./submain');
 const Application = require('nei/lib/util/args');
-const {fileUtil} = require('@foxman/helpers');
+const {fs} = require('@foxman/helpers');
 
 const options = {
     package: require('nei/package.json'),
@@ -43,7 +43,7 @@ const neiTools = {
     },
     run(opt) {
         try {
-            fileUtil.delDir(opt.basedir);
+            fs.delDir(opt.basedir);
         } catch (e) {
             // console.log(e);
         }

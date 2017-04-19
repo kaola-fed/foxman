@@ -1,6 +1,5 @@
-const {util, fileUtil} = require('@foxman/helpers');
+const {util, fs} = require('@foxman/helpers');
 const path = require('path');
-const fs = require('fs');
 const os = require('os');
 const globule = require('globule');
 const _ = require('util');
@@ -22,39 +21,18 @@ function getMockConfig(config) {
 }
 
 function writeNEIConfig({NEIRoute}, formatR) {
-    fileUtil.writeFile(
-        NEIRoute,
-        `module.exports = ${_.inspect(formatR, {maxArrayLength: null})}`,
-        () => {},
-        e => util.error(e)
-    );
+    return fs.writeFile(NEIRoute, `module.exports = ${_.inspect(formatR, { maxArrayLength: null })}`);
 }
 
 function updateLocalFiles(routes = [], getFilePath) {
-    return Promise.all(
-        routes.map(
-            route =>
-                new Promise(resolve => {
-                    /**
-             * 本地路径（非nei）
-             */
-                    const dataPath = getFilePath(route);
-                    fs.stat(dataPath, error => {
-                        /**
-                 * 文件不存在或者文件内容为空
-                 */
-                        if (error) {
-                            util.log('touch file: ' + dataPath);
-                            fileUtil
-                                .writeUnExistsFile(dataPath, '')
-                                .then(resolve, resolve);
-                            return 0;
-                        }
-                        resolve();
-                    });
-                })
-        )
-    );
+    return Promise.all(routes.map(
+        route => {
+            return fs.stat(getFilePath(route)).catch(() => {
+                util.log('Touched file: ' + getFilePath(route));
+                return fs.writeUnExistsFile(getFilePath(route));
+            });
+        }
+    ));
 }
 
 function formatRoutes(rules) {
@@ -100,5 +78,5 @@ function init({key, update = false}) {
         path.resolve(basedir, 'nei**/server.config.js')
     );
 
-    return {key, update, basedir, NEIRoute, serverConfigFile};
+    return { key, update, basedir, NEIRoute, serverConfigFile };
 }
