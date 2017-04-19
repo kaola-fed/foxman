@@ -1,14 +1,13 @@
-const {fs} = require('@foxman/helpers');
+const { fs } = require('@foxman/helpers');
 const path = require('path');
-const {consts} = require('@foxman/helpers');
-const {DIR} = consts.DispatherTypes;
+const { consts } = require('@foxman/helpers');
+const { DIR } = consts.DispatherTypes;
 
 module.exports = () => {
     return function*(next) {
         const dispatcher = this.dispatcher;
 
-        if (!dispatcher || 
-            (dispatcher.type !== DIR)) {
+        if (!dispatcher || dispatcher.type !== DIR) {
             return yield next;
         }
 
@@ -19,9 +18,10 @@ module.exports = () => {
         };
 
         const viewPath = dispatcher.pagePath;
-        const files = yield fs.getDirInfo(viewPath);
+        const files = yield fs.readdir(viewPath);
         const promises = files.map(file =>
-            fs.getFileStat(path.resolve(viewPath, file)));
+            fs.lstat(path.resolve(viewPath, file))
+        );
         let result = (yield Promise.all(promises)).map((item, idx) => {
             return Object.assign(item, {
                 name: files[idx],

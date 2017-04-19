@@ -1,7 +1,7 @@
 'use strict';
 const subMain = require('./submain');
 const Application = require('nei/lib/util/args');
-const {fs} = require('@foxman/helpers');
+const { fs } = require('@foxman/helpers');
 
 const options = {
     package: require('nei/package.json'),
@@ -42,11 +42,7 @@ const neiTools = {
         nei.exec(['update -basedir', opt.basedir]);
     },
     run(opt) {
-        try {
-            fs.delDir(opt.basedir);
-        } catch (e) {
-            // console.log(e);
-        }
+        fs.del.sync([opt.basedir]);
 
         this.build(opt);
 

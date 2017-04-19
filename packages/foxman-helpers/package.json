@@ -9,8 +9,10 @@
   "license": "MIT",
   "dependencies": {
     "chalklog": "^1.1.2",
+    "del": "^2.2.2",
     "fast-ftl": "1.7.1",
     "node-notifier": "^5.1.2",
+    "pify": "^2.3.0",
     "semver": "^5.3.0"
   }
 }

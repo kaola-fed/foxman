@@ -29,7 +29,7 @@ function updateLocalFiles(routes = [], getFilePath) {
         route => {
             return fs.stat(getFilePath(route)).catch(() => {
                 util.log('Touched file: ' + getFilePath(route));
-                return fs.writeUnExistsFile(getFilePath(route));
+                return fs.write(getFilePath(route));
             });
         }
     ));

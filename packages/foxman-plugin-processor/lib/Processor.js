@@ -9,7 +9,7 @@ exports.dispatcher = dispatcher;
 
 const extname = path.extname;
 
-const {getFileStat, readFile} = fs;
+const {lstat, readFile} = fs;
 const {log, warnLog, notify} = util;
 
 function noop(p) {
@@ -52,7 +52,7 @@ function dispatcher(
 
             let raw;
             try {
-                yield getFileStat(sourceFile);
+                yield lstat(sourceFile);
                 raw = yield readFile(sourceFile);
             } catch (e) {
                 warnLog(e);
