@@ -43,7 +43,7 @@ function warnLog(msg) {
     printer.yellow(upperCaseFirstLetter(msg));
 }
 
-exports.print = printer;
+exports.printer = printer;
 exports.debugLog = debugLog;
 exports.error = error;
 exports.log = log;
