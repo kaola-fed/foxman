@@ -1,16 +1,11 @@
 const zlib = require('zlib');
 const url = require('url');
-const {ServerResponse} = require('http');
+const { ServerResponse } = require('http');
 
-module.exports = function handler(
-    {
-        proxy,
-        service
-    }
-) {
+module.exports = function doProxy({ proxy, service }) {
     const target = url.parse(service(this.request.url.replace(/^(\/)/, '')));
     const res = new ServerResponse(
-        Object.assign({}, this.req, {url: target.path})
+        Object.assign({}, this.req, { url: target.path })
     );
     const body = [];
 
@@ -35,14 +30,7 @@ module.exports = function handler(
     });
 };
 
-function resolveRes(
-    {
-        ctx,
-        res,
-        body,
-        resolve
-    }
-) {
+function resolveRes({ ctx, res, body, resolve }) {
     const headers = res._headers;
     const buffer = Buffer.concat(body);
 

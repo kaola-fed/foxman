@@ -1,5 +1,5 @@
-const consts = require('./consts');
 const fs = require('./fs');
+const consts = require('./consts');
 const parser = require('./parser');
 const encrypt = require('./encrypt');
 const generator = require('./generator');
@@ -20,3 +20,4 @@ exports.promise = promise;
 exports.string = string;
 exports.system = system;
 exports.typer = typer;
+exports.consts = consts;

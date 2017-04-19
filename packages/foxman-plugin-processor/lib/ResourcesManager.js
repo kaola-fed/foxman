@@ -1,27 +1,22 @@
 class ResourcesManager {
     constructor() {
-        this.map = {};
+        this._map = {};
     }
 
-    set(
-        {
-            reqPath,
-            processed
-        }
-    ) {
-        this.map[reqPath] = processed;
+    set({ reqPath, processed }) {
+        this._map[reqPath] = processed;
     }
 
     has(reqPath) {
-        return !!this.map[reqPath];
+        return !!this._map[reqPath];
     }
 
     get(reqPath) {
-        return this.map[reqPath];
+        return this._map[reqPath];
     }
 
     clear(reqPath) {
-        this.map[reqPath] = null;
+        this._map[reqPath] = null;
     }
 }
 

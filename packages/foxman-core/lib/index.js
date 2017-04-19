@@ -94,11 +94,11 @@ module.exports = class Core {
                 const plugin = plugins[i];
 
                 if (plugin.init && plugin.$options.enable) {
-                    plugin.init({getter, service});
+                    plugin.init({ getter, service });
 
                     if (plugin.pendings.length > 0) {
                         const pluginName = upperCaseFirstLetter(plugin.name());
-                        log(`plugin pedding: ${pluginName}`);
+                        log(`plugin pending: ${pluginName}`);
                         yield Promise.all(plugin.pendings);
                         log(`plugin done: ${pluginName}`);
                     }

@@ -1,10 +1,7 @@
-const { logger, consts } = require('@foxman/helpers');
+const {logger, consts} = require('@foxman/helpers');
 const httpProxy = require('http-proxy');
-const proxyHandler = require('./proxyHandler');
 const {DispatherTypes} = consts;
-/**
- * 全局代理插件
- */
+const doProxy = require('./proxy');
 class ProxyPlugin {
     name() {
         return 'proxy';
@@ -78,10 +75,7 @@ class ProxyPlugin {
                     }
 
                     dispatcher.handler = ctx =>
-                        proxyHandler.call(ctx, {
-                            proxy,
-                            service
-                        });
+                        doProxy.call(ctx, { proxy, service });
 
                     yield next;
                 }
