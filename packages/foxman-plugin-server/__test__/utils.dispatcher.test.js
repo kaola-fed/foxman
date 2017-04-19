@@ -1,5 +1,5 @@
 var path = require('path');
-var apiHandler = require('../lib/apiHandler');
+var apiHandler = require('../lib/utils/apiHandler');
 
 test('apiHandler', function() {
   var combine = apiHandler({

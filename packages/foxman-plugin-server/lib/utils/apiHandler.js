@@ -1,4 +1,5 @@
-const {parseJSON, readJSONFile, ensurePromise} = require('./util');
+const {util} = require('@foxman/helpers');
+const {parseJSON, readJSONFile, ensurePromise} = util;
 
 function apiHandler({handler, dataPath}) {
     if (handler) {
