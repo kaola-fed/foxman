@@ -53,7 +53,7 @@ function writeFileSync(filename, text) {
     fs.writeFileSync(filename, text);
 }
 
-function writeUnExistsFile(file, text) {
+function writeUnExistsFile(file, text = '') {
     let needCreateStack = [file];
 
     return new Promise((...args) => {
@@ -97,6 +97,20 @@ function delDir(file) {
     }
 }
 
+function stat(file) {
+    return Promise.resolve().then(function () {
+        fs.stat(file, (error, info) => {
+            /**
+             * 文件不存在或者文件内容为空
+             */
+            if (error) {
+                return Promise.reject(error);
+            }
+            return Promise.resolve(info);
+        });
+    });
+}
+
 module.exports = {
     getFileByStream,
     getDirInfo,
@@ -105,5 +119,6 @@ module.exports = {
     writeFile,
     writeFileSync,
     writeUnExistsFile,
-    delDir
+    delDir,
+    stat
 };

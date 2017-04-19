@@ -1,4 +1,4 @@
-const {fileUtil} = require('@foxman/helpers');
+const {fs} = require('@foxman/helpers');
 const path = require('path');
 const {consts} = require('@foxman/helpers');
 const {DIR} = consts.DispatherTypes;
@@ -19,9 +19,9 @@ module.exports = () => {
         };
 
         const viewPath = dispatcher.pagePath;
-        const files = yield fileUtil.getDirInfo(viewPath);
+        const files = yield fs.getDirInfo(viewPath);
         const promises = files.map(file =>
-            fileUtil.getFileStat(path.resolve(viewPath, file)));
+            fs.getFileStat(path.resolve(viewPath, file)));
         let result = (yield Promise.all(promises)).map((item, idx) => {
             return Object.assign(item, {
                 name: files[idx],
