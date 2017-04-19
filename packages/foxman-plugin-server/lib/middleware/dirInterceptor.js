@@ -1,6 +1,5 @@
-const {fs} = require('@foxman/helpers');
+const {fs, consts} = require('@foxman/helpers');
 const path = require('path');
-const {consts} = require('@foxman/helpers');
 const {DIR} = consts.DispatherTypes;
 
 module.exports = () => {
