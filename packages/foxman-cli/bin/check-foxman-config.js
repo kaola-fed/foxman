@@ -1,4 +1,5 @@
-const {warnLog} = require('@foxman/helpers/lib/util');
+const {logger} = require('@foxman/helpers');
+const {warnLog} = logger;
 const path = require('path');
 
 module.exports = function (configPath) {

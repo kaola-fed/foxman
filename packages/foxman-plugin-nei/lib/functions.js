@@ -1,4 +1,4 @@
-const {util, fs} = require('@foxman/helpers');
+const {logger, string, fs} = require('@foxman/helpers');
 const path = require('path');
 const os = require('os');
 const globule = require('globule');
@@ -28,7 +28,7 @@ function updateLocalFiles(routes = [], getFilePath) {
     return Promise.all(routes.map(
         route => {
             return fs.stat(getFilePath(route)).catch(() => {
-                util.log('Touched file: ' + getFilePath(route));
+                logger.log('Touched file: ' + getFilePath(route));
                 return fs.writeUnExistsFile(getFilePath(route));
             });
         }
@@ -57,7 +57,7 @@ function formatRoutes(rules) {
 
         return {
             method,
-            url: util.appendHeadBreak(url),
+            url: string.appendHeadBreak(url),
             sync: isSync(rule)
         };
     }

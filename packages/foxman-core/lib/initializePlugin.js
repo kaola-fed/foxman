@@ -1,8 +1,8 @@
 /**
  * Created by hzxujunyu on 2016/9/19.
  */
-const { util: _ } = require('@foxman/helpers');
-const pid = _.createSystemId();
+const { system, typer } = require('@foxman/helpers');
+const pid = system.createSystemId();
 
 module.exports = init;
 
@@ -34,7 +34,7 @@ function init(plugin) {
 
 function generatePending(fn) {
     return new Promise(done => {
-        _.ensurePromise(fn(done)).catch(e => {
+        typer.ensurePromise(fn(done)).catch(e => {
             console.error(e);
         });
     });

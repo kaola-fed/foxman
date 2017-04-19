@@ -1,7 +1,18 @@
-const Render = require('fast-ftl').default;
-const { values } = require('./util');
+const {Render} = require('fast-ftl');
+const { values, typeOf } = require('./typer');
 
-class Renderer {
+function parseJSON(jsonStr) {
+    const result = new Function(`return ${jsonStr}`)();
+
+    if (typeOf(result) === 'object') {
+        return result;
+    }
+
+    return {};
+}
+
+
+class Freemarker {
     constructor({ viewRoot, templatePaths = {} }) {
         this.freemarker = Render({
             root: viewRoot,
@@ -19,4 +30,5 @@ class Renderer {
     }
 }
 
-module.exports = Renderer;
+exports.Render = Freemarker;
+exports.parseJSON = parseJSON;

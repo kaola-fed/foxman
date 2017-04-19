@@ -1,7 +1,7 @@
-const { util, DispatherTypes } = require('@foxman/helpers');
+const { logger, consts } = require('@foxman/helpers');
 const httpProxy = require('http-proxy');
 const proxyHandler = require('./proxyHandler');
-
+const {DispatherTypes} = consts;
 /**
  * 全局代理插件
  */
@@ -21,11 +21,11 @@ class ProxyPlugin {
 
         if (this.$options.enable) {
             if (!proxyConfig.host) {
-                util.error('To configure config proxy.host');
+                logger.error('To configure config proxy.host');
             }
 
             if (!~Object.keys(service).indexOf(proxyServerName)) {
-                util.error(
+                logger.error(
                     'To check config, and input correct proxyServer name'
                 );
             }
@@ -87,7 +87,7 @@ class ProxyPlugin {
                 }
         );
 
-        util.log(`Proxying to remote server ${proxyServerName}`);
+        logger.log(`Proxying to remote server ${proxyServerName}`);
     }
 }
 

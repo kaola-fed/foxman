@@ -1,10 +1,11 @@
-const {util: _ } = require('@foxman/helpers');
+const {typer, string} = require('@foxman/helpers');
 const path = require('path');
 const pathToRegexp = require('path-to-regexp');
 const {consts} = require('@foxman/helpers');
 const {DIR, SYNC} = consts.DispatherTypes;
 
-const { values, removeSuffix, addDataExt, jsonPathResolve } = _;
+const {values} = typer;
+const {removeSuffix, addDataExt, jsonPathResolve} = string;
 
 // 获得路由的 dispatcher 对象
 function matchRouter(

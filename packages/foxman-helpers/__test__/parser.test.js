@@ -1,15 +1,20 @@
-var path = require('path');
-var Renderer = require('../lib').Renderer;
+const {parser: _} = require('../lib')
+const path = require('path');
+const {Render} = _;
 
-var viewDir = 'fixtures/freemarker/view/';
-var viewRoot = path.resolve(__dirname, viewDir);
-
-var renderer = new Renderer({
+const viewDir = 'fixtures/freemarker/view/';
+const viewRoot = path.resolve(__dirname, viewDir);
+const render = new Render({
     viewRoot: viewRoot
 });
 
+
+test('parseJSON', function() {
+    expect(_.parseJSON('{a:1}').a).toBe(1);
+});
+
 test('parse1', function (done) {
-    renderer.parse(path.join(viewRoot, 'foo.ftl'), {}).then((info) => {
+    render.parse(path.join(viewRoot, 'foo.ftl'), {}).then((info) => {
         expect(!!(~info.indexOf('Foo Bar'))).toBe(true);
         done();
     }, function (err) {
@@ -18,7 +23,7 @@ test('parse1', function (done) {
 });
 
 test('parse2', function (done) {
-    renderer.parse(path.join(viewRoot, 'bar.ftl'), {foo: ' bar'}).then((info) => {
+    render.parse(path.join(viewRoot, 'bar.ftl'), {foo: ' bar'}).then((info) => {
         expect(!!(~info.indexOf('bar'))).toBe(true);
         done();
     }, function (err) {
@@ -33,7 +38,7 @@ test('stringify', function (done) {
         }
     };
     var jsonText = JSON.stringify({foo: 'bar'});
-    renderer.parse(path.join(viewRoot, 'stringify.ftl'), json).then((info) => {
+    render.parse(path.join(viewRoot, 'stringify.ftl'), json).then((info) => {
         expect(JSON.stringify(JSON.parse(info))).toBe(jsonText);
         done();
     }, function (err) {

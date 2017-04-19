@@ -1,7 +1,7 @@
 const path = require('path');
 const pathToRegexp = require('path-to-regexp');
 const co = require('co');
-const {fs, util} = require('@foxman/helpers');
+const {fs, logger, system} = require('@foxman/helpers');
 const TaskLock = require('task-lock');
 const ResourcesManager = require('./ResourcesManager');
 
@@ -10,7 +10,8 @@ exports.dispatcher = dispatcher;
 const extname = path.extname;
 
 const {getFileStat, readFile} = fs;
-const {log, warnLog, notify} = util;
+const {log, warnLog} = logger;
+const {notify} = system;
 
 function noop(p) {
     return p;

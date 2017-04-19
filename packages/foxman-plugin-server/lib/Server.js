@@ -7,7 +7,7 @@ const Koa = require('koa');
 const WebSocket = require('ws');
 const bodyParser = require('koa-bodyparser');
 
-const {util} = require('@foxman/helpers');
+const {typer, system} = require('@foxman/helpers');
 const routerMatch = require('./middleware/routerMatch');
 const apiInterceptor = require('./middleware/apiInterceptor');
 const pageInterceptor = require('./middleware/pageInterceptor');
@@ -17,7 +17,8 @@ const {configureViewEngine, configureEjs} = require('./configureViewEngine');
 
 const WebSocketServer = WebSocket.Server;
 
-const {notify, values} = util;
+const {values} = typer;
+const {notify} = system; 
 
 class Server {
     constructor(options) {

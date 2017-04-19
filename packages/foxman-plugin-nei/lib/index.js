@@ -1,6 +1,6 @@
 const path = require('path');
-const { util, consts } = require('@foxman/helpers');
-const { DIR, SYNC } = consts.DispatherTypes;
+const {string, consts} = require('@foxman/helpers');
+const {DIR, SYNC} = consts.DispatherTypes;
 const {
     getMockConfig,
     writeNEIConfig,
@@ -171,7 +171,7 @@ class NEISyncPlugin {
         } = this.$serverOptions;
 
         if (sync) {
-            return syncDataMatch(util.jsonPathResolve(filePath));
+            return syncDataMatch(string.jsonPathResolve(filePath));
         }
 
         if (!divideMethod) {
@@ -182,7 +182,7 @@ class NEISyncPlugin {
         }
 
         return asyncDataMatch(
-            util.jsonPathResolve(filePath.replace(/\/data/g, ''))
+            string.jsonPathResolve(filePath.replace(/\/data/g, ''))
         );
     }
 

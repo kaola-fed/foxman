@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const {parseJSON} = require('./parser');
+const {warnLog} = require('./logger');
 
 function getFileByStream(path) {
     return fs.ReadStream(path);
@@ -111,14 +113,34 @@ function stat(file) {
     });
 }
 
-module.exports = {
-    getFileByStream,
-    getDirInfo,
-    getFileStat,
-    readFile,
-    writeFile,
-    writeFileSync,
-    writeUnExistsFile,
-    delDir,
-    stat
-};
+function readJSONFile(url) {
+    return new Promise(resolve => {
+        let json;
+        readFile(url)
+            .then(data => {
+                try {
+                    json = parseJSON(data);
+                } catch (e) {
+                    warnLog('Parsed failed:');
+                    warnLog(e);
+                    json = {};
+                }
+                resolve({ json });
+            })
+            .catch(() => {
+                resolve({ json: {} });
+            });
+    });
+}
+
+exports.getFileByStream = getFileByStream;
+exports.getDirInfo = getDirInfo;
+exports.getFileStat = getFileStat;
+exports.readFile = readFile;
+exports.writeFile = writeFile;
+exports.writeFileSync = writeFileSync;
+exports.writeUnExistsFile = writeUnExistsFile;
+exports.delDir = delDir;
+exports.stat = stat;
+exports.readJSONFile = readJSONFile;
+

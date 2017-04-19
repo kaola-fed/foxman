@@ -1,10 +1,11 @@
 const co = require('co');
 const dotProp = require('dot-prop');
 const {
-    log,
-    upperCaseFirstLetter,
-    lowerCaseFirstLetter
-} = require('@foxman/helpers/lib/util');
+    logger, string
+} = require('@foxman/helpers');
+const {log} = logger;
+const {upperCaseFirstLetter,lowerCaseFirstLetter} = string; 
+
 const initializePlugin = require('./initializePlugin');
 const createRegistry = require('./createRegistry');
 

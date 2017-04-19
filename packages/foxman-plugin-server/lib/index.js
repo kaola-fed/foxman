@@ -1,6 +1,6 @@
 const Server = require('./Server');
 const path = require('path');
-const {Renderer, util: _} = require('@foxman/helpers');
+const {parser, logger, typer} = require('@foxman/helpers');
 const formatStaticOptions = require('./utils/formatStaticOptions');
 const checkServerConfig = require('./utils/checkServerConfig');
 
@@ -65,12 +65,12 @@ class ServerPlugin {
     constructor(opts = {}) {
         const result = checkServerConfig(opts);
         if (result) {
-            _.errorLog(result);
+            logger.errorLog(result);
         }
 
         // TODO: 需要deepClone
         const options = Object.assign({}, opts);
-        const statics = options.static ? _.ensureArray(opts.static) : [];
+        const statics = options.static ? typer.ensureArray(opts.static) : [];
 
         options.port = options.port || 3000;
 
@@ -94,7 +94,7 @@ class ServerPlugin {
             ? String(options.extension)
             : 'ftl';
 
-        options.Render = options.Render || Renderer;
+        options.Render = options.Render || parser.Render;
 
         this.$options = options;
     }
