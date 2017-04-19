@@ -1,6 +1,6 @@
 const util = require('./util');
 const fs = require('./fs');
-const Renderer = require('./render');
+const Renderer = require('./renderer');
 const consts = require('./consts');
 
 exports.util = util;
