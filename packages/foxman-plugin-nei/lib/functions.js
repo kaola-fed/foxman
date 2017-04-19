@@ -1,4 +1,4 @@
-const {util, fs} = require('@foxman/helpers');
+const { logger, string, fs } = require('@foxman/helpers');
 const path = require('path');
 const os = require('os');
 const globule = require('globule');
@@ -20,19 +20,22 @@ function getMockConfig(config) {
     return require(neiConfigRoot);
 }
 
-function writeNEIConfig({NEIRoute}, formatR) {
-    return fs.writeFile(NEIRoute, `module.exports = ${_.inspect(formatR, { maxArrayLength: null })}`);
+function writeNEIConfig({ NEIRoute }, formatR) {
+    return fs.writeFile(
+        NEIRoute,
+        `module.exports = ${_.inspect(formatR, { maxArrayLength: null })}`
+    );
 }
 
 function updateLocalFiles(routes = [], getFilePath) {
-    return Promise.all(routes.map(
-        route => {
+    return Promise.all(
+        routes.map(route => {
             return fs.stat(getFilePath(route)).catch(() => {
-                util.log('Touched file: ' + getFilePath(route));
+                logger.log('Touched file: ' + getFilePath(route));
                 return fs.write(getFilePath(route));
             });
-        }
-    ));
+        })
+    );
 }
 
 function formatRoutes(rules) {
@@ -57,7 +60,7 @@ function formatRoutes(rules) {
 
         return {
             method,
-            url: util.appendHeadBreak(url),
+            url: string.appendHeadBreak(url),
             sync: isSync(rule)
         };
     }
@@ -71,7 +74,7 @@ function formatRoutes(rules) {
     });
 }
 
-function init({key, update = false}) {
+function init({ key, update = false }) {
     const basedir = path.resolve(os.homedir(), 'localMock', key);
     const NEIRoute = path.resolve(basedir, 'nei.route.js');
     const [serverConfigFile] = globule.find(

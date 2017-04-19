@@ -1,26 +1,25 @@
-const {util} = require('@foxman/helpers');
-const {parseJSON, readJSONFile, ensurePromise} = util;
+const { parser, fs, promise } = require('@foxman/helpers');
 
-function apiHandler({handler, dataPath}) {
+function apiHandler({ handler, dataPath }) {
     if (handler) {
-        return ensurePromise(handler(this)).then(res => {
+        return promise.ensurePromise(handler(this)).then(res => {
             if (typeof res === 'string') {
                 try {
-                    res = parseJSON(res);
+                    res = parser.parseJSON(res);
                 } catch (error) {
                     return Promise.reject(
                         `${error.stack || error} \n 源数据：\n ${res}`
                     );
                 }
             }
-            return {json: res};
+            return { json: res };
         });
     }
 
     if (Array.isArray(dataPath)) {
         return Promise.all(
             dataPath.map(url => {
-                return readJSONFile(url);
+                return { json: fs.readJSONFile(url) };
             })
         ).then(resps => {
             return resps.reduce((bef, aft) => {
@@ -31,7 +30,7 @@ function apiHandler({handler, dataPath}) {
         });
     }
 
-    return readJSONFile(dataPath);
+    return fs.readJSONFile(dataPath).then(json => ({ json }));
 }
 
 module.exports = apiHandler;

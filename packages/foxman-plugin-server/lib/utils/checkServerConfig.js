@@ -1,5 +1,5 @@
-const {util} = require('@foxman/helpers');
-const {typeOf} = util;
+const {typer} = require('@foxman/helpers');
+const {typeOf} = typer;
 
 module.exports = function check ({
     viewRoot, syncData, asyncData

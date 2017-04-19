@@ -7,7 +7,7 @@ const Koa = require('koa');
 const WebSocket = require('ws');
 const bodyParser = require('koa-bodyparser');
 
-const { util } = require('@foxman/helpers');
+const {typer, system, logger} = require('@foxman/helpers');
 const routerMatch = require('./middleware/routerMatch');
 const apiInterceptor = require('./middleware/apiInterceptor');
 const pageInterceptor = require('./middleware/pageInterceptor');
@@ -20,7 +20,8 @@ const {
 
 const WebSocketServer = WebSocket.Server;
 
-const { notify, values } = util;
+const {values} = typer;
+const {notify} = system; 
 
 class Server {
     constructor(options) {
@@ -189,7 +190,7 @@ class Server {
         });
 
         const tips = `Server build successfully on ${this.https ? 'https' : 'http'}://127.0.0.1:${port}/`;
-        util.log(tips);
+        logger.log(tips);
         notify({
             title: 'Run successfully',
             msg: tips

@@ -1,9 +1,5 @@
 const path = require('path');
 
-exports.getTemplatePattern = getTemplatePattern;
-exports.getSyncDataPattern = files;
-exports.getResourcesPattern = getResourcesPattern;
-
 function joinPattern({ root, extension }) {
     return path.join(root, '**', '*.' + extension);
 }
@@ -14,7 +10,7 @@ function files(root) {
     );
 }
 
-function getTemplatePattern({ extension, viewRoot, templatePaths }) {
+function getTemplatePattern({ extension, viewRoot, templatePaths = [] }) {
     if (!Array.isArray(templatePaths)) {
         templatePaths = Object.keys(templatePaths).map(
             key => templatePaths[key]
@@ -31,3 +27,7 @@ function getResourcesPattern(statics) {
         return [...total, ...files(current.dir)];
     }, []);
 }
+
+exports.getTemplatePattern = getTemplatePattern;
+exports.getSyncDataPattern = files;
+exports.getResourcesPattern = getResourcesPattern;

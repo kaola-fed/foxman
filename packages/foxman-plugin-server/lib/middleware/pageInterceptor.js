@@ -1,5 +1,5 @@
 const apiHandler = require('../utils/apiHandler');
-const {util: _} = require('@foxman/helpers');
+const {system} = require('@foxman/helpers');
 const {consts} = require('@foxman/helpers');
 const {SYNC} = consts.DispatherTypes;
 
@@ -36,7 +36,7 @@ module.exports = ({viewEngine}) => {
             this.type = 'text/html; charset=utf-8';
             this.body = result;
         } catch (msg) {
-            _.notify({
+            system.notify({
                 title: '模板解析失败',
                 msg: msg.stack || msg
             });

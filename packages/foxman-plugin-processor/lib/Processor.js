@@ -1,7 +1,7 @@
 const path = require('path');
 const pathToRegexp = require('path-to-regexp');
 const co = require('co');
-const {fs, util} = require('@foxman/helpers');
+const { fs, logger, system } = require('@foxman/helpers');
 const TaskLock = require('task-lock');
 const ResourcesManager = require('./ResourcesManager');
 
@@ -9,25 +9,21 @@ exports.dispatcher = dispatcher;
 
 const extname = path.extname;
 
-const {lstat, readFile} = fs;
-const {log, warnLog, notify} = util;
+const { lstat, readFile } = fs;
+const { log, warnLog } = logger;
+const { notify } = system;
 
 function noop(p) {
     return p;
 }
 
-function dispatcher(
-    {
-        processors,
-        reloaderService
-    }
-) {
+function dispatcher({ processors, reloaderService }) {
     const resourcesManager = new ResourcesManager();
     const taskLock = new TaskLock();
     return function() {
         return function*(next) {
             const reqPath = this.request.path;
-            const processor = matchProcessor({processors, reqPath});
+            const processor = matchProcessor({ processors, reqPath });
 
             if (!processor) {
                 return yield next;
@@ -39,7 +35,7 @@ function dispatcher(
                 return false;
             }
 
-            const {pipeline = [], lockTask = false} = processor;
+            const { pipeline = [], lockTask = false } = processor;
             const processdFilenameStack = getSemiFinished({
                 pipeline: [
                     ...pipeline,
@@ -80,7 +76,7 @@ function dispatcher(
                     processed = yield generator;
                 }
 
-                resourcesManager.set({reqPath, processed});
+                resourcesManager.set({ reqPath, processed });
                 this.body = processed;
                 this.type = extname(reqPath);
 
@@ -92,19 +88,17 @@ function dispatcher(
     };
 }
 
-function* workflow(
-    {
-        raw,
-        processdFilenameStack,
-        reqPath,
-        pipeline,
-        resourcesManager,
-        reloaderService
-    }
-) {
+function* workflow({
+    raw,
+    processdFilenameStack,
+    reqPath,
+    pipeline,
+    resourcesManager,
+    reloaderService
+}) {
     let processed = raw;
     for (let item of pipeline) {
-        const {handler} = item;
+        const { handler } = item;
         const filename = processdFilenameStack.pop();
         try {
             processed = yield new Promise((resolve, reject) => {
@@ -136,19 +130,14 @@ function* workflow(
     return processed;
 }
 
-function matchProcessor(
-    {
-        processors,
-        reqPath
-    }
-) {
+function matchProcessor({ processors, reqPath }) {
     const [processor] = processors.filter(processor => {
         return pathToRegexp(processor.publicPath).test(reqPath);
     });
     return processor;
 }
 
-function updateDependencies({reqPath, reloaderService, resourcesManager}) {
+function updateDependencies({ reqPath, reloaderService, resourcesManager }) {
     return function(dependencies) {
         reloaderService.register({
             reqPath,
@@ -158,7 +147,7 @@ function updateDependencies({reqPath, reloaderService, resourcesManager}) {
     };
 }
 
-function combineBase({base, rawPath}) {
+function combineBase({ base, rawPath }) {
     return path.join(base, rawPath);
 }
 
@@ -166,13 +155,7 @@ function reqUrl2FilePath(url) {
     return path.join(...url.split('/'));
 }
 
-function getSemiFinished(
-    {
-        pipeline,
-        base,
-        reqPath
-    }
-) {
+function getSemiFinished({ pipeline, base, reqPath }) {
     const rawPath = reqUrl2FilePath(reqPath);
 
     const targetFile = combineBase({
@@ -182,7 +165,7 @@ function getSemiFinished(
 
     return pipeline.reduceRight(
         function(prev, item) {
-            const {toSource = noop} = item;
+            const { toSource = noop } = item;
             const raw = stackTop(prev);
             return [...prev, toSource.call(item, raw)];
         },
