@@ -1,7 +1,7 @@
 const child_process = require('child_process');
 const { lt } = require('semver');
-const { errorLog, printer } = require('./logger');
 const notifier = require('node-notifier');
+const {logger} = require('./logger');
 
 function notify({ title, msg }) {
     notifier.notify({
@@ -13,12 +13,8 @@ function notify({ title, msg }) {
     return 0;
 }
 
-function checkVersion({ version, versionLimit, notify = [] }) {
-    if (lt(version, versionLimit)) {
-        notify.forEach(errorLog);
-        return false;
-    }
-    return true;
+function checkVersion({ version, versionMin }) {
+    return !lt(version, versionMin);
 }
 
 function createSystemId() {
@@ -32,7 +28,7 @@ function createSystemId() {
 function jsSpawn(args) {
     let jsSpawn = child_process.spawn('node', args);
     jsSpawn.stderr.on('data', data => {
-        printer.red(`err: ${data}`);
+        logger.error(`err: ${data}`);
     });
     return {
         stdout: jsSpawn.stdout,
@@ -40,7 +36,12 @@ function jsSpawn(args) {
     };
 }
 
+function exit() {
+    process.exit(1);
+}
+
 exports.notify = notify;
 exports.jsSpawn = jsSpawn;
 exports.checkVersion = checkVersion;
 exports.createSystemId = createSystemId;
+exports.exit = exit;

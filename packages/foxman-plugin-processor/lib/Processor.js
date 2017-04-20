@@ -10,7 +10,6 @@ exports.dispatcher = dispatcher;
 const extname = path.extname;
 
 const { lstat, readFile } = fs;
-const { log, warnLog } = logger;
 const { notify } = system;
 
 function noop(p) {
@@ -51,7 +50,7 @@ function dispatcher({ processors, reloaderService }) {
                 yield lstat(sourceFile);
                 raw = yield readFile(sourceFile);
             } catch (e) {
-                warnLog(e);
+                logger.warn(e);
                 return yield next;
             }
 
@@ -80,7 +79,7 @@ function dispatcher({ processors, reloaderService }) {
                 this.body = processed;
                 this.type = extname(reqPath);
 
-                log(`Served by processor - ${reqPath}`);
+                logger.normal(`Served by processor - ${reqPath}`);
             } catch (e) {
                 return yield next;
             }
@@ -117,8 +116,8 @@ function* workflow({
             });
         } catch (e) {
             const errorTitle = `File ${filename} compile failed!`;
-            warnLog(errorTitle);
-            warnLog(e);
+            logger.warn(errorTitle);
+            logger.warn(e);
             notify({
                 title: errorTitle,
                 msg: e.stack || e

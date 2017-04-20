@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const yargs = require('yargs');
 const path = require('path');
+const {system} = require('@foxman/helpers');
 const updateNotifier = require('update-notifier');
 const checkNodeVersion = require('./check-node-version');
 const checkFoxmanVersion = require('./check-foxman-version');
@@ -10,7 +11,7 @@ const run = require('./run');
 const pkg = require('../package.json');
 
 if (!checkNodeVersion()) {
-    process.exit(1);
+    system.exit(1);
 }
 
 updateNotifier({pkg}).notify();
@@ -43,7 +44,7 @@ const argv = yargs
 const configPath = path.join(process.cwd(), argv.config);
 
 if (!checkFoxmanConfig(configPath)) {
-    process.exit(1);
+    system.exit(1);
 }
 
 const config = require(configPath);
@@ -53,7 +54,7 @@ if (argv.port) {
 }
 
 if (!checkFoxmanVersion(config.upgrade)) {
-    process.exit(1);
+    system.exit(1);
 }
 
 welcome();

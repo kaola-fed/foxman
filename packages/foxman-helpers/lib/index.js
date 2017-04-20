@@ -9,7 +9,6 @@ const string = require('./string');
 const system = require('./system');
 const typer = require('./typer');
 
-
 exports.consts = consts;
 exports.fs = fs;
 exports.parser = parser;

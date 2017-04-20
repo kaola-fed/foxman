@@ -1,5 +1,5 @@
 const {Render} = require('fast-ftl');
-const { values, typeOf } = require('./typer');
+const {values, typeOf} = require('./typer');
 
 function parseJSON(jsonStr) {
     const result = new Function(`return ${jsonStr}`)();

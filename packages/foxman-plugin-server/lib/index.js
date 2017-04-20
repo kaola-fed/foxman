@@ -1,6 +1,6 @@
 const Server = require('./Server');
 const path = require('path');
-const {parser, logger, typer} = require('@foxman/helpers');
+const {parser, logger, typer, system} = require('@foxman/helpers');
 const formatStaticOptions = require('./utils/formatStaticOptions');
 const checkServerConfig = require('./utils/checkServerConfig');
 
@@ -65,7 +65,8 @@ class ServerPlugin {
     constructor(opts = {}) {
         const result = checkServerConfig(opts);
         if (result) {
-            logger.errorLog(result);
+            logger.error(result);
+            system.exit();
         }
 
         // TODO: 需要deepClone

@@ -1,21 +1,17 @@
 const {logger: _} = require('../lib')
 
-test('debugLog', function() {
-    expect(
-        /** result */
-        _.debugLog('')
-    ).toBe(
-        /** expectedValue */
-        0
-    );
+test('warn', function() {
+    _.warn('');
 });
 
 test('log', function() {
-    expect(
-        /** result */
-        _.log('1')
-    ).toBe(
-        /** expectedValue */
-        0
-    );
+    _.normal('1');
+});
+
+test('success', function() {
+    _.success('');
+});
+
+test('error', function() {
+    _.error(new Error('1'));
 });

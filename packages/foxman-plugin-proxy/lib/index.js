@@ -1,4 +1,4 @@
-const {logger, consts} = require('@foxman/helpers');
+const {logger, consts, system} = require('@foxman/helpers');
 const httpProxy = require('http-proxy');
 const {DispatherTypes} = consts;
 const doProxy = require('./proxy');
@@ -19,12 +19,14 @@ class ProxyPlugin {
         if (this.$options.enable) {
             if (!proxyConfig.host) {
                 logger.error('To configure config proxy.host');
+                system.exit();
             }
 
             if (!~Object.keys(service).indexOf(proxyServerName)) {
                 logger.error(
                     'To check config, and input correct proxyServer name'
                 );
+                system.exit();
             }
         }
         Object.assign(this, {

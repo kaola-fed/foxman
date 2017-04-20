@@ -3,7 +3,6 @@ const dotProp = require('dot-prop');
 const {
     logger, string
 } = require('@foxman/helpers');
-const {log} = logger;
 const {upperCaseFirstLetter,lowerCaseFirstLetter} = string; 
 
 const initializePlugin = require('./initializePlugin');
@@ -26,7 +25,7 @@ module.exports = class Core {
 
         this._register(plugin);
 
-        log(`plugin loaded: ${upperCaseFirstLetter(plugin.name())}`);
+        logger.success(`plugin loaded: ${upperCaseFirstLetter(plugin.name())}`);
     }
 
     _register(plugin) {
@@ -98,9 +97,9 @@ module.exports = class Core {
 
                     if (plugin.pendings.length > 0) {
                         const pluginName = upperCaseFirstLetter(plugin.name());
-                        log(`plugin pending: ${pluginName}`);
+                        logger.success(`plugin pending: ${pluginName}`);
                         yield Promise.all(plugin.pendings);
-                        log(`plugin done: ${pluginName}`);
+                        logger.success(`plugin done: ${pluginName}`);
                     }
                 }
             }

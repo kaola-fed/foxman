@@ -1,8 +1,9 @@
-module.exports = function(upgrade = {}) {
-    const {system} = require('@foxman/helpers');
-    const {checkVersion} = system;
-    const pkg = require('../package.json');
+const {system, logger, consts} = require('@foxman/helpers');
+const {checkVersion} = system;
+const pkg = require('../package.json');
+const {ERRORTIPS} = consts;
 
+module.exports = function(upgrade = {}) {
     if (upgrade !== undefined && upgrade.version !== undefined) {
         let notify = [
             `Expect foxman version to be higher than v${upgrade.version} in current project!`
@@ -12,18 +13,16 @@ module.exports = function(upgrade = {}) {
             notify = upgrade.notify;
         }
 
-        return checkVersion({
+        if (!checkVersion({
             version: pkg.version,
-            versionLimit: upgrade.version,
-            notify: [
-                ...notify,
-                'Please install latest version:',
-                '$ npm i -g foxman',
-                'And re-install all dependencies in current working directory',
-                'For more release information, head to https://github.com/kaola-fed/foxman/releases ;-)'
-            ]
-        });
+            versionMin: upgrade.version})) {
+
+            notify.forEach(logger.error);
+            logger.ln();
+            logger.error(ERRORTIPS.INSTALL_LATEST_FOXMAN);
+
+            return false;
+        }
     }
-    
     return true;
 };

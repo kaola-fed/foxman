@@ -177,7 +177,7 @@ class Server {
         this.wss = buildWebSocket(this.serverApp);
         this.wss.on('connection', ws => {
             ws.on('message', message => {
-                console.log('received: %s', message);
+                logger.normal('received: %s', message);
             });
 
             const waitForSending = this._waitForSending;
@@ -190,7 +190,7 @@ class Server {
         });
 
         const tips = `Server build successfully on ${this.https ? 'https' : 'http'}://127.0.0.1:${port}/`;
-        logger.log(tips);
+        logger.success(tips);
         notify({
             title: 'Run successfully',
             msg: tips

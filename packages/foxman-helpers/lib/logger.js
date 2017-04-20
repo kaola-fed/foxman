@@ -1,51 +1,36 @@
+const {typeOf} = require('./typer');
 const Logger = require('chalklog');
 const printer = new Logger('foxman');
-const {upperCaseFirstLetter} = require('./string');
+const PrettyError = require('pretty-error');
+const prettyError = new PrettyError();
 
-function debugLog(msg) {
-    if (process.env.NODE_ENV === 'development') {
-        printer.blue(upperCaseFirstLetter(msg));
-    }
-    return 0;
+function ln() {
+    console.log('\n');
+}
+function normal(msg) {
+    printer.blue(msg);
 }
 
-function errorLog(msg) {
-    printer.red(msg);
-    return 0;
+function success(msg) {
+    printer.green(msg);
+}
+
+function warn(msg) {
+    if (typeOf(msg) !== 'string') {
+        return warn(prettyError.render(msg));
+    }
+    printer.yellow(msg);
 }
 
 function error(msg) {
-    msg = msg.stack || msg;
-
-    const tips = [
-        'Make sure you have the latest version of node.js and foxman.',
-        'If you do, this is most likely a problem with the foxman.',
-        'You could contact us(http://github.com/kaola-fed/foxman/issues)'
-    ];
-    tips.forEach(errorLog);
-
-    console.log('\n');
-    errorLog(msg);
-
-    tips.unshift('\n');
-    tips.unshift(msg);
-    // writeFileSync('foxman-debug.log', tips.join('\n'));
-    process.exit(1);
+    if (typeOf(msg) !== 'string') {
+        return error(prettyError.render(msg));
+    }
+    printer.red(msg);
 }
 
-function log(msg) {
-    printer.green(upperCaseFirstLetter(msg));
-    return 0;
-}
-
-function warnLog(msg) {
-    msg = msg.stack || msg;
-    printer.yellow(upperCaseFirstLetter(msg));
-}
-
-exports.printer = printer;
-exports.debugLog = debugLog;
+exports.normal = normal;
+exports.success = success;
 exports.error = error;
-exports.log = log;
-exports.errorLog = errorLog;
-exports.warnLog = warnLog;
+exports.warn = warn;
+exports.ln = ln;

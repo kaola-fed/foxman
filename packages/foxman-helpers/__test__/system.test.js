@@ -28,7 +28,7 @@ test('createSystemId', function() {
 test('checkVersion', function () {
     expect(
         /** result */
-        _.checkVersion({ version: '2.0.0', versionLimit: '1.0.0' })
+        _.checkVersion({ version: '2.0.0', versionMin: '1.0.0' })
     ).toBe(
         /** expectedValue */
         true
@@ -36,7 +36,7 @@ test('checkVersion', function () {
 
     expect(
         /** result */
-        _.checkVersion({ version: '1.0.0', versionLimit: '2.0.0' })
+        _.checkVersion({ version: '1.0.0', versionMin: '2.0.0' })
     ).toBe(
         /** expectedValue */
         false
@@ -46,7 +46,7 @@ test('checkVersion', function () {
 test('checkVersion-prerelease', function () {
     expect(
         /** result */
-        _.checkVersion({ version: '1.0.0', versionLimit: '1.0.0-0' })
+        _.checkVersion({ version: '1.0.0', versionMin: '1.0.0-0' })
     ).toBe(
         /** expectedValue */
         true
