@@ -20,20 +20,8 @@ class WatcherPlugin {
         const watcher = chokidar.watch(files, Object.assign({
             ignored: /(\.git)|(node_modules)/,
             ignoreInitial: true,
-
-            ersistent: true,
-            followSymlinks: true,
-            cwd: process.cwd(),
-            
-            alwaysStat: false,
-            depth: 99,
-            awaitWriteFinish: {
-                stabilityThreshold: 2000,
-                pollInterval: 100
-            },
-
-            ignorePermissionErrors: false,
-            atomic: true 
+            interval: 300,
+            binaryInterval: 300
         }, options));
 
         this._watchers.push(watcher);
