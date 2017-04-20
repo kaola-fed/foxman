@@ -1,6 +1,6 @@
 const Server = require('./Server');
 const path = require('path');
-const {parser, logger, typer, system} = require('@foxman/helpers');
+const { parser, logger, typer, system } = require('@foxman/helpers');
 const formatStaticOptions = require('./utils/formatStaticOptions');
 const checkServerConfig = require('./utils/checkServerConfig');
 
@@ -11,12 +11,12 @@ class ServerPlugin {
 
     service() {
         return {
-            injectScript({condition, src}) {
+            injectScript({ condition, src }) {
                 if (!this.server) {
                     return;
                 }
 
-                return this.server.injectScript({condition, src});
+                return this.server.injectScript({ condition, src });
             },
 
             eval(code) {
@@ -51,7 +51,6 @@ class ServerPlugin {
                 return this.server.use(middleware);
             },
 
-            // TODO: why?
             registerRouterNamespace(...args) {
                 if (!this.server) {
                     return;
@@ -79,14 +78,15 @@ class ServerPlugin {
             .filter(item => !!item)
             .map(formatStaticOptions);
 
-        options.runtimeRouters = {routers: options.routers || []};
+        options.runtimeRouters = { routers: options.routers || [] };
 
         delete options.routers;
 
-        options.syncDataMatch = options.syncDataMatch ||
-            (url => path.join(options.syncData, url));
+        options.syncDataMatch =
+            options.syncDataMatch || (url => path.join(options.syncData, url));
 
-        options.asyncDataMatch = options.asyncDataMatch ||
+        options.asyncDataMatch =
+            options.asyncDataMatch ||
             (url => path.join(options.asyncData, url));
 
         options.divideMethod = Boolean(options.divideMethod);
@@ -100,7 +100,7 @@ class ServerPlugin {
         this.$options = options;
     }
 
-    init({getter}) {
+    init({ getter }) {
         this.server = new Server(
             Object.assign(
                 {
