@@ -36,7 +36,7 @@ class ServerPlugin {
             },
 
             livereload(url) {
-                if (!this.server || !this.server.wss) {
+                if (!this.server) {
                     return;
                 }
 
