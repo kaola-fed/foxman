@@ -10,7 +10,7 @@ function lowerCaseFirstLetter(str) {
     });
 }
 
-function removeHeadBreak(str) {
+function removeLeadingSlash(str) {
     return str.replace(/^(\/|\\)/, '');
 }
 
@@ -25,12 +25,12 @@ function jsonPathResolve(url) {
     url = removeSuffix(url) + '.json';
 
     if (/\.[^\.]*$/.test(url)) {
-        return removeHeadBreak(url);
+        return removeLeadingSlash(url);
     }
     return url;
 }
 
-function appendHeadBreak(str) {
+function ensureLeadingSlash(str) {
     if (/^[\/\\]/.test(str)) {
         return str;
     }
@@ -48,7 +48,7 @@ function compressHtml(htmlstr) {
         });
 }
 
-function addDataExt(filePath) {
+function ensureJSONExtension(filePath) {
     if (~filePath.indexOf('.json')) {
         return filePath;
     }
@@ -61,10 +61,10 @@ exports.upperCaseFirstLetter = upperCaseFirstLetter;
 
 exports.jsonPathResolve = jsonPathResolve;
 
-exports.removeHeadBreak = removeHeadBreak;
+exports.removeLeadingSlash = removeLeadingSlash;
 exports.removeSuffix = removeSuffix;
 
-exports.addDataExt = addDataExt;
-exports.appendHeadBreak = appendHeadBreak;
+exports.ensureJSONExtension = ensureJSONExtension;
+exports.ensureLeadingSlash = ensureLeadingSlash;
 
 exports.compressHtml = compressHtml;

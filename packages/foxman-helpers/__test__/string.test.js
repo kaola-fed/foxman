@@ -15,9 +15,9 @@ test('firstUpperCase', function() {
     expect(_.upperCaseFirstLetter('abb')).toBe('Abb');
 });
 
-test('removeHeadBreak', function() {
-    expect(_.removeHeadBreak('\\nihao')).toBe('nihao');
-    expect(_.removeHeadBreak('/nihao')).toBe('nihao');
+test('removeLeadingSlash', function() {
+    expect(_.removeLeadingSlash('\\nihao')).toBe('nihao');
+    expect(_.removeLeadingSlash('/nihao')).toBe('nihao');
 });
 
 test('removeSuffix', function() {
@@ -60,10 +60,10 @@ test('lowerCaseFirstLetter', function() {
     );
 });
 
-test('addDataExt', function() {
+test('ensureJSONExtension', function() {
     expect(
         /** result */
-        _.addDataExt('1')
+        _.ensureJSONExtension('1')
     ).toBe(
         /** expectedValue */
         '1.json'
@@ -71,7 +71,7 @@ test('addDataExt', function() {
 
     expect(
         /** result */
-        _.addDataExt('1.json')
+        _.ensureJSONExtension('1.json')
     ).toBe(
         /** expectedValue */
         '1.json'
@@ -84,6 +84,6 @@ test('jsonPathResolve', function() {
     );
 });
 
-test('appendHeadBreak', function() {
-    expect(_.appendHeadBreak('buisagsa')).toBe('/buisagsa');
+test('ensureLeadingSlash', function() {
+    expect(_.ensureLeadingSlash('buisagsa')).toBe('/buisagsa');
 });

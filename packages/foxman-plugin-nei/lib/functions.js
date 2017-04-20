@@ -60,7 +60,7 @@ function formatRoutes(rules) {
 
         return {
             method,
-            url: string.appendHeadBreak(url),
+            url: string.ensureLeadingSlash(url),
             sync: isSync(rule)
         };
     }

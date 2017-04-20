@@ -5,7 +5,7 @@ const {consts} = require('@foxman/helpers');
 const {DIR, SYNC} = consts.DispatherTypes;
 
 const {values} = typer;
-const {removeSuffix, addDataExt, jsonPathResolve} = string;
+const {removeSuffix, ensureJSONExtension, jsonPathResolve} = string;
 
 // 获得路由的 dispatcher 对象
 function matchRouter(
@@ -52,13 +52,13 @@ function matchRouter(
             return Object.assign(dispatcher, {
                 type: 'sync',
                 pagePath: path.join(viewRoot, `${tplName}.${extension}`),
-                dataPath: syncDataMatch(addDataExt(tplName))
+                dataPath: syncDataMatch(ensureJSONExtension(tplName))
             });
         }
 
         return Object.assign(dispatcher, {
             type: 'async',
-            dataPath: asyncDataMatch(addDataExt(filePath))
+            dataPath: asyncDataMatch(ensureJSONExtension(filePath))
         });
     });
 
