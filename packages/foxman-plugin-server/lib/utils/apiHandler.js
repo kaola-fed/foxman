@@ -2,38 +2,55 @@ const { parser, fs, promise, logger } = require('@foxman/helpers');
 
 function apiHandler({ handler, dataPath }) {
     if (handler) {
-        return promise.ensurePromise(handler(this)).then(res => {
-            if (typeof res === 'string') {
-                try {
-                    res = parser.parseJSON(res);
-                } catch (error) {
-                    return Promise.reject(
-                        `${error.stack || error} \n 源数据：\n ${res}`
-                    );
-                }
-            }
-            return { json: res };
-        });
+        return handlerInvkoe(handler);
     }
+    return {
+        json: Array.isArray(dataPath)? 
+            readJSONs(dataPath): 
+            readJSON(readJSON)
+    };
+}
 
-    if (Array.isArray(dataPath)) {
-        return Promise.all(
-            dataPath.map(url => {
-                return fs.readJSONFile(url).catch(function() {
-                    logger.warnLog(`File '${url}' is not found, so foxman while output empty Object ({}).`);
-                    return {};
-                });
-            })
-        ).then(resps => {
-            return  {
-                json: resps.reduce((bef, aft) => {
-                    return Object.assign(bef, aft);
-                }, {})
+function handlerInvkoe(handler) {
+    return promise.ensurePromise(handler(this)).then(json => {
+        
+        if (typeof json === 'string') {
+            return {
+                json: safeJsonParse(json)
             };
-        });
-    }
+        }
 
-    return fs.readJSONFile(dataPath).then(json => ({ json }));
+        return { json };
+    });
+}
+
+function safeJsonParse(jsonstr) {
+    let json;
+    try {
+        json = parser.parseJSON(jsonstr);
+    } catch (error) {
+        return Promise.reject(
+            `${error.stack || error} \n 源数据：\n ${json}`
+        );
+    }
+    return json;
+}
+
+function readJSONs(dataPath) {
+    return Promise.all(
+        dataPath.map(readJSON)
+    ).then(
+        resps => 
+            resps.reduce((bef, aft) => 
+                Object.assign(bef, aft), {})
+    );
+}
+
+function readJSON(url) {
+    return fs.readJSONFile(url).catch(() => {
+        logger.warnLog(`File '${url}' is not found, so foxman while output empty Object ({}).`);
+        return {};
+    });
 }
 
 module.exports = apiHandler;
