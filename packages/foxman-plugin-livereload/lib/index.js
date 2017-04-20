@@ -9,6 +9,7 @@ class LivereloadPlugin {
     name() {
         return 'livereload';
     }
+
     service() {
         return {
             reload(url) {
@@ -23,7 +24,7 @@ class LivereloadPlugin {
 
     constructor() {}
 
-    init({service, getter}) {
+    init({ service, getter }) {
         const injectScript = service('server.injectScript');
         const livereload = service('server.livereload');
         const createWatcher = service('watcher.create');
@@ -35,7 +36,7 @@ class LivereloadPlugin {
         });
 
         const files = getWatchFiles(serverOptions);
-        this.reloader = new Reloader({livereload, createWatcher});
+        this.reloader = new Reloader({ livereload, createWatcher });
         this.reloader.watch(files);
     }
 }

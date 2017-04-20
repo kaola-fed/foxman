@@ -1,11 +1,11 @@
-const {logger: _} = require('../lib')
+const { logger: _ } = require('../lib');
 
 test('warn', function() {
     _.warn('');
 });
 
 test('log', function() {
-    _.normal('1');
+    _.info('1');
 });
 
 test('success', function() {

@@ -109,19 +109,25 @@ module.exports = class Core {
         }
     }
 
+    _names() {
+        const plugins = this._pluginRegistry.all();
+        return Object.keys(plugins);
+    }
+
     start() {
         const plugins = this._pluginRegistry.all();
 
         const getter = this._getter.bind(this);
         const service = this._service.bind(this);
         const call = this._call.bind(this);
+        const names = this._names.bind(this);
 
         return co(function*() {
             for (const i in plugins) {
                 const plugin = plugins[i];
 
                 if (plugin.init && plugin.$options.enable) {
-                    plugin.init({ getter, service, call });
+                    plugin.init({ getter, service, call, names });
 
                     if (plugin.pendings.length > 0) {
                         const pluginName = upperCaseFirstLetter(plugin.name());
