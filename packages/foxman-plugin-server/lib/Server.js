@@ -177,7 +177,7 @@ class Server {
         this.wss = buildWebSocket(this.serverApp);
         this.wss.on('connection', ws => {
             ws.on('message', message => {
-                logger.normal('received: %s', message);
+                logger.info('received: %s', message);
             });
 
             const waitForSending = this._waitForSending;

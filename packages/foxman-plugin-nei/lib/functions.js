@@ -31,7 +31,7 @@ function updateLocalFiles(routes = [], getFilePath) {
     return Promise.all(
         routes.map(route => {
             return fs.stat(getFilePath(route)).catch(() => {
-                logger.normal('Touched file: ' + getFilePath(route));
+                logger.info('Touched file: ' + getFilePath(route));
                 return fs.write(getFilePath(route));
             });
         })

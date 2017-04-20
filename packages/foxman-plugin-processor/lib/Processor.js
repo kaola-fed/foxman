@@ -79,7 +79,7 @@ function dispatcher({ processors, reloaderService }) {
                 this.body = processed;
                 this.type = extname(reqPath);
 
-                logger.normal(`Served by processor - ${reqPath}`);
+                logger.info(`Served by processor - ${reqPath}`);
             } catch (e) {
                 return yield next;
             }

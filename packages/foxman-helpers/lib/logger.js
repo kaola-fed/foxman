@@ -1,4 +1,4 @@
-const {typeOf} = require('./typer');
+const { typeOf } = require('./typer');
 const Logger = require('chalklog');
 const printer = new Logger('foxman');
 const PrettyError = require('pretty-error');
@@ -7,7 +7,7 @@ const prettyError = new PrettyError();
 function ln() {
     console.log('\n');
 }
-function normal(msg) {
+function info(msg) {
     printer.blue(msg);
 }
 
@@ -29,7 +29,7 @@ function error(msg) {
     printer.red(msg);
 }
 
-exports.normal = normal;
+exports.info = info;
 exports.success = success;
 exports.error = error;
 exports.warn = warn;
