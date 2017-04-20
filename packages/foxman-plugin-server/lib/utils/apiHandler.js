@@ -4,11 +4,9 @@ function apiHandler({ handler, dataPath }) {
     if (handler) {
         return handlerInvkoe(handler);
     }
-    return {
-        json: Array.isArray(dataPath)? 
+    return (Array.isArray(dataPath)? 
             readJSONs(dataPath): 
-            readJSON(readJSON)
-    };
+            readJSON(dataPath)).then(json => ({json}));
 }
 
 function handlerInvkoe(handler) {
