@@ -40,7 +40,7 @@ class ServerPlugin {
                     return;
                 }
 
-                return this.server.wss.livereload(url);
+                return this.server.livereload(url);
             },
 
             use(middleware) {
