@@ -19,4 +19,3 @@ exports.promise = promise;
 exports.string = string;
 exports.system = system;
 exports.typer = typer;
-exports.consts = consts;
