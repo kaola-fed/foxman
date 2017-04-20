@@ -1,4 +1,4 @@
-const { parser, fs, promise } = require('@foxman/helpers');
+const { parser, fs, promise, logger } = require('@foxman/helpers');
 
 function apiHandler({ handler, dataPath }) {
     if (handler) {
@@ -19,14 +19,17 @@ function apiHandler({ handler, dataPath }) {
     if (Array.isArray(dataPath)) {
         return Promise.all(
             dataPath.map(url => {
-                return { json: fs.readJSONFile(url) };
+                return fs.readJSONFile(url).catch(function() {
+                    logger.warnLog(`File '${url}' is not found, so foxman while output empty Object ({}).`);
+                    return {};
+                });
             })
         ).then(resps => {
-            return resps.reduce((bef, aft) => {
-                return {
-                    json: Object.assign(bef.json, aft.json)
-                };
-            });
+            return  {
+                json: resps.reduce((bef, aft) => {
+                    return Object.assign(bef, aft);
+                }, {})
+            };
         });
     }
 
