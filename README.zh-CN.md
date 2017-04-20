@@ -1,8 +1,8 @@
 <div align="center">
   <h1>Foxman</h1>
   <p>
-  <strong>Fox</strong> lies，means mock;
-  <strong>Man</strong> means intellectual and elegant
+  <strong>Fox</strong>狐狸会说谎，有 Mock 之意；
+  <strong>Man</strong> 优雅知性。
   </p>
 
   <a href="https://www.npmjs.com/package/foxman">
@@ -28,23 +28,42 @@
   </a>
 </div>
 
-## Features
+## Foxman 有什么？
 
-👀 **Mock Server** Support customizing template engine
+👀 **Mock Server**， 支持自定义模板引擎
 
-🤘 **Living Reload** More flexible livereload mechanism
+🤘 **Living Reload**， 更灵活的 reload 机制
 
-📡 **Remote Debugging** Combine local template and remote data, convenient for debugging
+📡 **Remote Debugging**， 远程调试，取本地的模板与远程端的数据，方便联调
 
-🚀 **Runtime Processor** Any processor implementing foxman-processor's interface can be loaded
+🚀 **Runtime Processor**， 运行时的即时编译，任何实现 foxman-processor 接口的处理器都能被装载进来
 
-🐞 **Debuger** Integrate with vconsole, good for mobile debugging
+🐞 **Debuger**，集成 vconsole，方便移动端调试
 
-💯 **NEI support** NEI inside, which is known as a normative api definiting platform
+💯 **NEI support**，集成网易接口维护利器 NEI，接口定义规范化
 
-🤔 **Extensible** Extensible enough for adding your own functionality
+🤔 **Extensible**，强大的扩展方式，方便开发者自行定制所需功能
 
-## Installation
+## Foxman 是什么？
+曾经想过很多这个问题的回答，比如：
+* Foxman 是 Mock Server，却又不只是 Mock Server（观众表示云里雾里）；
+* Foxman 是前端开发的集成工具（经常会觉得这个描述很 low）；
+* 一个小而美的前端开发环境（这个描述还不错）。
+
+如今，我相信有了一个更好的：
+* Foxman 本质上讲是一个以 Mock Server 为核心的容器，开发者可以基于内置的模块方便的添加扩展模块。所以，允许我称他为 Extensible Mock Server。
+
+而设计 Foxman 的初衷体现在两个词根：
+* **Fox** 狐狸会说谎，有 Mock 之意；
+* **Man** 优雅知性。
+
+## 文档
+
+快速入门、配置、插件开发以及原理等[文档](https://foxman.js.org/#/get-started)
+
+## 快速开始
+
+#### 1. 安装
 
 ```bash
 # with npm
@@ -53,25 +72,14 @@ $ npm i -g foxman
 $ yarn global add foxman
 ```
 
-> ⚠️ foxman doesn't support nodejs version under 6.4.0
+⚠️ 6.4.0 以下版本 Node.js ，不在 Foxman 的版本支持列表里。建议尽可能尝试 latest 版本，促成主流版本进步
 
-## Quick Start
 
-### 1. Configuration
+#### 2. 配置
 
-Simply populate a `foxman.config.js` file in your project root
+编写一份贴合工程情况的 [Foxman 配置](https://foxman.js.org/#/configuration)
 
-Add following content into this file:
-
-```js
-module.exports = {
-	// ...
-};
-```
-
-You can head to [documentation](https://foxman.js.org/#/configuration) for more configuration detail
-
-### 2. Run
+#### 3. 启动
 
 ```bash
 $ foxman

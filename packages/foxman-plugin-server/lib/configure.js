@@ -1,5 +1,5 @@
 const render = require('koa-ejs');
-const staticCache = require('koa-static-cache');
+const SDF = require('koa-sdf');
 const path = require('path');
 const formatStaticOptions = require('./utils/formatStaticOptions');
 
@@ -24,11 +24,11 @@ function configureEjs({ app }) {
 
 function configureStatics({ app, statics }) {
     statics.forEach(options => {
-        app.use(staticCache(options));
+        app.use(SDF(options));
     });
 
     app.use(
-        staticCache(
+        SDF(
             formatStaticOptions({
                 dir: path.resolve(__dirname, 'client'),
                 prefix: '/__FOXMAN__CLIENT__',
