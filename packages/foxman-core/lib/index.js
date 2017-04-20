@@ -1,9 +1,7 @@
 const co = require('co');
 const dotProp = require('dot-prop');
-const {
-    logger, string
-} = require('@foxman/helpers');
-const {upperCaseFirstLetter,lowerCaseFirstLetter} = string; 
+const { logger, string } = require('@foxman/helpers');
+const { upperCaseFirstLetter, lowerCaseFirstLetter } = string;
 
 const initializePlugin = require('./initializePlugin');
 const createRegistry = require('./createRegistry');
@@ -66,7 +64,7 @@ module.exports = class Core {
         return dotProp.get(plugin.$options || {}, rest.join('.'));
     }
 
-    _service(keypath) {
+    _service(keypath = '') {
         const [pluginName, serviceName] = keypath.split('.');
 
         if (!serviceName) {
@@ -82,18 +80,48 @@ module.exports = class Core {
         return services[serviceName] || function() {};
     }
 
+    _call(keypath = '', ...args) {
+        const [pluginName, methodName] = keypath.split('.');
+
+        if (!methodName) {
+            return;
+        }
+
+        if (pluginName === '*') {
+            const plugins = this._pluginRegistry.all();
+            return Object.keys(plugins).map(pluginName =>
+                this._call(`${pluginName}.${methodName}`)
+            );
+        }
+
+        const plugin = this._pluginRegistry.lookup(pluginName);
+
+        return this._doCall(plugin, methodName, args);
+    }
+
+    _doCall(plugin, methodName, args) {
+        if (!plugin) {
+            return;
+        }
+
+        if (typeof plugin.public()[methodName] === 'function') {
+            return plugin.public()[methodName].apply(plugin, args);
+        }
+    }
+
     start() {
         const plugins = this._pluginRegistry.all();
 
         const getter = this._getter.bind(this);
         const service = this._service.bind(this);
+        const call = this._call.bind(this);
 
         return co(function*() {
             for (const i in plugins) {
                 const plugin = plugins[i];
 
                 if (plugin.init && plugin.$options.enable) {
-                    plugin.init({ getter, service });
+                    plugin.init({ getter, service, call });
 
                     if (plugin.pendings.length > 0) {
                         const pluginName = upperCaseFirstLetter(plugin.name());

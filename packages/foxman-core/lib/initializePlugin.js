@@ -13,6 +13,12 @@ function init(plugin) {
         plugin.$options = {};
     }
 
+    if (!plugin.public) {
+        plugin.public = function() {
+            return {};
+        };
+    }
+
     if (typeof plugin.$options.enable === 'undefined') {
         plugin.$options.enable = true;
     }
