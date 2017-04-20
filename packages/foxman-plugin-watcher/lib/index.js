@@ -5,7 +5,7 @@ class WatcherPlugin {
         return 'Watcher';
     }
     
-    constructor(options = {}) {
+    constructor() {
         this._watchers = [];
     }
 
