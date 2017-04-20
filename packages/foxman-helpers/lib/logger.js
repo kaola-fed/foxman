@@ -4,7 +4,7 @@ const printer = new Logger('foxman');
 const PrettyError = require('pretty-error');
 const prettyError = new PrettyError();
 
-function ln() {
+function newline() {
     console.log('\n');
 }
 function info(msg) {
@@ -33,4 +33,4 @@ exports.info = info;
 exports.success = success;
 exports.error = error;
 exports.warn = warn;
-exports.ln = ln;
+exports.newline = newline;

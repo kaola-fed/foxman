@@ -1,7 +1,7 @@
-const {logger, consts} = require('@foxman/helpers');
-const {ERRORTIPS} = consts;
+const { logger, consts } = require('@foxman/helpers');
+const { ERRORTIPS } = consts;
 
-module.exports = function (configPath) {
+module.exports = function(configPath) {
     try {
         require(configPath);
     } catch (err) {
@@ -10,9 +10,9 @@ module.exports = function (configPath) {
                 logger.error(ERRORTIPS.NO_CONFIG);
             } else {
                 logger.error(ERRORTIPS.MAYBE_FOXMAN_CONFIG);
-                logger.ln();
+                logger.newline();
                 logger.error(err);
-                logger.ln();
+                logger.newline();
                 logger.error(ERRORTIPS.REINSTALL);
             }
         } else {

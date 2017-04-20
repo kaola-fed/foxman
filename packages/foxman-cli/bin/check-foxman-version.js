@@ -1,7 +1,7 @@
-const {system, logger, consts} = require('@foxman/helpers');
-const {checkVersion} = system;
+const { system, logger, consts } = require('@foxman/helpers');
+const { checkVersion } = system;
 const pkg = require('../package.json');
-const {ERRORTIPS} = consts;
+const { ERRORTIPS } = consts;
 
 module.exports = function(upgrade = {}) {
     if (upgrade !== undefined && upgrade.version !== undefined) {
@@ -13,12 +13,14 @@ module.exports = function(upgrade = {}) {
             notify = upgrade.notify;
         }
 
-        if (!checkVersion({
-            version: pkg.version,
-            versionMin: upgrade.version})) {
-
+        if (
+            !checkVersion({
+                version: pkg.version,
+                versionMin: upgrade.version
+            })
+        ) {
             notify.forEach(logger.error);
-            logger.ln();
+            logger.newline();
             logger.error(ERRORTIPS.INSTALL_LATEST_FOXMAN);
 
             return false;
