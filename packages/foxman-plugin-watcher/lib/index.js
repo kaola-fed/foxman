@@ -1,15 +1,11 @@
 const chokidar = require('chokidar');
 
-// Watcher Plugin
 class WatcherPlugin {
     name() {
         return 'Watcher';
     }
     
     constructor(options = {}) {
-        this.$options = {
-            enable: typeof options.enable !== 'undefined' ? options.enable : true
-        };
         this._watchers = [];
     }
 
