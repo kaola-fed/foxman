@@ -46,7 +46,7 @@ function readJSONs(dataPath) {
 
 function readJSON(url) {
     return fs.readJSONFile(url).catch(() => {
-        logger.warn(`File '${url}' is not found, so foxman while output empty Object ({}).`);
+        logger.warn(`File '${url}' is not found, so foxman while output empty object ({}).`);
         return {};
     });
 }
