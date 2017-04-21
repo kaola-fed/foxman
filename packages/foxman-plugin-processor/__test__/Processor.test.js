@@ -60,7 +60,7 @@ test('getSemiFinished3', () => {
 });
 
 
-test('workflow', () => {
+test('workflow', (done) => {
     const helloWorld = 'hello world';
     return co(Processor.workflow({
         raw: helloWorld,
@@ -77,13 +77,19 @@ test('workflow', () => {
                     }
                 }
             }
-        ]
+        ],
+        reloaderService: {
+            register: () => {
+                
+            }
+        }
     })).then((content) => {
         expect(content).toBe(helloWorld);
-    }).catch(e => console.error);
+        done();
+    }).catch(e => done);
 });
 
-test('workflow2', () => {
+test('workflow2', (done) => {
     const helloWorld = 'hello world';
     return co(Processor.workflow({
         raw: helloWorld,
@@ -100,8 +106,14 @@ test('workflow2', () => {
                     }
                 }
             }
-        ]
+        ],
+        reloaderService: {
+            register: () => {
+                
+            }
+        }
     })).then((content) => {
         expect(content).toBe('world');
-    }).catch(e => console.error);
+        done();
+    }).catch(e => done);
 });
