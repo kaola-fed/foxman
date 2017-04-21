@@ -12,5 +12,8 @@
     "co": "^4.6.0",
     "path-to-regexp": "^1.5.3",
     "task-lock": "1.4.0"
+  },
+  "devDependencies": {
+    "co": "^4.6.0"
   }
 }
