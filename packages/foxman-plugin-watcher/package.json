@@ -8,7 +8,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@foxman/helpers": "^0.1.4",
+    "@foxman/helpers": "^0.1.5-0",
     "anymatch": "^1.3.0",
     "chokidar": "^1.6.0"
   }
