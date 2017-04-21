@@ -57,7 +57,7 @@ $ yarn global add foxman
 
 ## Quick Start
 
-### 1. Configuration
+### 1. Configure
 
 Simply populate a `foxman.config.js` file in your project root
 
@@ -65,11 +65,11 @@ Add following content into this file:
 
 ```js
 module.exports = {
-	// ...
+  // ...
 };
 ```
 
-You can head to [documentation](https://foxman.js.org/#/configuration) for more configuration detail
+You can head to [documentation](https://foxman.js.org/#/configuration) for more configuration guides
 
 ### 2. Run
 
