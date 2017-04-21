@@ -3,9 +3,6 @@ const pathToRegexp = require('path-to-regexp');
 const co = require('co');
 const { fs, logger, system } = require('@foxman/helpers');
 const TaskLock = require('task-lock');
-
-exports.dispatcher = dispatcher;
-
 const extname = path.extname;
 const { lstat, readFile } = fs;
 const { notify } = system;
@@ -173,6 +170,7 @@ function stackTop(stack) {
     return stack.slice(-1)[0];
 }
 
+exports.dispatcher = dispatcher;
 exports.stackTop = stackTop;
 exports.workflow = workflow;
 exports.isPathMatched = isPathMatched;
