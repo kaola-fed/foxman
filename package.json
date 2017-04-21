@@ -11,7 +11,13 @@
     "jest": "jest --no-cache",
     "init-contributors": "all-contributors init",
     "add-contributor": "all-contributors add",
-    "generate-contributors": "all-contributors generate"
+    "generate-contributors": "all-contributors generate",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "packages/**/*.js": [
+      "eslint"
+    ]
   },
   "jest": {
     "collectCoverage": true,
@@ -29,8 +35,10 @@
   "devDependencies": {
     "all-contributors-cli": "^4.1.0",
     "eslint": "^3.19.0",
+    "husky": "^0.13.3",
     "jest": "^19.0.2",
-    "lerna": "^2.0.0-rc.1"
+    "lerna": "^2.0.0-rc.1",
+    "lint-staged": "^3.4.0"
   },
   "dependencies": {}
 }
