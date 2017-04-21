@@ -6,6 +6,7 @@ class ReloaderService {
         this.$resourcesManager = resourcesManager;
         this.$reload = reload;
     }
+
     register({ reqPath, files }) {
         const resourcesManager = this.$resourcesManager;
         const watcherMap = this.watcherMap;
@@ -16,7 +17,7 @@ class ReloaderService {
             watcher = this.$createWatcher(files);
 
             watcherMap[reqPath] = watcher;
-            watcher.on('change', (path) => {
+            watcher.on('change', path => {
                 resourcesManager.clear(reqPath);
                 reload(path);
             });

@@ -1,6 +1,7 @@
 const { logger, system, consts } = require('@foxman/helpers');
 const httpProxy = require('http-proxy');
 const doProxy = require('./proxy');
+
 class ProxyPlugin {
     name() {
         return 'proxy';
@@ -37,7 +38,7 @@ class ProxyPlugin {
     init({ service }) {
         const use = service('server.use');
 
-        this.registerProxy({
+        this._registerProxy({
             proxyConfig: this.proxyConfig,
             proxyServerName: this.proxyServerName,
             use,
@@ -61,7 +62,7 @@ class ProxyPlugin {
         return proxy;
     }
 
-    registerProxy({ use, proxy, proxyConfig, proxyServerName }) {
+    _registerProxy({ use, proxy, proxyConfig, proxyServerName }) {
         const service = proxyConfig.service[proxyServerName];
 
         use(
@@ -82,7 +83,7 @@ class ProxyPlugin {
                 }
         );
 
-        logger.log(`Proxying to remote server ${proxyServerName}`);
+        logger.success(`Proxying to remote server ${proxyServerName}`);
     }
 }
 
