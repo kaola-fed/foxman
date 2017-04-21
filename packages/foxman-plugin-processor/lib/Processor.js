@@ -20,7 +20,6 @@ function dispatcher({
     return function() {
         return function*(next) {
             const reqPath = this.request.path;
-
             if (!isPathMatched({ 
                 publicPath: processor.publicPath, 
                 reqPath 
@@ -48,7 +47,7 @@ function dispatcher({
             let raw;
             try {
                 yield lstat(sourceFile);
-                raw = yield readFile(sourceFile);
+                raw = (yield readFile(sourceFile)).toString();
             } catch (e) {
                 logger.warn(e);
                 return yield next;
@@ -80,6 +79,8 @@ function dispatcher({
                 this.type = extname(reqPath);
 
                 logger.info(`Served by processor - ${reqPath}`);
+
+                return processed;
             } catch (e) {
                 return yield next;
             }

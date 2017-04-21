@@ -10,8 +10,10 @@ class ReloaderService {
         const resourcesManager = this.$resourcesManager;
         const watcherMap = this.watcherMap;
         const reload = this.$reload;
+        
+        let watcher;
         if (!watcherMap[reqPath]) {
-            const watcher = this.$createWatcher(files);
+            watcher = this.$createWatcher(files);
 
             watcherMap[reqPath] = watcher;
             watcher.on('change', (path) => {
@@ -19,9 +21,12 @@ class ReloaderService {
                 reload(path);
             });
 
-            return;
+            return watcher;
         }
-        watcherMap[reqPath].add(files);
+
+        watcher = watcherMap[reqPath];
+        watcher.add(files);
+        return watcher;
     }
 }
 

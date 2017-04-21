@@ -117,3 +117,49 @@ test('workflow2', (done) => {
         done();
     }).catch(e => done);
 });
+
+
+test('dispatcher', (done) => {
+    const middleware = Processor.dispatcher({
+        reloaderService: {
+            register: () => {
+                
+            }
+        },
+        resourcesManager: {
+            has: () => false,
+            set: () => true
+        },
+        processor:{
+            base: path.join(__dirname, 'fixtures'),
+            publicPath: '/*.css',
+            pipeline: [
+                {
+                    handler: function*({
+                        raw,
+                        filename
+                    }) {
+                        return {
+                            content: raw.replace(/hello /, ''),
+                        }
+                    }
+                }
+            ],
+            toSource: reqPath => reqPath
+        }
+    })
+    const fn = middleware();
+    const generator = fn.call({
+        request: {
+            path: '/1.css'
+        }
+    });
+    return co(generator).then((content) => {
+        console.log(content)
+        expect(content).toBe('world');
+        done();
+    }).catch(e => {
+        console.log(e);
+        done(e);
+    });
+})
