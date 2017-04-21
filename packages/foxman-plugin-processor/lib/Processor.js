@@ -16,7 +16,6 @@ function dispatcher({
     reloaderService,
     resourcesManager
  }) {
-    
     const taskLock = new TaskLock();
     return function() {
         return function*(next) {
@@ -130,7 +129,7 @@ function* workflow({
 
 function createDependenciesReciever({
     reqPath, filename, 
-    reloaderService,resourcesManager
+    reloaderService, resourcesManager
 }) {
     return (files) => {
         if (!files || 
