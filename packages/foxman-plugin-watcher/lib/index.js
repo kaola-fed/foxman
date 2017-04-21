@@ -1,4 +1,5 @@
 const chokidar = require('chokidar');
+const {typer} = require('@foxman/helpers');
 
 class WatcherPlugin {
     name() {
@@ -13,17 +14,20 @@ class WatcherPlugin {
         this._watchers.forEach(watcher => watcher.close());
     }
 
-    _createWatcher({
-        files, 
-        options = {}
-    } = {}) {
-        const watcher = chokidar.watch(files, Object.assign({
+    _createWatcher(ref) {
+        let {files, options = {}} = ref;
+        if (typer.typeOf(ref) !== 'object') {
+            files = ref;    
+        }
+
+        options = Object.assign({
             ignored: /(\.git)|(node_modules)/,
             ignoreInitial: true,
             interval: 300,
             binaryInterval: 300
-        }, options));
+        }, options);
 
+        const watcher = chokidar.watch(files, options);
         this._watchers.push(watcher);
         return watcher;
     }

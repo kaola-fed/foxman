@@ -1,5 +1,6 @@
 const { dispatcher } = require('./Processor');
 const ReloaderService = require('./ReloaderService');
+const ResourcesManager = require('./ResourcesManager');
 
 class ProcessorPlugin {
     name() {
@@ -19,15 +20,24 @@ class ProcessorPlugin {
 
     init({ service }) {
         const use = service('server.use');
-        const watch = service('watch.watch');
+        const createWatcher = service('watcher.create');
         const reload = service('livereload.reload');
+        const {processors} = this;
 
-        use(
-            dispatcher({
-                processors: this.processors,
-                reloaderService: ReloaderService({ watch, reload })
-            })
-        );
+        processors.forEach(processor => {
+            const resourcesManager = new ResourcesManager();
+            use(
+                dispatcher({
+                    processor,
+                    resourcesManager,
+                    reloaderService: new ReloaderService({ 
+                        createWatcher,
+                        resourcesManager,
+                        reload
+                    })
+                })
+            );
+        });
     }
 }
 

@@ -90,8 +90,8 @@ module.exports = {
                     browsers: '> 5%'
                 })
             ],
-            toSource: raw => {
-                return raw.replace(/css/g, 'mcss');
+            toSource: reqPath => {
+                return reqPath.replace(/css/g, 'mcss');
             }
         }
     ],
