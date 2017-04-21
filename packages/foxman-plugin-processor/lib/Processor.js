@@ -11,21 +11,18 @@ function noop(p) {
     return p;
 }
 
-function dispatcher({ 
-    processor, 
-    reloaderService,
-    resourcesManager
- }) {
-    
+function dispatcher({ processor, reloaderService, resourcesManager }) {
     const taskLock = new TaskLock();
     return function() {
         return function*(next) {
             const reqPath = this.request.path;
 
-            if (!isPathMatched({ 
-                publicPath: processor.publicPath, 
-                reqPath 
-            })) {
+            if (
+                !isPathMatched({
+                    publicPath: processor.publicPath,
+                    reqPath
+                })
+            ) {
                 return yield next;
             }
 
@@ -99,18 +96,21 @@ function* workflow({
     let processed = raw;
     const filename = processdFilenameStack.pop();
     const recieveDependencies = createDependenciesReciever({
-        reloaderService, reqPath, resourcesManager, filename
+        reloaderService,
+        reqPath,
+        resourcesManager,
+        filename
     });
 
-    for (let item of pipeline) {
+    for (const item of pipeline) {
         const { handler } = item;
-        
+
         try {
             const refs = yield handler.call(item, {
                 raw: processed,
                 filename
             }) || {};
-            
+
             processed = refs.content || refs;
             recieveDependencies(refs.dependencies);
         } catch (e) {
@@ -129,18 +129,20 @@ function* workflow({
 }
 
 function createDependenciesReciever({
-    reqPath, filename, 
-    reloaderService,resourcesManager
+    reqPath,
+    filename,
+    reloaderService,
+    resourcesManager
 }) {
-    return (files) => {
-        if (!files || 
-            files.length === 0 ) {
+    return files => {
+        if (!files || files.length === 0) {
             files = [];
         }
 
         files = [filename, ...files];
         reloaderService.register({
-            reqPath, files,
+            reqPath,
+            files,
             resourcesManager
         });
     };

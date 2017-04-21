@@ -22,7 +22,7 @@ class ProcessorPlugin {
         const use = service('server.use');
         const createWatcher = service('watcher.create');
         const reload = service('livereload.reload');
-        const {processors} = this;
+        const { processors } = this;
 
         processors.forEach(processor => {
             const resourcesManager = new ResourcesManager();
@@ -30,7 +30,7 @@ class ProcessorPlugin {
                 dispatcher({
                     processor,
                     resourcesManager,
-                    reloaderService: new ReloaderService({ 
+                    reloaderService: new ReloaderService({
                         createWatcher,
                         resourcesManager,
                         reload
