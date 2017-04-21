@@ -3,7 +3,7 @@ const dotProp = require('dot-prop');
 const {
     logger, string
 } = require('@foxman/helpers');
-const {upperCaseFirstLetter,lowerCaseFirstLetter} = string; 
+const {lowerCaseFirstLetter} = string; 
 
 const initializePlugin = require('./initializePlugin');
 const createRegistry = require('./createRegistry');
@@ -25,7 +25,7 @@ module.exports = class Core {
 
         this._register(plugin);
 
-        logger.success(`plugin loaded: ${upperCaseFirstLetter(plugin.name())}`);
+        logger.success(`plugin loaded: ${lowerCaseFirstLetter(plugin.name())}`);
     }
 
     _register(plugin) {
@@ -68,9 +68,13 @@ module.exports = class Core {
 
     _service(keypath) {
         const [pluginName, serviceName] = keypath.split('.');
-
+        const pluginService = this._serviceRegistry.lookup(pluginName);
         if (!serviceName) {
-            return this._serviceRegistry.lookup(pluginName);
+            if (pluginService) {
+                return pluginService;
+            }
+            logger.warn(`plugin ${pluginName} is not found!`);
+            return {};
         }
 
         const services = this._serviceRegistry.lookup(pluginName);
@@ -79,7 +83,12 @@ module.exports = class Core {
             return function() {};
         }
 
-        return services[serviceName] || function() {};
+        if (serviceName in services) {
+            return services[serviceName];
+        }
+
+        logger.warn(`service ${keypath} is not found!`);
+        return function () {};
     }
 
     start() {
@@ -96,7 +105,7 @@ module.exports = class Core {
                     plugin.init({ getter, service });
 
                     if (plugin.pendings.length > 0) {
-                        const pluginName = upperCaseFirstLetter(plugin.name());
+                        const pluginName = lowerCaseFirstLetter(plugin.name());
                         logger.success(`plugin pending: ${pluginName}`);
                         yield Promise.all(plugin.pendings);
                         logger.success(`plugin done: ${pluginName}`);
