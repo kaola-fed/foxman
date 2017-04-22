@@ -1,3 +1,4 @@
+// const { typeOf } = require('./typer');
 const Logger = require('chalklog');
 const printer = new Logger('foxman');
 // const PrettyError = require('pretty-error');
