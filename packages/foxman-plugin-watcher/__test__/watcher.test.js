@@ -8,7 +8,7 @@ test('createWatcher', done => {
     const _watcher = watcher._createWatcher({
         files: filepath
     });
-    writeFooBar();
+    writeFooBar(1);
     return new Promise(resolve => {
         _watcher.on('change', file => {
             _watcher.close();
@@ -21,7 +21,7 @@ test('createWatcher', done => {
 
 test('createWatcher2', done => {
     const _watcher = watcher._createWatcher(filepath);
-    writeFooBar();
+    writeFooBar(2);
     return new Promise(resolve => {
         _watcher.on('change', file => {
             _watcher.close();
@@ -29,14 +29,12 @@ test('createWatcher2', done => {
             expect(file).toBe(filepath);
             done();
         });
-
-        
     });
 });
 
 test('createWatcher3', done => {
     const _watcher = watcher._createWatcher([filepath]);
-    writeFooBar();
+    writeFooBar(3);
     return new Promise(resolve => {
         _watcher.on('change', file => {
             _watcher.close();
@@ -47,8 +45,8 @@ test('createWatcher3', done => {
     });
 });
 
-function writeFooBar() {
+function writeFooBar(taskId) {
     setTimeout( () => {
-        fs.write(filepath, 'Foo Bar' + new Date().getTime());
+        fs.write(filepath, 'Foo Bar' + taskId);
     }, 1000);
 }
