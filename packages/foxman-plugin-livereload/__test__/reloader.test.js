@@ -9,8 +9,8 @@ test('Reloader', () => {
         },
         createWatcher:() => {
             return {
-                on: () => {
-
+                on: (type, fn) => {
+                    fn('1')
                 }
             }
         }
@@ -18,7 +18,7 @@ test('Reloader', () => {
     
     reloader.watch();
 
-    reloader.notifyReload();
+    reloader.notifyReload('1');
 
     expect(1).toBe(1);
 })
