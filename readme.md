@@ -1,7 +1,7 @@
 <div align="center">
   <h1>Foxman</h1>
   <p>
-  <strong>Fox</strong> lies，means mock;
+  <strong>Fox</strong> lies, which means mock;
   <strong>Man</strong> means intellectual and elegant
   </p>
 
