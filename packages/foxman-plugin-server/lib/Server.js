@@ -206,7 +206,9 @@ class Server {
         });
 
         const tips = `Server build successfully on ${this.https ? 'https' : 'http'}://127.0.0.1:${port}/`;
-        logger.success(tips);
+        logger.newline();
+        logger.say(tips);
+
         notify({
             title: 'Run successfully',
             msg: tips

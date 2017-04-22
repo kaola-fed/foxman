@@ -32,6 +32,7 @@
   "dependencies": {
     "@foxman/helpers": "^0.1.5-0",
     "co": "^4.6.0",
-    "dot-prop": "^4.1.1"
+    "dot-prop": "^4.1.1",
+    "ora": "^1.2.0"
   }
 }

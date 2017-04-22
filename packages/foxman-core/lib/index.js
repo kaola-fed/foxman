@@ -1,5 +1,6 @@
 const co = require('co');
 const dotProp = require('dot-prop');
+const ora = require('ora');
 const { logger, string } = require('@foxman/helpers');
 const { lowerCaseFirstLetter } = string;
 
@@ -22,8 +23,6 @@ module.exports = class Core {
         initializePlugin(plugin);
 
         this._register(plugin);
-
-        logger.success(`plugin loaded: ${lowerCaseFirstLetter(plugin.name())}`);
     }
 
     _register(plugin) {
@@ -131,19 +130,33 @@ module.exports = class Core {
         const call = this._call.bind(this);
         const names = this._names.bind(this);
 
+        const spinner = ora();
+
         return co(function*() {
+            spinner.start();
+
+            const pluginNum = Object.keys(plugins).length;
+
+            let counter = 0;
             for (const i in plugins) {
                 const plugin = plugins[i];
+                const pluginName = lowerCaseFirstLetter(plugin.name());
 
-                if (plugin.init && plugin.$options.enable) {
-                    plugin.init({ getter, service, call, names });
+                counter++;
+                spinner.text = `[${counter}/${pluginNum}] Loading ${pluginName}`;
 
-                    if (plugin.pendings.length > 0) {
-                        const pluginName = lowerCaseFirstLetter(plugin.name());
-                        logger.success(`plugin pending: ${pluginName}`);
-                        yield Promise.all(plugin.pendings);
-                        logger.success(`plugin done: ${pluginName}`);
+                try {
+                    if (plugin.init && plugin.$options.enable) {
+                        plugin.init({ getter, service, call, names });
+
+                        if (plugin.pendings.length > 0) {
+                            yield Promise.all(plugin.pendings);
+                        }
                     }
+
+                    spinner.succeed(`Plugin ${pluginName} loaded`);
+                } catch (e) {
+                    spinner.fail(`Failed to load plugin ${pluginName}`);
                 }
             }
         })
