@@ -53,7 +53,7 @@ $ npm i -g foxman
 $ yarn global add foxman
 ```
 
-> ⚠️ foxman doesn't support nodejs version under 6.4.0
+> ⚠️ foxman doesn't support nodejs under 6.4.0
 
 ## Quick Start
 
