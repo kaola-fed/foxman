@@ -16,16 +16,16 @@ function success(msg) {
 }
 
 function warn(msg) {
-    if (typeOf(msg) !== 'string') {
-        return warn(prettyError.render(msg));
-    }
+    // if (typeOf(msg) !== 'string') {
+    //     return warn(prettyError.render(msg));
+    // }
     printer.yellow(msg);
 }
 
 function error(msg) {
-    if (typeOf(msg) !== 'string') {
-        return error(prettyError.render(msg));
-    }
+    // if (typeOf(msg) !== 'string') {
+    //     return error(prettyError.render(msg));
+    // }
     printer.red(msg);
 }
 
