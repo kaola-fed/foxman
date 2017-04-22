@@ -52,7 +52,7 @@ if (!checkFoxmanVersion(config.upgrade)) {
     system.exit(1);
 }
 
-require('./welcome')();
+// require('./welcome')();
 
 if (argv.port) {
     config.server.port = parseInt(argv.port);
