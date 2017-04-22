@@ -31,10 +31,6 @@
   </a>
 </div>
 
-<p align="center">
-	<img src="media/screenshot.jpg" alt="screenshot" />
-<p>
-
 ## Features
 
 👀 **Mock Server** Support customizing template engine
@@ -83,6 +79,10 @@ module.exports = {
 ```bash
 $ foxman
 ```
+
+## Screenshot
+
+<img width="440px" src="media/screenshot.jpg" alt="Screenshot" />
 
 ## Contributors
 
