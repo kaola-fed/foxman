@@ -2,7 +2,7 @@ const zlib = require('zlib');
 const url = require('url');
 const { ServerResponse } = require('http');
 
-module.exports = function doProxy({ proxy, service }) {
+function doProxy({ proxy, service }) {
     const target = url.parse(service(this.request.url.replace(/^(\/)/, '')));
     const res = new ServerResponse(
         Object.assign({}, this.req, { url: target.path })
@@ -53,3 +53,6 @@ function resolveRes({ ctx, res, body, resolve }) {
         resolve(buffer.toString());
     }
 }
+
+exports = module.exports = doProxy;
+exports.resolveRes = resolveRes;
