@@ -1,5 +1,5 @@
 const path = require('path');
-const Reloader = require('../lib/Reloader');
+const Reloader = require('../lib/reloader');
 
 
 test('Reloader', () => {
