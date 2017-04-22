@@ -10,6 +10,10 @@ function files(root) {
     );
 }
 
+function getSyncDataPattern(root) {
+    return joinPattern({ root, extension: 'json' });
+}
+
 function getTemplatePattern({ extension, viewRoot, templatePaths = [] }) {
     if (!Array.isArray(templatePaths)) {
         templatePaths = Object.keys(templatePaths).map(
@@ -29,5 +33,5 @@ function getResourcesPattern(statics) {
 }
 
 exports.getTemplatePattern = getTemplatePattern;
-exports.getSyncDataPattern = files;
+exports.getSyncDataPattern = getSyncDataPattern;
 exports.getResourcesPattern = getResourcesPattern;
