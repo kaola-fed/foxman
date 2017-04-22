@@ -47,6 +47,6 @@ test('createWatcher3', done => {
             done();
         });
 
-        fs.write(filepath, 'Foo Bar 3');
+        fs.write(filepath, 'Foo Bar 1');
     });
 });
