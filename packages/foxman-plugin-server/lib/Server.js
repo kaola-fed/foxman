@@ -7,7 +7,7 @@ const Koa = require('koa');
 const WebSocket = require('ws');
 const bodyParser = require('koa-bodyparser');
 
-const {typer, system, logger} = require('@foxman/helpers');
+const { typer, system, logger } = require('@foxman/helpers');
 const routerMatch = require('./middleware/routerMatch');
 const apiInterceptor = require('./middleware/apiInterceptor');
 const pageInterceptor = require('./middleware/pageInterceptor');
@@ -20,8 +20,8 @@ const {
 
 const WebSocketServer = WebSocket.Server;
 
-const {values} = typer;
-const {notify} = system; 
+const { values } = typer;
+const { notify } = system;
 
 class Server {
     constructor(options) {
@@ -77,7 +77,7 @@ class Server {
 
         // inject builtin scripts
         app.use(function*(next) {
-            if (/text\/html/ig.test(this.type)) {
+            if (/text\/html/gi.test(this.type)) {
                 this.body =
                     this.body +
                     [
@@ -96,7 +96,7 @@ class Server {
 
         // inject scripts
         app.use(function*(next) {
-            if (/text\/html/ig.test(this.type)) {
+            if (/text\/html/gi.test(this.type)) {
                 this.body =
                     this.body +
                     _injectedScripts

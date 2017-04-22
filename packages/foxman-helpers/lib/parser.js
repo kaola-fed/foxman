@@ -1,5 +1,5 @@
-const {Render} = require('fast-ftl');
-const {values, typeOf} = require('./typer');
+const { Render } = require('fast-ftl');
+const { values, typeOf } = require('./typer');
 
 function parseJSON(jsonStr) {
     const result = new Function(`return ${jsonStr}`)();
@@ -11,7 +11,6 @@ function parseJSON(jsonStr) {
     return {};
 }
 
-
 class Freemarker {
     constructor({ viewRoot, templatePaths = {} }) {
         this.freemarker = Render({
@@ -20,11 +19,6 @@ class Freemarker {
         });
     }
 
-    /**
-     * @param {string} p1
-     * @param {object} data
-     * @returns {*|!Array}
-     */
     parse(p1, data) {
         return this.freemarker.parse(p1, data);
     }

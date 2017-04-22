@@ -1,17 +1,16 @@
 const apiHandler = require('../utils/apiHandler');
-const {consts} = require('@foxman/helpers');
-const {ASYNC} = consts.DispatherTypes;
+const { consts } = require('@foxman/helpers');
+const { ASYNC } = consts.DispatherTypes;
 
 // asyncHandler
 module.exports = () => {
     return function*(next) {
         const dispatcher = this.dispatcher;
 
-        if (!dispatcher || 
-            (dispatcher.type !== ASYNC)) {
+        if (!dispatcher || dispatcher.type !== ASYNC) {
             return yield next;
         }
-        
+
         let json;
 
         try {

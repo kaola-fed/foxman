@@ -1,6 +1,6 @@
 const path = require('path');
-const {string, consts} = require('@foxman/helpers');
-const {DIR, SYNC} = consts.DispatherTypes;
+const { string, consts } = require('@foxman/helpers');
+const { DIR, SYNC } = consts.DispatherTypes;
 const {
     getMockConfig,
     writeNEIConfig,
@@ -10,9 +10,7 @@ const {
 } = require('./functions');
 
 const FROM = 'NEI';
-/**
- * Nei 插件
- */
+
 class NEISyncPlugin {
     name() {
         return 'nei';

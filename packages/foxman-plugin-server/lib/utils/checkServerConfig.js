@@ -1,9 +1,7 @@
-const {typer} = require('@foxman/helpers');
-const {typeOf} = typer;
+const { typer } = require('@foxman/helpers');
+const { typeOf } = typer;
 
-module.exports = function check ({
-    viewRoot, syncData, asyncData
-}) {
+module.exports = function check({ viewRoot, syncData, asyncData }) {
     if (typeOf(viewRoot) !== 'string') {
         return 'config.server.viewRoot must be string';
     }

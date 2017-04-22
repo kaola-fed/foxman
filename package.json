@@ -12,7 +12,8 @@
     "init-contributors": "all-contributors init",
     "add-contributor": "all-contributors add",
     "generate-contributors": "all-contributors generate",
-    "precommit": "lint-staged"
+    "prettier": "prettier-eslint \"packages/**/*.js\" --prettier.single-quote=true es6 --write",
+    "precommit": "lint-staged && npm run boot && npm run jest"
   },
   "lint-staged": {
     "packages/**/*.js": [
@@ -38,7 +39,8 @@
     "husky": "^0.13.3",
     "jest": "^19.0.2",
     "lerna": "^2.0.0-rc.1",
-    "lint-staged": "^3.4.0"
+    "lint-staged": "^3.4.0",
+    "prettier-eslint-cli": "^3.4.2"
   },
   "dependencies": {}
 }

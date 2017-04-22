@@ -1,7 +1,7 @@
 const child_process = require('child_process');
 const { lt } = require('semver');
 const notifier = require('node-notifier');
-const {logger} = require('./logger');
+const { logger } = require('./logger');
 
 function notify({ title, msg }) {
     notifier.notify({

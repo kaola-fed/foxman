@@ -5,7 +5,7 @@ const _fs = require('nei/lib/util/file');
 const fs = require('fs');
 const path = require('path');
 const _util = require('nei/lib/util/util');
-const {logger} = require('nei/lib/util/logger');
+const { logger } = require('nei/lib/util/logger');
 
 logger.setLevel('ERROR');
 
@@ -34,10 +34,11 @@ subMain.build = function(arg, action, args) {
         this.fillArgs();
         // 合并完参数后, 需要重新 format 一下, 并且此时需要取默认值
         this.args = arg.format(this.config.action, this.args, true);
-        this.config.neiConfigRoot = path.resolve(
-            this.config.outputRoot,
-            `nei.${this.config.pid}.${this.args.key}`
-        ) + '/';
+        this.config.neiConfigRoot =
+            path.resolve(
+                this.config.outputRoot,
+                `nei.${this.config.pid}.${this.args.key}`
+            ) + '/';
         new Builder({
             config: this.config,
             args: this.args,

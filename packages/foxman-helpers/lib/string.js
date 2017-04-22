@@ -55,7 +55,6 @@ function ensureJSONExtension(filePath) {
     return filePath + '.json';
 }
 
-
 exports.lowerCaseFirstLetter = lowerCaseFirstLetter;
 exports.upperCaseFirstLetter = upperCaseFirstLetter;
 

@@ -1,26 +1,24 @@
-const {typer, string} = require('@foxman/helpers');
+const { typer, string } = require('@foxman/helpers');
 const path = require('path');
 const pathToRegexp = require('path-to-regexp');
-const {consts} = require('@foxman/helpers');
-const {DIR, SYNC} = consts.DispatherTypes;
+const { consts } = require('@foxman/helpers');
+const { DIR, SYNC } = consts.DispatherTypes;
 
-const {values} = typer;
-const {removeSuffix, ensureJSONExtension, jsonPathResolve} = string;
+const { values } = typer;
+const { removeSuffix, ensureJSONExtension, jsonPathResolve } = string;
 
 // 获得路由的 dispatcher 对象
-function matchRouter(
-    {
-        runtimeRouters,
-        reqQuery,
-        reqMethod,
-        reqPath,
-        viewRoot,
-        extension,
-        divideMethod,
-        syncDataMatch,
-        asyncDataMatch
-    }
-) {
+function matchRouter({
+    runtimeRouters,
+    reqQuery,
+    reqMethod,
+    reqPath,
+    viewRoot,
+    extension,
+    divideMethod,
+    syncDataMatch,
+    asyncDataMatch
+}) {
     if (Number(reqQuery.mode) === 1) {
         return;
     }
@@ -66,12 +64,12 @@ function matchRouter(
 }
 
 function matchResource({
-        reqQuery,
-        reqPath,
-        extension,
-        viewRoot,
-        syncDataMatch
-    }) {
+    reqQuery,
+    reqPath,
+    extension,
+    viewRoot,
+    syncDataMatch
+}) {
     if (Number(reqQuery.mode) !== 1 && reqPath === '/') {
         reqPath = '/index.html';
     }
@@ -105,36 +103,40 @@ function matchResource({
     return dispatcher;
 }
 
-module.exports = (
-    {
-        runtimeRouters, 
-        extension,
-        divideMethod, 
-        viewRoot,
-        syncDataMatch,
-        asyncDataMatch
-    }
-) => {
+module.exports = ({
+    runtimeRouters,
+    extension,
+    divideMethod,
+    viewRoot,
+    syncDataMatch,
+    asyncDataMatch
+}) => {
     return function*(next) {
-        const { method: reqMethod, query: reqQuery, path: reqPath } = this.request;
+        const {
+            method: reqMethod,
+            query: reqQuery,
+            path: reqPath
+        } = this.request;
 
-        this.dispatcher = matchRouter({
-            runtimeRouters,
-            reqQuery,
-            reqMethod,
-            reqPath,
-            viewRoot,
-            extension,
-            divideMethod,
-            syncDataMatch,
-            asyncDataMatch
-        }) || matchResource({
-            reqPath,
-            reqQuery,
-            extension,
-            viewRoot,
-            syncDataMatch
-        });
+        this.dispatcher =
+            matchRouter({
+                runtimeRouters,
+                reqQuery,
+                reqMethod,
+                reqPath,
+                viewRoot,
+                extension,
+                divideMethod,
+                syncDataMatch,
+                asyncDataMatch
+            }) ||
+            matchResource({
+                reqPath,
+                reqQuery,
+                extension,
+                viewRoot,
+                syncDataMatch
+            });
 
         return yield next;
     };

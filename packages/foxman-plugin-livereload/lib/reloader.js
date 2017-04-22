@@ -1,7 +1,7 @@
 const path = require('path');
 
 class Reloader {
-    constructor({livereload, createWatcher}) {
+    constructor({ livereload, createWatcher }) {
         this._livereload = livereload;
         this._createWatcher = createWatcher;
     }
@@ -14,8 +14,9 @@ class Reloader {
     }
 
     watch(files) {
-        this._createWatcher({files}).on('change', filepath =>
-            this.notifyReload(path.basename(filepath)));
+        this._createWatcher({ files }).on('change', filepath =>
+            this.notifyReload(path.basename(filepath))
+        );
     }
 }
 

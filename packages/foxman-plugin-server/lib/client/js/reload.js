@@ -18,10 +18,12 @@
             sheet = sheets[i];
 
             if (
-                sheet.rel == 'stylesheet' && sheet.href.indexOf(filename) !== -1
+                sheet.rel == 'stylesheet' &&
+                sheet.href.indexOf(filename) !== -1
             ) {
                 if (sheet.href.indexOf('styleVersion') === -1) {
-                    sheet.href += (sheet.href.indexOf('?') === -1 ? '?' : '&') +
+                    sheet.href +=
+                        (sheet.href.indexOf('?') === -1 ? '?' : '&') +
                         'styleVersion' +
                         '=' +
                         new Date().getTime();

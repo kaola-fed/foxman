@@ -20,6 +20,9 @@
   <a href="https://nodejs.org">
     <img src="https://img.shields.io/node/v/foxman.svg?style=flat-square" alt="node">
   </a>
+  <a href="https://github.com/prettier/prettier">
+    <img src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg?style=flat-square" alt="styled with prettier">
+  </a>
   <a href="https://github.com/kaola-fed/foxman/blob/master/CODE_OF_CONDUCT.md">
     <img src="https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square" alt="Code of Conduct">
   </a>

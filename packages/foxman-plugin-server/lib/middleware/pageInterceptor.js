@@ -1,14 +1,13 @@
 const apiHandler = require('../utils/apiHandler');
-const {system} = require('@foxman/helpers');
-const {consts} = require('@foxman/helpers');
-const {SYNC} = consts.DispatherTypes;
+const { system } = require('@foxman/helpers');
+const { consts } = require('@foxman/helpers');
+const { SYNC } = consts.DispatherTypes;
 
-module.exports = ({viewEngine}) => {
+module.exports = ({ viewEngine }) => {
     return function*(next) {
         const dispatcher = this.dispatcher;
 
-        if (!dispatcher || 
-            (dispatcher.type !== SYNC)) {
+        if (!dispatcher || dispatcher.type !== SYNC) {
             return yield next;
         }
 

@@ -11,7 +11,7 @@ class ReloaderService {
         const resourcesManager = this.$resourcesManager;
         const watcherMap = this.watcherMap;
         const reload = this.$reload;
-        
+
         let watcher;
         if (!watcherMap[reqPath]) {
             watcher = this.$createWatcher(files);
