@@ -28,7 +28,7 @@ function doProxy({ proxy, service }) {
             });
         });
     });
-};
+}
 
 function resolveRes({ ctx, res, body, resolve }) {
     const headers = res._headers;
