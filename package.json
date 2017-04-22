@@ -13,7 +13,7 @@
     "add-contributor": "all-contributors add",
     "generate-contributors": "all-contributors generate",
     "prettier": "prettier-eslint \"packages/**/*.js\" --prettier.single-quote=true es6 --write",
-    "precommit": "lint-staged && npm run boot && npm run jest"
+    "precommit": "lint-staged"
   },
   "lint-staged": {
     "packages/**/*.js": [
