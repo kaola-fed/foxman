@@ -51,6 +51,14 @@ class ServerPlugin {
                 return this.server.use(middleware);
             },
 
+            serve(prefix, dirname) {
+                if (!this.server) {
+                    return;
+                }
+
+                return this.server.serve(prefix, dirname);
+            },
+
             registerRouterNamespace(...args) {
                 if (!this.server) {
                     return;

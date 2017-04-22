@@ -7,7 +7,7 @@ const Koa = require('koa');
 const WebSocket = require('ws');
 const bodyParser = require('koa-bodyparser');
 
-const { typer, system, logger } = require('@foxman/helpers');
+const { typer, system, logger, string } = require('@foxman/helpers');
 const routerMatch = require('./middleware/routerMatch');
 const apiInterceptor = require('./middleware/apiInterceptor');
 const pageInterceptor = require('./middleware/pageInterceptor');
@@ -17,6 +17,7 @@ const {
     configureEjs,
     configureStatics
 } = require('./configure');
+const formatStaticOptions = require('./utils/formatStaticOptions');
 
 const WebSocketServer = WebSocket.Server;
 
@@ -111,6 +112,8 @@ class Server {
         });
 
         configureStatics({ statics, app });
+
+        this.serve('__FOXMAN__CLIENT__', path.join(__dirname, 'client'));
     }
 
     use(middleware) {
@@ -152,6 +155,19 @@ class Server {
                 payload: url
             });
         }
+    }
+
+    serve(prefix, dirname) {
+        configureStatics({
+            statics: [
+                formatStaticOptions({
+                    prefix: string.ensureLeadingSlash(prefix),
+                    dir: dirname,
+                    maxAge: 31536000
+                })
+            ],
+            app: this.app
+        });
     }
 
     start() {
