@@ -1,4 +1,4 @@
-const Reloader = require('./Reloader');
+const Reloader = require('./reloader');
 const {
     getTemplatePattern,
     getResourcesPattern,
