@@ -17,7 +17,7 @@ test('createWatcher', done => {
             done();
         });
 
-        fs.write(filepath, 'Foo Bar' + new Date().getTime());
+        fs.write(filepath, 'Foo Bar 1');
     });
 });
 
@@ -32,7 +32,7 @@ test('createWatcher2', done => {
             done();
         });
 
-        fs.write(filepath, 'Foo Bar' + new Date().getTime());
+        fs.write(filepath, 'Foo Bar 2');
     });
 });
 
@@ -47,6 +47,6 @@ test('createWatcher3', done => {
             done();
         });
 
-        fs.write(filepath, 'Foo Bar' + new Date().getTime());
+        fs.write(filepath, 'Foo Bar 3');
     });
 });
