@@ -1,8 +1,7 @@
-const { typeOf } = require('./typer');
 const Logger = require('chalklog');
 const printer = new Logger('foxman');
-const PrettyError = require('pretty-error');
-const prettyError = new PrettyError();
+// const PrettyError = require('pretty-error');
+// const prettyError = new PrettyError();
 
 function newline() {
     console.log('\n');
