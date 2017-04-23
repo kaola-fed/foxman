@@ -1,4 +1,4 @@
-const { parser, fs, promise, logger } = require('@foxman/helpers');
+const { parser, fs, promise, logger, path } = require('@foxman/helpers');
 
 function apiHandler({ handler, dataPath }) {
     if (handler) {
@@ -40,7 +40,7 @@ function readJSONs(dataPath) {
 function readJSON(filepath) {
     return fs.readJSONFile(filepath).catch(() => {
         logger.warn(
-            `File '${filepath}' is not found, so foxman will output empty object ({}).`
+            `File '${path.shorten(filepath)}' is not found, so foxman will output empty object ({}).`
         );
         return {};
     });

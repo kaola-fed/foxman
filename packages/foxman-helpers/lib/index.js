@@ -8,6 +8,7 @@ const promise = require('./promise');
 const string = require('./string');
 const system = require('./system');
 const typer = require('./typer');
+const path = require( './path' );
 
 exports.consts = consts;
 exports.fs = fs;
@@ -19,3 +20,4 @@ exports.promise = promise;
 exports.string = string;
 exports.system = system;
 exports.typer = typer;
+exports.path = path;
