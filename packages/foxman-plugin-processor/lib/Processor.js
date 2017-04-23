@@ -1,7 +1,8 @@
 const path = require('path');
 const pathToRegexp = require('path-to-regexp');
 const co = require('co');
-const { fs, logger, system } = require('@foxman/helpers');
+const { fs, system } = require('@foxman/helpers');
+const logger = require('./logger');
 const TaskLock = require('task-lock');
 const extname = path.extname;
 const { lstat, readFile } = fs;

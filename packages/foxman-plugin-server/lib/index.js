@@ -1,6 +1,7 @@
 const Server = require('./Server');
 const path = require('path');
-const { parser, logger, typer, system } = require('@foxman/helpers');
+const { parser, typer, system } = require('@foxman/helpers');
+const logger = require('./logger');
 const formatStaticOptions = require('./utils/formatStaticOptions');
 const checkServerConfig = require('./utils/checkServerConfig');
 

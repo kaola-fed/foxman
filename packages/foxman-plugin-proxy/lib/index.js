@@ -1,4 +1,5 @@
-const { logger, system, consts } = require('@foxman/helpers');
+const { system, consts } = require('@foxman/helpers');
+const logger = require('./logger');
 const httpProxy = require('http-proxy');
 const doProxy = require('./proxy');
 

@@ -1,4 +1,5 @@
-const { parser, fs, promise, logger, path } = require('@foxman/helpers');
+const { parser, fs, promise, path } = require('@foxman/helpers');
+const logger = require('../logger');
 
 function apiHandler({ handler, dataPath }) {
     if (handler) {

@@ -7,7 +7,8 @@ const Koa = require('koa');
 const WebSocket = require('ws');
 const bodyParser = require('koa-bodyparser');
 
-const { typer, system, logger, string } = require('@foxman/helpers');
+const { typer, system, string } = require('@foxman/helpers');
+const logger = require('./logger');
 const routerMatch = require('./middleware/routerMatch');
 const apiInterceptor = require('./middleware/apiInterceptor');
 const pageInterceptor = require('./middleware/pageInterceptor');

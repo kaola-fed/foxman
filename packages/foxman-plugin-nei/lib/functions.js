@@ -1,4 +1,5 @@
-const { logger, string, fs } = require('@foxman/helpers');
+const { string, fs } = require('@foxman/helpers');
+const logger = require('./logger');
 const path = require('path');
 const os = require('os');
 const globule = require('globule');
