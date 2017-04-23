@@ -108,8 +108,10 @@ module.exports = class Core {
             return;
         }
 
-        if (typeof plugin.public()[methodName] === 'function') {
-            return plugin.public()[methodName].apply(plugin, args);
+        const publics = plugin.public() || {};
+
+        if (typeof publics[methodName] === 'function') {
+            return publics[methodName].apply(plugin, args);
         }
     }
 
