@@ -70,21 +70,17 @@ module.exports = class Core {
             if (pluginService) {
                 return pluginService;
             }
-            logger.warn(`plugin ${pluginName} is not found!`);
+            logger.warn(`plugin "${pluginName}" is not found!`);
             return {};
         }
 
         const services = this._serviceRegistry.lookup(pluginName);
 
-        if (!services) {
-            return function() {};
-        }
-
-        if (serviceName in services) {
+        if (services && ( serviceName in services )) {
             return services[serviceName];
         }
 
-        logger.warn(`service ${keypath} is not found!`);
+        logger.warn(`service "${keypath}" is not found!`);
         return function() {};
     }
 
@@ -132,6 +128,8 @@ module.exports = class Core {
 
         const spinner = ora();
 
+        logger.newline();
+
         return co(function*() {
             spinner.start();
 
@@ -156,7 +154,7 @@ module.exports = class Core {
 
                     spinner.succeed(`Plugin ${pluginName} loaded`);
                 } catch (e) {
-                    spinner.fail(`Failed to load plugin ${pluginName}`);
+                    spinner.fail(`Failed to load plugin "${pluginName}"`);
                 }
             }
         })

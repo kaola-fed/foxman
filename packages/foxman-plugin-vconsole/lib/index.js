@@ -1,3 +1,5 @@
+const path = require( 'path' );
+
 class VconsolePlugin {
     name() {
         return 'vconsole';
@@ -10,11 +12,14 @@ class VconsolePlugin {
     constructor() {}
 
     init({ service }) {
-        const injectScript = service('service.injectScript');
+        const injectScript = service('server.injectScript');
+        const serve = service('server.serve');
+
+        serve( '__LIVERELOAD_CLIENT__', path.join( __dirname, '../static/' ) );
 
         injectScript({
-            condition: request => request.query.debug == 1,
-            src: `/__FOXMAN__CLIENT__/js/vconsole.min.js`
+            condition: request => typeof request.query.vconsole !== 'undefined',
+            src: `/__LIVERELOAD_CLIENT__/vconsole.min.js`
         });
     }
 }
