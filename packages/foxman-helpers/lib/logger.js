@@ -1,8 +1,6 @@
 const Logger = require('chalklog');
 const printer = new Logger('foxman');
 const parrotSay = require('parrotsay-api');
-// const PrettyError = require('pretty-error');
-// const prettyError = new PrettyError();
 
 function newline() {
     console.log('\n');
