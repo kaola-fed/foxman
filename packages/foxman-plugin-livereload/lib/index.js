@@ -56,7 +56,7 @@ function getWatchFiles(serverOptions = {}) {
             viewRoot,
             templatePaths
         }),
-        ...getSyncDataPattern(syncData),
+        getSyncDataPattern(syncData),
         ...getResourcesPattern(statics)
     ];
 }
