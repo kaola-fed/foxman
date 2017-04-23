@@ -14,7 +14,7 @@ class ProcessorPlugin {
     constructor({ processors }) {
         this.processors = processors;
         if (undefined === processors) {
-            this.$options.enable = false;
+            this.$options = { enable: false };
         }
     }
 

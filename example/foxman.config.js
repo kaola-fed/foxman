@@ -77,24 +77,24 @@ module.exports = {
     /**
      * Runtime Processor
      */
-    processors: [
-        {
-            base: __dirname,
-            publicPath: '/src/css/:css.css',
-            pipeline: [
-                new Mcss({
-                    paths: []
-                }),
-                new AutoPrefixer({
-                    cascade: false,
-                    browsers: '> 5%'
-                })
-            ],
-            toSource: reqPath => {
-                return reqPath.replace(/css/g, 'mcss');
-            }
-        }
-    ],
+    // processors: [
+    //     {
+    //         base: __dirname,
+    //         publicPath: '/src/css/:css.css',
+    //         pipeline: [
+    //             new Mcss({
+    //                 paths: []
+    //             }),
+    //             new AutoPrefixer({
+    //                 cascade: false,
+    //                 browsers: '> 5%'
+    //             })
+    //         ],
+    //         toSource: reqPath => {
+    //             return reqPath.replace(/css/g, 'mcss');
+    //         }
+    //     }
+    // ],
 
     /**
      * 需要watch的根目录，缺省值为 foxman.config.js 所在目录的所有文件
