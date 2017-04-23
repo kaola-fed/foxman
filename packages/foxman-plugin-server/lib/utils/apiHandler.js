@@ -37,10 +37,10 @@ function readJSONs(dataPath) {
     );
 }
 
-function readJSON(url) {
-    return fs.readJSONFile(url).catch(() => {
+function readJSON(filepath) {
+    return fs.readJSONFile(filepath).catch(() => {
         logger.warn(
-            `File '${url}' is not found, so foxman will output empty object ({}).`
+            `File '${filepath}' is not found, so foxman will output empty object ({}).`
         );
         return {};
     });
