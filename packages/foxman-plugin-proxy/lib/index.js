@@ -7,6 +7,10 @@ class ProxyPlugin {
         return 'proxy';
     }
 
+    dependencies() {
+        return [ 'server' ];
+    }
+
     service() {
         return {};
     }

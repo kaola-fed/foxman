@@ -10,6 +10,10 @@ class LivereloadPlugin {
         return 'livereload';
     }
 
+    dependencies() {
+        return [ 'server', 'watcher' ];
+    }
+
     service() {
         return {
             reload(url) {

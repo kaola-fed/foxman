@@ -9,6 +9,10 @@ class ServerPlugin {
         return 'server';
     }
 
+    dependencies() {
+        return [];
+    }
+
     service() {
         return {
             injectScript({ condition, src }) {

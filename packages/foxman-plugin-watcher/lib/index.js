@@ -10,6 +10,8 @@ class WatcherPlugin {
         this._watchers = [];
     }
 
+    init() {}
+
     destroy() {
         this._watchers.forEach(watcher => watcher.close());
     }

@@ -7,6 +7,10 @@ class ProcessorPlugin {
         return 'processor';
     }
 
+    dependencies() {
+        return [ 'server', 'watcher', 'livereload' ];
+    }
+
     service() {
         return {};
     }
@@ -22,7 +26,7 @@ class ProcessorPlugin {
         const use = service('server.use');
         const createWatcher = service('watcher.create');
         const reload = service('livereload.reload');
-        const { processors } = this;
+        const processors = this.processors || [];
 
         processors.forEach(processor => {
             const resourcesManager = new ResourcesManager();

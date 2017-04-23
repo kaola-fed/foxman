@@ -5,6 +5,10 @@ class VconsolePlugin {
         return 'vconsole';
     }
 
+    dependencies() {
+        return [ 'server' ];
+    }
+
     service() {
         return {};
     }

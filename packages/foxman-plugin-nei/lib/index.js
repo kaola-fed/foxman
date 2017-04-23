@@ -16,6 +16,10 @@ class NEISyncPlugin {
         return 'nei';
     }
 
+    dependencies() {
+        return [ 'server' ];
+    }
+
     service() {
         return {};
     }
