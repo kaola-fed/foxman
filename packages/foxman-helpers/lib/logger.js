@@ -1,24 +1,8 @@
 const Logger = require('chalklog');
-const printer = new Logger('foxman');
 const parrotSay = require('parrotsay-api');
 
 function newline() {
     console.log('\n');
-}
-function info(msg) {
-    printer.blue(msg);
-}
-
-function success(msg) {
-    printer.green(msg);
-}
-
-function warn(msg) {
-    printer.yellow(msg);
-}
-
-function error(msg) {
-    printer.red(msg);
 }
 
 function say(text) {
@@ -27,9 +11,33 @@ function say(text) {
         .catch(console.error);
 }
 
-exports.info = info;
-exports.success = success;
-exports.error = error;
-exports.warn = warn;
-exports.say = say;
+function createLogger( scope ) {
+    const logger = new Logger(scope);
+    return {
+        info(msg) {
+            logger.blue(msg);
+        },
+
+        success(msg) {
+            logger.green(msg);
+        },
+
+        warn(msg) {
+            logger.yellow(msg);
+        },
+
+        error(msg) {
+            logger.red(msg);
+        }
+    };
+}
+
+const defaultLogger = createLogger('foxman');
+
+exports.createLogger = createLogger;
+exports.info = defaultLogger.info;
+exports.success = defaultLogger.success;
+exports.error = defaultLogger.error;
+exports.warn = defaultLogger.warn;
 exports.newline = newline;
+exports.say = say;
