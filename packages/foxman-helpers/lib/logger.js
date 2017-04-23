@@ -1,4 +1,3 @@
-// const { typeOf } = require('./typer');
 const Logger = require('chalklog');
 const printer = new Logger('foxman');
 const parrotSay = require('parrotsay-api');
@@ -17,16 +16,10 @@ function success(msg) {
 }
 
 function warn(msg) {
-    // if (typeOf(msg) !== 'string') {
-    //     return warn(prettyError.render(msg));
-    // }
     printer.yellow(msg);
 }
 
 function error(msg) {
-    // if (typeOf(msg) !== 'string') {
-    //     return error(prettyError.render(msg));
-    // }
     printer.red(msg);
 }
 
