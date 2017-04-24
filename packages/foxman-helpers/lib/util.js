@@ -153,14 +153,6 @@ function compressHtml(htmlstr) {
 }
 
 function readJSONFile(url) {
-<<<<<<< HEAD
-    return loadJsonFile(url).then(json => ({json})).catch(e => {
-        warnLog('Parsed failed:');
-        warnLog(e);
-        return Promise.resolve({
-            json: {}
-        });
-=======
     return readFile(url).then(content => {
         return {
             json: JSON5.parse(content)
@@ -170,7 +162,6 @@ function readJSONFile(url) {
         return {
             json: {}
         };
->>>>>>> fix##162
     });
 }
 
