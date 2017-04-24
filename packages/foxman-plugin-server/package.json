@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-server",
-  "version": "0.1.5-0",
+  "version": "0.1.8",
   "description": "",
   "main": "lib/index.js",
   "scripts": {},
@@ -8,7 +8,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@foxman/helpers": "^0.1.5-0",
+    "@foxman/helpers": "^0.1.8",
     "http2": "^3.3.6",
     "koa": "^1.4.0",
     "koa-bodyparser": "^2.5.0",

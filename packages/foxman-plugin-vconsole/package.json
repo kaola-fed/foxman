@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-vconsole",
-  "version": "0.1.2-0",
+  "version": "0.1.8",
   "description": "",
   "main": "lib/index.js",
   "scripts": {},

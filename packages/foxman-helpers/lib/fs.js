@@ -1,9 +1,9 @@
 const pify = require('pify');
 const del = require('del');
 const mkdirp = require('mkdirp');
-const readJSONFile = require('load-json-file');
 const fs = require('fs');
 const path = require('path');
+const JSON5 = require('JSON5');
 
 const pfs = Object.assign(pify(fs), {
     write(filepath, content) {
@@ -12,8 +12,15 @@ const pfs = Object.assign(pify(fs), {
             return pify(fs.writeFile)(filepath, content);
         });
     },
-    del,
-    readJSONFile
+    del
+});
+
+Object.assign(pfs, {
+    readJSONFile(url) {
+        return pfs.readFile(url).then(json => {
+            return JSON5.parse(json);
+        });
+    }
 });
 
 module.exports = pfs;

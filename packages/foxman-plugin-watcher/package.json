@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-watcher",
-  "version": "0.1.4-0",
+  "version": "0.1.8",
   "description": "",
   "main": "lib/index.js",
   "scripts": {},
