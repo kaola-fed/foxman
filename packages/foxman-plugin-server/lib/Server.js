@@ -180,10 +180,10 @@ class Server {
         if (https) {
             const httpOptions = {
                 key: fs.readFileSync(
-                    path.resolve(__dirname, 'secure', 'localhost.key')
+                    path.resolve(__dirname, 'certificate', 'localhost.key')
                 ),
                 cert: fs.readFileSync(
-                    path.resolve(__dirname, 'secure', 'localhost.crt')
+                    path.resolve(__dirname, 'certificate', 'localhost.crt')
                 )
             };
             this.serverApp = http2.createServer(httpOptions, callback);
