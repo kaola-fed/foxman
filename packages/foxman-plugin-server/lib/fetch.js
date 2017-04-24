@@ -1,7 +1,7 @@
 const { parser, fs, promise, path } = require('@foxman/helpers');
-const logger = require('../logger');
+const logger = require('./logger');
 
-function apiHandler({ handler, dataPath }) {
+function fetch({ handler, dataPath }) {
     if (handler) {
         return handlerInvkoe(handler);
     }
@@ -47,4 +47,4 @@ function readJSON(filepath) {
     });
 }
 
-module.exports = apiHandler;
+module.exports = fetch;

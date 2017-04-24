@@ -1,8 +1,8 @@
 var path = require('path');
-var apiHandler = require('../lib/utils/apiHandler');
+var fetch = require('../lib/fetch');
 
-test('apiHandler', function() {
-  var combine = apiHandler({
+test('fetch', function() {
+  var combine = fetch({
     dataPath: [
       path.resolve(__dirname, 'fixtures/dispatcher/foo/foo.json'),
       path.resolve(__dirname, 'fixtures/dispatcher/foo/bar.json')
@@ -12,8 +12,8 @@ test('apiHandler', function() {
   });
 });
 
-test('apiHandler-sigleDataPath', function() {
-  var combine = apiHandler({
+test('fetch-sigleDataPath', function() {
+  var combine = fetch({
     dataPath: path.resolve(__dirname, 'fixtures/dispatcher/foo/bar.json')
   }).then(info => {
     expect(info.json.foo).toBe('bar');
@@ -21,8 +21,8 @@ test('apiHandler-sigleDataPath', function() {
 });
 
 
-test('apiHandler-PromiseHandler', function() {
-  return apiHandler({
+test('fetch-PromiseHandler', function() {
+  return fetch({
     handler: function () {
       return Promise.resolve({
         foo: 'bar'
@@ -33,8 +33,8 @@ test('apiHandler-PromiseHandler', function() {
   });
 });
 
-test('apiHandler-handler', function() {
-  return apiHandler({
+test('fetch-handler', function() {
+  return fetch({
     handler: function () {
       return {
         foo: 'bar'
@@ -45,8 +45,8 @@ test('apiHandler-handler', function() {
   });
 });
 
-test('apiHandler-handlerString', function() {
-  return apiHandler({
+test('fetch-handlerString', function() {
+  return fetch({
     handler: function () {
       return JSON.stringify({
         foo: 'bar'

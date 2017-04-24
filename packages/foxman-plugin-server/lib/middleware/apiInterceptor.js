@@ -1,4 +1,4 @@
-const apiHandler = require('../utils/apiHandler');
+const fetch = require('../fetch');
 const { consts } = require('@foxman/helpers');
 const { ASYNC } = consts.DispatherTypes;
 
@@ -14,7 +14,7 @@ module.exports = () => {
         let json;
 
         try {
-            json = (yield apiHandler.call(this, dispatcher)).json;
+            json = (yield fetch.call(this, dispatcher)).json;
         } catch (msg) {
             this.type = 500;
 

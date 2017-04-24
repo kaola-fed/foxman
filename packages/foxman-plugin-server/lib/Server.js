@@ -18,12 +18,13 @@ const {
     configureEjs,
     configureStatics
 } = require('./configure');
-const formatStaticOptions = require('./utils/formatStaticOptions');
+
 
 const WebSocketServer = WebSocket.Server;
 
 const { values } = typer;
 const { notify } = system;
+
 
 class Server {
     constructor(options) {
@@ -161,11 +162,11 @@ class Server {
     serve(prefix, dirname) {
         configureStatics({
             statics: [
-                formatStaticOptions({
+                {
                     prefix: string.ensureLeadingSlash(prefix),
                     dir: dirname,
                     maxAge: 31536000
-                })
+                }
             ],
             app: this.app
         });
@@ -179,10 +180,10 @@ class Server {
         if (https) {
             const httpOptions = {
                 key: fs.readFileSync(
-                    path.resolve(__dirname, 'crt', 'localhost.key')
+                    path.resolve(__dirname, 'secure', 'localhost.key')
                 ),
                 cert: fs.readFileSync(
-                    path.resolve(__dirname, 'crt', 'localhost.crt')
+                    path.resolve(__dirname, 'secure', 'localhost.crt')
                 )
             };
             this.serverApp = http2.createServer(httpOptions, callback);
