@@ -1,6 +1,7 @@
 const child_process = require('child_process');
 const crypto = require('crypto');
-const {readFile, writeFileSync} = require('./fileutil');
+const {writeFileSync} = require('./fileutil');
+const loadJsonFile = require('load-json-file');
 const Logger = require('chalklog');
 const notifier = require('node-notifier');
 const clog = new Logger('foxman');
@@ -152,22 +153,12 @@ function compressHtml(htmlstr) {
 }
 
 function readJSONFile(url) {
-    return new Promise(resolve => {
-        let json;
-        readFile(url)
-            .then(data => {
-                try {
-                    json = parseJSON(data);
-                } catch (e) {
-                    warnLog('Parsed failed:');
-                    warnLog(e);
-                    json = {};
-                }
-                resolve({json});
-            })
-            .catch(() => {
-                resolve({json: {}});
-            });
+    return loadJsonFile(url).then(json => ({json})).catch(e => {
+        warnLog('Parsed failed:');
+        warnLog(e);
+        return Promise.resolve({
+            json: {}
+        });
     });
 }
 
