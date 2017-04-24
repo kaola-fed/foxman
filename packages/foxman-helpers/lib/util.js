@@ -1,7 +1,7 @@
+const JSON5 = require('json5');
 const child_process = require('child_process');
 const crypto = require('crypto');
-const {writeFileSync} = require('./fileutil');
-const loadJsonFile = require('load-json-file');
+const {writeFileSync, readFile} = require('./fileutil');
 const Logger = require('chalklog');
 const notifier = require('node-notifier');
 const clog = new Logger('foxman');
@@ -153,12 +153,15 @@ function compressHtml(htmlstr) {
 }
 
 function readJSONFile(url) {
-    return loadJsonFile(url).then(json => ({json})).catch(e => {
-        warnLog('Parsed failed:');
+    return readFile(url).then(content => {
+        return {
+            json: JSON5.parse(content)
+        };
+    }).catch(e => {
         warnLog(e);
-        return Promise.resolve({
+        return {
             json: {}
-        });
+        };
     });
 }
 
