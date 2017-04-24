@@ -4,6 +4,7 @@ const Livereload = require('@foxman/plugin-livereload');
 const Processor = require('@foxman/plugin-processor');
 const Watcher = require('@foxman/plugin-watcher');
 const Server = require('@foxman/plugin-server');
+const VconsolePlugin = require('@foxman/plugin-vconsole');
 
 module.exports = config => {
     const core = new Core();
@@ -34,10 +35,7 @@ module.exports = config => {
     // Outer Plugins
     core.use(config.plugins);
 
-    if (config.vconsole) {
-        const VconsolePlugin = require('@foxman/plugin-vconsole');
-        core.use(new VconsolePlugin());
-    }
+    core.use(new VconsolePlugin());
 
     core.use(
         new Proxy({
