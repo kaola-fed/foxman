@@ -9,12 +9,6 @@ const MockControl = require('foxman-plugin-mock-control');
 const Automount = require('foxman-plugin-automount');
 const WebpackDevServer = require('foxman-plugin-webpack-dev-server');
 
-function urlTransformer(ip) {
-    return function(reqPath) {
-        return `http://${ip}/${reqPath}`;
-    };
-}
-
 const paths = {
     webapp: __dirname
 };
@@ -37,16 +31,6 @@ module.exports = {
     upgrade: {
         version: '0.8.2'
     },
-
-    vconsole: true,
-
-    /**
-     * nei 的 kei 然后执行 foxman -u 初始化工程目录。
-     **/
-    // nei: {
-    //     key: '9903a510a54f9310ee55f9658b8d4129'
-    // },
-
     plugins: [
         // new RouteDisplay(),
         //
@@ -77,101 +61,52 @@ module.exports = {
         // })
     ],
 
-    /**
-     * Runtime Processor
-     */
-    // processors: [
-    //     {
-    //         base: __dirname,
-    //         publicPath: '/src/css/:css.css',
-    //         pipeline: [
-    //             new Mcss({
-    //                 paths: []
-    //             }),
-    //             new AutoPrefixer({
-    //                 cascade: false,
-    //                 browsers: '> 5%'
-    //             })
-    //         ],
-    //         toSource: reqPath => {
-    //             return reqPath.replace(/css/g, 'mcss');
-    //         }
-    //     }
-    // ],
-
-    /**
-     * 需要watch的根目录，缺省值为 foxman.config.js 所在目录的所有文件
-     */
-    watch: {
-        root: paths.webapp
-    },
-
-    proxy: {
-        host: 'm.kaola.com',
-        service: {
-            test(reqPath) {
-                return urlTransformer('106.2.44.36')(reqPath);
+    processors: [
+        {
+            match: '/src/css/:css.css',
+            pipeline: [
+                new Mcss({
+                    paths: []
+                }),
+                new AutoPrefixer({
+                    cascade: false,
+                    browsers: '> 5%'
+                })
+            ],
+            locate(reqPath){
+                return path.join(__dirname + reqPath.replace(/css/g, 'mcss'));
             }
         }
-    },
+    ],
 
-    /**
-     * 服务配置
-     */
-    server: {
-        /**
-         * 路由表 格式参见 @routers
-         * routers 字段是偏底层的接口，不建议使用。使用 NEI 或者 Automount 插件的配置代替
-         */
-        routers: [
-            {
-                method: 'GET',
-                url: '/ajax/index.html',
-                sync: false,
-                filePath: 'foo.bar'
-            },
-            {
-                method: 'GET',
-                url: '/fooBar.html',
-                sync: true,
-                filePath: 'foo.bar'
-            }
-        ],
-        /**
-         * 端口
-         */
-        port: 9000,
-        /**
-         * 是否区分方法
-         */
-        divideMethod: !!0,
-        /**
-         * 是否启用 https
-         */
-        https: !!0,
-        /**
-         * 引入的 templatePaths，根据具体的 View Render 配置
-         */
-        templatePaths: {
-            commonTpl: paths.commonTpl
+
+    proxy: [
+        { name: 'pre', host: '', ip: '', protocol: 'http'}
+    ],
+
+    routes: [
+        {
+            method: 'GET',
+            url: '/ajax/index.html',
+            sync: false,
+            filePath: 'foo.bar'
         },
-        /**
-         * router type 为 sync 的filePath的ftl相对目录
-         */
-        viewRoot: paths.viewRoot,
-        /**
-         * router type 为 sync 的filePath的data相对目录
-         */
-        syncData: paths.syncData,
-        /**
-         * router type 为 async 的filepath的data相对目录
-         */
-        asyncData: paths.asyncData,
-        /**
-         * 静态资源目录
-         */
-        static: [
-            // paths.src
-        ]
-    }
+        {
+            method: 'GET',
+            url: '/fooBar.html',
+            sync: true,
+            filePath: 'foo.bar'
+        }
+    ],
+
+    port: 9000,
+    secure: false,
+    engineConfig: {
+        paths: [paths.commonTpl]
+    },
+    extension: 'ftl',
+    viewRoot: paths.viewRoot,
+    syncData: paths.syncData,
+    asyncData: paths.asyncData,
+    statics: []
 };

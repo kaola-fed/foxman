@@ -1,6 +1,6 @@
 @import './_demoinclude.mcss';
 body {
-    background: #fff;
+    background: #000;
     display: flex;
     flex-direction: column;
     font-size: 40px; font-weight: 700;

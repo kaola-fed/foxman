@@ -1,6 +1,7 @@
 const Server = require('./Server');
 const path = require('path');
-const {parser, typer, system} = require('@foxman/helpers');
+const { typer, system } = require('@foxman/helpers');
+const Freemarker = require('@foxman/engine-freemarker');
 const logger = require('./logger');
 const { typeOf } = typer;
 
@@ -73,42 +74,51 @@ class ServerPlugin {
         };
     }
 
-    constructor(opts = {}) {
+    constructor(opts) {
+        let {
+            port = 3000,
+            secure,
+            statics,
+            routes,
+            engine,
+            engineConfig = {},
+            extension = 'ftl',
+            viewRoot,
+            syncData,
+            asyncData
+        } = opts;
         const result = checkConfig(opts);
         if (result) {
             logger.error(result);
             system.exit();
         }
 
-        // TODO: 需要deepClone
-        const options = Object.assign({}, opts);
-        const statics = options.static ? typer.ensureArray(opts.static) : [];
+        statics = (statics ? typer.ensureArray(statics) : []).filter(item => !!item);
 
-        options.port = options.port || 3000;
+        const runtimeRouters = { routers: routes || [] };
+        
+        const syncDataMatch = (url => path.join(syncData, url));
+        
+        const asyncDataMatch = (url => path.join(asyncData, url));
 
-        options.statics = statics
-            .filter(item => !!item);
+        const Render = engine || Freemarker;
+        this.$options = {
+            runtimeRouters,
 
-        options.runtimeRouters = { routers: options.routers || [] };
+            extension,
+            Render,
+            port,
+            secure,
 
-        delete options.routers;
+            viewRoot,
+            syncData,
+            asyncData,
+            statics,
 
-        options.syncDataMatch =
-            options.syncDataMatch || (url => path.join(options.syncData, url));
-
-        options.asyncDataMatch =
-            options.asyncDataMatch ||
-            (url => path.join(options.asyncData, url));
-
-        options.divideMethod = Boolean(options.divideMethod);
-
-        options.extension = options.extension
-            ? String(options.extension)
-            : 'ftl';
-
-        options.Render = options.Render || parser.Render;
-
-        this.$options = options;
+            engineConfig,
+            syncDataMatch,
+            asyncDataMatch
+        };
     }
 
     init({ getter }) {
@@ -128,16 +138,16 @@ class ServerPlugin {
 }
 
 function checkConfig({ viewRoot, syncData, asyncData }) {
-    if (typeOf(viewRoot) !== 'string') {
-        return 'config.server.viewRoot must be string';
-    }
+    // if (typeOf(viewRoot) !== 'string') {
+    //     return 'config.viewRoot must be string';
+    // }
 
     if (typeOf(syncData) !== 'string') {
-        return 'config.server.syncData must be string';
+        return 'config.syncData must be string';
     }
 
     if (typeOf(asyncData) !== 'string') {
-        return 'config.server.asyncData must be string';
+        return 'config.asyncData must be string';
     }
 }
 

@@ -2,8 +2,10 @@ const zlib = require('zlib');
 const url = require('url');
 const { ServerResponse } = require('http');
 
-function doProxy({ proxy, service }) {
-    const target = url.parse(service(this.request.url.replace(/^(\/)/, '')));
+function doProxy({ proxy, ip, protocol, host }) {
+    const target = url.parse(
+        service({ip, protocol})(this.request.url.replace(/^(\/)/, ''))
+    );
     const res = new ServerResponse(
         Object.assign({}, this.req, { url: target.path })
     );
@@ -53,6 +55,13 @@ function resolveRes({ ctx, res, body, resolve }) {
         resolve(buffer.toString());
     }
 }
+
+function service({ip, protocol}) {
+    return (reqPath) => {
+        `${protocol}://${ip}/${reqPath}`;
+    };
+}
+
 
 exports = module.exports = doProxy;
 exports.resolveRes = resolveRes;

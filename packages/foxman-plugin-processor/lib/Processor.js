@@ -19,7 +19,7 @@ function dispatcher({ processor, reloaderService, resourcesManager }) {
             const reqPath = this.request.path;
             if (
                 !isPathMatched({
-                    publicPath: processor.publicPath,
+                    pattern: processor.match,
                     reqPath
                 })
             ) {
@@ -38,7 +38,6 @@ function dispatcher({ processor, reloaderService, resourcesManager }) {
                     ...pipeline,
                     processor // 从右往左
                 ],
-                base: processor.base,
                 reqPath
             });
             const sourceFile = stackTop(processdFilenameStack);
@@ -150,24 +149,24 @@ function createDependenciesReciever({
     };
 }
 
-function isPathMatched({ publicPath, reqPath }) {
-    return pathToRegexp(publicPath).test(reqPath);
+function isPathMatched({ pattern, reqPath }) {
+    return pathToRegexp(pattern).test(reqPath);
 }
 
 function reqUrl2FilePath(url = '') {
     return url.replace(/\//g, path.sep);
 }
 
-function getSemiFinished({ pipeline, base, reqPath }) {
+function getSemiFinished({ pipeline, reqPath }) {
     const rawReqPath = pipeline.reduceRight(
         function(prev, item) {
-            const { toSource = noop } = item;
+            const { locate = noop } = item;
             const raw = stackTop(prev);
-            return [...prev, toSource.call(item, raw)];
+            return [...prev, locate.call(item, raw)];
         },
         [reqPath]
     );
-    return rawReqPath.map(item => reqUrl2FilePath(path.join(base, item)));
+    return rawReqPath.map(item => reqUrl2FilePath(item));
 }
 
 function stackTop(stack) {

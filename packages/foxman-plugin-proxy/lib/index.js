@@ -16,26 +16,28 @@ class ProxyPlugin {
         return {};
     }
 
-    constructor({ proxyServerName = '', proxyConfig = {} }) {
+    constructor({ proxyName = '', proxies = [] }) {
         this.$options = {};
-        this.$options.enable = !!proxyServerName;
-        const service = proxyConfig.service || {};
-
+        this.$options.enable = !!proxyName;
+        let proxyConfig;
         if (this.$options.enable) {
-            if (!proxyConfig.host) {
-                logger.error('To configure config proxy.host');
-                system.exit();
-            }
-
-            if (!~Object.keys(service).indexOf(proxyServerName)) {
+            proxyConfig = this._findProxy(proxies, proxyName);
+            
+            if (!proxyConfig) {
                 logger.error(
-                    'To check config, and input correct proxyServer name'
+                    'Please check config, and input correct proxyServer name'
                 );
                 system.exit();
             }
+
+            if (!proxyConfig.host) {
+                logger.error('Please configure proxy.host');
+                system.exit();
+            }
         }
+
         Object.assign(this, {
-            proxyServerName,
+            proxyName,
             proxyConfig
         });
     }
@@ -45,13 +47,13 @@ class ProxyPlugin {
 
         this._registerProxy({
             proxyConfig: this.proxyConfig,
-            proxyServerName: this.proxyServerName,
+            proxyName: this.proxyName,
             use,
-            proxy: this._createProxyServer()
+            proxy: this._createProxyClient()
         });
     }
 
-    _createProxyServer() {
+    _createProxyClient() {
         const proxyConfig = this.proxyConfig;
         const proxy = httpProxy.createProxyServer({});
 
@@ -67,8 +69,8 @@ class ProxyPlugin {
         return proxy;
     }
 
-    _registerProxy({ use, proxy, proxyConfig, proxyServerName }) {
-        const service = proxyConfig.service[proxyServerName];
+    _registerProxy({ use, proxy, proxyConfig, proxyName }) {
+        const {ip, protocol = 'http', host} = proxyConfig;
 
         use(
             () =>
@@ -82,13 +84,17 @@ class ProxyPlugin {
                     }
 
                     dispatcher.handler = ctx =>
-                        doProxy.call(ctx, { proxy, service });
+                        doProxy.call(ctx, { proxy, ip, protocol, host });
 
                     yield next;
                 }
         );
 
-        logger.success(`Proxying to remote server ${proxyServerName}`);
+        logger.success(`Proxying to remote server ${proxyName}`);
+    }
+
+    _findProxy(proxies, proxyName) {
+        return proxies.filter(proxy => (proxy.name === proxyName))[0];
     }
 }
 

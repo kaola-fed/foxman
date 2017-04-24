@@ -167,7 +167,6 @@ class NEISyncPlugin {
 
     genCommonPath({ sync, filePath }) {
         const {
-            divideMethod,
             syncDataMatch,
             asyncDataMatch
         } = this.$serverOptions;
@@ -176,12 +175,10 @@ class NEISyncPlugin {
             return syncDataMatch(string.jsonPathResolve(filePath));
         }
 
-        if (!divideMethod) {
-            filePath = filePath.replace(
-                /(GET|DELETE|HEAD|PATCH|POST|PUT)\//i,
-                ''
-            );
-        }
+        filePath = filePath.replace(
+            /(GET|DELETE|HEAD|PATCH|POST|PUT)\//i,
+            ''
+        );
 
         return asyncDataMatch(
             string.jsonPathResolve(filePath.replace(/\/data/g, ''))

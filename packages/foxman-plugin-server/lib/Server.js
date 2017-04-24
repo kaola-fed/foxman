@@ -9,7 +9,10 @@ const bodyParser = require('koa-bodyparser');
 
 const { typer, system, string } = require('@foxman/helpers');
 const logger = require('./logger');
-const routerMatch = require('./middleware/routerMatch');
+
+const routerMiddleware = require('./middleware/router');
+const resourcesMiddleware = require('./middleware/resource');
+
 const apiInterceptor = require('./middleware/apiInterceptor');
 const pageInterceptor = require('./middleware/pageInterceptor');
 const dirInterceptor = require('./middleware/dirInterceptor');
@@ -33,14 +36,10 @@ class Server {
         this._injectedScripts = [];
         this.app = Koa({ outputErrors: false });
 
-        const { Render, templatePaths, viewRoot } = options;
+        const { Render, viewRoot } = options;
         const app = this.app;
 
-        this.viewEngine = configureViewEngine({
-            Render,
-            templatePaths,
-            viewRoot
-        });
+        this.viewEngine = new Render(viewRoot, options.engineConfig);
 
         configureEjs({ app });
     }
@@ -63,14 +62,30 @@ class Server {
 
     prepare() {
         const { app, _injectedScripts, viewEngine } = this;
-        const { ifProxy, statics } = this.serverOptions;
+        const { ifProxy, statics, viewRoot } = this.serverOptions;
 
         if (!ifProxy) {
             app.use(bodyParser());
         }
 
-        // {extension, runtimeRouters, divideMethod, viewRoot, syncData, asyncData, syncDataMatch, asyncDataMatch}
-        app.use(routerMatch(this.serverOptions));
+        const {
+            extension, runtimeRouters, 
+            syncDataMatch, asyncDataMatch
+        } = this.serverOptions;
+        
+        app.use(routerMiddleware({
+            runtimeRouters,
+            extension,
+            viewRoot,
+            syncDataMatch,
+            asyncDataMatch
+        }));
+
+        app.use(resourcesMiddleware({
+            extension,
+            viewRoot,
+            syncDataMatch
+        }));
 
         this._middlewares.forEach(middleware => app.use(middleware));
 
@@ -174,10 +189,10 @@ class Server {
 
     start() {
         this.prepare();
-        const { port, https } = this.serverOptions;
+        const { port, secure } = this.serverOptions;
         const callback = this.app.callback();
 
-        if (https) {
+        if (secure) {
             const httpOptions = {
                 key: fs.readFileSync(
                     path.resolve(__dirname, 'certificate', 'localhost.key')
