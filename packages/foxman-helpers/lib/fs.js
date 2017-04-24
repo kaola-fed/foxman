@@ -3,7 +3,7 @@ const del = require('del');
 const mkdirp = require('mkdirp');
 const fs = require('fs');
 const path = require('path');
-const JSON5 = require('JSON5');
+const JSON5 = require('json5');
 
 const pfs = Object.assign(pify(fs), {
     write(filepath, content) {
