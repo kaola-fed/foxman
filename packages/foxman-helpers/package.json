@@ -1,6 +1,6 @@
 {
   "name": "@foxman/helpers",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "",
   "main": "lib/index.js",
   "scripts": {},
@@ -11,8 +11,8 @@
     "chalklog": "^1.1.2",
     "fast-ftl": "1.7.1",
     "json5": "^0.5.1",
+    "load-json-file": "^2.0.0",
     "node-notifier": "^5.1.2",
-    "semver": "^5.3.0",
-    "load-json-file": "^2.0.0"
+    "semver": "^5.3.0"
   }
 }
