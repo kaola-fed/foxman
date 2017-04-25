@@ -1,6 +1,6 @@
 {
   "name": "foxman-test",
-  "version": "0.0.1",
+  "version": "1.0.0-0",
   "description": "foxman`s test",
   "main": "index.js",
   "devDependencies": {

@@ -13,11 +13,11 @@ function createLogger( scope ) {
         },
 
         warn(msg) {
-            logger.yellow(msg);
+            logger.yellow(msg.stack || msg);
         },
 
         error(msg) {
-            logger.red(msg);
+            logger.red(msg.stack || msg);
         },
 
         newline() {

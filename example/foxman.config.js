@@ -4,10 +4,10 @@ const webpackConfig = require('./webpack.config');
 
 const Mcss = require('foxman-processor-mcss');
 const AutoPrefixer = require('foxman-processor-autoprefixer');
-const RouteDisplay = require('foxman-plugin-route-display');
-const MockControl = require('foxman-plugin-mock-control');
-const Automount = require('foxman-plugin-automount');
-const WebpackDevServer = require('foxman-plugin-webpack-dev-server');
+// const RouteDisplay = require('foxman-plugin-route-display');
+// const MockControl = require('foxman-plugin-mock-control');
+// const Automount = require('foxman-plugin-automount');
+// const WebpackDevServer = require('foxman-plugin-webpack-dev-server');
 
 const paths = {
     webapp: __dirname
