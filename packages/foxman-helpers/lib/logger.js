@@ -13,10 +13,16 @@ function createLogger( scope ) {
         },
 
         warn(msg) {
+            if (Array.isArray(msg)) {
+                return msg.forEach(m => logger.warn(m));
+            }
             logger.yellow(msg.stack || msg);
         },
 
         error(msg) {
+            if (Array.isArray(msg)) {
+                return msg.forEach(m => logger.red(m));
+            }
             logger.red(msg.stack || msg);
         },
 
