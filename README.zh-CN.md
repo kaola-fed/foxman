@@ -30,7 +30,7 @@
 
 ## Foxman 有什么？
 
-👀 **Mock Server**， 支持自定义模板引擎
+🦊 **Mock Server**， 支持自定义模板引擎
 
 🤘 **Living Reload**， 更灵活的 reload 机制
 

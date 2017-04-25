@@ -33,7 +33,7 @@
 
 ## Features
 
-👀 **Mock Server** Support customizing template engine
+🦊 **Mock Server** Support customizing template engine
 
 🤘 **Living Reload** More flexible livereload mechanism
 
