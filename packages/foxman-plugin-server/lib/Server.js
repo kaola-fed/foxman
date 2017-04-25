@@ -193,15 +193,14 @@ class Server {
         const callback = this.app.callback();
 
         if (secure) {
-            const httpOptions = {
+            this.serverApp = http2.createServer({
                 key: fs.readFileSync(
                     path.resolve(__dirname, 'certificate', 'localhost.key')
                 ),
                 cert: fs.readFileSync(
                     path.resolve(__dirname, 'certificate', 'localhost.crt')
                 )
-            };
-            this.serverApp = http2.createServer(httpOptions, callback);
+            }, callback);
         } else {
             this.serverApp = http.createServer(callback);
         }
