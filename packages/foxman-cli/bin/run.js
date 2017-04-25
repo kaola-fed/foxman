@@ -22,7 +22,8 @@ module.exports = ({
         plugins,
         nei,
         proxy,
-        argv
+        argv,
+        livereload
     }) => {
     
     const core = new Core();
@@ -42,7 +43,14 @@ module.exports = ({
         asyncData
     }));
 
-    core.use(new Livereload());
+    core.use(new Livereload({
+        statics,
+        extension,
+        viewRoot,
+        syncData,
+        asyncData,
+        livereload
+    }));
 
     core.use(
         new Processor({

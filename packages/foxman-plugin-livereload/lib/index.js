@@ -26,22 +26,37 @@ class LivereloadPlugin {
         };
     }
 
-    constructor() {}
+    constructor({
+        statics,
+        viewRoot,
+        syncData,
+        extension,
+        livereload = true
+    }) {
+        this.files = getWatchFiles({
+            extension,
+            viewRoot,
+            syncData,
+            statics
+        });
+        
+        this.$options = {
+            enable: livereload
+        };
+    }
 
-    init({ service, getter }) {
+    init({ service }) {
         const injectScript = service('server.injectScript');
         const livereload = service('server.livereload');
         const createWatcher = service('watcher.create');
-        const serverOptions = getter('server');
 
         injectScript({
             condition: () => true,
             src: `/__FOXMAN__CLIENT__/js/reload.js`
         });
 
-        const files = getWatchFiles(serverOptions);
         this.reloader = new Reloader({ livereload, createWatcher });
-        this.reloader.watch(files);
+        this.reloader.watch(this.files);
     }
 }
 
