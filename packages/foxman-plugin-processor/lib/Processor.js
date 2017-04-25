@@ -27,6 +27,8 @@ function dispatcher({ processor, reloaderService, resourcesManager }) {
             }
 
             if (resourcesManager.has(reqPath)) {
+                logger.success(`Served by resourcesManager - ${reqPath}`);
+                
                 this.body = resourcesManager.get(reqPath);
                 this.type = extname(reqPath);
                 return;
@@ -76,7 +78,7 @@ function dispatcher({ processor, reloaderService, resourcesManager }) {
                 this.body = processed;
                 this.type = extname(reqPath);
 
-                logger.info(`Served by processor - ${reqPath}`);
+                logger.success(`Served by processor - ${reqPath}`);
 
                 return processed;
             } catch (e) {

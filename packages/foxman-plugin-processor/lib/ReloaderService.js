@@ -17,9 +17,9 @@ class ReloaderService {
             watcher = this.$createWatcher(files);
 
             watcherMap[reqPath] = watcher;
-            watcher.on('change', path => {
+            watcher.on('change', () => {
                 resourcesManager.clear(reqPath);
-                reload(path);
+                reload(reqPath);
             });
 
             return watcher;
