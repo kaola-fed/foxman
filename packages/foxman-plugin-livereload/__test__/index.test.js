@@ -18,6 +18,9 @@ test('init', () => {
                 'server.livereload': () => {
                     expect(1).toBe(1);
                 },
+                'server.serve': () => {
+                    expect(1).toBe(1);
+                },
                 'watcher.create': () => {
                     return {
                         on: (type, fn) => {
