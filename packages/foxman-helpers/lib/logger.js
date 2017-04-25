@@ -38,6 +38,6 @@ function createLogger( scope ) {
     };
 }
 
-const defaultLogger = createLogger('foxman');
+const defaultLogger = createLogger('🦊');
 
 Object.assign( exports, defaultLogger, { createLogger } );
