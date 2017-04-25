@@ -8,7 +8,6 @@ const path = require('path');
 function createRouterDispatcher({
     runtimeRouters,
     reqQuery,
-    reqMethod,
     reqPath,
     viewRoot,
     extension,
@@ -25,11 +24,7 @@ function createRouterDispatcher({
         []
     );
     routers.some(function(router) {
-        const { filePath, sync, method, url, handler } = router;
-
-        if ( method.toUpperCase() !== reqMethod.toUpperCase()) {
-            return false;
-        }
+        const { filePath, sync, url, handler } = router;
 
         if (!pathToRegexp(url).test(reqPath)) {
             return false;
