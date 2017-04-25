@@ -3,7 +3,7 @@ const logger = require('./logger');
 
 function fetch({ handler, dataPath }) {
     if (handler) {
-        return handlerInvkoe(handler);
+        return handlerInvkoe.call(this, handler);
     }
     return (Array.isArray(dataPath)
         ? readJSONs(dataPath)
