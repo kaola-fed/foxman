@@ -18,13 +18,10 @@ module.exports = ({
         asyncData,
         engine,
         engineConfig,
-
         processors,
-
         plugins,
-
+        nei,
         proxy,
-
         argv
     }) => {
     
@@ -32,7 +29,6 @@ module.exports = ({
 
     core.use(new Watcher(watch));
 
-    
     core.use(new Server({
         port,
         secure,
@@ -54,14 +50,25 @@ module.exports = ({
         })
     );
     
+    if (nei) {
+        const NEIPlugin = require('@foxman/plugin-nei');
+        core.use(
+            new NEIPlugin(
+                Object.assign(nei, {
+                    update: argv.update
+                })
+            )
+        );
+    }
+    
     core.use(plugins);
 
     core.use(new VconsolePlugin());
 
     core.use(
         new Proxy({
-            proxyConfig: proxy,
-            proxyServerName: argv.proxy
+            proxies: proxy,
+            proxyName: argv.proxy
         })
     );
 
