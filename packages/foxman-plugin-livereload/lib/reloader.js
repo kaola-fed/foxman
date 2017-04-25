@@ -7,10 +7,7 @@ class Reloader {
     }
 
     notifyReload(url) {
-        return this._livereload({
-            type: 'livereload',
-            payload: url
-        });
+        return this._livereload(url);
     }
 
     watch(files) {
