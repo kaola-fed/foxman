@@ -42,7 +42,9 @@ const neiTools = {
         nei.exec(['update -basedir', opt.basedir]);
     },
     run(opt) {
-        fs.del.sync([opt.basedir]);
+        fs.del.sync([opt.basedir], {
+            force: true
+        });
 
         this.build(opt);
 
