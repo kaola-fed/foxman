@@ -26,7 +26,8 @@
     "collectCoverageFrom": [
       "packages/**/*.{js}",
       "!**/node_modules/**",
-      "!**/foxman-plugin-server/lib/client/**"
+      "!**/foxman-plugin-server/lib/client/**",
+      "!**/foxman-plugin-vconsole/static/**"
     ],
     "moduleFileExtensions": [
       "js"
