@@ -1,6 +1,6 @@
 {
   "name": "foxman",
-  "version": "1.0.0-0",
+  "version": "0.8.8-1",
   "main": "app.js",
   "description": "Extensible Mock Server",
   "preferGlobal": true,
