@@ -1,6 +1,12 @@
 const path = require('path');
 const LiveReloader = require('../lib');
-const liveReloader = new LiveReloader()
+const liveReloader = new LiveReloader({
+    extension: 'ftl',
+    viewRoot: __dirname,
+    templatePaths: [],
+    syncData: __dirname,
+    statics: []
+})
 
 test('init', () => {
     liveReloader.init({
@@ -23,18 +29,7 @@ test('init', () => {
                     }
                 }
             }[key];
-        },
-        getter: (key) => {
-            return {
-                server: {
-                    extension: 'ftl',
-                    viewRoot: __dirname,
-                    templatePaths: [],
-                    syncData: __dirname,
-                    statics: []
-                }
-            }[key]
-        },
+        }
     })
 });
 
