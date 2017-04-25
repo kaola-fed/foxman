@@ -1,6 +1,5 @@
 const fetch = require('../fetch');
-const { system } = require('@foxman/helpers');
-const { consts } = require('@foxman/helpers');
+const { system, consts, JSON } = require('@foxman/helpers');
 const { SYNC } = consts.DispatherTypes;
 
 module.exports = ({ viewEngine }) => {
@@ -34,6 +33,7 @@ module.exports = ({ viewEngine }) => {
             let result = yield viewEngine.parse(filePath, json);
             this.type = 'text/html; charset=utf-8';
             this.body = result;
+            this.body += `<script type="text/javascript"> window.__FOXMAN_SYNC_DATA__ = ${JSON.stringify(json)} </script>`;
         } catch (msg) {
             system.notify({
                 title: '模板解析失败',
