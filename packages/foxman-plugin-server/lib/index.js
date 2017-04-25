@@ -137,7 +137,7 @@ class ServerPlugin {
     }
 }
 
-function checkConfig({ viewRoot, syncData, asyncData }) {
+function checkConfig({ syncData, asyncData }) {
     // if (typeOf(viewRoot) !== 'string') {
     //     return 'config.viewRoot must be string';
     // }
