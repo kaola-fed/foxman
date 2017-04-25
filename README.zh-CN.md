@@ -32,7 +32,7 @@
 
 🦊 **Mock Server**， 支持自定义模板引擎
 
-🤘 **Living Reload**， 更灵活的 reload 机制
+😎 **Living Reload**， 更灵活的 reload 机制
 
 📡 **Remote Debugging**， 远程调试，取本地的模板与远程端的数据，方便联调
 

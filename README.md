@@ -35,7 +35,7 @@
 
 🦊 **Mock Server** Support customizing template engine
 
-🤘 **Living Reload** More flexible livereload mechanism
+😎 **Living Reload** More flexible livereload mechanism
 
 📡 **Remote Debugging** Render local template with remote data, convenient for debugging
 
