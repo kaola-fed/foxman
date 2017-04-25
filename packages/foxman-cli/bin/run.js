@@ -7,57 +7,60 @@ const Server = require('@foxman/plugin-server');
 const VconsolePlugin = require('@foxman/plugin-vconsole');
 
 module.exports = ({
-        extension,
-        port,
-        secure,
-        statics,
-        viewRoot,
-        routes,
-        watch,
-        syncData,
-        asyncData,
-        engine,
-        engineConfig,
-        processors,
-        plugins,
-        nei,
-        proxy,
-        argv,
-        livereload
-    }) => {
-    
+    extension,
+    port,
+    secure,
+    statics,
+    viewRoot,
+    routes,
+    watch,
+    syncData,
+    asyncData,
+    engine,
+    engineConfig,
+    processors,
+    plugins,
+    nei,
+    proxy,
+    argv,
+    livereload
+}) => {
     const core = new Core();
 
     core.use(new Watcher(watch));
 
-    core.use(new Server({
-        port,
-        secure,
-        statics,
-        routes,
-        engine,
-        engineConfig,
-        extension,
-        viewRoot,
-        syncData,
-        asyncData
-    }));
+    core.use(
+        new Server({
+            port,
+            secure,
+            statics,
+            routes,
+            engine,
+            engineConfig,
+            extension,
+            viewRoot,
+            syncData,
+            asyncData
+        })
+    );
 
-    core.use(new Livereload({
-        statics,
-        extension,
-        viewRoot,
-        syncData,
-        asyncData,
-        livereload
-    }));
+    core.use(
+        new Livereload({
+            statics,
+            extension,
+            viewRoot,
+            syncData,
+            asyncData,
+            livereload
+        })
+    );
 
     core.use(
         new Processor({
             processors
         })
     );
-    
+
     if (nei) {
         const NEIPlugin = require('@foxman/plugin-nei');
         core.use(
@@ -68,7 +71,7 @@ module.exports = ({
             )
         );
     }
-    
+
     core.use(plugins);
 
     core.use(new VconsolePlugin());

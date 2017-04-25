@@ -45,21 +45,14 @@ function createResourceDispatcher({
     return dispatcher;
 }
 
-module.exports = ({
-    extension,
-    viewRoot,
-    syncDataMatch
-}) => {
+module.exports = ({ extension, viewRoot, syncDataMatch }) => {
     return function*(next) {
-        const {
-            query: reqQuery,
-            path: reqPath
-        } = this.request;
-        
+        const { query: reqQuery, path: reqPath } = this.request;
+
         if (this.dispatcher) {
             return yield next;
         }
-        
+
         this.dispatcher = createResourceDispatcher({
             reqPath,
             reqQuery,

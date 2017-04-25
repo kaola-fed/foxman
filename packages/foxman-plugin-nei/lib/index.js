@@ -17,7 +17,7 @@ class NEISyncPlugin {
     }
 
     dependencies() {
-        return [ 'server' ];
+        return ['server'];
     }
 
     service() {
@@ -166,19 +166,13 @@ class NEISyncPlugin {
     }
 
     genCommonPath({ sync, filePath }) {
-        const {
-            syncDataMatch,
-            asyncDataMatch
-        } = this.$serverOptions;
+        const { syncDataMatch, asyncDataMatch } = this.$serverOptions;
 
         if (sync) {
             return syncDataMatch(string.jsonPathResolve(filePath));
         }
 
-        filePath = filePath.replace(
-            /(GET|DELETE|HEAD|PATCH|POST|PUT)\//i,
-            ''
-        );
+        filePath = filePath.replace(/(GET|DELETE|HEAD|PATCH|POST|PUT)\//i, '');
 
         return asyncDataMatch(
             string.jsonPathResolve(filePath.replace(/\/data/g, ''))

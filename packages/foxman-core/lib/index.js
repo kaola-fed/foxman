@@ -75,7 +75,7 @@ module.exports = class Core {
 
         const services = this._serviceRegistry.lookup(pluginName);
 
-        if (services && ( serviceName in services )) {
+        if (services && serviceName in services) {
             return services[serviceName];
         }
 

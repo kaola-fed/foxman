@@ -71,7 +71,7 @@ module.exports = ({
         if (this.dispatcher) {
             return yield next;
         }
-        
+
         this.dispatcher = createRouterDispatcher({
             runtimeRouters,
             reqQuery,

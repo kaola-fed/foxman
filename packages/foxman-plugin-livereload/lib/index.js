@@ -12,7 +12,7 @@ class LivereloadPlugin {
     }
 
     dependencies() {
-        return [ 'server', 'watcher' ];
+        return ['server', 'watcher'];
     }
 
     service() {
@@ -27,13 +27,7 @@ class LivereloadPlugin {
         };
     }
 
-    constructor({
-        statics,
-        viewRoot,
-        syncData,
-        extension,
-        livereload = true
-    }) {
+    constructor({ statics, viewRoot, syncData, extension, livereload = true }) {
         this.files = getWatchFiles({
             extension,
             viewRoot,
@@ -52,7 +46,7 @@ class LivereloadPlugin {
         const livereload = service('server.livereload');
         const createWatcher = service('watcher.create');
 
-        serve( '__LIVERELOAD_CLIENT__', path.join( __dirname, '../static/' ) );
+        serve('__LIVERELOAD_CLIENT__', path.join(__dirname, '../static/'));
 
         injectScript({
             src: `/__LIVERELOAD_CLIENT__/reload.js`

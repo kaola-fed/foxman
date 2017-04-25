@@ -4,7 +4,7 @@ const { ServerResponse } = require('http');
 
 function doProxy({ proxy, ip, protocol }) {
     const target = url.parse(
-        service({ip, protocol})(this.request.url.replace(/^(\/)/, ''))
+        service({ ip, protocol })(this.request.url.replace(/^(\/)/, ''))
     );
     const res = new ServerResponse(
         Object.assign({}, this.req, { url: target.path })
@@ -56,10 +56,9 @@ function resolveRes({ ctx, res, body, resolve }) {
     }
 }
 
-function service({ip, protocol}) {
-    return (reqPath) => `${protocol}://${ip}/${reqPath}`;
+function service({ ip, protocol }) {
+    return reqPath => `${protocol}://${ip}/${reqPath}`;
 }
-
 
 exports = module.exports = doProxy;
 exports.resolveRes = resolveRes;

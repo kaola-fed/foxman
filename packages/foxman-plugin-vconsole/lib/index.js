@@ -1,4 +1,4 @@
-const path = require( 'path' );
+const path = require('path');
 
 class VconsolePlugin {
     name() {
@@ -6,7 +6,7 @@ class VconsolePlugin {
     }
 
     dependencies() {
-        return [ 'server' ];
+        return ['server'];
     }
 
     service() {
@@ -19,7 +19,7 @@ class VconsolePlugin {
         const injectScript = service('server.injectScript');
         const serve = service('server.serve');
 
-        serve( '__VCONSOLE_CLIENT__', path.join( __dirname, '../static/' ) );
+        serve('__VCONSOLE_CLIENT__', path.join(__dirname, '../static/'));
 
         injectScript({
             condition: request => typeof request.query.vconsole !== 'undefined',
