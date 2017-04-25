@@ -20,7 +20,6 @@ module.exports = function(upgrade = {}) {
             })
         ) {
             notify.forEach(logger.error);
-            logger.newline();
             logger.error(ERRORTIPS.INSTALL_LATEST_FOXMAN);
 
             return false;
