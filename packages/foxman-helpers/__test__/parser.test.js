@@ -1,5 +1,5 @@
-const {parser: _} = require('../lib')
+const {JSON: _} = require('../lib')
 
 test('parseJSON', function() {
-    expect(_.parseJSON('{a:1}').a).toBe(1);
+    expect(_.parse('{a:1}').a).toBe(1);
 });

@@ -3,7 +3,7 @@ const del = require('del');
 const mkdirp = require('mkdirp');
 const fs = require('fs');
 const path = require('path');
-const JSON5 = require('json5');
+const {parse: parseJSON} = require('./json');
 
 const pfs = Object.assign(pify(fs), {
     write(filepath, content) {
@@ -18,7 +18,7 @@ const pfs = Object.assign(pify(fs), {
 Object.assign(pfs, {
     readJSONFile(url) {
         return pfs.readFile(url).then(json => {
-            return JSON5.parse(json);
+            return parseJSON(json);
         });
     }
 });

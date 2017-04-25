@@ -1,6 +1,6 @@
 const fs = require('./fs');
 const consts = require('./consts');
-const parser = require('./parser');
+const JSON = require('./json');
 const encrypt = require('./encrypt');
 const generator = require('./generator');
 const logger = require('./logger');
@@ -12,7 +12,7 @@ const path = require( './path' );
 
 exports.consts = consts;
 exports.fs = fs;
-exports.parser = parser;
+exports.JSON = JSON;
 exports.encrypt = encrypt;
 exports.generator = generator;
 exports.logger = logger;

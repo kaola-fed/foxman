@@ -1,4 +1,4 @@
-const { parser, fs, promise, path } = require('@foxman/helpers');
+const { JSON, fs, promise, path } = require('@foxman/helpers');
 const logger = require('./logger');
 
 function fetch({ handler, dataPath }) {
@@ -25,7 +25,7 @@ function handlerInvkoe(handler) {
 function safeJsonParse(jsonstr) {
     let json;
     try {
-        json = parser.parseJSON(jsonstr);
+        json = JSON.parse(jsonstr);
     } catch (error) {
         return Promise.reject(`${error.stack || error} \n 源数据：\n ${json}`);
     }
