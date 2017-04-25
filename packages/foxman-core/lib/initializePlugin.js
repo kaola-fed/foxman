@@ -1,7 +1,7 @@
 /**
  * Created by hzxujunyu on 2016/9/19.
  */
-const { system, typer } = require('@foxman/helpers');
+const { system, promise } = require('@foxman/helpers');
 const pid = system.createSystemId();
 
 module.exports = init;
@@ -40,7 +40,7 @@ function init(plugin) {
 
 function generatePending(fn) {
     return new Promise(done => {
-        typer.ensurePromise(fn(done)).catch(e => {
+        promise.ensurePromise(fn(done)).catch(e => {
             console.error(e);
         });
     });
