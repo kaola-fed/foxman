@@ -65,10 +65,10 @@ class Server {
         }
 
         const {
-            extension, runtimeRouters, 
+            extension, runtimeRouters,
             syncDataMatch, asyncDataMatch
         } = this.serverOptions;
-        
+
         app.use(routerMiddleware({
             runtimeRouters,
             extension,
@@ -95,9 +95,9 @@ class Server {
                 this.body =
                     this.body +
                     [
-                        '/__FOXMAN__CLIENT__/js/builtin/eventbus.js',
-                        '/__FOXMAN__CLIENT__/js/builtin/websocket-connector.js',
-                        '/__FOXMAN__CLIENT__/js/builtin/eval.js'
+                        '/__FOXMAN_CLIENT__/js/builtin/eventbus.js',
+                        '/__FOXMAN_CLIENT__/js/builtin/websocket-connector.js',
+                        '/__FOXMAN_CLIENT__/js/builtin/eval.js'
                     ]
                         .map(
                             _script =>
@@ -126,7 +126,7 @@ class Server {
 
         configureStatics({ statics, app });
 
-        this.serve('__FOXMAN__CLIENT__', path.join(__dirname, 'client'));
+        this.serve('__FOXMAN_CLIENT__', path.join(__dirname, 'client'));
     }
 
     use(middleware) {

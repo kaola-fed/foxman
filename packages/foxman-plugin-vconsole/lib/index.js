@@ -19,11 +19,11 @@ class VconsolePlugin {
         const injectScript = service('server.injectScript');
         const serve = service('server.serve');
 
-        serve( '__LIVERELOAD_CLIENT__', path.join( __dirname, '../static/' ) );
+        serve( '__VCONSOLE_CLIENT__', path.join( __dirname, '../static/' ) );
 
         injectScript({
             condition: request => typeof request.query.vconsole !== 'undefined',
-            src: `/__LIVERELOAD_CLIENT__/vconsole.min.js`
+            src: `/__VCONSOLE_CLIENT__/vconsole.min.js`
         });
     }
 }
