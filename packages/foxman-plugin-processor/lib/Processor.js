@@ -27,7 +27,7 @@ function dispatcher({ processor, reloaderService, resourcesManager }) {
             }
 
             if (resourcesManager.has(reqPath)) {
-                logger.success(`Served by resourcesManager - ${reqPath}`);
+                logger.info(`Served by resourcesManager - ${reqPath}`);
                 
                 this.body = resourcesManager.get(reqPath);
                 this.type = extname(reqPath);
