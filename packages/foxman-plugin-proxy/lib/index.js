@@ -83,8 +83,7 @@ class ProxyPlugin {
                         return yield next;
                     }
 
-                    dispatcher.handler = ctx =>
-                        doProxy.call(ctx, { proxy, ip, protocol, host });
+                    dispatcher.handler = ctx => doProxy.call(ctx, { proxy, ip, protocol });
 
                     yield next;
                 }

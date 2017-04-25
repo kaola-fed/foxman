@@ -57,9 +57,7 @@ function resolveRes({ ctx, res, body, resolve }) {
 }
 
 function service({ip, protocol}) {
-    return (reqPath) => {
-        `${protocol}://${ip}/${reqPath}`;
-    };
+    return (reqPath) => `${protocol}://${ip}/${reqPath}`;
 }
 
 
