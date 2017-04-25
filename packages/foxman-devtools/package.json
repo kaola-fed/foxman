@@ -1,3 +1,4 @@
 {
-  "private": true
+  "private": true,
+  "name": "@foxman/devtools"
 }
