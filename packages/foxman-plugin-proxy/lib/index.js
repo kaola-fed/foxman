@@ -70,7 +70,7 @@ class ProxyPlugin {
     }
 
     _registerProxy({ use, proxy, proxyConfig, proxyName }) {
-        const {ip, protocol = 'http', host} = proxyConfig;
+        const {ip, protocol = 'http'} = proxyConfig;
 
         use(
             () =>
