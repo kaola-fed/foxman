@@ -37,7 +37,7 @@
 
 🤘 **Living Reload** More flexible livereload mechanism
 
-📡 **Remote Debugging** Combine local template and remote data, convenient for debugging
+📡 **Remote Debugging** Render local template with remote data, convenient for debugging
 
 🚀 **Runtime Processor** Any processor implementing foxman-processor's interface can be loaded
 
