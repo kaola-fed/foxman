@@ -2,7 +2,7 @@ const zlib = require('zlib');
 const url = require('url');
 const { ServerResponse } = require('http');
 
-function doProxy({ proxy, ip, protocol, host }) {
+function doProxy({ proxy, ip, protocol }) {
     const target = url.parse(
         service({ip, protocol})(this.request.url.replace(/^(\/)/, ''))
     );

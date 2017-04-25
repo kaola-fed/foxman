@@ -16,11 +16,7 @@ const resourcesMiddleware = require('./middleware/resource');
 const apiInterceptor = require('./middleware/apiInterceptor');
 const pageInterceptor = require('./middleware/pageInterceptor');
 const dirInterceptor = require('./middleware/dirInterceptor');
-const {
-    configureViewEngine,
-    configureEjs,
-    configureStatics
-} = require('./configure');
+const { configureEjs, configureStatics } = require('./configure');
 
 
 const WebSocketServer = WebSocket.Server;

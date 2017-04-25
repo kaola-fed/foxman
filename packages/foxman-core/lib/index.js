@@ -1,7 +1,7 @@
 const co = require('co');
 const dotProp = require('dot-prop');
 const ora = require('ora');
-const { logger, string } = require('@foxman/helpers');
+const { logger, string, system } = require('@foxman/helpers');
 const { lowerCaseFirstLetter } = string;
 const initializePlugin = require('./initializePlugin');
 const createRegistry = require('./createRegistry');
@@ -156,7 +156,8 @@ module.exports = class Core {
                     spinner.succeed(`Plugin ${pluginName} loaded`);
                 } catch (e) {
                     spinner.fail(`Failed to load plugin "${pluginName}"`);
-                    console.log(e)
+                    logger.error(e);
+                    system.exit();
                 }
             }
         })

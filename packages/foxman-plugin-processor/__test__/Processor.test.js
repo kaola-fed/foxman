@@ -8,7 +8,7 @@ test('stackTop', () => {
 
 test('isPathMatched', () => {
     expect(Processor.isPathMatched(
-        {publicPath: '/src/css/:css.css', reqPath: '/src/css/1.css'}
+        {pattern: '/src/css/:css.css', reqPath: '/src/css/1.css'}
     )).toBe(!!1)
 });
 
@@ -20,28 +20,28 @@ test('getSemiFinished', () => {
     const file = Processor.getSemiFinished({ 
         pipeline: [
             {
-                toSource: (reqPath) => {
+                locate: (reqPath) => {
                     return reqPath;
                 }
             }
         ], 
         base: __dirname, 
         reqPath: '/a/b' }).slice(-1)[0];
-    expect(file).toBe(path.join(__dirname, 'a', 'b'));
+    expect(file).toBe(path.sep + path.join('a', 'b'));
 });
 
 test('getSemiFinished2', () => {
     const file = Processor.getSemiFinished({ 
         pipeline: [
             {
-                toSource: (reqPath) => {
+                locate: (reqPath) => {
                     return reqPath + '/c';
                 }
             }
         ], 
         base: __dirname, 
         reqPath: '/a/b' }).slice(-1)[0];
-    expect(file).toBe(path.join(__dirname, 'a', 'b', 'c'));
+    expect(file).toBe(path.sep + path.join('a', 'b', 'c'));
 });
 
 
@@ -49,14 +49,14 @@ test('getSemiFinished3', () => {
     const file = Processor.getSemiFinished({ 
         pipeline: [
             {
-                toSource: (reqPath) => {
+                locate: (reqPath) => {
                     return reqPath.replace(/css/g, 'mcss');
                 }
             }
         ], 
         base: __dirname, 
         reqPath: '/css/b' }).slice(-1)[0];
-    expect(file).toBe(path.join(__dirname, 'mcss', 'b'));
+    expect(file).toBe(path.sep + path.join('mcss', 'b'));
 });
 
 
@@ -131,8 +131,7 @@ test('dispatcher', (done) => {
             set: () => true
         },
         processor:{
-            base: path.join(__dirname, 'fixtures'),
-            publicPath: '/*.css',
+            match: '/*.css',
             pipeline: [
                 {
                     handler: function*({
@@ -145,7 +144,7 @@ test('dispatcher', (done) => {
                     }
                 }
             ],
-            toSource: reqPath => reqPath
+            locate: reqPath => path.join(__dirname, 'fixtures', reqPath)
         }
     })
     const fn = middleware();
