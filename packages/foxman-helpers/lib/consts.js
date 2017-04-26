@@ -18,7 +18,7 @@ exports.ERRORTIPS = {
         `Make sure you have the latest version of node.js and foxman.`,
         `If you do, this is most likely a problem with the plugins used in your foxman.config.js,`,
         `not with foxman itself`
-    ],   
+    ],
 
     INSTALL_LATEST_FOXMAN: [
         `Please install latest version:',`,

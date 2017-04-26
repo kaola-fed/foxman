@@ -8,7 +8,7 @@ class ProcessorPlugin {
     }
 
     dependencies() {
-        return [ 'server', 'watcher', 'livereload' ];
+        return ['server', 'watcher', 'livereload'];
     }
 
     service() {

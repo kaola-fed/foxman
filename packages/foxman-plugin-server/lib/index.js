@@ -93,13 +93,15 @@ class ServerPlugin {
             system.exit();
         }
 
-        statics = (statics ? typer.ensureArray(statics) : []).filter(item => !!item);
+        statics = (statics ? typer.ensureArray(statics) : []).filter(
+            item => !!item
+        );
 
         const runtimeRouters = { routers: routes || [] };
-        
-        const syncDataMatch = (url => path.join(syncData, url));
-        
-        const asyncDataMatch = (url => path.join(asyncData, url));
+
+        const syncDataMatch = url => path.join(syncData, url);
+
+        const asyncDataMatch = url => path.join(asyncData, url);
 
         const Render = engine || Freemarker;
         this.$options = {

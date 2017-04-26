@@ -18,12 +18,10 @@ const pageInterceptor = require('./middleware/pageInterceptor');
 const dirInterceptor = require('./middleware/dirInterceptor');
 const { configureEjs, configureStatics } = require('./configure');
 
-
 const WebSocketServer = WebSocket.Server;
 
 const { values } = typer;
 const { notify } = system;
-
 
 class Server {
     constructor(options) {
@@ -65,23 +63,29 @@ class Server {
         }
 
         const {
-            extension, runtimeRouters, 
-            syncDataMatch, asyncDataMatch
-        } = this.serverOptions;
-        
-        app.use(routerMiddleware({
-            runtimeRouters,
             extension,
-            viewRoot,
+            runtimeRouters,
             syncDataMatch,
             asyncDataMatch
-        }));
+        } = this.serverOptions;
 
-        app.use(resourcesMiddleware({
-            extension,
-            viewRoot,
-            syncDataMatch
-        }));
+        app.use(
+            routerMiddleware({
+                runtimeRouters,
+                extension,
+                viewRoot,
+                syncDataMatch,
+                asyncDataMatch
+            })
+        );
+
+        app.use(
+            resourcesMiddleware({
+                extension,
+                viewRoot,
+                syncDataMatch
+            })
+        );
 
         this._middlewares.forEach(middleware => app.use(middleware));
 
@@ -95,9 +99,9 @@ class Server {
                 this.body =
                     this.body +
                     [
-                        '/__FOXMAN__CLIENT__/js/builtin/eventbus.js',
-                        '/__FOXMAN__CLIENT__/js/builtin/websocket-connector.js',
-                        '/__FOXMAN__CLIENT__/js/builtin/eval.js'
+                        '/__FOXMAN_CLIENT__/js/builtin/eventbus.js',
+                        '/__FOXMAN_CLIENT__/js/builtin/websocket-connector.js',
+                        '/__FOXMAN_CLIENT__/js/builtin/eval.js'
                     ]
                         .map(
                             _script =>
@@ -126,7 +130,7 @@ class Server {
 
         configureStatics({ statics, app });
 
-        this.serve('__FOXMAN__CLIENT__', path.join(__dirname, 'client'));
+        this.serve('__FOXMAN_CLIENT__', path.join(__dirname, 'client'));
     }
 
     use(middleware) {
@@ -189,14 +193,17 @@ class Server {
         const callback = this.app.callback();
 
         if (secure) {
-            this.serverApp = http2.createServer({
-                key: fs.readFileSync(
-                    path.resolve(__dirname, 'certificate', 'localhost.key')
-                ),
-                cert: fs.readFileSync(
-                    path.resolve(__dirname, 'certificate', 'localhost.crt')
-                )
-            }, callback);
+            this.serverApp = http2.createServer(
+                {
+                    key: fs.readFileSync(
+                        path.resolve(__dirname, 'certificate', 'localhost.key')
+                    ),
+                    cert: fs.readFileSync(
+                        path.resolve(__dirname, 'certificate', 'localhost.crt')
+                    )
+                },
+                callback
+            );
         } else {
             this.serverApp = http.createServer(callback);
         }

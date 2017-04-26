@@ -9,7 +9,7 @@ class ProxyPlugin {
     }
 
     dependencies() {
-        return [ 'server' ];
+        return ['server'];
     }
 
     service() {
@@ -22,7 +22,7 @@ class ProxyPlugin {
         let proxyConfig;
         if (this.$options.enable) {
             proxyConfig = this._findProxy(proxies, proxyName);
-            
+
             if (!proxyConfig) {
                 logger.error(
                     'Please check config, and input correct proxyServer name'
@@ -70,7 +70,7 @@ class ProxyPlugin {
     }
 
     _registerProxy({ use, proxy, proxyConfig, proxyName }) {
-        const {ip, protocol = 'http'} = proxyConfig;
+        const { ip, protocol = 'http' } = proxyConfig;
 
         use(
             () =>
@@ -83,7 +83,8 @@ class ProxyPlugin {
                         return yield next;
                     }
 
-                    dispatcher.handler = ctx => doProxy.call(ctx, { proxy, ip, protocol });
+                    dispatcher.handler = ctx =>
+                        doProxy.call(ctx, { proxy, ip, protocol });
 
                     yield next;
                 }
@@ -93,7 +94,7 @@ class ProxyPlugin {
     }
 
     _findProxy(proxies, proxyName) {
-        return proxies.filter(proxy => (proxy.name === proxyName))[0];
+        return proxies.filter(proxy => proxy.name === proxyName)[0];
     }
 }
 

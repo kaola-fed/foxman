@@ -1,3 +1,4 @@
+const path = require('path');
 const Reloader = require('./reloader');
 const {
     getTemplatePattern,
@@ -11,7 +12,7 @@ class LivereloadPlugin {
     }
 
     dependencies() {
-        return [ 'server', 'watcher' ];
+        return ['server', 'watcher'];
     }
 
     service() {
@@ -26,20 +27,14 @@ class LivereloadPlugin {
         };
     }
 
-    constructor({
-        statics,
-        viewRoot,
-        syncData,
-        extension,
-        livereload = true
-    }) {
+    constructor({ statics, viewRoot, syncData, extension, livereload = true }) {
         this.files = getWatchFiles({
             extension,
             viewRoot,
             syncData,
             statics
         });
-        
+
         this.$options = {
             enable: livereload
         };
@@ -47,12 +42,14 @@ class LivereloadPlugin {
 
     init({ service }) {
         const injectScript = service('server.injectScript');
+        const serve = service('server.serve');
         const livereload = service('server.livereload');
         const createWatcher = service('watcher.create');
 
+        serve('__LIVERELOAD_CLIENT__', path.join(__dirname, '../static/'));
+
         injectScript({
-            condition: () => true,
-            src: `/__FOXMAN__CLIENT__/js/reload.js`
+            src: `/__LIVERELOAD_CLIENT__/reload.js`
         });
 
         this.reloader = new Reloader({ livereload, createWatcher });

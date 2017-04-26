@@ -27,7 +27,7 @@ function getTemplatePattern({ extension, viewRoot, templatePaths = [] }) {
 }
 
 function getResourcesPattern(statics) {
-    return statics.map(item => (item.dir || item)).reduce((total, current) => {
+    return statics.map(item => item.dir || item).reduce((total, current) => {
         return [...total, ...files(current)];
     }, []);
 }
