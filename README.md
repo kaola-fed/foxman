@@ -1,5 +1,9 @@
+<div>
+  <img src="media/fox.jpg" />
+</div>
+
 <div align="center">
-  <h1>Foxman</h1>
+  <h2>Foxman</h2>
   <p>
   <strong>Fox</strong> lies, which means mock;
   <strong>Man</strong> means intellectual and elegant
@@ -90,6 +94,10 @@ $ foxman
 | [<img src="https://avatars3.githubusercontent.com/u/10825163?v=3" width="80px;"/><br /><sub>君羽</sub>](https://github.com/imhype)<br />[💻](https://github.com/kaola-fed/foxman/commits?author=ImHype) 🔌 🚇 [📖](https://github.com/kaola-fed/foxman/commits?author=ImHype) [⚠️](https://github.com/kaola-fed/foxman/commits?author=ImHype)<br /> [🐛](https://github.com/kaola-fed/foxman/issues?q=author%3AImHype) 💡 | [<img src="https://avatars3.githubusercontent.com/u/9125255?v=3" width="80px;"/><br /><sub>MO</sub>](https://github.com/fengzilong)<br />[💻](https://github.com/kaola-fed/foxman/commits?author=fengzilong) [📖](https://github.com/kaola-fed/foxman/commits?author=fengzilong) 🚇 🔌<br /> [⚠️](https://github.com/kaola-fed/foxman/commits?author=fengzilong) |
 | :---: | :---: |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
+## Credits
+
+`media/fox.jpg` is from network
 
 ## LICENSE
 
