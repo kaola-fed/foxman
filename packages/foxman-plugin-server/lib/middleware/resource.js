@@ -1,6 +1,5 @@
-const { string } = require('@foxman/helpers');
+const { string, consts } = require('@foxman/helpers');
 const path = require('path');
-const { consts } = require('@foxman/helpers');
 const { DIR, SYNC } = consts.DispatherTypes;
 
 const { jsonPathResolve } = string;
