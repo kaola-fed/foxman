@@ -32,9 +32,9 @@ function safeJsonParse(jsonstr) {
     return json;
 }
 
-function readJSONs(dataPath) {
-    return Promise.all(dataPath.map(readJSON)).then(resps =>
-        resps.reduce((bef, aft) => Object.assign(bef, aft), {})
+function readJSONs(filepaths) {
+    return Promise.all(filepaths.map(readJSON)).then(resps =>
+        resps.reduce((total, current) => Object.assign(total, current), {})
     );
 }
 
