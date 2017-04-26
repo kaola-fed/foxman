@@ -27,14 +27,14 @@ function safeJsonParse(jsonstr) {
     try {
         json = JSON.parse(jsonstr);
     } catch (error) {
-        return Promise.reject(`${error.stack || error} \n 源数据：\n ${json}`);
+        return new Error(`${error.stack || error} \n 源数据：\n ${json}`);
     }
     return json;
 }
 
 function readJSONs(filepaths) {
-    return Promise.all(filepaths.map(readJSON)).then(resps =>
-        resps.reduce((total, current) => Object.assign(total, current), {})
+    return Promise.all(filepaths.map(readJSON)).then(jsons =>
+        jsons.reduce((total, current) => Object.assign(total, current), {})
     );
 }
 
