@@ -26,8 +26,12 @@ module.exports = ({
         livereload
     }) => {
     
-    const core = new Core();
+    if (argv.port) {
+        port = parseInt(argv.port);
+    }
 
+    const core = new Core();
+    
     core.use(new Watcher(watch));
 
     core.use(new Server({
