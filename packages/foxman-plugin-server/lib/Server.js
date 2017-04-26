@@ -10,12 +10,12 @@ const bodyParser = require('koa-bodyparser');
 const { typer, system, string } = require('@foxman/helpers');
 const logger = require('./logger');
 
-const routerMiddleware = require('./middleware/router');
-const resourcesMiddleware = require('./middleware/resource');
+const routerMiddleware = require('./dispatchers/router');
+const resourcesMiddleware = require('./dispatchers/resource');
 
-const apiInterceptor = require('./middleware/apiInterceptor');
-const pageInterceptor = require('./middleware/pageInterceptor');
-const dirInterceptor = require('./middleware/dirInterceptor');
+const apiInterceptor = require('./interceptors/api');
+const pageInterceptor = require('./interceptors/page');
+const dirInterceptor = require('./interceptors/dir');
 const { configureEjs, configureStatics } = require('./configure');
 
 const WebSocketServer = WebSocket.Server;

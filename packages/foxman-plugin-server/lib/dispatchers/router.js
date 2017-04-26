@@ -1,8 +1,8 @@
 const { typer, string } = require('@foxman/helpers');
 const pathToRegexp = require('path-to-regexp');
+const path = require('path');
 const { values } = typer;
 const { removeSuffix, ensureJSONExtension } = string;
-const path = require('path');
 
 // 获得路由的 dispatcher 对象
 function createRouterDispatcher({

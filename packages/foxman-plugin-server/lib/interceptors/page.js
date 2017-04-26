@@ -1,5 +1,5 @@
-const fetch = require('../fetch');
 const { system, consts, JSON } = require('@foxman/helpers');
+const fetch = require('../fetch');
 const { SYNC } = consts.DispatherTypes;
 
 module.exports = ({ viewEngine }) => {
