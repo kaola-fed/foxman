@@ -2,12 +2,13 @@
 
 ## 介绍
 
-### Foxman 是什么？
-> Foxman 是面向**前端开发**的**集成工具**，对开发阶段的 Mock 环境、CSS 预处理器、Living Reload、Remote Debugging、开发规范 等基本需要做了集成。
+foxman的基础定位是一个mock server，但它的核心却是**为扩展而生**的
 
-而他的设计初衷体现在构成他的两个词根上:  
-* Fox 狐狸会说谎，有 Mock 之意
-* Man 优雅知性
+你可能想不到，它的核心代码中找不到任何mock server相关的代码
+
+mock server的能力是在foxman-core的插件体系之上拓展出来的一个能力，mock server的功能由几个内置插件共同组成
+
+所以说，foxman定位为一个可扩展的mock server，但它提供的绝不仅仅只是一个mock server，你可以基于foxman-core定制出自己想要的任何命令行工具
 
 ## 安装
 
@@ -29,24 +30,6 @@ foxman 不支持v6.4.0以下的Node.js
 ### 安装
 
 ```bash
-$ npm install -g foxman
-```
-
-- `-g` 安装到全局目录，必须使用全局安装，当全局安装后才能在命令行（cmd或者终端）找到 `foxman` 命令
-- 如果 npm 长时间运行无响应，推荐使用 [cnpm](http://npm.taobao.org/) 来安装
-
-安装完成后执行 `foxman -v` 判断是否安装成功，如果安装成功，则显示类似如下信息：
-
-```bash
-$ foxman -v
-
-v0.8.0
-```
-
-### 升级
-
-```bash
-$ npm remove -g foxman
 $ npm install -g foxman
 ```
 
