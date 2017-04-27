@@ -1,0 +1,16 @@
+{
+  "name": "@foxman/plugin-webpack-dev-server",
+  "version": "0.1.0",
+  "description": "Webpack Dev Server For Foxman",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"test\""
+  },
+  "author": "June",
+  "license": "MIT",
+  "dependencies": {
+    "koa-webpack-dev-middleware": "^1.4.4",
+    "koa-webpack-hot-middleware": "^1.0.3",
+    "webpack": "^2.2.1"
+  }
+}
