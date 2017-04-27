@@ -1,12 +1,11 @@
 {
   "name": "@foxman/plugin-devtools",
-  "version": "0.1.0",
+  "version": "1.0.0-0",
   "description": "",
   "main": "lib/index.js",
   "scripts": {},
   "keywords": [],
   "author": "",
   "license": "MIT",
-  "dependencies": {
-  }
+  "dependencies": {}
 }
