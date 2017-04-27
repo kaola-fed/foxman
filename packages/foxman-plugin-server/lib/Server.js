@@ -119,7 +119,7 @@ class Server {
                     this.body +
                     _injectedScripts
                         .map(script => {
-                            return script.condition(this.request)
+                            return (script.condition ? script.condition(this.request): true)
                                 ? `<script type="text/javascript" src="${script.src}"></script>`
                                 : '';
                         })
