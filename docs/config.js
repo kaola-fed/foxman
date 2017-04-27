@@ -5,7 +5,7 @@ docute.init( {
     nav: {
         default: [
             {
-                title: 'Home',
+                title: 'Get Started',
                 path: '/get-started'
             },
             {
