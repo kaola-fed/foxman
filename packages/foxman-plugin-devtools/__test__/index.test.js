@@ -4,7 +4,11 @@ test( 'is foxman plugin', () => {
 	var plugin = new DevtoolsPlugin();
 	expect(typeof plugin.init).toBe( 'function' );
 
-	const mock = jest.fn();
+	const mock = jest.fn(function () {
+		return {
+			use: () => {},
+		};
+	});
 
 	plugin.init( {
 		service: mock,
