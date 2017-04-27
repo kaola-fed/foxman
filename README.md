@@ -1,5 +1,5 @@
 <div>
-  <img src="media/fox.jpg" />
+  <img src="https://raw.githubusercontent.com/kaola-fed/foxman/master/media/fox.jpg" />
 </div>
 
 <div align="center">
