@@ -70,6 +70,13 @@ class ServerPlugin {
                 }
 
                 return this.server.registerRouterNamespace(...args);
+            },
+            getRuntimeRouters(...args) {
+                if (!this.server) {
+                    return;
+                }
+
+                return this.server.getRuntimeRouters(...args);
             }
         };
     }
