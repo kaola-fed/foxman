@@ -7,33 +7,35 @@ const Koa = require('koa');
 const WebSocket = require('ws');
 const bodyParser = require('koa-bodyparser');
 
-const {util} = require('@foxman/helpers');
-const dispatcher = require('./middleware/dispatcher');
-const routerMap = require('./middleware/routerMapping');
-const configureStatics = require('./configureStatics');
-const {configureViewEngine, configureEjs} = require('./configureViewEngine');
+const { typer, system, string } = require('@foxman/helpers');
+const logger = require('./logger');
+
+const routerMiddleware = require('./dispatchers/router');
+const resourcesMiddleware = require('./dispatchers/resource');
+
+const apiInterceptor = require('./interceptors/api');
+const pageInterceptor = require('./interceptors/page');
+const dirInterceptor = require('./interceptors/dir');
+const { configureEjs, configureStatics } = require('./configure');
 
 const WebSocketServer = WebSocket.Server;
 
-const {notify, values} = util;
+const { values } = typer;
+const { notify } = system;
 
 class Server {
     constructor(options) {
         this.serverOptions = options;
         this._middlewares = [];
         this._injectedScripts = [];
-        this.app = Koa({outputErrors: false});
+        this.app = Koa({ outputErrors: false });
 
-        const {Render, templatePaths, viewRoot} = options;
+        const { Render, viewRoot } = options;
         const app = this.app;
 
-        this.viewEngine = configureViewEngine({
-            Render,
-            templatePaths,
-            viewRoot
-        });
+        this.viewEngine = new Render(viewRoot, options.engineConfig);
 
-        configureEjs({app});
+        configureEjs({ app });
     }
 
     registerRouterNamespace(name, value = []) {
@@ -53,28 +55,53 @@ class Server {
     }
 
     prepare() {
-        const {app, _injectedScripts, viewEngine} = this;
-        const {ifProxy, statics} = this.serverOptions;
+        const { app, _injectedScripts, viewEngine } = this;
+        const { ifProxy, statics, viewRoot } = this.serverOptions;
 
         if (!ifProxy) {
             app.use(bodyParser());
         }
 
-        // {extension, runtimeRouters, divideMethod, viewRoot, syncData, asyncData, syncDataMatch, asyncDataMatch}
-        app.use(routerMap(this.serverOptions));
+        const {
+            extension,
+            runtimeRouters,
+            syncDataMatch,
+            asyncDataMatch
+        } = this.serverOptions;
+
+        app.use(
+            routerMiddleware({
+                runtimeRouters,
+                extension,
+                viewRoot,
+                syncDataMatch,
+                asyncDataMatch
+            })
+        );
+
+        app.use(
+            resourcesMiddleware({
+                extension,
+                viewRoot,
+                syncDataMatch
+            })
+        );
 
         this._middlewares.forEach(middleware => app.use(middleware));
 
-        app.use(dispatcher({viewEngine}));
+        app.use(pageInterceptor({ viewEngine }));
+        app.use(apiInterceptor());
+        app.use(dirInterceptor());
 
         // inject builtin scripts
         app.use(function*(next) {
-            if (/text\/html/ig.test(this.type)) {
-                this.body = this.body +
+            if (/text\/html/gi.test(this.type)) {
+                this.body =
+                    this.body +
                     [
-                        '/__FOXMAN__CLIENT__/js/builtin/eventbus.js',
-                        '/__FOXMAN__CLIENT__/js/builtin/websocket-connector.js',
-                        '/__FOXMAN__CLIENT__/js/builtin/eval.js'
+                        '/__FOXMAN_CLIENT__/js/builtin/eventbus.js',
+                        '/__FOXMAN_CLIENT__/js/builtin/websocket-connector.js',
+                        '/__FOXMAN_CLIENT__/js/builtin/eval.js'
                     ]
                         .map(
                             _script =>
@@ -87,11 +114,12 @@ class Server {
 
         // inject scripts
         app.use(function*(next) {
-            if (/text\/html/ig.test(this.type)) {
-                this.body = this.body +
+            if (/text\/html/gi.test(this.type)) {
+                this.body =
+                    this.body +
                     _injectedScripts
                         .map(script => {
-                            return script.condition(this.request)
+                            return (script.condition ? script.condition(this.request): true)
                                 ? `<script type="text/javascript" src="${script.src}"></script>`
                                 : '';
                         })
@@ -100,15 +128,17 @@ class Server {
             yield next;
         });
 
-        configureStatics({statics, app});
+        configureStatics({ statics, app });
+
+        this.serve('__FOXMAN_CLIENT__', path.join(__dirname, 'client'));
     }
 
     use(middleware) {
         this._middlewares.push(middleware(this));
     }
 
-    injectScript({condition, src}) {
-        this._injectedScripts.push({condition, src});
+    injectScript({ condition, src }) {
+        this._injectedScripts.push({ condition, src });
     }
 
     // only eval for one time
@@ -133,21 +163,47 @@ class Server {
         });
     }
 
+    livereload(url) {
+        const wss = this.wss;
+
+        if (wss) {
+            this.wss.broadcast({
+                type: 'livereload',
+                payload: url
+            });
+        }
+    }
+
+    serve(prefix, dirname) {
+        configureStatics({
+            statics: [
+                {
+                    prefix: string.ensureLeadingSlash(prefix),
+                    dir: dirname,
+                    maxAge: 31536000
+                }
+            ],
+            app: this.app
+        });
+    }
+
     start() {
         this.prepare();
-        const {port, https} = this.serverOptions;
+        const { port, secure } = this.serverOptions;
         const callback = this.app.callback();
 
-        if (https) {
-            const httpOptions = {
-                key: fs.readFileSync(
-                    path.resolve(__dirname, 'crt', 'localhost.key')
-                ),
-                cert: fs.readFileSync(
-                    path.resolve(__dirname, 'crt', 'localhost.crt')
-                )
-            };
-            this.serverApp = http2.createServer(httpOptions, callback);
+        if (secure) {
+            this.serverApp = http2.createServer(
+                {
+                    key: fs.readFileSync(
+                        path.resolve(__dirname, 'certificate', 'localhost.key')
+                    ),
+                    cert: fs.readFileSync(
+                        path.resolve(__dirname, 'certificate', 'localhost.crt')
+                    )
+                },
+                callback
+            );
         } else {
             this.serverApp = http.createServer(callback);
         }
@@ -156,7 +212,7 @@ class Server {
         this.wss = buildWebSocket(this.serverApp);
         this.wss.on('connection', ws => {
             ws.on('message', message => {
-                console.log('received: %s', message);
+                logger.info('received: %s', message);
             });
 
             const waitForSending = this._waitForSending;
@@ -169,7 +225,9 @@ class Server {
         });
 
         const tips = `Server build successfully on ${this.https ? 'https' : 'http'}://127.0.0.1:${port}/`;
-        util.log(tips);
+        logger.newline();
+        logger.say(tips);
+
         notify({
             title: 'Run successfully',
             msg: tips

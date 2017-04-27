@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-server",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "",
   "main": "lib/index.js",
   "scripts": {},
@@ -8,12 +8,13 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@foxman/helpers": "^0.1.6",
+    "@foxman/helpers": "^0.1.8",
+    "@foxman/engine-freemarker": "^0.1.0",
     "http2": "^3.3.6",
     "koa": "^1.4.0",
     "koa-bodyparser": "^2.5.0",
     "koa-ejs": "^3.0.0",
-    "koa-sdf": "1.0.0",
+    "koa-sdf": "1.1.0-0",
     "path-to-regexp": "^1.5.3",
     "ws": "^2.2.3"
   }

@@ -2,16 +2,14 @@
 
 (function() {
     var not_support = document.createElement('div');
-    not_support.style.cssText = 'position:fixed;top:0;left:0;right:0;background:red;color:white;line-height:30px;text-align:center;';
+    not_support.style.cssText =
+        'position:fixed;top:0;left:0;right:0;background:red;color:white;line-height:30px;text-align:center;';
     not_support.innerHTML = "Your browser doesn't support WebSocket";
     if (!window.WebSocket) {
         document.body.appendChild(not_support);
-        setTimeout(
-            function() {
-                document.body.removeChild(not_support);
-            },
-            3000
-        );
+        setTimeout(function() {
+            document.body.removeChild(not_support);
+        }, 3000);
         return;
     }
 

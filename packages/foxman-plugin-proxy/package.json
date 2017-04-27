@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-proxy",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "",
   "main": "lib/index.js",
   "scripts": {},
@@ -8,7 +8,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@foxman/helpers": "^0.1.6",
+    "@foxman/helpers": "^0.1.8",
     "http-proxy": "^1.15.2"
   }
 }

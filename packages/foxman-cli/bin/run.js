@@ -1,48 +1,92 @@
-const app = require('@foxman/core');
+const Core = require('@foxman/core');
 const Proxy = require('@foxman/plugin-proxy');
 const Livereload = require('@foxman/plugin-livereload');
 const Processor = require('@foxman/plugin-processor');
-const Watch = require('@foxman/plugin-watch');
+const Watcher = require('@foxman/plugin-watcher');
 const Server = require('@foxman/plugin-server');
+const VconsolePlugin = require('@foxman/plugin-vconsole');
 
-module.exports = config => {
-    app.use(new Watch(config.watch));
+module.exports = ({
+        port,
+        secure,
+        statics,
+        viewRoot,
+        routes,
+        watch,
+        syncData,
+        asyncData,
+        engine,
+        engineConfig,
+        processors,
+        plugins,
+        nei,
+        proxy,
+        argv,
+        livereload,
+        extension
+    }) => {
+    
+    if (argv.port) {
+        port = parseInt(argv.port);
+    }
+    
+    const core = new Core();
+    
+    core.use(new Watcher(watch));
 
-    app.use(new Server(config.server));
-
-    app.use(new Livereload());
-
-    app.use(
-        new Processor({
-            processors: config.processors
+    core.use(
+        new Server({
+            port,
+            secure,
+            statics,
+            routes,
+            engine,
+            engineConfig,
+            extension,
+            viewRoot,
+            syncData,
+            asyncData
         })
     );
 
-    if (config.nei) {
-        const VconsolePlugin = require('@foxman/plugin-nei');
-        app.use(
-            new VconsolePlugin(
-                Object.assign(config.nei, {
-                    update: config.argv.update
+    core.use(
+        new Livereload({
+            statics,
+            extension,
+            viewRoot,
+            syncData,
+            asyncData,
+            livereload
+        })
+    );
+
+    core.use(
+        new Processor({
+            processors
+        })
+    );
+
+    if (nei) {
+        const NEIPlugin = require('@foxman/plugin-nei');
+        core.use(
+            new NEIPlugin(
+                Object.assign(nei, {
+                    update: argv.update
                 })
             )
         );
     }
 
-    // Outer Plugins
-    app.use(config.plugins);
+    core.use(plugins);
 
-    if (config.server.debugTool) {
-        const VconsolePlugin = require('@foxman/plugin-vconsole');
-        app.use(new VconsolePlugin());
-    }
+    core.use(new VconsolePlugin());
 
-    app.use(
+    core.use(
         new Proxy({
-            proxyConfig: config.proxy,
-            proxyServerName: config.argv.proxy
+            proxies: proxy,
+            proxyName: argv.proxy
         })
     );
 
-    app.run();
+    core.start();
 };

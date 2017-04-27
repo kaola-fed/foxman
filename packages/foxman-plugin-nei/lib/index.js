@@ -1,6 +1,6 @@
 const path = require('path');
-const {util, consts} = require('@foxman/helpers');
-const {DIR, SYNC} = consts.DispatherTypes;
+const { string, consts } = require('@foxman/helpers');
+const { DIR, SYNC } = consts.DispatherTypes;
 const {
     getMockConfig,
     writeNEIConfig,
@@ -10,23 +10,38 @@ const {
 } = require('./functions');
 
 const FROM = 'NEI';
-/**
- * Nei 插件
- */
+
 class NEISyncPlugin {
+    name() {
+        return 'nei';
+    }
+
+    dependencies() {
+        return ['server'];
+    }
+
+    service() {
+        return {};
+    }
+
     constructor(options) {
         this.NEIInfo = init(options);
     }
 
-    init(serverPlugin) {
-        this.server = serverPlugin.server;
-        const {update} = this.NEIInfo;
+    init({ service, getter }) {
+        const { use, registerRouterNamespace } = service('server');
 
-        this.updateNEIDataProxy({update});
+        this.$use = use;
+        this.$registerRouterNamespace = registerRouterNamespace;
+        this.$serverOptions = getter('server');
+
+        const { update } = this.NEIInfo;
+
+        this.updateNEIDataProxy({ update });
         this.registerMiddleware();
     }
 
-    updateNEIDataProxy({update}) {
+    updateNEIDataProxy({ update }) {
         if (update) {
             this.syncNEIData();
         } else {
@@ -35,12 +50,11 @@ class NEISyncPlugin {
     }
 
     registerMiddleware() {
-        const server = this.server;
         const genCommonPath = this.genCommonPath.bind(this);
         const genNeiApiUrl = this.genNeiApiUrl.bind(this);
 
         // update function
-        server.use(
+        this.$use(
             () =>
                 function*(next) {
                     const requestPath = this.request.path;
@@ -52,16 +66,14 @@ class NEISyncPlugin {
                 }
         );
 
-        server.use(
+        this.$use(
             () =>
                 function*(next) {
-                    const {dispatcher = {}} = this;
-                    const {router = false, type, filePath} = dispatcher;
-                    const {from} = router;
+                    const { dispatcher = {} } = this;
+                    const { router = false, type, filePath } = dispatcher;
+                    const { from } = router;
 
-                    if (
-                        type === DIR || !router || from !== FROM
-                    ) {
+                    if (type === DIR || !router || from !== FROM) {
                         return yield next;
                     }
 
@@ -80,7 +92,7 @@ class NEISyncPlugin {
     }
 
     useLocalData() {
-        const {serverConfigFile, NEIRoute} = this.NEIInfo;
+        const { serverConfigFile, NEIRoute } = this.NEIInfo;
         if (!serverConfigFile) {
             return this.syncNEIData();
         }
@@ -89,7 +101,7 @@ class NEISyncPlugin {
         this.updateRoutes(require(NEIRoute));
     }
 
-    setMock({mockApi, mockTpl}) {
+    setMock({ mockApi, mockTpl }) {
         Object.assign(this.NEIInfo, {
             mock: {
                 api: mockApi,
@@ -103,17 +115,17 @@ class NEISyncPlugin {
     }
 
     getNeiRoutes() {
-        const {NEIRoute} = this.NEIInfo;
+        const { NEIRoute } = this.NEIInfo;
         delete require.cache[NEIRoute];
         return require(NEIRoute);
     }
 
     syncNEIData() {
-        const {key, basedir} = this.NEIInfo;
+        const { key, basedir } = this.NEIInfo;
 
         return this.pending(end => {
             return require('./NEISync')
-                .run({key, basedir})
+                .run({ key, basedir })
                 .then(config => this.getUpdate(config))
                 .then(routes => {
                     this.updateRoutes(routes);
@@ -126,11 +138,11 @@ class NEISyncPlugin {
     }
 
     getUpdate(config) {
-        const {routes, mockApi, mockTpl} = getMockConfig(config);
+        const { routes, mockApi, mockTpl } = getMockConfig(config);
         const formatR = formatRoutes(routes);
         const getFilePath = this.genCommonPath.bind(this);
 
-        this.setMock({mockApi, mockTpl});
+        this.setMock({ mockApi, mockTpl });
         writeNEIConfig(this.NEIInfo, formatR);
 
         return updateLocalFiles(formatR, getFilePath).then(() => {
@@ -139,8 +151,6 @@ class NEISyncPlugin {
     }
 
     updateRoutes(routers) {
-        const server = this.server;
-
         const addNEIMark = routers => {
             return routers.map(router => {
                 return Object.assign(
@@ -152,34 +162,25 @@ class NEISyncPlugin {
             });
         };
 
-        server.registerRouterNamespace('nei', addNEIMark(routers));
+        this.$registerRouterNamespace('nei', addNEIMark(routers));
     }
 
-    genCommonPath({sync, filePath}) {
-        const {
-            divideMethod,
-            syncDataMatch,
-            asyncDataMatch
-        } = this.server.serverOptions;
+    genCommonPath({ sync, filePath }) {
+        const { syncDataMatch, asyncDataMatch } = this.$serverOptions;
 
         if (sync) {
-            return syncDataMatch(util.jsonPathResolve(filePath));
+            return syncDataMatch(string.jsonPathResolve(filePath));
         }
 
-        if (!divideMethod) {
-            filePath = filePath.replace(
-                /(GET|DELETE|HEAD|PATCH|POST|PUT)\//i,
-                ''
-            );
-        }
+        filePath = filePath.replace(/(GET|DELETE|HEAD|PATCH|POST|PUT)\//i, '');
 
         return asyncDataMatch(
-            util.jsonPathResolve(filePath.replace(/\/data/g, ''))
+            string.jsonPathResolve(filePath.replace(/\/data/g, ''))
         );
     }
 
-    genNeiApiUrl({sync, filePath}) {
-        const {api, tpl} = this.getMock();
+    genNeiApiUrl({ sync, filePath }) {
+        const { api, tpl } = this.getMock();
         return path.resolve(sync ? tpl : api, filePath + '.json');
     }
 }

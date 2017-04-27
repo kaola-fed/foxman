@@ -1,31 +1,47 @@
-const {dispatcher} = require('./Processor');
+const { dispatcher } = require('./Processor');
 const ReloaderService = require('./ReloaderService');
+const ResourcesManager = require('./ResourcesManager');
 
 class ProcessorPlugin {
-    constructor({processors}) {
+    name() {
+        return 'processor';
+    }
+
+    dependencies() {
+        return ['server', 'watcher', 'livereload'];
+    }
+
+    service() {
+        return {};
+    }
+
+    constructor({ processors }) {
         this.processors = processors;
         if (undefined === processors) {
-            this.enable = false;
+            this.$options = { enable: false };
         }
     }
 
-    init(serverPlugin, watcherPlugin, livereloadPlugin) {
-        const processors = this.processors;
-        const server = serverPlugin.server;
-        const watcher = watcherPlugin.watcher;
-        const reloader = livereloadPlugin.reloader;
+    init({ service }) {
+        const use = service('server.use');
+        const createWatcher = service('watcher.create');
+        const reload = service('livereload.reload');
+        const processors = this.processors || [];
 
-        const reloaderService = ReloaderService({
-            watcher,
-            reloader
+        processors.forEach(processor => {
+            const resourcesManager = new ResourcesManager();
+            use(
+                dispatcher({
+                    processor,
+                    resourcesManager,
+                    reloaderService: new ReloaderService({
+                        createWatcher,
+                        resourcesManager,
+                        reload
+                    })
+                })
+            );
         });
-
-        server.use(
-            dispatcher({
-                processors,
-                reloaderService
-            })
-        );
     }
 }
 

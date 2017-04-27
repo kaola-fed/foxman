@@ -1,6 +1,6 @@
-const {util, fileUtil} = require('@foxman/helpers');
+const { string, fs } = require('@foxman/helpers');
+const logger = require('./logger');
 const path = require('path');
-const fs = require('fs');
 const os = require('os');
 const globule = require('globule');
 const _ = require('util');
@@ -21,39 +21,21 @@ function getMockConfig(config) {
     return require(neiConfigRoot);
 }
 
-function writeNEIConfig({NEIRoute}, formatR) {
-    fileUtil.writeFile(
+function writeNEIConfig({ NEIRoute }, formatR) {
+    return fs.writeFile(
         NEIRoute,
-        `module.exports = ${_.inspect(formatR, {maxArrayLength: null})}`,
-        () => {},
-        e => util.error(e)
+        `module.exports = ${_.inspect(formatR, { maxArrayLength: null })}`
     );
 }
 
 function updateLocalFiles(routes = [], getFilePath) {
     return Promise.all(
-        routes.map(
-            route =>
-                new Promise(resolve => {
-                    /**
-             * 本地路径（非nei）
-             */
-                    const dataPath = getFilePath(route);
-                    fs.stat(dataPath, error => {
-                        /**
-                 * 文件不存在或者文件内容为空
-                 */
-                        if (error) {
-                            util.log('touch file: ' + dataPath);
-                            fileUtil
-                                .writeUnExistsFile(dataPath, '')
-                                .then(resolve, resolve);
-                            return 0;
-                        }
-                        resolve();
-                    });
-                })
-        )
+        routes.map(route => {
+            return fs.stat(getFilePath(route)).catch(() => {
+                logger.info('Touched file: ' + getFilePath(route));
+                return fs.write(getFilePath(route));
+            });
+        })
     );
 }
 
@@ -79,7 +61,7 @@ function formatRoutes(rules) {
 
         return {
             method,
-            url: util.appendHeadBreak(url),
+            url: string.ensureLeadingSlash(url),
             sync: isSync(rule)
         };
     }
@@ -93,12 +75,12 @@ function formatRoutes(rules) {
     });
 }
 
-function init({key, update = false}) {
+function init({ key, update = false }) {
     const basedir = path.resolve(os.homedir(), 'localMock', key);
     const NEIRoute = path.resolve(basedir, 'nei.route.js');
     const [serverConfigFile] = globule.find(
         path.resolve(basedir, 'nei**/server.config.js')
     );
 
-    return {key, update, basedir, NEIRoute, serverConfigFile};
+    return { key, update, basedir, NEIRoute, serverConfigFile };
 }

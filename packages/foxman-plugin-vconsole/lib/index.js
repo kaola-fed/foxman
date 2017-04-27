@@ -1,10 +1,29 @@
+const path = require('path');
+
 class VconsolePlugin {
+    name() {
+        return 'vconsole';
+    }
+
+    dependencies() {
+        return ['server'];
+    }
+
+    service() {
+        return {};
+    }
+
     constructor() {}
 
-    init(serverPlugin) {
-        serverPlugin.server.injectScript({
-            condition: request => request.query.debug == 1,
-            src: `/__FOXMAN__CLIENT__/js/vconsole.min.js`
+    init({ service }) {
+        const injectScript = service('server.injectScript');
+        const serve = service('server.serve');
+
+        serve('__VCONSOLE_CLIENT__', path.join(__dirname, '../static/'));
+
+        injectScript({
+            condition: request => typeof request.query.vconsole !== 'undefined',
+            src: `/__VCONSOLE_CLIENT__/vconsole.min.js`
         });
     }
 }

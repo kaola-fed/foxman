@@ -1,0 +1,29 @@
+{
+    "manifest_version": 2,
+
+    "name": "Foxman DevTools",
+    "description": "A chrome extension for foxman",
+    "version": "0.1",
+
+    "browser_action": {
+        "default_icon": "media/icon.png"
+    },
+
+    "icons": {
+        "16": "media/icon.png",
+        "48": "media/icon.png",
+        "128": "media/icon.png"
+    },
+
+    "devtools_page": "devtools.html",
+
+    "background": {
+        "scripts": [ "background.js" ]
+    },
+
+    "permissions": [ "<all_urls>" ],
+
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+
+    "web_accessible_resources": []
+}

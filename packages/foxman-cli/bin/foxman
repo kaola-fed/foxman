@@ -1,19 +1,19 @@
 #!/usr/bin/env node
 const yargs = require('yargs');
 const path = require('path');
+const { system } = require('@foxman/helpers');
 const updateNotifier = require('update-notifier');
 const checkNodeVersion = require('./check-node-version');
 const checkFoxmanVersion = require('./check-foxman-version');
 const checkFoxmanConfig = require('./check-foxman-config');
-const welcome = require('./welcome');
 const run = require('./run');
 const pkg = require('../package.json');
 
 if (!checkNodeVersion()) {
-    process.exit(1);
+    system.exit(1);
 }
 
-updateNotifier({pkg}).notify();
+updateNotifier({ pkg }).notify();
 
 const argv = yargs
     .usage('Usage: foxman [options]')
@@ -38,24 +38,18 @@ const argv = yargs
     .help('H')
     .alias('H', 'help')
     .alias('H', 'h')
-    .example('foxman -C ./config.json -P local -U').argv;
+    .example('foxman --config ./config.js --proxy local --update').argv;
 
 const configPath = path.join(process.cwd(), argv.config);
 
 if (!checkFoxmanConfig(configPath)) {
-    process.exit(1);
+    system.exit(1);
 }
 
 const config = require(configPath);
 
-if (argv.port) {
-    config.server.port = parseInt(argv.port);
-}
-
 if (!checkFoxmanVersion(config.upgrade)) {
-    process.exit(1);
+    system.exit(1);
 }
 
-welcome();
-
-run(Object.assign({}, config, {argv, configPath}));
+run(Object.assign({}, config, { argv, configPath }));

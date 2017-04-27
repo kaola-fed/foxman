@@ -11,7 +11,15 @@
     "jest": "jest --no-cache",
     "init-contributors": "all-contributors init",
     "add-contributor": "all-contributors add",
-    "generate-contributors": "all-contributors generate"
+    "generate-contributors": "all-contributors generate",
+    "prettier": "prettier-eslint \"packages/**/*.js\" --prettier.single-quote=true es6 --write",
+    "precommit": "lint-staged",
+    "commit": "git-cz"
+  },
+  "lint-staged": {
+    "packages/**/*.js": [
+      "eslint --quiet"
+    ]
   },
   "jest": {
     "collectCoverage": true,
@@ -19,7 +27,8 @@
     "collectCoverageFrom": [
       "packages/**/*.{js}",
       "!**/node_modules/**",
-      "!**/foxman-plugin-server/lib/client/**"
+      "!**/foxman-plugin-server/lib/client/**",
+      "!**/foxman-plugin-vconsole/static/**"
     ],
     "moduleFileExtensions": [
       "js"
@@ -28,9 +37,19 @@
   },
   "devDependencies": {
     "all-contributors-cli": "^4.1.0",
+    "commitizen": "^2.9.6",
+    "cz-conventional-changelog": "^2.0.0",
     "eslint": "^3.19.0",
+    "husky": "^0.13.3",
     "jest": "^19.0.2",
-    "lerna": "^2.0.0-rc.1"
+    "lerna": "^2.0.0-rc.1",
+    "lint-staged": "^3.4.0",
+    "prettier-eslint-cli": "^3.4.2"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
