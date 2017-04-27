@@ -16,6 +16,10 @@ docute.init( {
                 title: 'Plugins',
                 path: '/plugins'
             },
+            {
+                title: 'Processors',
+                path: '/processors'
+            },
         ]
     }
 } );
