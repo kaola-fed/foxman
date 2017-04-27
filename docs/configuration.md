@@ -2,7 +2,7 @@
 
 ### port
 
-Type: `Number`, `String`
+Type: `Number` `String`
 
 foxman运行的端口
 
@@ -17,11 +17,13 @@ Type: `Boolean`
 Type: `Array`
 
 ```js
-{
-    dir: '', // 本地路径
-    prefix: '', // 访问路径
-    maxAge: 365 * 24 * 60 * 60, // 可选，过期时间
-},
+[
+    {
+        dir: '', // 本地路径
+        prefix: '', // 访问路径
+        maxAge: 365 * 24 * 60 * 60, // 可选，过期时间
+    }
+]
 ```
 
 静态目录，你可以使用prefix对静态目录进行url rewrite
@@ -65,8 +67,8 @@ module.exports = Engine;
 
 * **parse** 接收 filepath 和 data，返回一个 Promise
 
-<div class="tip">
-	实际上你也可以自己实现一个engine类，只要实现parse方法即可(但是foxman v1版本暂不支持自定义渲染引擎)
+<div class="tips">
+    实际上你也可以自己实现一个engine类，只要实现parse方法即可(但是foxman v1版本暂不支持自定义渲染引擎)
 </div>
 
 ### syncData
