@@ -1,6 +1,4 @@
-# Foxman 常用插件
-
-* [foxman-plugin-route-display](https://github.com/foxman-plugins/RouteDisplay)
-* [@foxman/plugin-forward](https://github.com/foxman-plugins/Forward)
-* [foxman-plugin-mock-control](https://github.com/foxman-plugins/MockControl)
-* [foxman-plugin-webpack-dev-server](https://github.com/foxman-plugins/WebpackDevServer)
+[@foxman/plugin-route-display](@foxman/plugin-route-display)
+[@foxman/plugin-forward](https://npm.im/@foxman/plugin-forward)
+[@foxman/plugin-mock-control](@foxman/plugin-mock-control)
+[@foxman/plugin-automount](https://npm.im/@foxman/processor-autoprefixer)
