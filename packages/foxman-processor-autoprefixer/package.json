@@ -1,0 +1,15 @@
+{
+  "name": "@foxman/processor-autoprefixer",
+  "version": "1.0.0-0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ImHype",
+  "license": "MIT",
+  "dependencies": {
+    "autoprefixer": "^6.7.7",
+    "postcss": "^5.2.16"
+  }
+}

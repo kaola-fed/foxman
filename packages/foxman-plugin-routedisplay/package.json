@@ -1,0 +1,19 @@
+{
+  "name": "@foxman/plugin-route-display",
+  "version": "1.0.0-1",
+  "description": "route-display",
+  "main": "index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/foxman-plugins/RouteDisplay.git"
+  },
+  "author": "June",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/foxman-plugins/RouteDisplay/issues"
+  },
+  "homepage": "https://github.com/foxman-plugins/RouteDisplay#readme",
+  "devDependencies": {}
+}

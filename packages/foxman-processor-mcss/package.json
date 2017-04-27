@@ -1,0 +1,15 @@
+{
+  "name": "@foxman/processor-mcss",
+  "version": "1.0.0-0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ImHype",
+  "license": "MIT",
+  "dependencies": {
+    "chalklog": "^1.1.2",
+    "mcss": "^0.5.1"
+  }
+}

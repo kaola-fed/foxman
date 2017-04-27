@@ -1,0 +1,8 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "",
+  "devDependencies": {
+    "foxman-plugin-mock-control": "^1.0.0"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "@foxman/plugin-mock-control",
+  "version": "1.0.0-0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "June",
+  "license": "MIT",
+  "dependencies": {
+    "json5": "^0.5.1",
+    "@foxman/helpers": "^1.0.0-0"
+  }
+}
