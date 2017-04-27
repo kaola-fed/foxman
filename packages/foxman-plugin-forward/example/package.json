@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "name": "foxman-example",
+  "version": "0.0.0",
+  "description": "foxman example",
+  "devDependencies": {},
+  "license": "MIT",
+  "dependencies": {
+  }
+}
