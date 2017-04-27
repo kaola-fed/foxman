@@ -29,10 +29,11 @@
       "profile": "https://github.com/fengzilong",
       "contributions": [
         "code",
-        "doc",
-        "infra",
         "plugin",
-        "test"
+        "infra",
+        "doc",
+        "test",
+        "bug"
       ]
     }
   ]

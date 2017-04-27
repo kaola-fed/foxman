@@ -132,12 +132,7 @@ module.exports = Mcss
 
 ### Proxy
 
-#### host@String(必需项)
-
-> 用以发送给测试环境时带在 request 头上，给 nginx 分发用
-
-#### service@object(必需项)
-> service 的作用是接收到当浏览器的同步请求时，如何转发到远端 JSON url 上
+> host会作为headers中的一项传递给后端，用于nginx分发
 
 ```js
 proxy:  [
@@ -165,6 +160,7 @@ foxman 在处理到同步请求时，会将请求进行转发，并在 headers �
 ```
 
 **改造服务端**
+
 拦截请求的 'X-Special-Proxy-Header' 字段，如果为 'foxman' 则将 页面 Model (MVC中的M)转成 JSON 后直接返回。
 
 ### NEI

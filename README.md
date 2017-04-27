@@ -86,12 +86,12 @@ $ foxman
 
 ## Screenshot
 
-<img width="440px" src="media/screenshot.jpg" alt="Screenshot" />
+<img width="440px" src="https://raw.githubusercontent.com/kaola-fed/foxman/master/media/screenshot.jpg" alt="Screenshot" />
 
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-| [<img src="https://avatars3.githubusercontent.com/u/10825163?v=3" width="80px;"/><br /><sub>君羽</sub>](https://github.com/imhype)<br />[💻](https://github.com/kaola-fed/foxman/commits?author=ImHype) 🔌 🚇 [📖](https://github.com/kaola-fed/foxman/commits?author=ImHype) [⚠️](https://github.com/kaola-fed/foxman/commits?author=ImHype)<br /> [🐛](https://github.com/kaola-fed/foxman/issues?q=author%3AImHype) 💡 | [<img src="https://avatars3.githubusercontent.com/u/9125255?v=3" width="80px;"/><br /><sub>MO</sub>](https://github.com/fengzilong)<br />[💻](https://github.com/kaola-fed/foxman/commits?author=fengzilong) [📖](https://github.com/kaola-fed/foxman/commits?author=fengzilong) 🚇 🔌<br /> [⚠️](https://github.com/kaola-fed/foxman/commits?author=fengzilong) |
+| [<img src="https://avatars3.githubusercontent.com/u/10825163?v=3" width="80px;"/><br /><sub>君羽</sub>](https://github.com/imhype)<br />[💻](https://github.com/kaola-fed/foxman/commits?author=ImHype "Code") [🔌](#plugin-ImHype "Plugin/utility libraries") [🚇](#infra-ImHype "Infrastructure (Hosting, Build-Tools, etc)") [📖](https://github.com/kaola-fed/foxman/commits?author=ImHype "Documentation") [⚠️](https://github.com/kaola-fed/foxman/commits?author=ImHype "Tests")<br /> [🐛](https://github.com/kaola-fed/foxman/issues?q=author%3AImHype "Bug reports") [💡](#example-ImHype "Examples") | [<img src="https://avatars3.githubusercontent.com/u/9125255?v=3" width="80px;"/><br /><sub>MO</sub>](https://github.com/fengzilong)<br />[💻](https://github.com/kaola-fed/foxman/commits?author=fengzilong "Code") [🔌](#plugin-fengzilong "Plugin/utility libraries") [🚇](#infra-fengzilong "Infrastructure (Hosting, Build-Tools, etc)") [📖](https://github.com/kaola-fed/foxman/commits?author=fengzilong "Documentation") [⚠️](https://github.com/kaola-fed/foxman/commits?author=fengzilong "Tests")<br /> [🐛](https://github.com/kaola-fed/foxman/issues?q=author%3Afengzilong "Bug reports") |
 | :---: | :---: |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
