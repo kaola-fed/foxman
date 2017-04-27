@@ -7,31 +7,30 @@ const Server = require('@foxman/plugin-server');
 const VconsolePlugin = require('@foxman/plugin-vconsole');
 
 module.exports = ({
-        port,
-        secure,
-        statics,
-        viewRoot,
-        routes,
-        watch,
-        syncData,
-        asyncData,
-        engine,
-        engineConfig,
-        processors,
-        plugins,
-        nei,
-        proxy,
-        argv,
-        livereload,
-        extension
-    }) => {
-    
+    port,
+    secure,
+    statics,
+    viewRoot,
+    routes,
+    watch,
+    syncData,
+    asyncData,
+    engine,
+    engineConfig,
+    processors,
+    plugins,
+    nei,
+    proxy,
+    argv,
+    livereload,
+    extension
+}) => {
     if (argv.port) {
         port = parseInt(argv.port);
     }
-    
+
     const core = new Core();
-    
+
     core.use(new Watcher(watch));
 
     core.use(

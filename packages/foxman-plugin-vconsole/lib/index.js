@@ -9,10 +9,6 @@ class VconsolePlugin {
         return ['server'];
     }
 
-    service() {
-        return {};
-    }
-
     constructor() {}
 
     init({ service }) {

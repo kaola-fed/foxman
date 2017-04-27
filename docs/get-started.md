@@ -18,7 +18,7 @@
 安装 node 和 npm，详细过程参考官网 https://nodejs.org
 
 <p class="warning">
-6.4.0 以下版本的 Node.js ，不在 Foxman 的版本支持列表里。最新版本 Node.js 支持会第一时间跟进，支持后更新支持列表。
+foxman 不支持v6.4.0以下的Node.js
 </p>
 
 - Ubuntu 用户使用 `apt-get` 安装 node 后，安装的程序名叫 `nodejs`，需要软链成 `node`

@@ -1,7 +1,7 @@
 const api = require('./api');
 
 module.exports = class DevtoolsPlugin {
-    constructor( options ) {
+    constructor(options) {
         this.options = options;
     }
 
@@ -10,7 +10,7 @@ module.exports = class DevtoolsPlugin {
     }
 
     init({ service }) {
-        const use = service( 'server.use' );
-        use( api );
+        const use = service('server.use');
+        use(api);
     }
 };

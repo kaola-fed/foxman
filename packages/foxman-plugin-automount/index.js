@@ -2,15 +2,11 @@ const globule = require('globule');
 const path = require('path');
 
 class AutomountPlugin {
-    constructor({
-        syncDataMatch,
-        asyncDataMatch,
-        methodGetter,
-        tplUrlMap = {}
-    } = {}) {
-
+    constructor(
+        { syncDataMatch, asyncDataMatch, methodGetter, tplUrlMap = {} } = {}
+    ) {
         const defaultUrlGetter = filePath => {
-            return '/' + filePath + '.html'; 
+            return '/' + filePath + '.html';
         };
         const defaultMethodGetter = () => {
             return 'get';
@@ -22,29 +18,37 @@ class AutomountPlugin {
         this.tplUrlMap = tplUrlMap;
     }
 
-    init({service, getter}) {
+    init({ service, getter }) {
         const createWatcher = service('watcher.create');
-        const registerRouterNamespace = service('server.registerRouterNamespace');
-        const {extension, viewRoot, asyncData} = getter('server');
+        const registerRouterNamespace = service(
+            'server.registerRouterNamespace'
+        );
+        const { extension, viewRoot, asyncData } = getter('server');
 
         this.extension = {
             tpl: extension,
-            data: 'json' 
+            data: 'json'
         };
 
-        this.initUrlTplMap({tplUrlMap: this.tplUrlMap});
+        this.initUrlTplMap({ tplUrlMap: this.tplUrlMap });
 
         this.initRouterUpdater({
-            viewRoot, asyncData, 
-            registerRouterNamespace, createWatcher
+            viewRoot,
+            asyncData,
+            registerRouterNamespace,
+            createWatcher
         });
     }
 
     initRouterUpdater({
-        viewRoot, asyncData, 
-        registerRouterNamespace, createWatcher
+        viewRoot,
+        asyncData,
+        registerRouterNamespace,
+        createWatcher
     }) {
-        const syncRouterWatcher = createWatcher(this.formatPattern(viewRoot, true));
+        const syncRouterWatcher = createWatcher(
+            this.formatPattern(viewRoot, true)
+        );
         const asyncRouterWatcher = createWatcher(this.formatPattern(asyncData));
 
         const SYNCROUTER_NAMESPACE = 'automountSyncRouters';
@@ -53,9 +57,11 @@ class AutomountPlugin {
         const getSyncRouters = () => this.initRouters(viewRoot, true);
         const getAsyncRouters = () => this.initRouters(asyncData, false);
 
-        const updateSyncRouters = () => registerRouterNamespace(SYNCROUTER_NAMESPACE, getSyncRouters());
-        const updateAsyncRouters = () => registerRouterNamespace(ASYNCROUTER_NAMESPACE, getAsyncRouters());
-        
+        const updateSyncRouters = () =>
+            registerRouterNamespace(SYNCROUTER_NAMESPACE, getSyncRouters());
+        const updateAsyncRouters = () =>
+            registerRouterNamespace(ASYNCROUTER_NAMESPACE, getAsyncRouters());
+
         updateSyncRouters();
         updateAsyncRouters();
 
@@ -66,10 +72,8 @@ class AutomountPlugin {
         asyncRouterWatcher.on('unlink', updateAsyncRouters);
     }
 
-    initUrlTplMap({
-        tplUrlMap
-    }){
-        this.tplUrlMap = Object.keys(tplUrlMap).reduce((prev, url)=> {
+    initUrlTplMap({ tplUrlMap }) {
+        this.tplUrlMap = Object.keys(tplUrlMap).reduce((prev, url) => {
             const tpl = tplUrlMap[url] || '';
             const tplName = this.removeExtense(tpl, true);
 
@@ -89,38 +93,42 @@ class AutomountPlugin {
     }
 
     getExtense(sync) {
-        const {tpl, data} = this.extension;
-        const extense = sync ? tpl :data;
+        const { tpl, data } = this.extension;
+        const extense = sync ? tpl : data;
         return extense;
     }
 
     formatPattern(base, sync = false) {
-        const pattern = path.join(base, '**/**.'+ this.getExtense(sync));
+        const pattern = path.join(base, '**/**.' + this.getExtense(sync));
         return pattern;
     }
 
     initRouters(base, sync) {
         const formatPattern = this.formatPattern.bind(this);
         const files = globule.find(formatPattern(base, sync));
-        const methodGetter = this.methodGetter; 
-        const urlMatch = sync ? (filePath) => {
-            let url = this.tplUrlMap[filePath];
-            if (url) {
-                return url; 
+        const methodGetter = this.methodGetter;
+        const urlMatch = sync
+            ? filePath => {
+                let url = this.tplUrlMap[filePath];
+                if (url) {
+                    return url;
+                }
+                return this.syncDataMatch(filePath);
             }
-            return this.syncDataMatch(filePath);
-        }: this.asyncDataMatch;
+            : this.asyncDataMatch;
 
         const routers = files.reduce((prev, file) => {
-            const filePath = this.transformSep(this.removeExtense(path.relative(base, file), sync));
+            const filePath = this.transformSep(
+                this.removeExtense(path.relative(base, file), sync)
+            );
             let urls = urlMatch(filePath);
-           
-            (Array.isArray(urls) ? urls: [urls]).forEach(url => {
+
+            (Array.isArray(urls) ? urls : [urls]).forEach(url => {
                 prev.push({
-                    'method': methodGetter(filePath),
-                    'url': url,
-                    'sync': sync,
-                    'filePath': filePath
+                    method: methodGetter(filePath),
+                    url: url,
+                    sync: sync,
+                    filePath: filePath
                 });
             });
             return prev;
@@ -128,6 +136,5 @@ class AutomountPlugin {
 
         return routers;
     }
-
 }
 exports = module.exports = AutomountPlugin;
