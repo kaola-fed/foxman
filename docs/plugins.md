@@ -1,4 +1,4 @@
-[@foxman/plugin-route-display](@foxman/plugin-route-display)
-[@foxman/plugin-forward](https://npm.im/@foxman/plugin-forward)
-[@foxman/plugin-mock-control](@foxman/plugin-mock-control)
-[@foxman/plugin-automount](https://npm.im/@foxman/processor-autoprefixer)
+- [@foxman/plugin-route-display](@foxman/plugin-route-display)
+- [@foxman/plugin-forward](https://npm.im/@foxman/plugin-forward)
+- [@foxman/plugin-mock-control](@foxman/plugin-mock-control)
+- [@foxman/plugin-automount](https://npm.im/@foxman/processor-autoprefixer)
