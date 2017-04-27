@@ -1,5 +1,5 @@
 const path = require('path');
-const { string, consts } = require('@foxman/helpers');
+const { string, consts, fs } = require('@foxman/helpers');
 const { DIR, SYNC } = consts.DispatherTypes;
 const {
     getMockConfig,
@@ -82,10 +82,19 @@ class NEISyncPlugin {
                         filePath: filePath
                     };
 
-                    dispatcher.dataPath = [
-                        genNeiApiUrl(routeModel),
-                        genCommonPath(routeModel)
-                    ];
+                    try {
+                        yield fs.lstat(genCommonPath(routeModel));
+                        
+                        const content = yield fs.readFile(genCommonPath(routeModel));
+                        if (content === '') {
+                            throw new Error('local file is empty');
+                        }
+                    } catch (e) {
+                        dispatcher.dataPath = genNeiApiUrl(routeModel);
+                        return yield next;
+                    }
+                    
+                    dispatcher.dataPath = genCommonPath(routeModel);
                     yield next;
                 }
         );
