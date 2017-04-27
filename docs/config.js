@@ -1,7 +1,7 @@
 docute.init( {
     repo: 'kaola-fed/foxman',
     'edit-link': 'https://github.com/kaola-fed/foxman/blob/master/docs/',
-    home: 'https://raw.githubusercontent.com/kaola-fed/foxman/master/readme.md',
+    home: 'https://raw.githubusercontent.com/kaola-fed/foxman/master/README.md',
     nav: {
         default: [
             {
