@@ -4,10 +4,10 @@ test( 'is foxman plugin', () => {
 	var plugin = new DevtoolsPlugin();
 	expect(typeof plugin.init).toBe( 'function' );
 
+	let useMock;
 	const mock = jest.fn(function () {
-		return {
-			use: () => {},
-		};
+		useMock = jest.fn();
+		return useMock;
 	});
 
 	plugin.init( {
@@ -15,5 +15,7 @@ test( 'is foxman plugin', () => {
 	} );
 
 	expect( mock ).toHaveBeenCalled();
+	expect( useMock ).toHaveBeenCalled();
+
 	expect( typeof plugin.name() ).toBe( 'string' );
 } );
