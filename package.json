@@ -28,7 +28,9 @@
       "packages/**/*.{js}",
       "!**/node_modules/**",
       "!**/foxman-plugin-server/lib/client/**",
-      "!**/foxman-plugin-vconsole/static/**"
+      "!**/foxman-plugin-livereload/static/**",
+      "!**/foxman-plugin-vconsole/static/**",
+      "!packages/**/logger.js"
     ],
     "moduleFileExtensions": [
       "js"

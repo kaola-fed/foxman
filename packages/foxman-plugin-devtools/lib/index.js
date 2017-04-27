@@ -9,10 +9,6 @@ module.exports = class DevtoolsPlugin {
         return 'devtools';
     }
 
-    service() {
-        return {};
-    }
-
     init({ service }) {
         const use = service( 'server.use' );
         use( api );
