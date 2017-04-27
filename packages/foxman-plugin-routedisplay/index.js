@@ -23,7 +23,7 @@ class RouteDisplayPlugin {
             yield next;
         });
     }
-};
+}
 
 function ensureSlash(str) {
     str = String(str);

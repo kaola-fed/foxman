@@ -1,12 +1,12 @@
 const JSON5 = require('json5');
 const fs = require('fs');
-let {logger, path, typer} = require('@foxman/helpers')
+let {logger, path} = require('@foxman/helpers');
 
 logger = logger.createLogger('mock-control');
 function MockControl (options) {
     this.mapJS = options.mapJS || function (dataPath) {
         return dataPath.replace(/\.json$/, '.js');
-    }
+    };
 }
 
 MockControl.prototype.init = function ({getter, service}) {
@@ -46,7 +46,7 @@ MockControl.prototype.init = function ({getter, service}) {
                 delete require.cache[scriptPath];
                 const handler = require(scriptPath);
                 dispatcher.handler = () => {
-                    return new Promise((resolve, reject) => {
+                    return new Promise((resolve) => {
                         resolve(handler(data, request) || data);
                     });
                 };
@@ -56,12 +56,12 @@ MockControl.prototype.init = function ({getter, service}) {
                 }
             } catch (err) {
                 if (err.code !== 'MODULE_NOT_FOUND') {
-                    logger.error(err)
+                    logger.error(err);
                 }
             }
             
             yield next;
-        }
+        };
     }.bind(this));
 };
 

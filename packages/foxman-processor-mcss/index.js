@@ -40,8 +40,8 @@ class Mcss {
                         dependencies: Mcss.getDependencies(instance)
                     });
                 })
-                .fail(reject)
-        })
+                .fail(reject);
+        });
 
         return result;
     }
@@ -51,4 +51,4 @@ class Mcss {
     }
 }
 
-exports = module.exports = Mcss
+exports = module.exports = Mcss;

@@ -1,7 +1,5 @@
 const globule = require('globule');
 const path = require('path');
-const chalklog = require('chalklog');
-const log = new chalklog('Automount');
 
 class AutomountPlugin {
     constructor({
@@ -13,10 +11,10 @@ class AutomountPlugin {
 
         const defaultUrlGetter = filePath => {
             return '/' + filePath + '.html'; 
-        }
-        const defaultMethodGetter = filePath => {
+        };
+        const defaultMethodGetter = () => {
             return 'get';
-        }
+        };
 
         this.syncDataMatch = syncDataMatch || defaultUrlGetter;
         this.asyncDataMatch = asyncDataMatch || defaultUrlGetter;
@@ -87,7 +85,7 @@ class AutomountPlugin {
     }
 
     transformSep(filePath) {
-        return filePath.replace(/\\/g, '/')
+        return filePath.replace(/\\/g, '/');
     }
 
     getExtense(sync) {
@@ -132,4 +130,4 @@ class AutomountPlugin {
     }
 
 }
-exports = module.exports = AutomountPlugin
+exports = module.exports = AutomountPlugin;
