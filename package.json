@@ -34,8 +34,9 @@
       "!**/foxman-plugin-mockcontrol/**",
       "!**/foxman-plugin-routedisplay/**",
       "!**/foxman-plugin-automount/**",
-      "!**/foxman-processor-mcss/**",
+      "!**/foxman-plugin-webpackdevserver/**",
       "!**/foxman-processor-autoprefixer/**",
+      "!**/foxman-processor-mcss/**",
       
       "!packages/**/logger.js"
     ],
