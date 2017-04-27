@@ -97,7 +97,7 @@ $ foxman
 
 ## Credits
 
-`media/fox.jpg` is from internet
+`media/fox.jpg` is from Internet
 
 ## LICENSE
 
