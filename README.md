@@ -76,7 +76,7 @@ module.exports = {
 };
 ```
 
-[Dive into documentation](https://foxman.js.org/#/configuration) if you wanna get more configuration guides
+[Dive into documentation ⇗](https://foxman.js.org/#/configuration) if you wanna get more configuration guides
 
 ### 2. Run
 
