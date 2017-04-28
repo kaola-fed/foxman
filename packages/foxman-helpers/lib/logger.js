@@ -1,3 +1,4 @@
+const os = require('os');
 const Logger = require('chalklog');
 const parrotSay = require('parrotsay-api');
 
@@ -31,7 +32,11 @@ function createLogger(scope) {
         },
 
         say(text) {
-            return parrotSay(text).then(console.log).catch(console.error);
+            if ( os.platform() === 'win32' ) {
+                console.log( text );
+            } else {
+                parrotSay(text).then(console.log).catch(console.error);
+            }
         }
     };
 }
