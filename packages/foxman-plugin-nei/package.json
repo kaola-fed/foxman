@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-nei",
-  "version": "1.0.0-0",
+  "version": "1.0.0-2",
   "description": "",
   "main": "lib/index.js",
   "scripts": {},
