@@ -39,10 +39,19 @@ function readJSONs(filepaths) {
 }
 
 function readJSON(filepath) {
-    return fs.readJSONFile(filepath).catch(() => {
-        logger.warn(
-            `File '${path.shorten(filepath)}' is not found, so foxman will output empty object ({}).`
-        );
+    return fs.readJSONFile(filepath).catch((error) => {
+        if (error.code === 'ENOENT') {
+            logger.warn(
+                `File '${path.shorten(filepath)}' is not found, so foxman will output empty object ({}).`
+            );
+        } else {
+            logger.warn(
+                `File '${path.shorten(filepath)}' is parsed error:`
+            );
+            logger.warn(
+                error
+            );
+        }
         return {};
     });
 }
