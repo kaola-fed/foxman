@@ -33,7 +33,7 @@ function updateLocalFiles(routes = [], getFilePath) {
         routes.map(route => {
             return fs.stat(getFilePath(route)).catch(() => {
                 logger.info('Touched file: ' + getFilePath(route));
-                return fs.write(getFilePath(route));
+                return fs.write(getFilePath(route), '');
             });
         })
     );
