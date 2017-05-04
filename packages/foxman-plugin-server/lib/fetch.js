@@ -46,7 +46,7 @@ function readJSON(filepath) {
             );
         } else {
             logger.warn(
-                `File '${path.shorten(filepath)}' is parsed error:`
+                `File '${path.shorten(filepath)}' is not parsable, so foxman will output empty object ({}).`
             );
             logger.warn(
                 error
