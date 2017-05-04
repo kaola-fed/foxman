@@ -91,7 +91,7 @@ class NEISyncPlugin {
                         dispatcher.dataPath = genNeiApiUrl(routeModel);
                         return yield next;
                     }
-                    
+
                     dispatcher.dataPath = genCommonPath(routeModel);
                     yield next;
                 }

@@ -7,7 +7,9 @@ const WebpackHotMiddleware = require('koa-webpack-hot-middleware');
 const webpack = require('webpack');
 
 const typeOf = (obj, type) => {
-    return Object.prototype.toString.call(obj).toLowerCase().slice(8, -1) == type;
+    return (
+        Object.prototype.toString.call(obj).toLowerCase().slice(8, -1) == type
+    );
 };
 
 const addDevModule = entry => {
@@ -64,27 +66,27 @@ const validateWebpackConfig = webpackConfig => {
 };
 
 const getDevServerConfig = (webpackConfig, devServerConfig) => {
-    return Object.assign({
-        noInfo: false,  // display no info to console (only warnings and errors)
-        quiet: false,   // display nothing to the console
-        lazy: false,     // switch into lazy mode // that means no watching, but recompilation on every request
-        watchOptions: {
-            aggregateTimeout: 300
+    return Object.assign(
+        {
+            noInfo: false, // display no info to console (only warnings and errors)
+            quiet: false, // display nothing to the console
+            lazy: false, // switch into lazy mode // that means no watching, but recompilation on every request
+            watchOptions: {
+                aggregateTimeout: 300
+            },
+            headers: { 'X-Special-Static-Header': 'foxman' },
+            stats: {
+                colors: true
+            },
+            contentBase: webpackConfig.output.path,
+            publicPath: webpackConfig.output.publicPath,
+            hot: true
         },
-        headers: {'X-Special-Static-Header': 'foxman'},
-        stats: {
-            colors: true
-        },
-        contentBase: webpackConfig.output.path,
-        publicPath: webpackConfig.output.publicPath,
-        hot: true
-    }, devServerConfig);
+        devServerConfig
+    );
 };
 
-function WebpackDevServerPlugin({
-    webpackConfig,
-    devServerConfig
-}) {
+function WebpackDevServerPlugin({ webpackConfig, devServerConfig }) {
     validateWebpackConfig(webpackConfig);
 
     if (!typeOf(devServerConfig, 'object')) {
@@ -100,20 +102,16 @@ function WebpackDevServerPlugin({
     this.devServerConfig = getDevServerConfig(webpackConfig, devServerConfig);
 }
 
-WebpackDevServerPlugin.prototype.init = function ({service}) {
-    const {webpackConfig, devServerConfig} = this;
+WebpackDevServerPlugin.prototype.init = function({ service }) {
+    const { webpackConfig, devServerConfig } = this;
     const compiler = webpack(webpackConfig);
     const use = service('server.use');
-    use(
-        () => {
-            return webpackMiddleware(compiler, devServerConfig);
-        }
-    );
-    use(
-        () => {
-            return WebpackHotMiddleware(compiler);
-        }
-    );
+    use(() => {
+        return webpackMiddleware(compiler, devServerConfig);
+    });
+    use(() => {
+        return WebpackHotMiddleware(compiler);
+    });
 };
 
 module.exports = WebpackDevServerPlugin;

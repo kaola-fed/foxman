@@ -32,8 +32,8 @@ function createLogger(scope) {
         },
 
         say(text) {
-            if ( os.platform() === 'win32' ) {
-                console.log( text );
+            if (os.platform() === 'win32') {
+                console.log(text);
             } else {
                 parrotSay(text).then(console.log).catch(console.error);
             }
