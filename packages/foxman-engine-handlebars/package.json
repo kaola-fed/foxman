@@ -1,0 +1,14 @@
+{
+  "name": "@foxman/engine-handlebars",
+  "version": "1.0.0-1",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "handlebars": "^4.0.8",
+    "@foxman/helpers": "^1.0.0-1"
+  }
+}
