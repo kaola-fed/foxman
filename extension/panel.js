@@ -11,6 +11,16 @@ window.addEventListener( 'message', function (e) {
   }
 }, false );
 
+let last;
 function display( json ) {
-  document.querySelector( '#app' ).innerHTML = JSON.stringify( json );
+  if ( last ) {
+    last.$inject( false );
+    last.destroy();
+  }
+
+  last = new JSONTree( {
+    data: {
+      source: json || {}
+    }
+  } ).$inject( '#app' );
 }
