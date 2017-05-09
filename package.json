@@ -31,12 +31,18 @@
       "!**/foxman-plugin-livereload/static/**",
       "!**/foxman-plugin-vconsole/static/**",
 
+      "!**/foxman-plugin-nei/**",
+      "!**/foxman-plugin-proxy/**",
+      "!**/foxman-plugin-server/**",
+
       "!**/foxman-plugin-mockcontrol/**",
       "!**/foxman-plugin-routedisplay/**",
       "!**/foxman-plugin-automount/**",
       "!**/foxman-plugin-webpackdevserver/**",
+      "!**/foxman-plugin-forward/**",
       "!**/foxman-processor-autoprefixer/**",
       "!**/foxman-processor-mcss/**",
+      "!**/foxman-engine-handlebars/**",
       
       "!packages/**/logger.js"
     ],
