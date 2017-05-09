@@ -210,29 +210,29 @@ class Server {
             this.serverApp = http.createServer(callback);
         }
 
-        this.serverApp.listen(port);
-        this.wss = buildWebSocket(this.serverApp);
-        this.wss.on('connection', ws => {
-            ws.on('message', message => {
-                logger.info('received: %s', message);
+        this.serverApp.listen(port, () => {
+            const tips = `Server build successfully on ${this.https ? 'https' : 'http'}://127.0.0.1:${port}/`;
+            logger.newline();
+            logger.say(tips);
+            notify({
+                title: 'Run successfully',
+                msg: tips
             });
 
-            const waitForSending = this._waitForSending;
-            if (!waitForSending) {
-                return;
-            }
-            waitForSending.forEach(wfs => {
-                ws.send(JSON.stringify(wfs));
+            this.wss = buildWebSocket(this.serverApp);
+            this.wss.on('connection', ws => {
+                ws.on('message', message => {
+                    logger.info('received: %s', message);
+                });
+
+                const waitForSending = this._waitForSending;
+                if (!waitForSending) {
+                    return;
+                }
+                waitForSending.forEach(wfs => {
+                    ws.send(JSON.stringify(wfs));
+                });
             });
-        });
-
-        const tips = `Server build successfully on ${this.https ? 'https' : 'http'}://127.0.0.1:${port}/`;
-        logger.newline();
-        logger.say(tips);
-
-        notify({
-            title: 'Run successfully',
-            msg: tips
         });
     }
 }

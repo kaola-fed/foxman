@@ -83,17 +83,15 @@ class NEISyncPlugin {
                     };
 
                     try {
-                        yield fs.lstat(genCommonPath(routeModel));
-                        
-                        const content = yield fs.readFile(genCommonPath(routeModel));
-                        if (content === '') {
+                        const stat = yield fs.lstat(genCommonPath(routeModel));
+                        if (stat.size === 0) {
                             throw new Error('local file is empty');
                         }
                     } catch (e) {
                         dispatcher.dataPath = genNeiApiUrl(routeModel);
                         return yield next;
                     }
-                    
+
                     dispatcher.dataPath = genCommonPath(routeModel);
                     yield next;
                 }
