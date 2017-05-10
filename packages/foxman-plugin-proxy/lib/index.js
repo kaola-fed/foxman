@@ -1,7 +1,7 @@
-const { system, consts } = require('@foxman/helpers');
+const { system } = require('@foxman/helpers');
 const logger = require('./logger');
-const httpProxy = require('http-proxy');
-const doProxy = require('./proxy');
+const koaApiForward = require('koa-api-forward');
+const afterProxy = require('./afterProxy');
 
 class ProxyPlugin {
     name() {
@@ -44,50 +44,27 @@ class ProxyPlugin {
 
     init({ service }) {
         const use = service('server.use');
-
+        const {host, ip, protocol} = this.proxyConfig;
+        
         this._registerProxy({
-            proxyConfig: this.proxyConfig,
-            proxyName: this.proxyName,
             use,
-            proxy: this._createProxyClient()
+            host, hostname: ip,
+            proxyName: this.proxyName,
+            scheme: protocol
         });
     }
 
-    _createProxyClient() {
-        const proxyConfig = this.proxyConfig;
-        const proxy = httpProxy.createProxyServer({});
 
-        proxy.on('proxyReq', req => {
-            req.setHeader('X-Special-Proxy-Header', 'foxman');
-            req.setHeader('Host', proxyConfig.host);
-        });
-
-        proxy.on('end', (req, res, proxyRes) => {
-            res.emit('proxyEnd', req, res, proxyRes);
-        });
-
-        return proxy;
-    }
-
-    _registerProxy({ use, proxy, proxyConfig, proxyName }) {
-        const { ip, protocol = 'http' } = proxyConfig;
-
+    _registerProxy({ use, host, hostname, proxyName, scheme }) {
         use(
-            () =>
-                function*(next) {
-                    const dispatcher = this.dispatcher || {};
-                    const router = dispatcher.router || false;
-                    const type = dispatcher.type;
+            () => koaApiForward({
+                host, scheme,
+                specialHeader: 'foxman', hostname
+            })
+        );
 
-                    if (type === consts.DIR || !router) {
-                        return yield next;
-                    }
-
-                    dispatcher.handler = ctx =>
-                        doProxy.call(ctx, { proxy, ip, protocol });
-
-                    yield next;
-                }
+        use( 
+            () => afterProxy()
         );
 
         logger.success(`Proxying to remote server ${proxyName}`);
