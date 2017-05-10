@@ -9,6 +9,6 @@
   "license": "MIT",
   "dependencies": {
     "@foxman/helpers": "^1.0.0-1",
-    "http-proxy": "^1.15.2"
+    "koa-api-forward": "^1.0.0-1"
   }
 }

@@ -1,16 +1,15 @@
 {
-  "name": "foxman-test",
+  "name": "@foxman/test",
   "version": "1.0.0-0",
   "description": "foxman`s test",
   "main": "index.js",
   "devDependencies": {
-    "foxman-plugin-automount": "latest",
-    "foxman-plugin-mock-control": "latest",
-    "foxman-plugin-route-display": "latest",
-    "foxman-plugin-webpack-dev-server": "latest",
-    "foxman-processor-mcss": "latest",
-    "foxman-processor-autoprefixer": "latest",
-    "webpack": "^2.3.2"
+    "@foxman/plugin-automount": "latest",
+    "@foxman/plugin-mock-control": "latest",
+    "@foxman/plugin-route-display": "latest",
+    "@foxman/plugin-webpack-dev-server": "latest",
+    "@foxman/processor-mcss": "latest",
+    "@foxman/processor-autoprefixer": "latest"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

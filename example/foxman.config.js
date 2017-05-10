@@ -2,12 +2,12 @@
 const path = require('path');
 const webpackConfig = require('./webpack.config');
 
-const Mcss = require('foxman-processor-mcss');
-const AutoPrefixer = require('foxman-processor-autoprefixer');
-// const RouteDisplay = require('foxman-plugin-route-display');
-// const MockControl = require('foxman-plugin-mock-control');
-// const Automount = require('foxman-plugin-automount');
-// const WebpackDevServer = require('foxman-plugin-webpack-dev-server');
+const Mcss = require('@foxman/processor-mcss');
+const AutoPrefixer = require('@foxman/processor-autoprefixer');
+const RouteDisplay = require('@foxman/plugin-route-display');
+const MockControl = require('@foxman/plugin-mock-control');
+const Automount = require('@foxman/plugin-automount');
+const WebpackDevServer = require('@foxman/plugin-webpack-dev-server');
 
 const paths = {
     webapp: __dirname
@@ -45,11 +45,11 @@ module.exports = {
         //     }
         // }),
         //
-        // new Automount({
-        //     tplUrlMap: {
-        //         '/index.html': 'foo.bar'
-        //     }
-        // }),
+        new Automount({
+            tplUrlMap: {
+                '/user/ajax/getUserProfile.html': 'getUserProfile'
+            }
+        }),
         //
         // new WebpackDevServer({
         //     webpackConfig,
@@ -81,7 +81,7 @@ module.exports = {
 
 
     proxy: [
-        { name: 'pre', host: '', ip: '', protocol: 'http'}
+        { name: 'online', host: 'm.kaola.com', ip: 'm.kaola.com', protocol: 'http'}
     ],
 
     routes: [
