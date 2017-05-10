@@ -17,7 +17,7 @@ const pfs = Object.assign(pify(fs), {
 
 Object.assign(pfs, {
     readJSONFile(url) {
-        return pfs.readFile(url).then(json => {
+        return pfs.readFile(url).then(buffer => buffer.toString()).then(json => {
             return parseJSON(json);
         });
     }
