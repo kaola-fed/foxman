@@ -1,3 +1,6 @@
-const JSON = require('hjson');
+const HJSON = require('hjson');
 
-module.exports = JSON;
+module.exports = {
+    parse: HJSON.parse,
+    stringify: JSON.stringify
+};

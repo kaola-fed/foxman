@@ -1,24 +1,30 @@
 const { JSON, fs, promise, path } = require('@foxman/helpers');
 const logger = require('./logger');
 
-function fetch({ handler, dataPath }) {
-    if (handler) {
-        return handlerInvkoe.call(this, handler);
-    }
-    return (Array.isArray(dataPath)
-        ? readJSONs(dataPath)
-        : readJSON(dataPath)).then(json => ({ json }));
+function fetch({ handler, dataPath, extendData = {} }) {
+    return Promise.resolve()
+        .then(() => {
+            if (handler) {
+                return handlerInvkoe.call(this, handler);
+            }
+        })
+        .then(data => {
+            if (!data && dataPath) {
+                return Array.isArray(dataPath) ? readJSONs(dataPath) : readJSON(dataPath);
+            }
+            return data;
+        }).then( json => ({
+            json: Object.assign(extendData, json)
+        }));
 }
 
 function handlerInvkoe(handler) {
     return promise.ensurePromise(handler(this)).then(json => {
         if (typeof json === 'string') {
-            return {
-                json: safeJsonParse(json)
-            };
+            return safeJsonParse(json);
         }
 
-        return { json };
+        return json;
     });
 }
 
