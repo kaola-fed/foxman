@@ -1,6 +1,6 @@
 {
   "name": "@foxman/core",
-  "version": "1.0.0-2",
+  "version": "1.0.0-5",
   "main": "lib/index.js",
   "description": "Extensible Mock Server",
   "files": [

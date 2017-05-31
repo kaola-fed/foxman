@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-processor",
-  "version": "1.0.0-2",
+  "version": "1.0.0-5",
   "description": "",
   "main": "lib/index.js",
   "scripts": {},

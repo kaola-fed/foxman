@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-webpack-dev-server",
-  "version": "1.0.0-1",
+  "version": "1.0.0-5",
   "description": "Webpack Dev Server For Foxman",
   "main": "index.js",
   "scripts": {
