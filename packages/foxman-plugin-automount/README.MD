@@ -37,4 +37,4 @@ module.exports = {
 }
 ```
 
-[查看例子](./example/)
+[查看例子](../../example/foxman.config.js)
