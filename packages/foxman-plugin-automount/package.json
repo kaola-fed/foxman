@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-automount",
-  "version": "1.0.0-8",
+  "version": "1.0.0-9",
   "description": "Router 自动刷新",
   "main": "index.js",
   "scripts": {
