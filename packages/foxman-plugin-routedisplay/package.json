@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-route-display",
-  "version": "1.0.0-6",
+  "version": "1.0.0-7",
   "description": "route-display",
   "main": "index.js",
   "scripts": {},
