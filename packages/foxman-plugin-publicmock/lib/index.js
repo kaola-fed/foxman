@@ -30,9 +30,11 @@ class PublicMockPlugin {
             }
 
             dispatcher.extendData = publicMockList.reduce((extendData, {
-                pattern, data, type = 'sync'
+                pattern, data, type
             }) => {
-                if (isPathMatched({pattern,  reqPath}) && type === dispatcher.type ) {
+                if (isPathMatched({pattern, reqPath}) 
+                    && ( typeof type === 'undefined' 
+                    || type === dispatcher.type ) ) {
                     return Object.assign(data, data);
                 }
                 return extendData;
