@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-route-display",
-  "version": "1.0.0-7",
+  "version": "1.0.0-8",
   "description": "route-display",
   "main": "index.js",
   "scripts": {},
@@ -13,6 +13,5 @@
   "bugs": {
     "url": "https://github.com/foxman-plugins/RouteDisplay/issues"
   },
-  "homepage": "https://github.com/foxman-plugins/RouteDisplay#readme",
-  "devDependencies": {}
+  "homepage": "https://github.com/foxman-plugins/RouteDisplay#readme"
 }

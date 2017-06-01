@@ -1,11 +1,10 @@
 {
   "name": "@foxman/plugin-forward",
-  "version": "1.0.1-5",
+  "version": "1.0.1-6",
   "main": "lib/index.js",
   "scripts": {},
   "author": "fengzilong <fengzilong1992@gmail.com>",
   "license": "MIT",
-  "devDependencies": {},
   "dependencies": {
     "chalklog": "^1.1.2",
     "is-url": "^1.2.2",
