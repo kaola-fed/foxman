@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-public-mock",
-  "version": "1.0.0-10",
+  "version": "1.0.0-11",
   "description": "",
   "main": "lib/index.js",
   "scripts": {},
@@ -8,7 +8,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@foxman/helpers": "^1.0.0-8",
+    "@foxman/helpers": "^1.0.0-9",
     "path-to-regexp": "^1.7.0"
   }
 }
