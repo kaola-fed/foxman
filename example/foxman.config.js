@@ -105,5 +105,5 @@ module.exports = {
     viewRoot: PATHES.viewRoot,
     syncData: PATHES.syncData,
     asyncData: PATHES.asyncData,
-    statics: []
+    statics: [PATHES.src]
 };

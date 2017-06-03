@@ -29,6 +29,7 @@
       "!**/foxman-plugin-server/**",
 
       "!**/foxman-plugin-mockcontrol/**",
+      "!**/foxman-plugin-publicmock/**",
       "!**/foxman-plugin-routedisplay/**",
       "!**/foxman-plugin-automount/**",
       "!**/foxman-plugin-webpackdevserver/**",
@@ -36,6 +37,7 @@
       "!**/foxman-processor-autoprefixer/**",
       "!**/foxman-processor-mcss/**",
       "!**/foxman-engine-handlebars/**",
+      "!**/foxman-engine-arttemplate/**",
 
       "!packages/**/logger.js"
     ],

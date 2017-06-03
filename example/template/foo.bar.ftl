@@ -10,5 +10,7 @@
         <section>
             Hello, ${name!''}
         </section>
+        <script src="/src/javascript/page/index.js"></script>
+        <script src="/dist/javascript/index.js"></script>
     </body>
 </html>
