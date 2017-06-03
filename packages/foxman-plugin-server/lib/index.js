@@ -85,8 +85,8 @@ class ServerPlugin {
         let {
             port = 3000,
             secure,
-            statics,
-            routes,
+            statics = [],
+            routes = [],
             engine,
             engineConfig = {},
             extension = 'ftl',
@@ -100,11 +100,9 @@ class ServerPlugin {
             system.exit();
         }
 
-        statics = (statics ? typer.ensureArray(statics) : []).filter(
-            item => !!item
-        );
+        statics = typer.ensureArray(statics).filter(item => !!item);
 
-        const runtimeRouters = { routers: routes || [] };
+        const runtimeRouters = { routers: routes };
 
         const syncDataMatch = url => path.join(syncData, url);
 
@@ -147,10 +145,6 @@ class ServerPlugin {
 }
 
 function checkConfig({ syncData, asyncData }) {
-    // if (typeOf(viewRoot) !== 'string') {
-    //     return 'config.viewRoot must be string';
-    // }
-
     if (typeOf(syncData) !== 'string') {
         return 'config.syncData must be string';
     }

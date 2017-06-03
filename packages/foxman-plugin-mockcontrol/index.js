@@ -1,8 +1,11 @@
-const JSON5 = require('json5');
-const fs = require('fs');
-let { logger, path } = require('@foxman/helpers');
+let { typer, logger, path } = require('@foxman/helpers');
+const ensureResponseData = require('./lib/ensureResponseData');
+const getHandler = require('./lib/getHandler');
+const getJSON = require('./lib/getJSON');
+const handleResponse = require('./lib/handleResponse');
 
 logger = logger.createLogger('mock-control');
+
 function MockControl(options) {
     this.mapJS =
         options.mapJS ||
@@ -12,69 +15,49 @@ function MockControl(options) {
 }
 
 MockControl.prototype.init = function({ getter, service }) {
-    if (getter('proxy.enable')) {
+    if (getter('proxy.enable'))
         return;
-    }
 
     const self = this;
     service('server.use')(
-        function() {
-            return function*(next) {
-                const dispatcher = this.dispatcher;
-                if (!dispatcher || dispatcher.type === 'dir') {
-                    return yield next;
-                }
+        () => function*(next) {
+            const dispatcher = this.dispatcher;
+            if (!dispatcher || dispatcher.type === 'dir') 
+                return yield next;
 
-                const request = this.request;
-                let dataPath = dispatcher.dataPath;
-                let data;
-                let jsonFound = true;
+            const dataPath = ensureItem(dispatcher.dataPath);
+            const scriptPath = self.mapJS(dataPath);
 
-                dataPath = ensureItem(dataPath);
+            if (typer.typeOf(dataPath) === 'undefined')
+                return yield next;
 
-                if (dataPath.length === 0) {
-                    return yield next;
-                }
+            let handleResponseMessage;
+            let {hasJson, parsedData, message: getJSONMessage} = yield getJSON(dataPath);
+            let {hasJs, handler, message: getHandlerMessage} = yield getHandler(scriptPath);
+            let responseData = ensureResponseData({hasJson, parsedData});
 
-                try {
-                    delete require.cache[dataPath];
-                    data = JSON5.parse(fs.readFileSync(dataPath));
-                } catch (err) {
-                    jsonFound = false;
-                    data = {};
-                }
-                try {
-                    const scriptPath = self.mapJS(dataPath);
-                    delete require.cache[scriptPath];
-                    const handler = require(scriptPath);
-                    dispatcher.handler = () => {
-                        return new Promise(resolve => {
-                            resolve(handler(data, request) || data);
-                        });
-                    };
+            if (hasJs)
+                ({responseData, message: handleResponseMessage} = yield handleResponse.call(this, {handler, responseData, scriptPath}));
+            
+            else if (!hasJson)
+                getJSONMessage = `File ${path.shorten(dataPath)} is not found!`;
 
-                    if (!jsonFound) {
-                        logger.error(
-                            `File ${path.shorten(dataPath)} parsed failed. So output empty object({})`
-                        );
-                    }
-                } catch (err) {
-                    if (err.code !== 'MODULE_NOT_FOUND') {
-                        logger.error(err);
-                    }
-                }
+            const message = getJSONMessage || getHandlerMessage || handleResponseMessage;
 
-                yield next;
-            };
-        }.bind(this)
+            if (message) 
+                logger.error(message);
+
+            if (!responseData)
+                return;
+
+            dispatcher.handler = () => Promise.resolve(responseData);
+
+            yield next;
+        }
     );
 };
 
 function ensureItem(item) {
-    if (!item) {
-        return [];
-    }
-
     return Array.isArray(item) ? item[item.length - 1] : item;
 }
 
