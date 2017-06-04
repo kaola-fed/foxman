@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-proxy",
-  "version": "1.0.0-9",
+  "version": "1.0.0-10",
   "description": "",
   "main": "lib/index.js",
   "scripts": {},
