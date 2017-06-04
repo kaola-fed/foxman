@@ -57,9 +57,15 @@ class ProxyPlugin {
 
     _registerProxy({ use, host, hostname, proxyName, scheme }) {
         const koaApiForward = new KoaApiForward({host, specialHeader: 'foxman'});
+        koaApiForward.on('error', (e) => {
+            logger.error(e);
+        });
+
         use(
             () => koaApiForward.middleware({
-                hostname, scheme
+                hostname, scheme, timeoutHook() {
+                    logger.error(`Proxying to remote server ${proxyName} timeout`);
+                }
             })
         );
 
