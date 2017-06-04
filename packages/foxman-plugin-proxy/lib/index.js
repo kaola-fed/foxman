@@ -1,6 +1,6 @@
 const { system } = require('@foxman/helpers');
 const logger = require('./logger');
-const koaApiForward = require('koa-api-forward');
+const KoaApiForward = require('koa-api-forward');
 const afterProxy = require('./afterProxy');
 
 class ProxyPlugin {
@@ -56,10 +56,10 @@ class ProxyPlugin {
 
 
     _registerProxy({ use, host, hostname, proxyName, scheme }) {
+        const koaApiForward = new KoaApiForward({host, specialHeader: 'foxman'});
         use(
-            () => koaApiForward({
-                host, scheme,
-                specialHeader: 'foxman', hostname
+            () => koaApiForward.middleware({
+                hostname, scheme
             })
         );
 
