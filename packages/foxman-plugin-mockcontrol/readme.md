@@ -27,7 +27,7 @@ module.exports = {
 ```
 
 ## 三种 MockControl JS 的书写方式
-都一样的在 MockData 同目录下创建同文件名的 .js 文件，有三种方式可以应对不同的需求场景：
+需要在 MockData.json 同目录下创建同文件名的 .js 文件，有三种方式可以应对不同的需求场景：
 
 ### 方式一、exports function
 > 需求场景: 根据请求响应特定的结构（一般场景）
