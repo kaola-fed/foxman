@@ -67,7 +67,7 @@ function response(data) {
         }, 3000);
     });
 
-    this.body = `callback(${data})`
+    this.body = `callback(${JSON.stringify(data)})`;
 };
 module.exports = response;
 ```
