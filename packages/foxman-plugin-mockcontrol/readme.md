@@ -40,7 +40,7 @@ module.exports = function (data, request) {
 > 适用场景: jsonp 响应
 ```javascript
 
-module.exports = function * (data) {
+module.exports = function (data) {
     this.body = `callback(${JSON.stringify(data)})`;
 };
 module.exports = response;
