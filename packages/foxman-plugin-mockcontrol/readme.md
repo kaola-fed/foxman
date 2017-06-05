@@ -42,7 +42,8 @@ module.exports = function (data, request) {
 
 module.exports = function * (data) {
     this.body = `callback(${JSON.stringify(data)})`;
-};;
+};
+module.exports = response;
 ```
 
 > 适用场景: 下载文件
