@@ -47,7 +47,7 @@ MockControl.prototype.init = function({ getter, service }) {
             if (message) 
                 logger.error(message);
 
-            if (!responseData)
+            if (typeof responseData === 'undefined')
                 return;
 
             dispatcher.handler = () => Promise.resolve(responseData);
