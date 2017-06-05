@@ -24,7 +24,7 @@ module.exports = {
 ## 如何编写控制响应的 js
 需要在 MockData.json 同目录下创建同文件名的 .js 文件，有四种方式可以应对不同的适用场景：
 
-### 方式一、export function，且有 return 值
+### 方式一、export function，有 return 值
 > 适用场景: 根据请求响应特定的结构（一般场景）
 ```javascript
 module.exports = function (data, request) {
@@ -36,7 +36,7 @@ module.exports = function (data, request) {
 };;
 ```
 
-### 方式二、export function，且无 return 值 
+### 方式二、export function，无 return 值 
 > 适用场景: jsonp 响应
 ```javascript
 
