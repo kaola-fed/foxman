@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-smartmount",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "like @foxman/plugin-automount,with different api",
   "main": "index.js",
   "scripts": {
