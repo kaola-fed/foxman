@@ -9,6 +9,8 @@ let util = require('./util');
 let debug = require('debug')('foxmanPluginSmartMount');
 let defReplenishUrlMap = syncFilePath => `/${syncFilePath}.html`;
 let defReplenishApiMap = asyncFilePath => `/${asyncFilePath}`;
+const DEF_EX_TPL_PATTERNS = ['!**/**/_*.ftl'];
+const DEF_EX_JSON_PATTERNS = ['!**/**/_*.json'];
 
 class SmartMountPlugin {
     /**
@@ -35,11 +37,9 @@ class SmartMountPlugin {
         this.replenishApiMap = typeof replenishApiMap === 'function' ? replenishApiMap : defReplenishApiMap;
         excludePatterns = typeof excludePatterns === 'object' ? excludePatterns : {};
         excludePatterns.urlTpl = util.fixExcludePatterns(excludePatterns.urlTpl);
-        const defExcludePattern = '!**/**/_*.ftl';
-        if(!~excludePatterns.urlTpl.indexOf(defExcludePattern)){
-            excludePatterns.urlTpl.push(defExcludePattern);
-        }
         excludePatterns.apiJson = util.fixExcludePatterns(excludePatterns.apiJson);
+        excludePatterns.urlTpl = excludePatterns.urlTpl.length ? excludePatterns.urlTpl : DEF_EX_TPL_PATTERNS;
+        excludePatterns.apiJson = excludePatterns.apiJson.length ? excludePatterns.apiJson : DEF_EX_JSON_PATTERNS;
         this.excludePatterns = excludePatterns;
     }
     /**
