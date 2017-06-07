@@ -1,0 +1,15 @@
+{
+  "name": "@foxman/plugin-smartmount",
+  "version": "0.0.1",
+  "description": "like @foxman/plugin-automount,with different api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "debug": "^2.6.8",
+    "globule": "^1.1.0"
+  },
+  "author": "froguard",
+  "license": "MIT"
+}
