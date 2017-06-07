@@ -27,7 +27,7 @@
       "!**/foxman-plugin-nei/**",
       "!**/foxman-plugin-proxy/**",
       "!**/foxman-plugin-server/**",
-
+      "!**/foxman-plugin-smartmount/**",
       "!**/foxman-plugin-mockcontrol/**",
       "!**/foxman-plugin-publicmock/**",
       "!**/foxman-plugin-routedisplay/**",
