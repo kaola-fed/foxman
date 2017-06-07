@@ -40,7 +40,7 @@ module.exports = {
             if(typeof v === 'string'){
                 v = v.trim().replace(regStuffix, '').trim();
                 let nk = k.trim();
-                let {method, url} = this.path2router(nk);
+                let {method, url} = this.path2router(nk, true);// url
                 let _mth = sync ? false : method;
                 nk = `${_mth?`${_mth} `:''}${url}`;
                 // keep unique
@@ -62,10 +62,12 @@ module.exports = {
      *   1.文件路径：get/xxx -> {method:'GET', url:'xxx'}
      *   2.url地址：GET /xxx -> {method:'GET', url:'xxx'}
      * @param pathStr 可以是文件路径，也可以是url
+     * @param isUrl 是否为url
      * @returns { {method: (string|null), url: (string)} }
      */
-    path2router(pathStr = ''){
-        let np = this.transformSep(pathStr).replace(/^\//g, '');
+    path2router(pathStr = '', isUrl = false){
+        let np = isUrl ? pathStr : this.transformSep(pathStr)
+        np = np.replace(/^\//g, '');
         let method = null;
         let regExStart = /^[a-zA-Z]+\s*\//g;// 同时匹配：文件夹和 url 路径，eg：文件夹'get/', url 'GET  /'
         let start = np.match(regExStart);

@@ -107,7 +107,7 @@ class SmartMountPlugin {
     _getSyncRouters(){
         let files = globule.find(this.PATTERNS.sync);
         let syncRouters = files.reduce((prev, file) => {
-            let filePath = this._getRelativePath(file, 1);
+            let filePath = this._getRelativePath(file, true);
 
             let urls = this.replenishUrlMap(filePath);
             urls = typeof urls === 'string' ? [urls] : Array.isArray(urls) ? urls : [];
@@ -137,7 +137,7 @@ class SmartMountPlugin {
         let apiMap = this.apiMap || {};
 
         let asyncRouters = files.reduce((prev, file) => {
-            let filePath = this._getRelativePath(file, 0);
+            let filePath = this._getRelativePath(file, false);
             let method = util.path2router(filePath).method || 'GET';
 
             let urls = this.replenishApiMap(filePath);

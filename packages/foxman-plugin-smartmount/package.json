@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-smartmount",
-  "version": "1.0.0-0",
+  "version": "1.0.0-1",
   "description": "like @foxman/plugin-automount,with different api",
   "main": "index.js",
   "scripts": {
@@ -10,6 +10,16 @@
     "debug": "^2.6.8",
     "globule": "^1.1.0"
   },
-  "author": "froguard",
+  "author": {
+    "name": "Froguard"
+  },
+  "bugs": {
+    "url": "https://github.com/kaola-fed/foxman/issues"
+  },
+  "homepage": "https://foxman.js.org",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:kaola-fed/foxman.git"
+  },
   "license": "MIT"
 }
