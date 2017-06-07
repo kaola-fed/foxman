@@ -65,13 +65,17 @@ module.exports = {
             },
             /**
              * 需要排除扫描的文件
+             * 不写的或者写了单数数组为空的话，将采用默认值，忽略一切以下划线打头的文件，如 _*.json _*.ftl
              */
             excludePatterns: {
                 urlTpl: [
                     '!com/**/*.ftl',
-                    '!**/**/macro.ftl'
+                    '!**/**/macro.ftl',
+                    '!**/**/_*.ftl'
                 ],
-                apiJson: []
+                apiJson: [
+                    '!**/**/_*.json'
+                ]
             }
     ],
     ...
