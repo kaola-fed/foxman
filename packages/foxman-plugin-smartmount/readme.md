@@ -13,7 +13,7 @@ npm i --D foxman @foxman/plugin-smartmount
 foxman.config.js:
 
 ```js
-const Automount = require('foxman-plugin-smartmount');
+const SmartMount = require('@foxman/plugin-smartmount');
 module.exports = {
     ...
     plugins: [
