@@ -35,6 +35,20 @@
         "test",
         "bug"
       ]
+    },
+    {
+      "login": "Froguard",
+      "name": "froguardoge",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/4298621?v=3",
+      "profile": "https://github.com/Froguard",
+      "contributions": [
+        "code",
+        "plugin",
+        "infra",
+        "doc",
+        "test",
+        "bug"
+      ]
     }
   ]
 }
