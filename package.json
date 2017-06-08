@@ -32,6 +32,7 @@
       "!**/foxman-plugin-publicmock/**",
       "!**/foxman-plugin-routedisplay/**",
       "!**/foxman-plugin-automount/**",
+      "!**/foxman-plugin-smartmount/**",
       "!**/foxman-plugin-webpackdevserver/**",
       "!**/foxman-plugin-forward/**",
       "!**/foxman-processor-autoprefixer/**",
