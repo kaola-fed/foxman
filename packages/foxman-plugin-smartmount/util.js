@@ -66,7 +66,7 @@ module.exports = {
      * @returns { {method: (string|null), url: (string)} }
      */
     path2router(pathStr = '', isUrl = false){
-        let np = isUrl ? pathStr : this.transformSep(pathStr)
+        let np = isUrl ? pathStr : this.transformSep(pathStr);
         np = np.replace(/^\//g, '');
         let method = null;
         let regExStart = /^[a-zA-Z]+\s*\//g;// 同时匹配：文件夹和 url 路径，eg：文件夹'get/', url 'GET  /'
