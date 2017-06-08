@@ -44,10 +44,7 @@
       "contributions": [
         "code",
         "plugin",
-        "infra",
-        "doc",
-        "test",
-        "bug"
+        "doc"
       ]
     }
   ]
