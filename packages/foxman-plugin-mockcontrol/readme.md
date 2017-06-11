@@ -15,11 +15,11 @@ Foxman 基础的 Mock 方式，是静态的。即，我们编写的 Mock Data JS
 
 ## 如何使用
 1. cd `path/to/project` (已启用 foxman 的工程)
-2. `npm i --save-dev foxman-plugin-mock-control`
+2. `npm i --save-dev @foxman/plugin-mock-control`
 3. 在 `foxman.config.js` 中新增 plugins 的配置项
 
 ```javascript
-const MockControl = require('foxman-plugin-mock-control');
+const MockControl = require('@foxman/plugin-mock-control');
 module.exports = {
     ...
     plugins: [
@@ -59,14 +59,14 @@ plugins: [
 * mapJS - 从 Mock Data 到 Mock JS 的映射方式，缺省为 `.json` 同名 `.js` 文件 
 
 ## Mock JS 能力说明
-* this 指向 koa 中间件的 this
+* this 指向 koa 中间件的 this
 ```js
 module.exports = function() {
     console.log(this);
 }
 ```
 
-* 第一个参数为， Mock Data
+* 第一个参数为， Mock Data
 ```js
 module.exports = function(data) {
     console.log('data', data);
