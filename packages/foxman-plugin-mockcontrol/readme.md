@@ -17,11 +17,14 @@ $ cd packages/foxman-plugin-mockcontrol/example/
 $ npm i # 无梯子用户推荐 cnpm
 $ npm start
 ```
+
 * [根据请求来定制响应 DEMO](http://127.0.0.1:9000/example.1.ftl)
 * [jsonp 响应 DEMO](http://127.0.0.1:9000/example.2.ftl)
 * [下载文件 DEMO](http://127.0.0.1:9000/example.3.ftl)
 * [延时响应 DEMO](http://127.0.0.1:9000/example.4.ftl)
 * [延时响应 + JSONP DEMO](http://127.0.0.1:9000/example.5.ftl)
+
+⚠️  以上都是本地链接
 
 ## 如何引入
 1. cd `path/to/project` (已启用 foxman 的工程)
