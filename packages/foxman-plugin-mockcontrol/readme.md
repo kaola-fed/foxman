@@ -62,14 +62,14 @@ module.exports = function (data) {
 }
 ```
 
-* 当方法体 return 对象时，会用于后续的页面渲染
+* 当方法体含 return 语句时，会将 return 的对象用于后续的页面渲染
 ```js
 module.exports = function (data) {
     return data;
 }
 ```
 
-* 当方法体不 return 对象时，则不再执行后续中间件。此时，可以指定 `this.body`
+* 当方法体不含 return 语句，则不再执行后续中间件。此时，可以指定 `this.body`
 ```js
 module.exports = function (data) {
     this.body = 'without return.'
