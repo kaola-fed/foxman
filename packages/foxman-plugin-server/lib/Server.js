@@ -87,6 +87,10 @@ class Server {
             })
         );
 
+        configureStatics({ statics, app });
+        
+        this.serve('__FOXMAN_CLIENT__', path.join(__dirname, 'client'));
+
         this._middlewares.forEach(middleware => app.use(middleware));
 
         app.use(pageInterceptor({ viewEngine }));
@@ -130,9 +134,6 @@ class Server {
             yield next;
         });
 
-        configureStatics({ statics, app });
-
-        this.serve('__FOXMAN_CLIENT__', path.join(__dirname, 'client'));
     }
 
     use(middleware) {
