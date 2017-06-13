@@ -8,12 +8,7 @@ class ArtTemplate {
         this.renderer = template;
         this.renderer.render = (filename, data) => {
             settings.filename = filename;
-            try {
-                return template.compile(settings)(data);
-            } catch (error) {
-                delete error.stack;
-                throw new Error(JSON.stringify(error, null, 4));
-            }
+            return template.compile(settings)(data);
         };
     }
 
