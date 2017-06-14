@@ -4,7 +4,8 @@ const Livereload = require('@foxman/plugin-livereload');
 const Processor = require('@foxman/plugin-processor');
 const Watcher = require('@foxman/plugin-watcher');
 const Server = require('@foxman/plugin-server');
-const VconsolePlugin = require('@foxman/plugin-vconsole');
+const Vconsole = require('@foxman/plugin-vconsole');
+const Static = require('@foxman/plugin-static');
 
 module.exports = ({
     port,
@@ -37,7 +38,6 @@ module.exports = ({
         new Server({
             port,
             secure,
-            statics,
             routes,
             engine,
             engineConfig,
@@ -78,7 +78,11 @@ module.exports = ({
 
     core.use(plugins);
 
-    core.use(new VconsolePlugin());
+    core.use(new Vconsole());
+
+    core.use(
+        new Static({statics})
+    );
 
     core.use(
         new Proxy({

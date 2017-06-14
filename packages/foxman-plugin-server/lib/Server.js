@@ -86,8 +86,6 @@ class Server {
                 syncDataMatch
             })
         );
-
-        configureStatics({ statics, app });
         
         this.serve('__FOXMAN_CLIENT__', path.join(__dirname, 'client'));
 
@@ -134,6 +132,7 @@ class Server {
             yield next;
         });
 
+        // configureStatics({ statics, app });
     }
 
     use(middleware) {
@@ -177,13 +176,13 @@ class Server {
         }
     }
 
-    serve(prefix, dirname) {
+    serve(prefix, dirname, maxAge = 31536000) {
         configureStatics({
             statics: [
                 {
                     prefix: string.ensureLeadingSlash(prefix),
                     dir: dirname,
-                    maxAge: 31536000
+                    maxAge
                 }
             ],
             app: this.app

@@ -56,12 +56,12 @@ class ServerPlugin {
                 return this.server.use(middleware);
             },
 
-            serve(prefix, dirname) {
+            serve(prefix, dirname, maxAge) {
                 if (!this.server) {
                     return;
                 }
 
-                return this.server.serve(prefix, dirname);
+                return this.server.serve(prefix, dirname, maxAge);
             },
 
             registerRouterNamespace(...args) {

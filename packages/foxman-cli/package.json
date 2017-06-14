@@ -48,6 +48,7 @@
     "@foxman/plugin-server": "^1.0.0-11",
     "@foxman/plugin-vconsole": "^1.0.0-8",
     "@foxman/plugin-watcher": "^1.0.0-9",
+    "@foxman/plugin-statics": "^1.0.0-9",
     "update-notifier": "^2.1.0",
     "yargs": "^7.0.2"
   }

@@ -1,0 +1,13 @@
+{
+  "name": "@foxman/plugin-statics",
+  "version": "1.0.0-9",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@foxman/helpers": "^1.0.0-9"
+  }
+}
