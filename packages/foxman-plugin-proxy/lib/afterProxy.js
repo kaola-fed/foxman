@@ -1,5 +1,6 @@
 function afterProxy () {
     return function * (next) {
+        console.log(this._proxyResponse);
         if (void 0 === this._proxyResponse) {
             return yield next;
         }

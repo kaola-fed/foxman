@@ -1,5 +1,3 @@
-const path = require('path');
-
 class StaticsPlugin {
     name() {
         return 'statics';
@@ -21,7 +19,7 @@ class StaticsPlugin {
 
     init({ service }) {
         const serve = service('server.serve');
-        this.$options.statics.forEach(({dirname, prefix, maxAge}) => serve(dirname, __dirname, maxAge));
+        serve(this.$options.statics);
     }
 }
 

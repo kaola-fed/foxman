@@ -56,7 +56,7 @@ class Server {
 
     prepare() {
         const { app, _injectedScripts, viewEngine } = this;
-        const { ifProxy, statics, viewRoot } = this.serverOptions;
+        const { ifProxy, viewRoot } = this.serverOptions;
 
         if (!ifProxy) {
             app.use(bodyParser());
@@ -131,8 +131,6 @@ class Server {
             }
             yield next;
         });
-
-        // configureStatics({ statics, app });
     }
 
     use(middleware) {
@@ -176,15 +174,21 @@ class Server {
         }
     }
 
-    serve(prefix, dirname, maxAge = 31536000) {
+    serve(...args) {
+        let statics;
+        if (args.length === 1 && Array.isArray(args[0])) {
+            statics = args[0];
+        } else {
+            const [prefix, dirname, maxAge = 31536000] = args;
+            statics = [{
+                prefix: string.ensureLeadingSlash(prefix),
+                dir: dirname,
+                maxAge
+            }];
+        }
+
         configureStatics({
-            statics: [
-                {
-                    prefix: string.ensureLeadingSlash(prefix),
-                    dir: dirname,
-                    maxAge
-                }
-            ],
+            statics,
             app: this.app
         });
     }

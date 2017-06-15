@@ -6,10 +6,8 @@ class ArtTemplate {
         const settings = Object.assign({root: base}, defaultSettings, engineConfig);
         
         this.renderer = template;
-        this.renderer.render = (filename, data) => {
-            settings.filename = filename;
-            return template.compile(settings)(data);
-        };
+        this.renderer.render = (filename, data) => 
+            template.compile(Object.assign(settings, {filename}))(data);
     }
 
     parse(view, data) {

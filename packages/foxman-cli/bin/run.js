@@ -5,7 +5,7 @@ const Processor = require('@foxman/plugin-processor');
 const Watcher = require('@foxman/plugin-watcher');
 const Server = require('@foxman/plugin-server');
 const Vconsole = require('@foxman/plugin-vconsole');
-const Static = require('@foxman/plugin-static');
+const Static = require('@foxman/plugin-statics');
 
 module.exports = ({
     port,
@@ -78,8 +78,10 @@ module.exports = ({
 
     core.use(plugins);
 
-    core.use(new Vconsole());
-
+    core.use(
+        new Vconsole()
+        );
+   
     core.use(
         new Static({statics})
     );
