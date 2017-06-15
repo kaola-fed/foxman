@@ -1,6 +1,6 @@
 {
   "name": "foxman",
-  "version": "1.0.0-12",
+  "version": "1.0.0-13",
   "main": "app.js",
   "description": "Extensible Mock Server",
   "preferGlobal": true,
@@ -44,11 +44,11 @@
     "@foxman/plugin-livereload": "^1.0.0-9",
     "@foxman/plugin-nei": "^1.0.0-9",
     "@foxman/plugin-processor": "^1.0.0-9",
-    "@foxman/plugin-proxy": "^1.0.0-10",
-    "@foxman/plugin-server": "^1.0.0-11",
+    "@foxman/plugin-proxy": "^1.0.0-11",
+    "@foxman/plugin-server": "^1.0.0-12",
+    "@foxman/plugin-statics": "^1.0.0-10",
     "@foxman/plugin-vconsole": "^1.0.0-8",
     "@foxman/plugin-watcher": "^1.0.0-9",
-    "@foxman/plugin-statics": "^1.0.0-9",
     "update-notifier": "^2.1.0",
     "yargs": "^7.0.2"
   }
