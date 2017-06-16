@@ -1,4 +1,4 @@
-const checkFoxmanVersion = require('../bin/check-foxman-version');
+const checkFoxmanVersion = require('../lib/check-foxman-version');
 
 test('checkFoxmanVersion', function() {
      expect(checkFoxmanVersion({

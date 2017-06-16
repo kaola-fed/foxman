@@ -1,4 +1,4 @@
-const checkFoxmanConfig = require('../bin/check-foxman-config');
+const checkFoxmanConfig = require('../lib/check-foxman-config');
 const path = require('path');
 
 test('checkFoxmanConfig', function() {
