@@ -19,10 +19,18 @@ Type: `Array`
 ```js
 [
     {
-        dir: '', // 本地路径
-        prefix: '', // 访问路径
+        dir: './src/', // 本地路径
+        prefix: '/hello/', // 访问路径前缀 
         maxAge: 365 * 24 * 60 * 60, // 可选，过期时间
     }
+]
+```
+
+或者
+
+```js
+[
+    './src/' // 使用 /src/xxx 进行访问
 ]
 ```
 
@@ -33,6 +41,19 @@ Type: `Array`
 Type: `Array`
 
 自定义路由
+
+```js
+[
+    {
+        method: 'GET',  // GET | POST ...
+        url: '/ajax/index.html', // 访问的路径
+        sync: false, // 是否是页面接口
+        filePath: 'foo.bar' // Mock 数据地址，或 ftl 地址，不带后缀
+    },
+]
+```
+
+建议使用 nei 或 [smartmount](../packages/foxman-plugin-smartmount) 代替 routes 模块
 
 ### viewRoot
 
@@ -48,11 +69,9 @@ Example: `ftl`
 
 模板文件的后缀
 
-### engineConfig
-
-Type: `Object`
-
-engineConfig会作为额外参数传递给渲染引擎，foxman内置了freemarker引擎，大概是这样子的一个Engine类
+### engine
+Type: `Class`
+除了 freemarker 以外，你也可以自己实现一个engine类，只要实现parse方法即可
 
 ```js
 class Engine {
@@ -62,14 +81,31 @@ class Engine {
 
 module.exports = Engine;
 ```
+实现细节，参考 [foxman-engine-freemarker](https://github.com/kaola-fed/foxman/tree/master/packages/foxman-engine-freemarker)。
 
-参考 [foxman-engine-freemarker](https://github.com/kaola-fed/foxman/tree/master/packages/foxman-engine-freemarker)。
+然后，配置 foxman config 中的 engine 字段
+```js
+const Arttemplate = require('@foxman/engine-arttemplate');
+
+...
+engine: Arttemplate
+...
+
+```
+
+以上操作即可实现自定义模板渲染引擎
+
+已有的官方渲染引擎：
+* @foxman/engine-arttemplate
+* 
+
+### engineConfig
+
+Type: `Object`
+
+engineConfig会作为额外参数传递给渲染引擎，即上文中的 `engineConfig` 字段
 
 * **parse** 接收 filepath 和 data，返回一个 Promise
-
-<div class="tips">
-    实际上你也可以自己实现一个engine类，只要实现parse方法即可(但是foxman v1版本暂不支持自定义渲染引擎)
-</div>
 
 ### syncData
 
@@ -98,11 +134,13 @@ proxy:  [
 ]
 ```
 
+Foxman 的 proxy 功能会在请求中带上 `X-Special-Proxy-Header: Foxman` 的请求头
+
 ### plugins
 
 Type: `Array`
 
-foxman插件
+foxman插件，已有的官方插件
 
 ### processors
 
