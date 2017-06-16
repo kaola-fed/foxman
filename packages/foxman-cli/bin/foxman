@@ -3,10 +3,10 @@ const yargs = require('yargs');
 const path = require('path');
 const { system } = require('@foxman/helpers');
 const updateNotifier = require('update-notifier');
-const checkNodeVersion = require('./check-node-version');
-const checkFoxmanVersion = require('./check-foxman-version');
-const checkFoxmanConfig = require('./check-foxman-config');
-const run = require('./run');
+const checkNodeVersion = require('../lib/check-node-version');
+const checkFoxmanVersion = require('../lib/check-foxman-version');
+const checkFoxmanConfig = require('../lib/check-foxman-config');
+const run = require('../lib/run');
 const pkg = require('../package.json');
 
 if (!checkNodeVersion()) {
