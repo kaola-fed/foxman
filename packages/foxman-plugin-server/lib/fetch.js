@@ -5,7 +5,7 @@ function fetch({ handler, dataPath, extendData = {} }) {
     return Promise.resolve()
         .then(() => {
             if (handler) {
-                return handlerInvkoe.call(this, handler);
+                return handlerInvoke.call(this, handler);
             }
         })
         .then(data => {
@@ -18,7 +18,7 @@ function fetch({ handler, dataPath, extendData = {} }) {
         }));
 }
 
-function handlerInvkoe(handler) {
+function handlerInvoke(handler) {
     return promise.ensurePromise(handler(this)).then(json => {
         if (typeof json === 'string') {
             return safeJsonParse(json);
