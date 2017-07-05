@@ -12,7 +12,7 @@ Type: `Boolean`
 
 是否启用https
 
-### static
+### statics
 
 Type: `Array`
 
