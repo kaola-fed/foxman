@@ -21,19 +21,27 @@ const argv = yargs
     .alias('C', 'c')
     .describe('C', '配置文件路径')
     .default('C', 'foxman.config.js')
+
     .alias('P', 'proxy')
     .describe('P', '使用配置中的代理，填写代理名即可')
     .default('P', false)
+
     .alias('p', 'port')
     .describe('p', '指定临时端口')
     .default('p', false)
+
     .alias('U', 'update')
     .alias('U', 'u')
     .describe('U', '是否远程nei中拉取接口信息')
     .default('U', false)
+
     .alias('V', 'version')
     .alias('V', 'v')
     .describe('V', 'Show version')
+
+    .alias('o', 'openBrowser')
+    .describe('o', 'Open browser on started')
+
     .version(() => `v${pkg.version}`)
     .help('H')
     .alias('H', 'help')

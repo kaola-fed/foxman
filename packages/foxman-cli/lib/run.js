@@ -24,16 +24,20 @@ module.exports = ({
     proxy,
     argv,
     livereload,
-    extension
+    extension,
+    openBrowser
 }) => {
     if (argv.port) {
         port = parseInt(argv.port);
     }
 
+    if (argv.openBrowser) {
+        openBrowser = argv.openBrowser;
+    }
+
     const core = new Core();
 
     core.use(new Watcher(watch));
-
     core.use(
         new Server({
             port,
@@ -44,7 +48,8 @@ module.exports = ({
             extension,
             viewRoot,
             syncData,
-            asyncData
+            asyncData,
+            openBrowser
         })
     );
 
