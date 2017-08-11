@@ -1,3 +1,4 @@
+const os = require('os');
 const http = require('http');
 const fs = require('fs');
 const http2 = require('http2');
@@ -215,7 +216,12 @@ class Server {
         }
 
         this.serverApp.listen(port, () => {
-            const tips = `Server build successfully on ${this.https ? 'https' : 'http'}://127.0.0.1:${port}/`;
+            const protocal = this.https ? 'https' : 'http';
+            let tips = `Server build successfully on ${protocal}://127.0.0.1:${port}/`;
+            const localIP = getLocalIP();
+            if (localIP) {
+                tips += `\r\nLocal Address: ${protocal}://${localIP}:${port}/`;
+            }
             logger.newline();
             logger.say(tips);
             notify({
@@ -256,6 +262,20 @@ function buildWebSocket(server) {
     };
 
     return wss;
+}
+
+function getLocalIP() {
+    const interfaces = os.networkInterfaces();
+    const addresses = [];
+    for (let k in interfaces) {
+        for (let k2 in interfaces[k]) {
+            const address = interfaces[k][k2];
+            if (address.family === 'IPv4' && !address.internal) {
+                addresses.push(address.address);
+            }
+        }
+    }
+    return addresses[0] || '';
 }
 
 module.exports = Server;
