@@ -198,7 +198,7 @@ class Server {
 
     start() {
         this.prepare();
-        const { port, secure, open } = this.serverOptions;
+        const { port, secure, openBrowser } = this.serverOptions;
         const callback = this.app.callback();
 
         if (secure) {
@@ -225,7 +225,7 @@ class Server {
                 const localAddress = `${protocal}://${localIP}:${port}/`;
                 tips += `\r\nLocal Address: ${localAddress}`;
 
-                if (open) {
+                if (openBrowser) {
                     opn(localAddress);
                 }
             }

@@ -25,14 +25,14 @@ module.exports = ({
     argv,
     livereload,
     extension,
-    open
+    openBrowser
 }) => {
     if (argv.port) {
         port = parseInt(argv.port);
     }
 
-    if (argv.open) {
-        open = argv.open;
+    if (argv.openBrowser) {
+        openBrowser = argv.openBrowser;
     }
 
     const core = new Core();
@@ -49,7 +49,7 @@ module.exports = ({
             viewRoot,
             syncData,
             asyncData,
-            open
+            openBrowser
         })
     );
 

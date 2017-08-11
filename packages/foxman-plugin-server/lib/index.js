@@ -93,7 +93,7 @@ class ServerPlugin {
             viewRoot,
             syncData,
             asyncData,
-            open
+            openBrowser
         } = opts;
         const result = checkConfig(opts);
         if (result) {
@@ -126,7 +126,7 @@ class ServerPlugin {
             engineConfig,
             syncDataMatch,
             asyncDataMatch,
-            open
+            openBrowser
         };
     }
 
