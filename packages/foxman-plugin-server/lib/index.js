@@ -92,7 +92,8 @@ class ServerPlugin {
             extension = 'ftl',
             viewRoot,
             syncData,
-            asyncData
+            asyncData,
+            openBrowser
         } = opts;
         const result = checkConfig(opts);
         if (result) {
@@ -124,7 +125,8 @@ class ServerPlugin {
 
             engineConfig,
             syncDataMatch,
-            asyncDataMatch
+            asyncDataMatch,
+            openBrowser
         };
     }
 

@@ -19,6 +19,8 @@ const pageInterceptor = require('./interceptors/page');
 const dirInterceptor = require('./interceptors/dir');
 const { configureEjs, configureStatics } = require('./configure');
 
+const opn = require('opn');
+
 const WebSocketServer = WebSocket.Server;
 
 const { values } = typer;
@@ -87,7 +89,7 @@ class Server {
                 syncDataMatch
             })
         );
-        
+
         this.serve('__FOXMAN_CLIENT__', path.join(__dirname, 'client'));
 
         this._middlewares.forEach(middleware => app.use(middleware));
@@ -196,7 +198,7 @@ class Server {
 
     start() {
         this.prepare();
-        const { port, secure } = this.serverOptions;
+        const { port, secure, openBrowser } = this.serverOptions;
         const callback = this.app.callback();
 
         if (secure) {
@@ -220,7 +222,12 @@ class Server {
             let tips = `Server build successfully on ${protocal}://127.0.0.1:${port}/`;
             const localIP = getLocalIP();
             if (localIP) {
-                tips += `\r\nLocal Address: ${protocal}://${localIP}:${port}/`;
+                const localAddress = `${protocal}://${localIP}:${port}/`;
+                tips += `\r\nLocal Address: ${localAddress}`;
+
+                if (openBrowser) {
+                    opn(localAddress);
+                }
             }
             logger.newline();
             logger.say(tips);
@@ -228,6 +235,7 @@ class Server {
                 title: 'Run successfully',
                 msg: tips
             });
+
 
             this.wss = buildWebSocket(this.serverApp);
             this.wss.on('connection', ws => {
