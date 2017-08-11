@@ -198,7 +198,7 @@ class Server {
 
     start() {
         this.prepare();
-        const { port, secure } = this.serverOptions;
+        const { port, secure, open } = this.serverOptions;
         const callback = this.app.callback();
 
         if (secure) {
@@ -224,7 +224,10 @@ class Server {
             if (localIP) {
                 const localAddress = `${protocal}://${localIP}:${port}/`;
                 tips += `\r\nLocal Address: ${localAddress}`;
-                opn(localAddress);
+
+                if (open) {
+                    opn(localAddress);
+                }
             }
             logger.newline();
             logger.say(tips);
@@ -232,6 +235,7 @@ class Server {
                 title: 'Run successfully',
                 msg: tips
             });
+
 
             this.wss = buildWebSocket(this.serverApp);
             this.wss.on('connection', ws => {
