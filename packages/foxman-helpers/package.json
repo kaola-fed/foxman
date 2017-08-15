@@ -10,7 +10,7 @@
   "dependencies": {
     "chalklog": "^1.1.2",
     "del": "^2.2.2",
-    "fast-ftl": "1.7.1",
+    "fast-ftl": "^1.8.3",
     "hjson": "^2.4.2",
     "node-notifier": "^5.1.2",
     "parrotsay-api": "^0.1.1",

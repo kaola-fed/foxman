@@ -28,14 +28,14 @@ function Renderer(options = {}) {
     }
     var o = (this.options = Object.assign({}, defaults, options));
 
-  // custom handlebars instance
+    // custom handlebars instance
     this.handlebars = handlebars.create();
 
-  // register global helpers/partials
+    // register global helpers/partials
     if (o.helpers) this.helper(o.helpers);
     if (o.partials) this.partial(o.partials);
 
-  // enabling caching (via lru-cache)
+    // enabling caching (via lru-cache)
     if (o.cache) {
         this.cache = new Cache({ max: 100 });
     }
@@ -83,10 +83,10 @@ Renderer.prototype.getTemplate = function*(file) {
 
     var key = 'template:' + abs;
 
-  // when caching is enabled
+    // when caching is enabled
     if (o.cache) {
         if (this.cache.peek(key)) {
-      // check for existence
+            // check for existence
 
             return this.cache.get(key);
         } else {
@@ -272,33 +272,33 @@ Renderer.prototype.render = function*(template, locals, options) {
     locals = extend(true, {}, locals);
     options = extend(true, {}, { data: o.data }, options);
 
-  // extract layout id
+    // extract layout id
     var layoutId = typeof locals.layout === 'undefined'
-    ? o.defaultLayout
-    : locals.layout;
+        ? o.defaultLayout
+        : locals.layout;
     delete locals.layout;
 
-  // extract pre-rendered body
+    // extract pre-rendered body
     var body = options.body;
 
-  // retrieve layout (if needed)
+    // retrieve layout (if needed)
     var layout = yield this.getLayout(layoutId);
 
-  // retrieve view
+    // retrieve view
     if (!body) var view = yield this.getView(template);
 
-  // extend locals with front-matter data
+    // extend locals with front-matter data
     if (layout && layout.attributes) extend(locals, layout.attributes);
     if (view && view.attributes) extend(locals, view.attributes);
 
-  // set up some special meta locals before rendering
+    // set up some special meta locals before rendering
     options.data.view = template;
     if (layoutId) options.data.layout = layoutId;
 
-  // load partials
+    // load partials
     options.partials = yield this.getPartials();
 
-  // when a layout is needed
+    // when a layout is needed
     if (layout) {
 
         options.data.body = body || view.render(locals, options);

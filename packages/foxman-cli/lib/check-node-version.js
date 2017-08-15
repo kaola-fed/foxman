@@ -12,7 +12,7 @@ module.exports = function() {
         logger.error(
             `Expect Node.js version to be higher than v${MIN_SUPPORT_NODE_VERSION}!` +
                 '\n' +
-                `Please install latest version\'s Node.js.`
+                `Please install latest version's Node.js.`
         );
         return false;
     }

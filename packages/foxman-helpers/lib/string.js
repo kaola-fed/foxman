@@ -16,15 +16,15 @@ function removeLeadingSlash(str) {
 
 function removeSuffix(str, test) {
     if (test) {
-        return str.replace(new RegExp('\.' + test + '$', 'ig'), '');
+        return str.replace(new RegExp('.' + test + '$', 'ig'), '');
     }
-    return str.replace(/\.[^\.]*$/, '');
+    return str.replace(/\.[^.]*$/, '');
 }
 
 function jsonPathResolve(url) {
     url = removeSuffix(url) + '.json';
 
-    if (/\.[^\.]*$/.test(url)) {
+    if (/\.[^.]*$/.test(url)) {
         return removeLeadingSlash(url);
     }
     return url;

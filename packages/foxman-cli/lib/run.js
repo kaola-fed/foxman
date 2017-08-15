@@ -85,7 +85,7 @@ module.exports = ({
 
     core.use(
         new Vconsole()
-        );
+    );
    
     core.use(
         new Static({statics})
