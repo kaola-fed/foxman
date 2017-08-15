@@ -1,6 +1,6 @@
 {
   "name": "@foxman/core",
-  "version": "1.0.0-9",
+  "version": "1.0.0",
   "main": "lib/index.js",
   "description": "Extensible Mock Server",
   "files": [
@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/kaola-fed/foxman#readme",
   "dependencies": {
-    "@foxman/helpers": "^1.0.0-9",
+    "@foxman/helpers": "^1.0.0",
     "co": "^4.6.0",
     "dot-prop": "^4.1.1",
     "ora": "^1.2.0"

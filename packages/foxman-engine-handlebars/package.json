@@ -1,6 +1,6 @@
 {
   "name": "@foxman/engine-handlebars",
-  "version": "1.0.0-9",
+  "version": "1.0.0",
   "description": "",
   "main": "lib/index.js",
   "scripts": {},
@@ -8,7 +8,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@foxman/helpers": "^1.0.0-9",
+    "@foxman/helpers": "^1.0.0",
     "chalk": "^0.5.1",
     "co": "^4.6.0",
     "co-fs": "^1.2.0",

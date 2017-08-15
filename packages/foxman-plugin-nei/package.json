@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-nei",
-  "version": "1.0.0-9",
+  "version": "1.0.0",
   "description": "",
   "main": "lib/index.js",
   "scripts": {},
@@ -8,7 +8,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@foxman/helpers": "^1.0.0-9",
+    "@foxman/helpers": "^1.0.0",
     "globule": "^1.0.0",
     "nei": "^3.0.3"
   }
