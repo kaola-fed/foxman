@@ -218,19 +218,21 @@ class Server {
         }
 
         this.serverApp.listen(port, () => {
-            const protocal = this.https ? 'https' : 'http';
-            let tips = `Server build successfully on ${protocal}://127.0.0.1:${port}/`;
+            const protocol = secure ? 'https' : 'http';
+            let tips = `Server build successfully on ${protocol}://127.0.0.1:${port}/`;
             const localIP = getLocalIP();
             if (localIP) {
-                const localAddress = `${protocal}://${localIP}:${port}/`;
+                const localAddress = `${protocol}://${localIP}:${port}/`;
                 tips += `\r\nLocal Address: ${localAddress}`;
 
                 if (openBrowser) {
                     opn(localAddress);
                 }
             }
+            
             logger.newline();
             logger.say(tips);
+
             notify({
                 title: 'Run successfully',
                 msg: tips
