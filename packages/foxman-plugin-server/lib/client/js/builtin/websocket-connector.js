@@ -1,27 +1,25 @@
 /* eslint-disable */
 
 (function() {
-    var not_support = document.createElement('div');
-    not_support.style.cssText =
+    var notSupport = document.createElement('div');
+    notSupport.style.cssText =
         'position:fixed;top:0;left:0;right:0;background:red;color:white;line-height:30px;text-align:center;';
-    not_support.innerHTML = "Your browser doesn't support WebSocket";
+    notSupport.innerHTML = "Your browser doesn't support WebSocket";
     if (!window.WebSocket) {
-        document.body.appendChild(not_support);
+        document.body.appendChild(notSupport);
         setTimeout(function() {
-            document.body.removeChild(not_support);
+            document.body.removeChild(notSupport);
         }, 3000);
         return;
     }
 
-    function openSocket() {
-        try {
-            var socket = new WebSocket(
-                (location.protocol === 'https:' ? 'wss:' : 'ws:') +
-                    '//' +
-                    location.host
-            );
-            bindEventSocket(socket);
-        } catch (e) {}
+    function createSocket() {
+        var socket = new WebSocket(
+            (location.protocol === 'https:' ? 'wss:' : 'ws:') +
+                '//' +
+                location.host
+        );
+        bindEventSocket(socket);
     }
 
     function bindEventSocket(socket) {
@@ -43,9 +41,9 @@
 
         socket.onclose = function() {
             console.log('[WebSocket] closed');
-            setTimeout(openSocket, 1000);
+            setTimeout(createSocket, 1000);
         };
     }
 
-    openSocket();
+    createSocket();
 })();

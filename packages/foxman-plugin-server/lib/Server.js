@@ -239,7 +239,7 @@ class Server {
             });
 
 
-            this.wss = buildWebSocket(this.serverApp);
+            this.wss = createWebSocket(this.serverApp);
             this.wss.on('connection', ws => {
                 ws.on('message', message => {
                     logger.info('received: %s', message);
@@ -257,9 +257,9 @@ class Server {
     }
 }
 
-function buildWebSocket(server) {
+function createWebSocket(server) {
     const wss = new WebSocketServer({
-        server: server
+        server
     });
 
     wss.broadcast = data => {
