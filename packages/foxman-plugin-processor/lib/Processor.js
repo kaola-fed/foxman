@@ -38,11 +38,12 @@ function dispatcher({ processor, reloaderService, resourcesManager }) {
                 if (ifNoneMatch && ifNoneMatch === eTag) {
                     this.status = 304;
                     this.body = '';
-                    this.set('ETag', eTag);
                 } else {
                     this.status = 200;
                     this.body = content;
                 }
+
+                this.set('ETag', eTag);
                 return;
             }
 
