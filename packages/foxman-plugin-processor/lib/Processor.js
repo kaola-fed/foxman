@@ -1,7 +1,7 @@
 const path = require('path');
 const pathToRegexp = require('path-to-regexp');
 const co = require('co');
-const { fs, system } = require('@foxman/helpers');
+const { fs, system, encrypt } = require('@foxman/helpers');
 const logger = require('./logger');
 const TaskLock = require('task-lock');
 const extname = path.extname;
@@ -29,8 +29,20 @@ function dispatcher({ processor, reloaderService, resourcesManager }) {
             if (resourcesManager.has(reqPath)) {
                 logger.info(`Served by resourcesManager - ${reqPath}`);
 
-                this.body = resourcesManager.get(reqPath);
+                const ifNoneMatch = this.req.headers['if-none-match'];
+                const content = resourcesManager.get(reqPath);
+                const eTag = encrypt.md5(content);
+
                 this.type = extname(reqPath);
+
+                if (ifNoneMatch && ifNoneMatch === eTag) {
+                    this.status = 304;
+                    this.body = '';
+                    this.set('ETag', eTag);
+                } else {
+                    this.status = 200;
+                    this.body = content;
+                }
                 return;
             }
 
@@ -78,10 +90,13 @@ function dispatcher({ processor, reloaderService, resourcesManager }) {
                 this.body = processed;
                 this.type = extname(reqPath);
 
+                this.set('ETag', encrypt.md5(processed));
+
                 logger.success(`Served by processor - ${reqPath}`);
 
                 return processed;
             } catch (e) {
+                console.log(e)
                 return yield next;
             }
         };
