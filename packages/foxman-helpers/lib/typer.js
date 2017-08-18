@@ -14,6 +14,19 @@ function ensureArray(target) {
     return [target];
 }
 
+function isTrue(flag) {
+    if (flag === 'true') {
+        flag = true;
+    } else if (flag === 'false') {
+        flag = false;
+    } else {
+        flag = Number(flag);
+    }
+
+    return flag;
+}
+
 exports.typeOf = typeOf;
 exports.values = values;
 exports.ensureArray = ensureArray;
+exports.isTrue = isTrue;

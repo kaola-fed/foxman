@@ -192,7 +192,7 @@ class Server {
 
         configureStatics({
             statics,
-            app: this.app
+            app: this
         });
     }
 

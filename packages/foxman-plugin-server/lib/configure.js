@@ -23,6 +23,8 @@ function configureEjs({ app }) {
 
 function configureStatics({ app, statics }) {
     statics.forEach(options => {
-        app.use(SDF(options));
+        app.use(
+            () => 
+                SDF(options));
     });
 }

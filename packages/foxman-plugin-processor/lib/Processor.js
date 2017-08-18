@@ -97,7 +97,8 @@ function dispatcher({ processor, reloaderService, resourcesManager }) {
 
                 return processed;
             } catch (e) {
-                console.log(e)
+                logger.error(e.stack || e.toString());
+                
                 return yield next;
             }
         };

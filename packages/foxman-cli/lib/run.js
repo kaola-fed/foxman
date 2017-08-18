@@ -6,6 +6,7 @@ const Watcher = require('@foxman/plugin-watcher');
 const Server = require('@foxman/plugin-server');
 const Vconsole = require('@foxman/plugin-vconsole');
 const Static = require('@foxman/plugin-statics');
+const { typer } = require('@foxman/helpers');
 
 module.exports = ({
     port,
@@ -31,8 +32,8 @@ module.exports = ({
         port = parseInt(argv.port);
     }
 
-    if (argv.openBrowser) {
-        openBrowser = argv.openBrowser;
+    if (typeof argv.openBrowser !== undefined) {
+        openBrowser = typer.isTrue(argv.openBrowser);
     }
 
     const core = new Core();
