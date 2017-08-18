@@ -19,7 +19,9 @@ class ReloaderService {
             watcherMap[reqPath] = watcher;
             watcher.on('change', () => {
                 resourcesManager.clear(reqPath);
-                reload(reqPath);
+                setTimeout(function(){
+                    reload(reqPath);
+                }, 50);
             });
 
             return watcher;

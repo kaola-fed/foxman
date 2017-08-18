@@ -3,8 +3,8 @@ class ResourcesManager {
         this._map = {};
     }
 
-    set({ reqPath, processed }) {
-        this._map[reqPath] = processed;
+    set(reqPath, {version, content}) {
+        this._map[reqPath] = {version, content};
     }
 
     has(reqPath) {

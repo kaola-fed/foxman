@@ -30,12 +30,11 @@ function dispatcher({ processor, reloaderService, resourcesManager }) {
                 logger.info(`Served by resourcesManager - ${reqPath}`);
 
                 const ifNoneMatch = this.req.headers['if-none-match'];
-                const content = resourcesManager.get(reqPath);
-                const eTag = encrypt.md5(content);
+                const {content, version} = resourcesManager.get(reqPath);
 
                 this.type = extname(reqPath);
 
-                if (ifNoneMatch && ifNoneMatch === eTag) {
+                if (ifNoneMatch && Number(ifNoneMatch) === Number(version)) {
                     this.status = 304;
                     this.body = '';
                 } else {
@@ -43,7 +42,7 @@ function dispatcher({ processor, reloaderService, resourcesManager }) {
                     this.body = content;
                 }
 
-                this.set('ETag', eTag);
+                this.set('ETag', version);
                 return;
             }
 
@@ -87,11 +86,15 @@ function dispatcher({ processor, reloaderService, resourcesManager }) {
                     processed = yield generator;
                 }
 
-                resourcesManager.set({ reqPath, processed });
+                const version = Date.now();
+                resourcesManager.set(reqPath, {
+                    content: processed,
+                    version
+                });
                 this.body = processed;
                 this.type = extname(reqPath);
 
-                this.set('ETag', encrypt.md5(processed));
+                this.set('ETag', version);
 
                 logger.success(`Served by processor - ${reqPath}`);
 
