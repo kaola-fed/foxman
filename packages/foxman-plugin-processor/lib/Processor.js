@@ -134,7 +134,8 @@ function* workflow({
                 filename
             }) || {};
 
-            processed = refs.content || refs;
+            processed = (refs.content !== undefined) ? refs.content: refs;
+
             recieveDependencies(refs.dependencies);
         } catch (e) {
             const errorTitle = `File ${filename} compile failed!`;
