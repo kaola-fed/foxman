@@ -4,9 +4,6 @@
     var __FOXMAN_EVENT_BUS__ = window.__FOXMAN_EVENT_BUS__;
 
     __FOXMAN_EVENT_BUS__.on('livereload', function(filename) {
-        if (document.hidden) {
-            return false;
-        }
         if (/\.css/.test(filename)) {
             updateStyle(filename);
         } else {
