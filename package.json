@@ -52,7 +52,7 @@
     "commitizen": "^2.9.6",
     "cz-conventional-changelog": "^2.0.0",
     "eslint": "^4.1.0",
-    "jest": "^19.0.2",
+    "jest": "^21.0.0",
     "lerna": "^2.0.0-rc.1",
     "prettier-eslint-cli": "^4.0.3"
   },
