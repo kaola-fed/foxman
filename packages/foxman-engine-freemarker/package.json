@@ -1,6 +1,6 @@
 {
   "name": "@foxman/engine-freemarker",
-  "version": "1.0.0-9",
+  "version": "1.0.0",
   "description": "",
   "main": "lib/index.js",
   "scripts": {},
@@ -8,6 +8,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "fast-ftl": "1.7.1"
+    "fast-ftl": "1.8.3"
   }
 }
