@@ -8,6 +8,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "fast-ftl": "1.8.3"
+    "fast-ftl": "1.9.0"
   }
 }
