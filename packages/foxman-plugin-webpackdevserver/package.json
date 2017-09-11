@@ -10,7 +10,9 @@
   "license": "MIT",
   "dependencies": {
     "koa-webpack-dev-middleware": "^1.4.4",
-    "koa-webpack-hot-middleware": "^1.0.3",
-    "webpack": "^2.2.1"
+    "koa-webpack-hot-middleware": "^1.0.3"
+  },
+  "peerDependencies": {
+    "webpack": "^3.5.6"
   }
 }
