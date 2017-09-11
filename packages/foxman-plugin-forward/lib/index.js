@@ -27,16 +27,19 @@ module.exports = class ForwardPlugin {
                     const originalUrl = this.originalUrl;
 
                     const matched = routes.some(route => {
-                        const { from, to } = route;
-
+                        let { from, to } = route;
+                        let result;
                         let regexp;
-                        if (from.test) {
+                        if (from.exec) {
                             regexp = from;
                         } else {
                             regexp = new RegExp(from);
                         }
 
-                        if (regexp.test(originalUrl)) {
+                        if (result = regexp.exec(originalUrl)) {
+                            if (to instanceof Function) {
+                                to = to(...result);
+                            }
                             log.green(`${originalUrl} -> ${to}`);
                             forward.call(this, to);
                             return true;
