@@ -151,7 +151,8 @@ test('dispatcher', (done) => {
     const generator = fn.call({
         request: {
             path: '/1.css'
-        }
+        },
+        set() {}
     });
     return co(generator).then((content) => {
         console.log(content)
