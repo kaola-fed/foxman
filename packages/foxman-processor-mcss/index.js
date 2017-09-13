@@ -27,7 +27,7 @@ class Mcss {
     }
 
     locate(raw) {
-        return raw.replace(/\.css$/g, '\.mcss');
+        return raw.replace(/\.css$/g, '.mcss');
     }
 
     *handler({ raw, filename }) {

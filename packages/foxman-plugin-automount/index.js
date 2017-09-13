@@ -84,7 +84,7 @@ class AutomountPlugin {
     }
 
     removeExtense(template = '', sync = false) {
-        const reg = new RegExp('\\\.' + this.getExtense(sync) + '$', 'ig');
+        const reg = new RegExp('.' + this.getExtense(sync) + '$', 'ig');
         return template.replace(reg, '');
     }
 

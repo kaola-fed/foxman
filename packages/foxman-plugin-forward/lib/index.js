@@ -36,7 +36,9 @@ module.exports = class ForwardPlugin {
                             regexp = new RegExp(from);
                         }
 
+                        /* eslint-disable */
                         if (result = regexp.exec(originalUrl)) {
+                            /* eslint-enable */
                             if (to instanceof Function) {
                                 to = to(...result);
                             }

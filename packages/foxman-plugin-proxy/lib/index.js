@@ -62,11 +62,13 @@ class ProxyPlugin {
         });
 
         use(
-            () => koaApiForward.middleware({
-                hostname, scheme, timeoutHook() {
-                    logger.error(`Proxying to remote server ${proxyName} timeout`);
-                }
-            })
+            () => {
+                return koaApiForward.middleware({
+                    hostname, scheme, timeoutHook() {
+                        logger.error(`Proxying to remote server ${proxyName} timeout`);
+                    }
+                });
+            }
         );
 
         use( 

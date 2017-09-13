@@ -31,7 +31,7 @@ function jsonPathResolve(url) {
 }
 
 function ensureLeadingSlash(str) {
-    if (/^[\/\\]/.test(str)) {
+    if (/^[/\\]/.test(str)) {
         return str;
     }
     return '/' + str;
