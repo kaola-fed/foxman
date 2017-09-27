@@ -92,6 +92,10 @@ class AutomountPlugin {
         return filePath.replace(/\\/g, '/');
     }
 
+    transformUnderline(filePath) {
+        return filePath.replace(/_\//g, ':');
+    }
+
     getExtense(sync) {
         const { tpl, data } = this.extension;
         const extense = sync ? tpl : data;
@@ -118,7 +122,7 @@ class AutomountPlugin {
             : this.asyncDataMatch;
 
         const routers = files.reduce((prev, file) => {
-            const filePath = this.transformSep(
+            const filePath =  this.transformSep(
                 this.removeExtense(path.relative(base, file), sync)
             );
             let urls = urlMatch(filePath);
@@ -126,7 +130,7 @@ class AutomountPlugin {
             (Array.isArray(urls) ? urls : [urls]).forEach(url => {
                 prev.push({
                     method: methodGetter(filePath),
-                    url: url,
+                    url: this.transformUnderline(url),
                     sync: sync,
                     filePath: filePath
                 });
