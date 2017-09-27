@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-mock-control",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   "author": "June",
   "license": "MIT",
   "dependencies": {
-    "@foxman/helpers": "^1.2.1",
+    "@foxman/helpers": "^1.2.2",
     "json5": "^0.5.1"
   }
 }

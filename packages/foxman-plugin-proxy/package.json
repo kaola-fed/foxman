@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-proxy",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "",
   "main": "lib/index.js",
   "scripts": {},
@@ -8,7 +8,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@foxman/helpers": "^1.2.1",
+    "@foxman/helpers": "^1.2.2",
     "koa-api-forward": "^1.0.0-1"
   }
 }
