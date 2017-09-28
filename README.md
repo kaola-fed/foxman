@@ -1,7 +1,3 @@
-<div>
-  <img src="https://raw.githubusercontent.com/kaola-fed/foxman/master/media/fox.jpg" />
-</div>
-
 <div align="center">
   <h2>Foxman</h2>
   <p>
@@ -94,10 +90,6 @@ $ foxman
 | [<img src="https://avatars3.githubusercontent.com/u/10825163?v=3" width="80px;"/><br /><sub>君羽</sub>](https://github.com/imhype)<br />[💻](https://github.com/kaola-fed/foxman/commits?author=ImHype "Code") [🔌](#plugin-ImHype "Plugin/utility libraries") [🚇](#infra-ImHype "Infrastructure (Hosting, Build-Tools, etc)") [📖](https://github.com/kaola-fed/foxman/commits?author=ImHype "Documentation") [⚠️](https://github.com/kaola-fed/foxman/commits?author=ImHype "Tests") [🐛](https://github.com/kaola-fed/foxman/issues?q=author%3AImHype "Bug reports") [💡](#example-ImHype "Examples") | [<img src="https://avatars3.githubusercontent.com/u/9125255?v=3" width="80px;"/><br /><sub>MO</sub>](https://github.com/fengzilong)<br />[💻](https://github.com/kaola-fed/foxman/commits?author=fengzilong "Code") [🔌](#plugin-fengzilong "Plugin/utility libraries") [🚇](#infra-fengzilong "Infrastructure (Hosting, Build-Tools, etc)") [📖](https://github.com/kaola-fed/foxman/commits?author=fengzilong "Documentation") [⚠️](https://github.com/kaola-fed/foxman/commits?author=fengzilong "Tests") [🐛](https://github.com/kaola-fed/foxman/issues?q=author%3Afengzilong "Bug reports") | [<img src="https://avatars0.githubusercontent.com/u/4298621?v=3" width="80px;"/><br /><sub>froguardoge</sub>](https://github.com/Froguard)<br />[💻](https://github.com/kaola-fed/foxman/commits?author=Froguard "Code") [🔌](#plugin-Froguard "Plugin/utility libraries") [📖](https://github.com/kaola-fed/foxman/commits?author=Froguard "Documentation") |
 | :---: | :---: | :---: |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-
-## Credits
-
-`media/fox.jpg` is from Internet
 
 ## LICENSE
 
