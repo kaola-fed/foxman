@@ -39,7 +39,7 @@
   },
   "homepage": "https://github.com/kaola-fed/foxman#readme",
   "dependencies": {
-    "@foxman/core": "^1.2.2",
+    "pluginify": "^0.0.1",
     "@foxman/helpers": "^1.2.2",
     "@foxman/plugin-livereload": "^1.2.2",
     "@foxman/plugin-nei": "^1.2.2",

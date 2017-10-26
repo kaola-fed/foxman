@@ -1,4 +1,4 @@
-const Core = require('@foxman/core');
+const Core = require('pluginify');
 const Proxy = require('@foxman/plugin-proxy');
 const Livereload = require('@foxman/plugin-livereload');
 const Processor = require('@foxman/plugin-processor');
@@ -87,7 +87,7 @@ module.exports = ({
     core.use(
         new Vconsole()
     );
-   
+
     core.use(
         new Static({statics})
     );
