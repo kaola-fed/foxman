@@ -31,7 +31,7 @@ module.exports = {
     port: 9000,
     secure: false,
 
-    static: [],
+    statics: [],
     routes: [],
 
     // engine: 'freemarker',
