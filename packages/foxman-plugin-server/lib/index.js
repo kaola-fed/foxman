@@ -1,7 +1,6 @@
 const Server = require('./Server');
 const path = require('path');
 const { typer, system } = require('@foxman/helpers');
-const Freemarker = require('@foxman/engine-freemarker');
 const logger = require('./logger');
 const { typeOf } = typer;
 
@@ -88,8 +87,8 @@ class ServerPlugin {
             statics = [],
             routes = [],
             engine,
-            engineConfig = {},
-            extension = 'ftl',
+            engineConfig,
+            extension,
             viewRoot,
             syncData,
             asyncData,
@@ -109,7 +108,7 @@ class ServerPlugin {
 
         const asyncDataMatch = url => path.join(asyncData, url);
 
-        const Render = engine || Freemarker;
+        const Render = engine;
         this.$options = {
             runtimeRouters,
 

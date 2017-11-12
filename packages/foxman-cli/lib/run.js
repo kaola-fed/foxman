@@ -7,25 +7,25 @@ const Server = require('@foxman/plugin-server');
 const Vconsole = require('@foxman/plugin-vconsole');
 const Static = require('@foxman/plugin-statics');
 const { typer } = require('@foxman/helpers');
+const Freemarker = require('@foxman/engine-freemarker');
 
 module.exports = ({
-    port,
-    secure,
-    statics,
-    viewRoot,
-    routes,
-    watch,
-    syncData,
-    asyncData,
-    engine,
-    engineConfig,
-    processors,
-    plugins,
-    nei,
-    proxy,
+    port = 3000,
+    secure = false,
+    statics = [],
+    viewRoot = '',
+    routes = [],
+    syncData = '',
+    asyncData = '',
+    engine = Freemarker,
+    engineConfig = {},
+    processors = [],
+    plugins = [],
+    nei = '',
+    proxy = [],
     argv,
-    livereload,
-    extension,
+    livereload = true,
+    extension = 'ftl',
     openBrowser
 }) => {
     if (argv.port) {
@@ -38,7 +38,7 @@ module.exports = ({
 
     const core = new Core();
 
-    core.use(new Watcher(watch));
+    core.use(new Watcher());
     core.use(
         new Server({
             port,
