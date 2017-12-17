@@ -6,8 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "fox": "./node_modules/foxman-run/bootstrap"
+  },
   "dependencies": {
-      "foxman-run": "1.0.0"
+    "foxman-run": "1.0.0",
+    "nodemon": "^1.13.3"
   },
   "keywords": [],
   "author": "",
