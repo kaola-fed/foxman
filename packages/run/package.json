@@ -1,0 +1,8 @@
+{
+  "name": "foxman-run",
+  "version": "1.0.0",
+  "dependencies": {
+    "@easy-koa/plugin-forwarder": "^1.0.1",
+    "easy-koa": "^1.0.1"
+  }
+}

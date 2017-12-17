@@ -68,3 +68,13 @@ jspm_packages
 
 
 **package-lock.json
+old-packages/**
+
+packages/**/*.d.ts
+!packages/**/types/**/index.d.ts
+packages/**/*.js
+packages/**/*.js.map
+
+examples/**/*.d.ts
+examples/**/*.js
+examples/**/*.js.map

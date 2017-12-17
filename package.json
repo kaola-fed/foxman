@@ -12,7 +12,7 @@
     "init-contributors": "all-contributors init",
     "add-contributor": "all-contributors add",
     "generate-contributors": "all-contributors generate",
-    "prettier": "prettier-eslint \"packages/**/*.js\" --prettier.single-quote=true es6 --write"
+    "dev": "tsc -w"
   },
   "jest": {
     "collectCoverage": true,
@@ -23,7 +23,6 @@
       "!**/foxman-plugin-server/lib/client/**",
       "!**/foxman-plugin-livereload/static/**",
       "!**/foxman-plugin-vconsole/static/**",
-
       "!**/foxman-plugin-nei/**",
       "!**/foxman-plugin-proxy/**",
       "!**/foxman-plugin-server/**",
@@ -39,7 +38,6 @@
       "!**/foxman-processor-mcss/**",
       "!**/foxman-engine-handlebars/**",
       "!**/foxman-engine-arttemplate/**",
-
       "!packages/**/logger.js"
     ],
     "moduleFileExtensions": [
@@ -53,10 +51,16 @@
     "cz-conventional-changelog": "^2.0.0",
     "eslint": "^4.1.0",
     "jest": "^21.0.0",
-    "lerna": "^2.0.0-rc.1",
-    "prettier-eslint-cli": "^4.0.3"
+    "@types/node": "^8.0.47",
+    "gulp": "^3.9.1",
+    "gulp-rm": "^1.0.4",
+    "husky": "^0.14.3",
+    "lerna": "^2.5.1",
+    "lint-staged": "^6.0.0",
+    "tslint": "^5.8.0",
+    "tslint-eslint-rules": "^4.1.1",
+    "typescript": "^2.6.1"
   },
-  "dependencies": {},
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"

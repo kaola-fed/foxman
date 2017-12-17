@@ -1,9 +1,0 @@
-{
-  "scripts": {
-    "start": "foxman"
-  },
-  "devDependencies": {
-    "@foxman/plugin-mock-control": "^1.0.0-12",
-    "foxman": "^1.0.0-11"
-  }
-}
