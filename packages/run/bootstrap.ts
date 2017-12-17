@@ -3,10 +3,12 @@ import { Module } from '@easy-koa/shared'
 import { Forwarder } from '@easy-koa/plugin-forwarder';
 import * as path from 'path';
 
+const base = process.cwd();
+
 @Module({
     logger: {
         application: 'foxman',
-        logdir: path.join(__dirname, 'logs'),
+        logdir: path.join(base, 'logs'),
         options: {},
     },
     monitor: {
@@ -19,7 +21,7 @@ import * as path from 'path';
         controllers: [
         ],
         renderOptions: {
-            root: path.join(__dirname, 'view'),
+            root: path.join(base, 'view'),
         },
         port: 3000,
     },
@@ -41,11 +43,11 @@ import * as path from 'path';
         x: 1,
     },
 })
-class FoxmanEasyKoa extends EasyKoa {}
+class Foxman extends EasyKoa {}
 
-const foxmanEasyKoa: FoxmanEasyKoa = FoxmanEasyKoa.create()
+const foxman: Foxman = Foxman.create()
 
-foxmanEasyKoa
+foxman
     .run()
     .then(function(): any {
         // do something in completed
