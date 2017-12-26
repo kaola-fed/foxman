@@ -35,7 +35,7 @@ class PublicMockPlugin {
                 if (isPathMatched({pattern, reqPath}) 
                     && ( typeof type === 'undefined' 
                     || type === dispatcher.type ) ) {
-                    return Object.assign(data, data);
+                    return Object.assign(extendData, data);
                 }
                 return extendData;
             }, dispatcher.extendData);
