@@ -38,7 +38,7 @@ class PublicMockPlugin {
                     return Object.assign(extendData, data);
                 }
                 return extendData;
-            }, dispatcher.extendData);
+            }, dispatcher.extendData || {});
 
             yield next;
         });
