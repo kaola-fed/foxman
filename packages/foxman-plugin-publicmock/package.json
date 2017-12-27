@@ -1,6 +1,6 @@
 {
   "name": "@foxman/plugin-public-mock",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "",
   "main": "lib/index.js",
   "scripts": {},
