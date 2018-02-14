@@ -54,7 +54,7 @@
     "eslint": "^4.1.0",
     "jest": "^21.0.0",
     "lerna": "^2.0.0-rc.1",
-    "prettier-eslint-cli": "^4.0.3"
+    "prettier-eslint-cli": "^4.7.1"
   },
   "dependencies": {},
   "config": {
