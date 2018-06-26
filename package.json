@@ -51,7 +51,7 @@
     "all-contributors-cli": "^5.0.0",
     "commitizen": "^2.9.6",
     "cz-conventional-changelog": "^2.0.0",
-    "eslint": "^5.0.0",
+    "eslint": "5.0.0",
     "jest": "^22.1.0",
     "lerna": "^2.0.0-rc.1",
     "prettier-eslint-cli": "^4.0.3"
