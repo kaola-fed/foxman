@@ -1,5 +1,6 @@
 const { JSON, fs, promise, path } = require('@foxman/helpers');
 const logger = require('./logger');
+const extend = require('extend2');
 
 function fetch({ handler, dataPath, extendData = {} }) {
     return Promise.resolve()
@@ -14,7 +15,7 @@ function fetch({ handler, dataPath, extendData = {} }) {
             }
             return data;
         }).then( json => ({
-            json: Object.assign(extendData, json)
+            json: extend(true, {}, extendData, json)
         }));
 }
 
