@@ -48,7 +48,7 @@
     "testRegex": "/__test__/.*\\.test\\.(js)$"
   },
   "devDependencies": {
-    "all-contributors-cli": "^5.0.0",
+    "all-contributors-cli": "^5.4.0",
     "commitizen": "^2.9.6",
     "cz-conventional-changelog": "^2.0.0",
     "eslint": "^5.0.0",
