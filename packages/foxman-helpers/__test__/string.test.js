@@ -76,6 +76,14 @@ test('ensureJSONExtension', function() {
         /** expectedValue */
         '1.json'
     );
+
+    expect(
+        /** result */
+        _.ensureJSONExtension('1.jsona')
+    ).toBe(
+        /** expectedValue */
+        '1.jsona.json'
+    );
 });
 
 test('jsonPathResolve', function() {
