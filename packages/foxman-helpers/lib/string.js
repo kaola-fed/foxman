@@ -49,7 +49,7 @@ function compressHtml(htmlstr) {
 }
 
 function ensureJSONExtension(filePath) {
-    if (~filePath.indexOf('.json')) {
+    if (filePath.endsWith('.json')) {
         return filePath;
     }
     return filePath + '.json';
