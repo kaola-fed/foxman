@@ -1,6 +1,6 @@
 {
   "name": "foxman",
-  "version": "1.3.6",
+  "version": "1.3.7",
   "main": "app.js",
   "description": "Extensible Mock Server",
   "preferGlobal": true,
@@ -44,7 +44,7 @@
     "@foxman/plugin-nei": "^1.2.3",
     "@foxman/plugin-processor": "^1.2.3",
     "@foxman/plugin-proxy": "^1.3.3",
-    "@foxman/plugin-server": "^1.3.6",
+    "@foxman/plugin-server": "^1.3.7",
     "@foxman/plugin-statics": "^1.2.3",
     "@foxman/plugin-vconsole": "^1.0.2",
     "@foxman/plugin-watcher": "^1.2.3",
