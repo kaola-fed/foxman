@@ -27,7 +27,10 @@ function createRouterDispatcher({
     routers.some(function(router) {
         const { filePath, method, sync, url, handler } = router;
 
-        const notMatchMethod = method && method.toUpperCase() !== reqMethod;
+        const METHODS = ['GET', 'POST', 'PUT', 'DELETE'];
+        const upperMethod = method && method.toUpperCase() || '';
+        const notMatchMethod = upperMethod && METHODS.includes(upperMethod) && upperMethod !== reqMethod;
+
         if (!reqPath.match(pathToRegexp(url)) || notMatchMethod) {
             return false;
         }
