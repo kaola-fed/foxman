@@ -8,6 +8,7 @@ const { removeSuffix, ensureJSONExtension } = string;
 function createRouterDispatcher({
     runtimeRouters,
     reqQuery,
+    reqMethod,
     reqPath,
     viewRoot,
     extension,
@@ -24,9 +25,10 @@ function createRouterDispatcher({
         []
     );
     routers.some(function(router) {
-        const { filePath, sync, url, handler } = router;
+        const { filePath, method, sync, url, handler } = router;
 
-        if (!pathToRegexp(url).test(reqPath)) {
+        const notMatchMethod = method && method.toUpperCase() !== reqMethod;
+        if (!reqPath.match(pathToRegexp(url)) || notMatchMethod) {
             return false;
         }
 
