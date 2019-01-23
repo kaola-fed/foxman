@@ -9,7 +9,7 @@ class AutomountPlugin {
             return '/' + filePath + '.html';
         };
         const defaultMethodGetter = () => {
-            return 'get';
+            return '';
         };
 
         this.syncDataMatch = syncDataMatch || defaultUrlGetter;
