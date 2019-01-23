@@ -41,7 +41,7 @@ const argv = yargs
 
     .alias('o', 'openBrowser')
     .describe('o', 'Open browser on started')
-    .default('o', true)
+    .default('o', false)
     
     .version(() => `v${pkg.version}-${__dirname.includes('node_modules')? 'official' : 'local'}`)
     .help('H')
